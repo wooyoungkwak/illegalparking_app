@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:teragate_v3/config/env.dart';
-import 'package:teragate_v3/models/result_model.dart';
-import 'package:teragate_v3/models/storage_model.dart';
-import 'package:teragate_v3/utils/log_util.dart';
-import 'package:teragate_v3/utils/time_util.dart';
+import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/models/result_model.dart';
+import 'package:illegalparking_app/models/storage_model.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
+import 'package:illegalparking_app/utils/time_util.dart';
 
 Map<String, String> headers = {};
 

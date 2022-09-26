@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:teragate_v3/utils/log_util.dart';
-import 'package:teragate_v3/config/env.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
+import 'package:illegalparking_app/config/env.dart';
 
 // device IP 확인
 Future<Map<String, dynamic>> getIPAddressByWifi() async {

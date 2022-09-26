@@ -18,9 +18,9 @@ List<Permission> _getPermissions() {
   List<Permission> permissions = [Permission.location];
 
   if (Platform.isAndroid) {
-    permissions.add(Permission.bluetoothScan);
-    permissions.add(Permission.bluetoothConnect);
-    permissions.add(Permission.bluetooth);
+    // permissions.add(Permission.bluetoothScan);
+    // permissions.add(Permission.bluetoothConnect);
+    // permissions.add(Permission.bluetooth);
     permissions.add(Permission.locationAlways);
     permissions.add(Permission.locationWhenInUse);
   }

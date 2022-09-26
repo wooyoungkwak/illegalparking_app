@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:teragate_v3/config/env.dart';
+import 'package:illegalparking_app/config/env.dart';
 
 LoginInfo resultInfoFromJson(String str) => LoginInfo.fromJson(json.decode(str));
 
