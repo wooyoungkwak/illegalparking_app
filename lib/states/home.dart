@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:illegalparking_app/states/webview.dart';
 import 'package:illegalparking_app/states/camera.dart';
 import 'package:illegalparking_app/states/my_page.dart';
+import 'package:illegalparking_app/states/whole_camera_state.dart';
+import 'package:illegalparking_app/states/widgets/crop.dart';
+import 'package:mask_for_camera_view/mask_for_camera_view.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,7 +18,7 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 1;
   static const List<Widget> _widgetOption = <Widget>[
     WebviewPage(),
-    MyCamera(),
+    Wholecamera(),
     MyPage(),
   ];
 
