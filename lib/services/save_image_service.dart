@@ -29,7 +29,6 @@ Future<void> saveImageDirectory(MaskForCameraViewResult res, bool part) async {
     c.wholeImageMemorywrit(res.croppedImage!);
     wholeImagename = nametime;
   }
-
   //myImagePath
   //20221004152932789426 저장된 파일이름
   //res.croppedImage

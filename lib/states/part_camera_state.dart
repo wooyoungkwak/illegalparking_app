@@ -6,6 +6,7 @@ import '../controllers/address_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
 import 'package:get/get.dart';
+import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 class Partcamera extends StatefulWidget {
   const Partcamera({Key? key}) : super(key: key);
@@ -24,6 +25,7 @@ class _PartcameraState extends State<Partcamera> {
 
   @override
   Widget build(BuildContext context) {
+    ProgressDialog pd = ProgressDialog(context: context);
     return Scaffold(
       body: _createWillPopScope(Stack(
         children: [
@@ -37,6 +39,7 @@ class _PartcameraState extends State<Partcamera> {
               boxBorderWidth: 2.8,
               backColor: Colors.black,
               onTake: (MaskForCameraViewResult res) async {
+                pd.show(max: 100, msg: '데이터 생성 중');
                 saveImageDirectory(res, true).then((value) => suchAddress().then((value) => Get.off(() => const Declaration())));
                 // 현재 사진저장 > 주소검색 > 화면이동
                 // 나중에 사진저장 > 서버에 보내서 값 받아오는 동안 주소 검색 > 2개 다 완료되면 화면이동

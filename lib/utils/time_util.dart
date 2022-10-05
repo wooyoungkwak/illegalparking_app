@@ -67,7 +67,7 @@ String getDateToStringForMMInNow() {
 }
 
 String getDateToStringForNumber() {
-  return getDateToString(getNow(), "yyyyMMddkkmmssSSS");
+  return getDateToString(getNow(), "yyyyMMddkkmmss");
 }
 
 String getMinorToDate() {

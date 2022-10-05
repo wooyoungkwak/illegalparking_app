@@ -9,11 +9,9 @@ import 'package:illegalparking_app/states/my_page_registration.dart';
 import 'package:illegalparking_app/states/my_page_report.dart';
 import 'package:illegalparking_app/states/sign_up.dart';
 import 'package:illegalparking_app/states/widgets/crop.dart';
-import 'package:mask_for_camera_view/mask_for_camera_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await MaskForCameraView.initialize();
   await MaskForCameraCustomView.initialize();
 
   runApp(const MyApp());

@@ -1,4 +1,5 @@
 import 'package:illegalparking_app/states/home.dart';
+import 'package:illegalparking_app/states/whole_camera_state.dart';
 import '../main.dart';
 import '../controllers/address_controller.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ class _ConfirmationState extends State<Confirmation> {
 
   @override
   Widget build(BuildContext context) {
+    final ReactiveController c = Get.put(ReactiveController());
     final statusBarHeight = MediaQuery.of(context).padding.top;
     return _createWillPopScope(Padding(
         padding: EdgeInsets.only(top: statusBarHeight),
@@ -37,10 +39,12 @@ class _ConfirmationState extends State<Confirmation> {
                 child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                   IconButton(
                       onPressed: () {
-                        // Get.offAll(main());
+                        c.wholeImagewrite("");
+                        c.partImagewrite("");
+                        Get.offAll(const Home());
                       },
                       icon: const Icon(Icons.close_outlined),
-                      color: Colors.white),
+                      color: Colors.black),
                 ]),
               ),
               const Expanded(flex: 1, child: SizedBox()),
@@ -57,16 +61,16 @@ class _ConfirmationState extends State<Confirmation> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          Get.off(const MyPageReport());
+                          c.wholeImagewrite("");
+                          c.partImagewrite("");
+                          Get.offAll(const MyPageReport());
                         },
                         child: const Text('신고이력'),
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          final ReactiveController c = Get.put(ReactiveController());
                           c.wholeImagewrite("");
                           c.partImagewrite("");
-                          // Get.offAll(main());
                           //임시로 카메라 다시 시작
                           Get.offAll(const Home());
                         },

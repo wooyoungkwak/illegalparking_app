@@ -23,7 +23,7 @@ Future<void> suchAddress() async {
 //카카오 경도 위도로 주소
 Future<void> regeocoder(double longitude, double latitude) async {
   // ignore: non_constant_identifier_names
-  String RESTAPIKEY = "429eb33ae5e0c87a6d5a400f262ef734";
+  String RESTAPIKEY = "429eb33ae5e0c87a6d5a400f262ef734"; //나중에 env에 따로 옮길것
   Kakao map;
 
   c.change(latitude: latitude, longitude: longitude, address: "실패[데이터 및 WIFI를 확인해주세요]");
@@ -33,7 +33,6 @@ Future<void> regeocoder(double longitude, double latitude) async {
 
   if (responseGps.statusCode == 200) {
     map = Kakao.fromJson(json.decode(responseGps.body));
-    print(map.documents[0]['address']['address_name']);
     c.change(latitude: latitude, longitude: longitude, address: map.documents[0]['address']['address_name']);
   } else {
     throw Exception(responseGps.body);

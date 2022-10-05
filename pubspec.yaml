@@ -55,8 +55,10 @@ dependencies:
   path_provider: ^2.0.11
   #GPS 위치추적
   geolocator: ^9.0.2
-  #GSP revers geocoding (위도 경도 > 주소) 주소가 정확하지않음
-  kakao_flutter_sdk: ^1.2.2 # 전체 추가
+  #GSP revers geocoding (위도 경도 > 주소)
+  kakao_flutter_sdk: ^1.2.2 # 카카오전체 추가
+  #
+  sn_progress_dialog: ^1.0.8
 
 dev_dependencies:
   flutter_test:

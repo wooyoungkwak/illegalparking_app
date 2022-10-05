@@ -37,8 +37,7 @@ class _WholecameraState extends State<Wholecamera> {
               boxBorderColor: Colors.blue,
               boxBorderWidth: 1.0,
               onTake: (MaskForCameraViewResult res) async {
-                saveImageDirectory(res, false); //디렉토리 검색 후 이미지 저장 true = part, false = whole 구분하는 좋은 방법이 뭘까... string?
-
+                saveImageDirectory(res, false); //디렉토리 검색 후 이미지 저장 true = part, false = whole
                 if (c.partImage.value.isNotEmpty) {
                   Get.to(const Declaration());
                 } else {

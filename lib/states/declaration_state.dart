@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:illegalparking_app/states/home.dart';
+
 import '../states/confirmation.state.dart';
 import '../controllers/address_controller.dart';
 import '../states/part_camera_state.dart';
@@ -53,7 +55,7 @@ class _DeclarationState extends State<Declaration> {
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           body: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 30),
+            margin: const EdgeInsets.symmetric(horizontal: 10),
             child: CustomScrollView(
               slivers: [
                 SliverFillRemaining(
@@ -68,10 +70,12 @@ class _DeclarationState extends State<Declaration> {
                           children: [
                             IconButton(
                                 onPressed: () {
-                                  // Get.offAll(main());
+                                  c.wholeImagewrite("");
+                                  c.partImagewrite("");
+                                  Get.offAll(const Home());
                                 },
                                 icon: const Icon(Icons.close_outlined),
-                                color: Colors.white),
+                                color: Colors.black),
                           ],
                         ),
                       ),
@@ -164,7 +168,7 @@ class _DeclarationState extends State<Declaration> {
                                   width: 12,
                                 ),
                                 Text(
-                                  "$getDateToStringForAll(Deta.now())",
+                                  getDateToStringForYYYYMMDDHHMMKORInNow(),
                                   style: const TextStyle(fontSize: 12),
                                 ),
                               ],

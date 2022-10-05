@@ -4,7 +4,6 @@ import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/states/guest_camera.dart';
 import 'package:illegalparking_app/states/guest_my_page.dart';
 import 'package:illegalparking_app/states/webview.dart';
-import 'package:illegalparking_app/states/camera.dart';
 import 'package:illegalparking_app/states/my_page.dart';
 import 'package:illegalparking_app/states/whole_camera_state.dart';
 import 'package:illegalparking_app/states/widgets/crop.dart';
