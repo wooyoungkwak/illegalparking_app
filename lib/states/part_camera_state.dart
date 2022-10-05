@@ -1,3 +1,7 @@
+import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/services/server_service.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
+
 import '../states/widgets/crop.dart';
 import '../services/save_image_service.dart';
 import '../services/such_loation_service.dart';
@@ -25,6 +29,7 @@ class _PartcameraState extends State<Partcamera> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(ReactiveController());
     ProgressDialog pd = ProgressDialog(context: context);
     return Scaffold(
       body: _createWillPopScope(Stack(
@@ -40,9 +45,12 @@ class _PartcameraState extends State<Partcamera> {
               backColor: Colors.black,
               onTake: (MaskForCameraViewResult res) async {
                 pd.show(max: 100, msg: '데이터 생성 중');
-                saveImageDirectory(res, true).then((value) => suchAddress().then((value) => Get.off(() => const Declaration())));
-                // 현재 사진저장 > 주소검색 > 화면이동
-                // 나중에 사진저장 > 서버에 보내서 값 받아오는 동안 주소 검색 > 2개 다 완료되면 화면이동
+                saveImageDirectory(res, true).then((value) => suchAddress().then((value) {
+                      Get.off(() => const Declaration());
+                      // 현재 사진저장 > 주소검색 > 화면이동
+                      // 나중에 사진저장 > 서버에 보내서 값 받아오는 동안 주소 검색 > 2개 다 완료되면 화면이동
+                      sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, controller.partImage.value);
+                }));
               }),
           CreateContainerByAlignment(0, -0.3, DefaultTextStyle(style: Theme.of(context).textTheme.headline1!, child: const Text("번호판만 촬영해주세요", style: TextStyle(fontSize: 15, color: Colors.white)))),
           CreateContainerByAlignment(0, 0.9, SizedBox(height: 100, width: 200, child: Image.asset("assets/car_number.jpg")))

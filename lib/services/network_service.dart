@@ -30,32 +30,32 @@ Future<Map<String, dynamic>> getIPAddressByMobile() async {
   return map;
 }
 
-// ip 설정 ( wifi or mobile (lte, 5G 등 ) )
-  Future<StreamSubscription> initIp() async {
-    Connectivity().checkConnectivity().then((result) {
-      if (result == ConnectivityResult.mobile) {
-        getIPAddressByMobile().then((map) {
-          Env.DEVICE_IP = map["ip"];
-        });
-      } else if (result == ConnectivityResult.wifi) {
-        getIPAddressByWifi().then((map) {
-          Env.DEVICE_IP = map["ip"];
-        });
-      }
-    });
+// // ip 설정 ( wifi or mobile (lte, 5G 등 ) )
+//   Future<StreamSubscription> initIp() async {
+//     Connectivity().checkConnectivity().then((result) {
+//       if (result == ConnectivityResult.mobile) {
+//         getIPAddressByMobile().then((map) {
+//           Env.DEVICE_IP = map["ip"];
+//         });
+//       } else if (result == ConnectivityResult.wifi) {
+//         getIPAddressByWifi().then((map) {
+//           Env.DEVICE_IP = map["ip"];
+//         });
+//       }
+//     });
 
-    return Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.mobile) {
-        getIPAddressByMobile().then((map) {
-          Log.log(' mobile ip address = ${map["ip"]}');
-          Env.DEVICE_IP = map["ip"];
-        });
-      } else if (result == ConnectivityResult.wifi) {
-        getIPAddressByWifi().then((map) {
-          Log.log(' wifi ip address = ${map["ip"]}');
-          Env.DEVICE_IP = map["ip"];
-        });
-      }
-    });
-  }
+//     return Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+//       if (result == ConnectivityResult.mobile) {
+//         getIPAddressByMobile().then((map) {
+//           Log.log(' mobile ip address = ${map["ip"]}');
+//           Env.DEVICE_IP = map["ip"];
+//         });
+//       } else if (result == ConnectivityResult.wifi) {
+//         getIPAddressByWifi().then((map) {
+//           Log.log(' wifi ip address = ${map["ip"]}');
+//           Env.DEVICE_IP = map["ip"];
+//         });
+//       }
+//     });
+//   }
   

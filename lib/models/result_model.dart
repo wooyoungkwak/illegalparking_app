@@ -19,8 +19,6 @@ class LoginInfo {
     return LoginInfo(json["success"], json["data"], "", tokenInfo);
   }
 
-  static LoginInfo fromJsonByFail(Map<String, dynamic> json) => LoginInfo(json["success"], {}, Env.MSG_LOGIN_FAIL, null);
-
   Map<String, dynamic> toJson() => {"success": success, "data": data};
 
   String getPhotoPath() {
@@ -132,64 +130,6 @@ class WorkInfo {
   }
 }
 
-class WeekInfo {
-  bool success = true; // 요청 결과 (예> true (성공) / false (실패))
-  String message = ""; // 요청 결과 메시지 ( 오류가 있을때만 message 가 존재 )
-  List<WorkInfo> workInfos;
-  WeekInfo(this.success, this.message, {required this.workInfos});
-
-  static WeekInfo fromJson(Map<String, dynamic> json) {
-    List<WorkInfo> workInfos = [];
-
-    if (json == null || json["data"] == null) {
-      return WeekInfo(false, Env.MSG_FAIL_REGISTER, workInfos: workInfos);
-    }
-
-    for (var data in json["data"]) {
-      workInfos.add(WorkInfo.fromJsonByWeek(json["success"], json["message"], data));
-    }
-
-    return WeekInfo(json["success"], json["message"], workInfos: workInfos);
-  }
-
-  Map<String, dynamic> toJson() {
-    return {"success": success, "message": message, "workInfos": workInfos};
-  }
-
-  @override
-  String toString() {
-    return jsonEncode(toJson());
-  }
-}
-
-class ConfigInfo {
-  bool? success;
-  String? message;
-  List<BeaconInfoData> beaconInfoDatas;
-
-  ConfigInfo({this.success, this.message, required this.beaconInfoDatas});
-
-  static ConfigInfo fromJson(Map<String, dynamic> json) {
-    List<dynamic> config = json["config"];
-    List<BeaconInfoData> beaconInfoDatas = [];
-
-    Env.UUIDS.clear();
-
-    for (var element in config) {
-      Env.UUIDS["${element["uuid"]}"] = element["place"];
-      beaconInfoDatas.add(BeaconInfoData.fromJson(element));
-    }
-
-    return ConfigInfo(success: json["success"], message: "", beaconInfoDatas: beaconInfoDatas);
-  }
-
-  Map<String, dynamic> toJson() => {"success": success, "message": message, "beaconInfoDatas": beaconInfoDatas};
-
-  @override
-  String toString() {
-    return jsonEncode(toJson());
-  }
-}
 
 class BeaconInfoData {
   String place;

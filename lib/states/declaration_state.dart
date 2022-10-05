@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/states/home.dart';
 
 import '../states/confirmation.state.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../utils/time_util.dart';
+import 'package:illegalparking_app/services/server_service.dart';
 
 class Declaration extends StatefulWidget {
   const Declaration({super.key});
@@ -202,8 +204,8 @@ class _DeclarationState extends State<Declaration> {
                             ElevatedButton(
                               onPressed: () async {
                                 await saveImageGallery();
-
                                 Get.off(const Confirmation());
+                                sendFile(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.wholeImage.value);
                               },
                               child: const Text('신고하기'),
                             ),
