@@ -78,6 +78,7 @@ class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      shrinkWrap: true,
       children: [
         // 등록, 신고, 포인트
         if (!controller.certifiedVehicle)
@@ -107,7 +108,7 @@ class _MyPageState extends State<MyPage> {
                   child: Ink(
                     child: InkWell(
                       onTap: () {
-                        Navigator.pushNamed(context, "/infomation");
+                        Navigator.pushNamed(context, "/car_infomation");
                       },
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(minHeight: 100),
@@ -194,52 +195,53 @@ class _MyPageState extends State<MyPage> {
                 children: List.generate(
                   testlist.length,
                   (index) => SizedBox(
-                      child: Wrap(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 16.0,
-                          left: 16.0,
-                          right: 16.0,
-                          bottom: 8.0,
+                    child: Wrap(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 16.0,
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: 8.0,
+                          ),
+                          child: Text(testlist[index]["title"]),
                         ),
-                        child: Text(testlist[index]["title"]),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8.0,
-                          left: 16.0,
-                          right: 16.0,
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 8.0,
+                            left: 16.0,
+                            right: 16.0,
+                          ),
+                          child: Text(testlist[index]["content"]),
                         ),
-                        child: Text(testlist[index]["content"]),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8.0,
-                          left: 16.0,
-                          right: 16.0,
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 8.0,
+                            left: 16.0,
+                            right: 16.0,
+                          ),
+                          child: Row(
+                            children: [
+                              const Text("현재시간"),
+                              const Spacer(),
+                              TextButton(
+                                onPressed: () {
+                                  showNoticeDialog(index);
+                                },
+                                child: const Text("더보기 >"),
+                              ),
+                            ],
+                          ),
                         ),
-                        child: Row(
-                          children: [
-                            const Text("현재시간"),
-                            const Spacer(),
-                            TextButton(
-                              onPressed: () {
-                                showNoticeDialog(index);
-                              },
-                              child: const Text("더보기 >"),
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (testlist.length != (index + 1))
-                        Container(
-                          color: Colors.grey,
-                          height: 1,
-                          width: MediaQuery.of(context).size.width,
-                        )
-                    ],
-                  )),
+                        if (testlist.length != (index + 1))
+                          Container(
+                            color: Colors.grey,
+                            height: 1,
+                            width: MediaQuery.of(context).size.width,
+                          )
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],

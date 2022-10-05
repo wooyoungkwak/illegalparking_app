@@ -39,8 +39,7 @@ class _PartcameraState extends State<Partcamera> {
               boxBorderWidth: 2.8,
               backColor: Colors.black,
               onTake: (MaskForCameraViewResult res) async {
-                suchAddress().then((value) => saveImageDirectory(res, true).then((value) => Future.delayed(
-                  const Duration(minutes: 1), () {
+                suchAddress().then((value) => saveImageDirectory(res, true).then((value) => Future.delayed(const Duration(minutes: 1), () {
                       Get.off(() => Declaration());
                     }))); // GPS, 주소 검색 후 저장
               }),

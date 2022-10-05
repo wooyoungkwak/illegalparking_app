@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:illegalparking_app/controllers/login_controller.dart';
+import 'package:illegalparking_app/states/guest_camera.dart';
+import 'package:illegalparking_app/states/guest_my_page.dart';
 import 'package:illegalparking_app/states/webview.dart';
 import 'package:illegalparking_app/states/camera.dart';
 import 'package:illegalparking_app/states/my_page.dart';
@@ -14,13 +18,23 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final loginController = Get.put(LoginController());
+
   late String changeText = "안녕하세요\n김봉남님";
-  int _selectedIndex = 1;
+
   static const List<Widget> _widgetOption = <Widget>[
     WebviewPage(),
     Wholecamera(),
     MyPage(),
   ];
+
+  static const List<Widget> _guestModeWidgetOption = <Widget>[
+    WebviewPage(),
+    GuestCamera(),
+    GuestMyPage(),
+  ];
+
+  int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -36,20 +50,29 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     super.dispose();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      loginController.offGuesMode();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _selectedIndex == 2
+      appBar: _selectedIndex == 2 && !loginController.isGuestMode
           ? AppBar(
               automaticallyImplyLeading: false,
               title: Text(changeText),
               // centerTitle: true,
-              actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.settings))],
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/infomation');
+                    },
+                    icon: const Icon(Icons.settings))
+              ],
             )
           : null,
-      body: _widgetOption.elementAt(_selectedIndex),
+      body: loginController.isGuestMode ? _guestModeWidgetOption.elementAt(_selectedIndex) : _widgetOption.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

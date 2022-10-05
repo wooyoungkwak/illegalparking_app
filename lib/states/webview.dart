@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:illegalparking_app/controllers/map_controller.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -41,7 +42,7 @@ class _WebviewPageState extends State<WebviewPage> {
               _controller.complete(webViewController);
             },
             onProgress: (int progress) {
-              print("Webview is loading (progress : $progress%");
+              Log.debug("Webview is loading (progress : $progress%");
             },
             javascriptMode: JavascriptMode.unrestricted,
             javascriptChannels: _createJavascriptChannels(context),
