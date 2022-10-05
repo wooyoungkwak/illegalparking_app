@@ -1,5 +1,4 @@
 import 'dart:io';
-import '../main.dart';
 import '../states/confirmation.state.dart';
 import '../controllers/address_controller.dart';
 import '../states/part_camera_state.dart';
@@ -8,13 +7,18 @@ import '../services/save_image_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../utils/time_util.dart';
+
 class Declaration extends StatefulWidget {
+  const Declaration({super.key});
+
   @override
   State<Declaration> createState() => _DeclarationState();
 }
 
 class _DeclarationState extends State<Declaration> {
   final ScrollController _scrollController = ScrollController();
+  // ignore: non_constant_identifier_names
   late TextEditingController _NumberplateContoroller;
 
   @override
@@ -24,6 +28,7 @@ class _DeclarationState extends State<Declaration> {
     String? number;
     number = "123가 465789";
     //나중에 번호판 값 받아오면 넣을 위치
+    // ignore: unnecessary_null_comparison
     if (number == null) {
       _NumberplateContoroller = TextEditingController(text: "");
     } else {
@@ -48,7 +53,7 @@ class _DeclarationState extends State<Declaration> {
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           body: Container(
-            margin: EdgeInsets.symmetric(horizontal: 30),
+            margin: const EdgeInsets.symmetric(horizontal: 30),
             child: CustomScrollView(
               slivers: [
                 SliverFillRemaining(
@@ -65,7 +70,7 @@ class _DeclarationState extends State<Declaration> {
                                 onPressed: () {
                                   // Get.offAll(main());
                                 },
-                                icon: Icon(Icons.close_outlined),
+                                icon: const Icon(Icons.close_outlined),
                                 color: Colors.white),
                           ],
                         ),
@@ -77,7 +82,7 @@ class _DeclarationState extends State<Declaration> {
                               Obx((() => SizedBox(
                                     height: 160,
                                     child: Image.file(
-                                      File(controller.whole_Image.value),
+                                      File(controller.wholeImage.value),
                                       fit: BoxFit.fill,
                                     ),
                                   ))),
@@ -94,7 +99,7 @@ class _DeclarationState extends State<Declaration> {
                           flex: 3,
                           child: Column(
                             children: [
-                              Obx((() => SizedBox(height: 90, child: Image.file(File(controller.part_Image.value))))),
+                              Obx((() => SizedBox(height: 90, child: Image.file(File(controller.partImage.value))))),
                               ElevatedButton(
                                 onPressed: () {
                                   Get.to(const Partcamera());
@@ -120,7 +125,7 @@ class _DeclarationState extends State<Declaration> {
                                 SizedBox(width: 200, height: 50, child: Card(child: _createTextFormField(_NumberplateContoroller))),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             Row(
@@ -136,8 +141,8 @@ class _DeclarationState extends State<Declaration> {
                                 Obx(() {
                                   return Flexible(
                                     child: Text(
-                                      controller.image_GPS.value.address.length > 1 ? controller.image_GPS.value.address : "주소를 찾을 수 없습니다.",
-                                      //controller.image_GPS.value.address.substring(4),//구글 map사용해서 앞에 대한민국 붙음
+                                      controller.imageGPS.value.address.length > 1 ? controller.imageGPS.value.address : "위치를 찾을 수 없습니다.",
+                                      //controller.imageGPS.value.address.substring(4),//구글 map사용해서 앞에 대한민국 붙음
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -145,7 +150,7 @@ class _DeclarationState extends State<Declaration> {
                                 })
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             Row(
@@ -159,7 +164,7 @@ class _DeclarationState extends State<Declaration> {
                                   width: 12,
                                 ),
                                 Text(
-                                  "${DateTime.now()}",
+                                  "$getDateToStringForAll(Deta.now())",
                                   style: const TextStyle(fontSize: 12),
                                 ),
                               ],
@@ -167,7 +172,7 @@ class _DeclarationState extends State<Declaration> {
                             Obx(() {
                               return Flexible(
                                 child: Text(
-                                  controller.image_GPS.value.latitude.toString(),
+                                  controller.imageGPS.value.latitude.toString(),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -176,7 +181,7 @@ class _DeclarationState extends State<Declaration> {
                             Obx(() {
                               return Flexible(
                                 child: Text(
-                                  controller.image_GPS.value.longitude.toString(),
+                                  controller.imageGPS.value.longitude.toString(),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -194,7 +199,7 @@ class _DeclarationState extends State<Declaration> {
                               onPressed: () async {
                                 await saveImageGallery();
 
-                                Get.off(Confirmation());
+                                Get.off(const Confirmation());
                               },
                               child: const Text('신고하기'),
                             ),
@@ -204,15 +209,15 @@ class _DeclarationState extends State<Declaration> {
                       Expanded(
                         flex: 1,
                         child: Wrap(
-                          children: [
-                            const Text(
+                          children: const [
+                            Text(
                               "주차와 정차를 할 수 없거나 자신의 소유권(또는 이용권)이 없는 주정차 구역에 주정차를 하는 행위를 말하며, 무단주차 또는 주정차위반이라고도 한다. 자동차가.",
                               style: TextStyle(fontSize: 12),
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 50,
                       )
                     ],

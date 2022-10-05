@@ -79,7 +79,7 @@ void showAlertDialog(BuildContext context, {String? text, dynamic action}) {
 //   var notificationDetails = NotificationDetails(android: androidNotificationDetails, iOS: iOSNotificationDetails);
 //   flutterLocalNotificationsPlugin.show(id, tag, subtitle, notificationDetails, payload: 'item x');
 // }
-// 
+//
 // // 진동, 소리 둘다 켜져있을때
 // Future<void> showNotification(FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin, String tag, String subtitle) async {
 //   const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(Env.NOTIFICATION_CHANNEL_ID, Env.NOTIFICATION_CHANNEL_NAME,

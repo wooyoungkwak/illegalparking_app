@@ -23,6 +23,7 @@ class _WholecameraState extends State<Wholecamera> {
 
   @override
   Widget build(BuildContext context) {
+    final double statusBarHeight = MediaQuery.of(context).padding.top;
     return Scaffold(
       body: Stack(
         alignment: Alignment.center,
@@ -38,20 +39,21 @@ class _WholecameraState extends State<Wholecamera> {
               onTake: (MaskForCameraViewResult res) async {
                 saveImageDirectory(res, false); //디렉토리 검색 후 이미지 저장 true = part, false = whole 구분하는 좋은 방법이 뭘까... string?
 
-                if (c.part_Image.value.isNotEmpty) {
-                  Get.to(Declaration());
+                if (c.partImage.value.isNotEmpty) {
+                  Get.to(const Declaration());
                 } else {
                   Get.to(const Partcamera());
                 }
               }),
           initContainerByOutlineButton(0, 0.95, "불법주정차 법규", context),
-          Positioned(top: 100, child: initColumnByText(10))
+          Positioned(top: statusBarHeight + 20, child: initColumnByText(10))
         ],
       ),
     );
   }
 }
 
+// ignore: non_constant_identifier_names
 Container CreateContainerByAlignment(double X, double Y, Widget widget) {
   return Container(alignment: Alignment(X, Y), child: widget);
 }
@@ -68,7 +70,7 @@ Column initColumnByText(double size) {
           color: Colors.white,
         ),
       ),
-      SizedBox(
+      const SizedBox(
         height: 5,
       ),
       Text(
@@ -78,7 +80,7 @@ Column initColumnByText(double size) {
           color: Colors.white,
         ),
       ),
-      SizedBox(
+      const SizedBox(
         height: 5,
       ),
       Text(
@@ -88,7 +90,7 @@ Column initColumnByText(double size) {
           color: Colors.white,
         ),
       ),
-      SizedBox(
+      const SizedBox(
         height: 5,
       ),
       Text(
@@ -98,7 +100,7 @@ Column initColumnByText(double size) {
           color: Colors.white,
         ),
       ),
-      SizedBox(
+      const SizedBox(
         height: 5,
       ),
       Text(
@@ -108,7 +110,7 @@ Column initColumnByText(double size) {
           color: Colors.white,
         ),
       ),
-      SizedBox(
+      const SizedBox(
         height: 5,
       ),
       Text(
@@ -150,22 +152,22 @@ void widgetbottomsheet(BuildContext context) {
       return FractionallySizedBox(
         heightFactor: 0.9,
         child: Container(
-          padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+          padding: const EdgeInsets.all(8),
+          decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
           child: Column(
             children: [
-              Container(width: 50, child: Divider(color: Colors.blueGrey, thickness: 4.0)),
-              SizedBox(height: 15),
-              Expanded(
+              const SizedBox(width: 50, child: Divider(color: Colors.blueGrey, thickness: 4.0)),
+              const SizedBox(height: 15),
+              const Expanded(
                 flex: 1,
                 child: Text(
                   '불법주정차 법규',
                   style: TextStyle(color: Colors.black),
                 ),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Expanded(flex: 8, child: Image.asset("assets/parking _rule.png")), //불법주정차에 대한 법규 이미지 넣을 부분
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Expanded(
                   flex: 1,
                   child: Center(
@@ -174,7 +176,7 @@ void widgetbottomsheet(BuildContext context) {
                           onPressed: () {
                             Get.back();
                           }))),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
             ],
           ),
         ),

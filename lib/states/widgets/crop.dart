@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+// ignore: depend_on_referenced_packages
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +15,7 @@ import 'package:mask_for_camera_view/crop_image.dart';
 
 CameraController? _cameraController;
 List<CameraDescription>? _cameras;
-GlobalKey _stickyKey = GlobalKey();
-
+// GlobalKey _stickyKey = GlobalKey();
 double? _screenWidth;
 double? _screenHeight;
 double? _boxWidthForCrop;
@@ -26,6 +26,7 @@ FlashMode _flashMode = FlashMode.off;
 // ignore: must_be_immutable
 class MaskForCameraCustomView extends StatefulWidget {
   MaskForCameraCustomView({
+    super.key,
     this.boxWidth = 300.0,
     this.boxHeight = 168.0,
     this.boxBorderWidth = 1.8,
@@ -85,7 +86,6 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> {
 
   @override
   void dispose() {
-    print("##################cameradispose");
     _cameraController!.dispose();
     super.dispose();
   }
@@ -97,8 +97,6 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> {
 
     _boxWidthForCrop = widget.boxWidth;
     _boxHeightForCrop = widget.boxHeight;
-
-    double width = 150;
 
     return Scaffold(
       body: SafeArea(
@@ -138,7 +136,7 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> {
               ),
             ),
             Positioned(
-              bottom: 125,
+              bottom: widget.boxHeight > 150 ? 80 : 145,
               left: 0,
               right: 0,
               child: Container(

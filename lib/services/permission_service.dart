@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:app_settings/app_settings.dart';
+// import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 Future<bool> callPermissions() async {
@@ -18,11 +18,8 @@ List<Permission> _getPermissions() {
   List<Permission> permissions = [Permission.location];
 
   if (Platform.isAndroid) {
-    // permissions.add(Permission.bluetoothScan);
-    // permissions.add(Permission.bluetoothConnect);
-    // permissions.add(Permission.bluetooth);
-    permissions.add(Permission.locationAlways);
     permissions.add(Permission.locationWhenInUse);
+    permissions.add(Permission.camera);
   }
 
   return permissions;
@@ -44,3 +41,27 @@ Future<bool> checkDeviceLocationIsOn() async {
   }
   return false;
 }
+
+// //위치권한 확인용!
+// Future<Position> determinePosition() async {
+//   bool serviceEnabled;
+//   LocationPermission permission;
+
+//   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+//   if (!serviceEnabled) {
+//     return Future.error('Location services are disabled.');
+//   }
+
+//   permission = await Geolocator.checkPermission();
+//   if (permission == LocationPermission.denied) {
+//     permission = await Geolocator.requestPermission();
+//     if (permission == LocationPermission.denied) {
+//       return Future.error('Location permissions are denied');
+//     }
+//   }
+
+//   if (permission == LocationPermission.deniedForever) {
+//     return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+//   }
+//   return await Geolocator.getCurrentPosition();
+// }

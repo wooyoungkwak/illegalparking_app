@@ -3,35 +3,35 @@ import '../models/address_model.dart';
 import 'package:get/get.dart';
 
 class ReactiveController extends GetxController {
-  var whole_Image = "".obs;
-  var part_Image = "".obs;
+  var wholeImage = "".obs;
+  var partImage = "".obs;
 
-  late Uint8List whole_Image_Memory;
-  late Uint8List part_Image_Memory;
+  late Uint8List wholeImageMemory;
+  late Uint8List partImageMemory;
 
-  var image_GPS = ImageGPS(latitude: 0, longitude: 0, address: "").obs;
+  var imageGPS = ImageGPS(latitude: 0, longitude: 0, address: "").obs;
 
   change({required double latitude, required double longitude, required String address}) {
-    image_GPS.update((val) {
+    imageGPS.update((val) {
       val?.latitude = latitude;
       val?.longitude = longitude;
       val?.address = address;
     });
   }
 
-  whole_Image_write(String path) {
-    whole_Image = path.obs;
+  wholeImagewrite(String path) {
+    wholeImage = path.obs;
   }
 
-  part_Image_write(String path) {
-    part_Image = path.obs;
+  partImagewrite(String path) {
+    partImage = path.obs;
   }
 
-  whole_Image_Memory_writ(Uint8List path) {
-    whole_Image_Memory = path;
+  wholeImageMemorywrit(Uint8List path) {
+    wholeImageMemory = path;
   }
 
-  part_Image_Memory_writ(Uint8List path) {
-    part_Image_Memory = path;
+  partImageMemorywrit(Uint8List path) {
+    partImageMemory = path;
   }
 }

@@ -1,13 +1,12 @@
 class ImageGPS {
-  double latitude;
-  double longitude;
+  double latitude, longitude;
   String address;
 
   ImageGPS({
     required double latitude,
     required double longitude,
     required String address,
-  })  : this.latitude = latitude,
-        this.longitude = longitude,
-        this.address = address;
+  })  : latitude = latitude,
+        longitude = longitude,
+        address = address;
 }

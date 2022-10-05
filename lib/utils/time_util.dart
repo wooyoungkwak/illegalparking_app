@@ -66,6 +66,10 @@ String getDateToStringForMMInNow() {
   return getDateToString(getNow(), "mm");
 }
 
+String getDateToStringForNumber() {
+  return getDateToString(getNow(), "yyyyMMddkkmmssSSS");
+}
+
 String getMinorToDate() {
   String date = getDateToString(getNow(), "MMdd");
   if (date.substring(0, 1) == "0") {

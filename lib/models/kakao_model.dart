@@ -13,13 +13,13 @@ class Kakao {
 }
 
 class Meta {
-  int total_count;
+  int totalcount;
 
-  Meta({required this.total_count});
+  Meta({required this.totalcount});
 
   factory Meta.fromJson(Map<String, dynamic> parsedJson) {
     return Meta(
-      total_count: parsedJson['total_count'],
+      totalcount: parsedJson['totalcount'],
     );
   }
 }

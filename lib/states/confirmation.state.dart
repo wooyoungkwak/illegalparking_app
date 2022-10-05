@@ -1,10 +1,14 @@
+import 'package:illegalparking_app/states/home.dart';
 import '../main.dart';
 import '../controllers/address_controller.dart';
-import '../states/whole_camera_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'my_page_report.dart';
+
 class Confirmation extends StatefulWidget {
+  const Confirmation({super.key});
+
   @override
   State<Confirmation> createState() => _ConfirmationState();
 }
@@ -29,7 +33,7 @@ class _ConfirmationState extends State<Confirmation> {
           body: Column(
             children: [
               Container(
-                alignment: Alignment(1, 1),
+                alignment: const Alignment(1, 1),
                 child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                   IconButton(
                       onPressed: () {
@@ -53,18 +57,18 @@ class _ConfirmationState extends State<Confirmation> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          //Get.off(?????)홈 이동 넣어주세요
+                          Get.off(const MyPageReport());
                         },
                         child: const Text('신고이력'),
                       ),
                       ElevatedButton(
                         onPressed: () {
                           final ReactiveController c = Get.put(ReactiveController());
-                          c.whole_Image_write("");
-                          c.part_Image_write("");
+                          c.wholeImagewrite("");
+                          c.partImagewrite("");
                           // Get.offAll(main());
                           //임시로 카메라 다시 시작
-                          //Get.offAll(?????)홈 이동 넣어주세요
+                          Get.offAll(const Home());
                         },
                         child: const Text('홈'),
                       ),
