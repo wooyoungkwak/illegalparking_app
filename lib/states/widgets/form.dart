@@ -1,12 +1,37 @@
 import 'package:flutter/material.dart';
 
+Padding createCustomText({
+  String? text,
+  String? family,
+  double? size,
+  double? height,
+  FontWeight? weight,
+  Color? color,
+  double? padding,
+}) {
+  return Padding(
+    padding: EdgeInsets.all(padding ?? 8.0),
+    child: Text(
+      text ?? "",
+      style: TextStyle(
+        color: color ?? Colors.black,
+        height: height,
+        fontSize: size ?? 18.0,
+        fontWeight: weight ?? FontWeight.bold,
+        fontFamily: family,
+      ),
+    ),
+  );
+}
+
 Padding createTextFormField({
   String? labelText,
   String? hintText,
+  double? padding,
   bool? obscureText,
 }) {
   return Padding(
-    padding: const EdgeInsets.all(8.0),
+    padding: EdgeInsets.all(padding ?? 8.0),
     child: TextFormField(
       obscureText: obscureText ?? false,
       decoration: InputDecoration(
@@ -26,15 +51,18 @@ Padding createTextFormField({
 
 Padding createElevatedButton({
   String? text,
-  dynamic function,
+  Color? color,
+  double? padding,
+  dynamic? function,
 }) {
   return Padding(
-    padding: const EdgeInsets.all(8.0),
+    padding: EdgeInsets.all(padding ?? 8.0),
     child: SizedBox(
       height: 40,
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: function ?? () {},
+        style: ElevatedButton.styleFrom(primary: color ?? Colors.blue),
+        onPressed: function,
         child: Text(text ?? ""),
       ),
     ),
@@ -63,7 +91,8 @@ Card createMypageCard({List<Widget>? widgetList, dynamic route}) {
   );
 }
 
-showCustomDialog({required BuildContext context, String? title, Widget? widget}) {
+showCustomDialog(
+    {required BuildContext context, String? title, Widget? widget}) {
   showDialog(
     context: context,
     builder: (BuildContext context) => Scaffold(
@@ -81,4 +110,103 @@ showCustomDialog({required BuildContext context, String? title, Widget? widget})
         ),
         body: widget),
   );
+}
+
+Card createReportList(BuildContext context, List list) {
+  return Card(
+    child: Wrap(
+      alignment: WrapAlignment.center,
+      children: List.generate(
+        list.length,
+        (index) => SizedBox(
+          child: Wrap(
+            children: [
+              Column(
+                children: [
+                  //주 정보
+                  Row(
+                    children: [
+                      // 이미지
+                      Image(
+                        height: 80,
+                        width: 80,
+                        image: AssetImage(
+                          list[index]["image"],
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //주소
+                          createCustomText(
+                            size: 16.0,
+                            text: list[index]["address"],
+                          ),
+                          //시간
+                          createCustomText(
+                            size: 12.0,
+                            text: list[index]["time"],
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          color: reportColors(list[index]["state"]),
+                          child: createCustomText(
+                            weight: FontWeight.w400,
+                            color: reportColors(list[index]["state"]) ==
+                                    const Color(0xffffffff)
+                                ? Colors.black
+                                : Colors.white,
+                            text: list[index]["state"],
+                          ),
+                        ),
+                      )
+                      // 상태
+                    ],
+                  ),
+                ],
+              ),
+              //메세지
+              createCustomText(
+                padding: 16.0,
+                size: 12.0,
+                text: "* ${list[index]["message"]}",
+              ),
+              if (list.length != (index + 1))
+                Container(
+                  color: Colors.grey,
+                  height: 1,
+                  width: MediaQuery.of(context).size.width,
+                )
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+Color reportColors(String state) {
+  Color color = const Color(0xffffffff);
+  switch (state) {
+    case "신고발생":
+      color = const Color(0xffffc107);
+      break;
+    case "신고대기":
+      color = const Color(0xffffc107);
+      break;
+    case "신고접수":
+      color = const Color(0xffd84315);
+      break;
+    case "신고제외":
+      color = const Color(0xff9e9e9e);
+      break;
+    case "과태료대상":
+      color = const Color(0xffbf360c);
+      break;
+  }
+  return color;
 }
