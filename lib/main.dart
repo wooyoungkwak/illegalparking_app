@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:illegalparking_app/services/permission_service.dart';
 import 'package:illegalparking_app/states/home.dart';
 import 'package:illegalparking_app/states/login.dart';
 import 'package:illegalparking_app/states/my_page_car_infomation.dart';
@@ -13,7 +14,7 @@ import 'package:illegalparking_app/states/widgets/crop.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MaskForCameraCustomView.initialize();
-
+  callPermissions();
   runApp(const MyApp());
 }
 

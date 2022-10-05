@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:app_settings/app_settings.dart';
+import 'package:geolocator/geolocator.dart';
 // import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -16,10 +17,9 @@ Future<bool> callPermissions() async {
 
 List<Permission> _getPermissions() {
   List<Permission> permissions = [Permission.location];
-
+  permissions.add(Permission.camera);
   if (Platform.isAndroid) {
     permissions.add(Permission.locationWhenInUse);
-    permissions.add(Permission.camera);
   }
 
   return permissions;

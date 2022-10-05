@@ -46,7 +46,7 @@ dependencies:
   flutter_secure_storage: ^6.0.0
   shared_preferences: ^2.0.15
 
-  camera: ^0.10.0+1
+  camera: ^0.10.0+3
   #갤러리저장
   image_gallery_saver: ^1.7.1
   #번호판 카메라
