@@ -21,8 +21,6 @@ double? _screenHeight;
 double? _boxWidthForCrop;
 double? _boxHeightForCrop;
 
-// FlashMode _flashMode = FlashMode.off;
-
 // ignore: must_be_immutable
 class MaskForCameraCustomView extends StatefulWidget {
   MaskForCameraCustomView({
@@ -74,19 +72,19 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> {
       ResolutionPreset.high,
       enableAudio: false,
     );
-    // _cameraController?.setFlashMode(_flashMode);
-    super.initState();
+    _cameraController!.setFlashMode(FlashMode.auto);
     _cameraController!.initialize().then((_) async {
       if (!mounted) {
         return;
       }
       setState(() {});
     });
+    super.initState();
   }
 
   @override
   void dispose() {
-    // _cameraController!.dispose();
+    _cameraController!.dispose();
     super.dispose();
   }
 

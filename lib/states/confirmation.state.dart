@@ -1,10 +1,8 @@
+import 'package:illegalparking_app/controllers/report_controller.dart';
+import 'package:illegalparking_app/main.dart';
 import 'package:illegalparking_app/states/home.dart';
-import 'package:illegalparking_app/states/whole_camera_state.dart';
-import '../main.dart';
-import '../controllers/address_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'my_page_report.dart';
 
 class Confirmation extends StatefulWidget {
@@ -27,7 +25,7 @@ class _ConfirmationState extends State<Confirmation> {
 
   @override
   Widget build(BuildContext context) {
-    final ReactiveController c = Get.put(ReactiveController());
+    final ReportController controller = Get.put(ReportController());
     final statusBarHeight = MediaQuery.of(context).padding.top;
     return _createWillPopScope(Padding(
         padding: EdgeInsets.only(top: statusBarHeight),
@@ -39,8 +37,8 @@ class _ConfirmationState extends State<Confirmation> {
                 child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                   IconButton(
                       onPressed: () {
-                        c.wholeImagewrite("");
-                        c.partImagewrite("");
+                        controller.carreportImagewrite("");
+                        controller.carnumberImagewrite("");
                         Get.offAll(const Home());
                       },
                       icon: const Icon(Icons.close_outlined),
@@ -61,16 +59,16 @@ class _ConfirmationState extends State<Confirmation> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          c.wholeImagewrite("");
-                          c.partImagewrite("");
+                          controller.carreportImagewrite("");
+                          controller.carnumberImagewrite("");
                           Get.offAll(const MyPageReport());
                         },
                         child: const Text('신고이력'),
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          c.wholeImagewrite("");
-                          c.partImagewrite("");
+                          controller.carreportImagewrite("");
+                          controller.carnumberImagewrite("");
                           //임시로 카메라 다시 시작
                           Get.offAll(const Home());
                         },

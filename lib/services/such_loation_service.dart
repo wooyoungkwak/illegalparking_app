@@ -1,12 +1,12 @@
 import 'dart:convert';
-import '../controllers/address_controller.dart';
+import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import '../models/kakao_model.dart';
+import 'package:illegalparking_app/models/kakao_model.dart';
 
 // final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
-final ReactiveController c = Get.put(ReactiveController());
+final ReportController c = Get.put(ReportController());
 
 Future<void> suchAddress() async {
   // final position = await _geolocatorPlatform.getCurrentPosition();
@@ -26,14 +26,14 @@ Future<void> regeocoder(double longitude, double latitude) async {
   String RESTAPIKEY = "429eb33ae5e0c87a6d5a400f262ef734"; //나중에 env에 따로 옮길것
   Kakao map;
 
-  c.change(latitude: latitude, longitude: longitude, address: "실패[데이터 및 WIFI를 확인해주세요]");
+  c.addresswrite(latitude: latitude, longitude: longitude, address: "실패[데이터 및 WIFI를 확인해주세요]");
   String kakaourl = "https://dapi.kakao.com/v2/local/geo/coord2address.json?x=$longitude&y=$latitude&input_coord=WGS84";
 
   final responseGps = await http.get(Uri.parse(kakaourl), headers: {"Authorization": "KakaoAK $RESTAPIKEY"});
 
   if (responseGps.statusCode == 200) {
     map = Kakao.fromJson(json.decode(responseGps.body));
-    c.change(latitude: latitude, longitude: longitude, address: map.documents[0]['address']['address_name']);
+    c.addresswrite(latitude: latitude, longitude: longitude, address: map.documents[0]['address']['address_name']);
   } else {
     throw Exception(responseGps.body);
   }

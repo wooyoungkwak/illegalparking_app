@@ -2,7 +2,9 @@ import 'dart:async';
 // import 'dart:convert';
 // import 'dart:html';
 // import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 // import 'package:illegalparking_app/config/env.dart';
 // import 'package:illegalparking_app/models/result_model.dart';
@@ -39,26 +41,32 @@ Map<String, String> headers = {};
 
 // 로그인
 Future<bool> sendFile(String url, String filePath) async {
-  Log.debug( " uri => ${Uri.parse(url)}");
+  final ReportController c = Get.put(ReportController());
+  Log.debug(" uri => ${Uri.parse(url)}");
   var request = new http.MultipartRequest("POST", Uri.parse(url));
   try {
     List<String> temps = filePath.split("/");
     String fileName = temps.last + ".jpg";
     request.files.add(await http.MultipartFile.fromPath('file', filePath, filename: fileName));
     var response = await request.send();
+    final respStr = await response.stream.bytesToString(); //번호판 결과값 반환
+    Log.debug("  stream = ${respStr}");
+    c.carNumberwrite(respStr); // 번호판 저장
 
-    Log.debug("  response.statusCode = ${response.statusCode}");
-    Log.debug("  resonse data length  = ${response.contentLength}");
-    Log.debug("  resonse data length  = ${response.reasonPhrase}");
-    Log.debug("  resonse data length  = ${response.request}");
+    // Log.debug("  resonse data length  = ${response.contentLength}");
+    // Log.debug("  resonse data length  = ${response.reasonPhrase}");
+    // Log.debug("  resonse data length  = ${response.request}");
 
     if (response.statusCode == 200) {
+      Log.debug(response.statusCode.toString());
       return true;
     } else {
+      // return false;
       throw Exception('파일 전송 오류 1111 ');
     }
   } catch (e) {
     Log.debug(e.toString());
+    // return false;
     throw Exception('파일 전송 오류 22222 ');
   }
 }
