@@ -37,12 +37,14 @@ class _ReportcameraState extends State<Reportcamera> {
               boxBorderColor: Colors.blue,
               boxBorderWidth: 1.0,
               onTake: (MaskForCameraViewResult res) {
-                saveImageDirectory(res, false); //디렉토리 검색 후 이미지 저장 true = part, false = whole
-                if (c.carnumberImage.value.isNotEmpty) {
-                  Get.to(const Declaration());
-                } else {
-                  Get.to(const Numbercamera());
-                }
+                //디렉토리 검색 후 이미지 저장 true = part, false = whole
+                saveImageDirectory(res, false).then((value) {
+                  if (c.carnumberImage.value.isNotEmpty) {
+                    Get.off(const Declaration());
+                  } else {
+                    Get.to(const Numbercamera());
+                  }
+                });
               }),
           initContainerByOutlineButton(0, 0.95, "불법주정차 법규", context),
           Positioned(top: statusBarHeight + 20, child: initColumnByText(10))

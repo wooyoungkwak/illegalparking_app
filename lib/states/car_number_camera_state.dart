@@ -22,6 +22,7 @@ class _NumbercameraState extends State<Numbercamera> {
   final ReportController controller = Get.put(ReportController());
   @override
   void initState() {
+    MaskForCameraCustomView.initialize();
     super.initState();
   }
 
