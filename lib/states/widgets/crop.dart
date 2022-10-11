@@ -91,7 +91,7 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> {
 
   @override
   Widget build(BuildContext context) {
-    _cameraController!.setFlashMode(FlashMode.auto);
+    // _cameraController!.setFlashMode(FlashMode.auto);
     _screenWidth = MediaQuery.of(context).size.width;
     _screenHeight = MediaQuery.of(context).size.height;
 
