@@ -1,16 +1,15 @@
 import 'dart:io';
 import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/states/home.dart';
-
-import '../states/confirmation.state.dart';
-import '../controllers/address_controller.dart';
-import '../states/part_camera_state.dart';
-import '../states/whole_camera_state.dart';
-import '../services/save_image_service.dart';
+import 'package:illegalparking_app/states/confirmation.state.dart';
+import 'package:illegalparking_app/states/car_number_camera_state.dart';
+import 'package:illegalparking_app/states/car_report_camera_state.dart';
+import 'package:illegalparking_app/services/save_image_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../utils/time_util.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
+import 'package:illegalparking_app/utils/time_util.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 
 class Declaration extends StatefulWidget {
@@ -21,6 +20,7 @@ class Declaration extends StatefulWidget {
 }
 
 class _DeclarationState extends State<Declaration> {
+  final ReportController controller = Get.put(ReportController());
   final ScrollController _scrollController = ScrollController();
   // ignore: non_constant_identifier_names
   late TextEditingController _NumberplateContoroller;
@@ -30,7 +30,9 @@ class _DeclarationState extends State<Declaration> {
     super.initState();
 
     String? number;
-    number = "123가 465789";
+    number = controller.carNumber.value;
+
+    Log.debug("number: $number");
     //나중에 번호판 값 받아오면 넣을 위치
     // ignore: unnecessary_null_comparison
     if (number == null) {
@@ -49,7 +51,8 @@ class _DeclarationState extends State<Declaration> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ReactiveController());
+    Log.debug("신고하기 화면");
+    Log.debug("address: ${controller.imageGPS.value.address.toString()}");
     final statusBarHeight = MediaQuery.of(context).padding.top;
     return _createWillPopScope(
       Padding(
@@ -72,8 +75,8 @@ class _DeclarationState extends State<Declaration> {
                           children: [
                             IconButton(
                                 onPressed: () {
-                                  c.wholeImagewrite("");
-                                  c.partImagewrite("");
+                                  controller.carreportImagewrite("");
+                                  controller.carnumberImagewrite("");
                                   Get.offAll(const Home());
                                 },
                                 icon: const Icon(Icons.close_outlined),
@@ -88,13 +91,13 @@ class _DeclarationState extends State<Declaration> {
                               Obx((() => SizedBox(
                                     height: 160,
                                     child: Image.file(
-                                      File(controller.wholeImage.value),
+                                      File(controller.reportImage.value),
                                       fit: BoxFit.fill,
                                     ),
                                   ))),
                               ElevatedButton(
                                 onPressed: () {
-                                  Get.to(const Wholecamera());
+                                  Get.to(const Reportcamera());
                                   // Navigator.pop(context);
                                 },
                                 child: const Text('재촬영'),
@@ -105,10 +108,10 @@ class _DeclarationState extends State<Declaration> {
                           flex: 3,
                           child: Column(
                             children: [
-                              Obx((() => SizedBox(height: 90, child: Image.file(File(controller.partImage.value))))),
+                              Obx((() => SizedBox(height: 90, child: Image.file(File(controller.carnumberImage.value))))),
                               ElevatedButton(
                                 onPressed: () {
-                                  Get.to(const Partcamera());
+                                  Get.to(const Numbercamera());
                                 },
                                 child: const Text('재촬영'),
                               ),
@@ -145,6 +148,7 @@ class _DeclarationState extends State<Declaration> {
                                   width: 10,
                                 ),
                                 Obx(() {
+                                  Log.debug("testaddress: ${controller.imageGPS.value.address}");
                                   return Flexible(
                                     child: Text(
                                       controller.imageGPS.value.address.length > 1 ? controller.imageGPS.value.address : "위치를 찾을 수 없습니다.",
@@ -205,7 +209,7 @@ class _DeclarationState extends State<Declaration> {
                               onPressed: () async {
                                 await saveImageGallery();
                                 Get.off(const Confirmation());
-                                sendFile(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.wholeImage.value);
+                                sendFile(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value);
                               },
                               child: const Text('신고하기'),
                             ),

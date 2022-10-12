@@ -1,21 +1,21 @@
-import '../services/save_image_service.dart';
-import '../states/widgets/crop.dart';
-import '../states/declaration_state.dart';
-import '../states/part_camera_state.dart';
-import '../controllers/address_controller.dart';
+import 'package:illegalparking_app/controllers/report_controller.dart';
+import 'package:illegalparking_app/services/save_image_service.dart';
+import 'package:illegalparking_app/states/widgets/crop.dart';
+import 'package:illegalparking_app/states/declaration_state.dart';
+import 'package:illegalparking_app/states/car_number_camera_state.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
 import 'package:get/get.dart';
 
-class Wholecamera extends StatefulWidget {
-  const Wholecamera({Key? key}) : super(key: key);
+class Reportcamera extends StatefulWidget {
+  const Reportcamera({Key? key}) : super(key: key);
 
   @override
-  State<Wholecamera> createState() => _WholecameraState();
+  State<Reportcamera> createState() => _ReportcameraState();
 }
 
-class _WholecameraState extends State<Wholecamera> {
-  final ReactiveController c = Get.put(ReactiveController());
+class _ReportcameraState extends State<Reportcamera> {
+  final ReportController c = Get.put(ReportController());
   @override
   void initState() {
     super.initState();
@@ -36,13 +36,15 @@ class _WholecameraState extends State<Wholecamera> {
               takeButtonColor: Colors.black,
               boxBorderColor: Colors.blue,
               boxBorderWidth: 1.0,
-              onTake: (MaskForCameraViewResult res) async {
-                saveImageDirectory(res, false); //디렉토리 검색 후 이미지 저장 true = part, false = whole
-                if (c.partImage.value.isNotEmpty) {
-                  Get.to(const Declaration());
-                } else {
-                  Get.to(const Partcamera());
-                }
+              onTake: (MaskForCameraViewResult res) {
+                //디렉토리 검색 후 이미지 저장 true = part, false = whole
+                saveImageDirectory(res, false).then((value) {
+                  if (c.carnumberImage.value.isNotEmpty) {
+                    Get.off(const Declaration());
+                  } else {
+                    Get.to(const Numbercamera());
+                  }
+                });
               }),
           initContainerByOutlineButton(0, 0.95, "불법주정차 법규", context),
           Positioned(top: statusBarHeight + 20, child: initColumnByText(10))
@@ -143,6 +145,7 @@ Container initContainerByOutlineButton(double X, double Y, String text, BuildCon
   );
 }
 
+//바텀sheet 불법 주정차 기준 창
 void widgetbottomsheet(BuildContext context) {
   showModalBottomSheet(
     context: context,

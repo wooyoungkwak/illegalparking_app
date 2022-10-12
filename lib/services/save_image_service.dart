@@ -1,14 +1,15 @@
 import 'dart:io';
-import '../controllers/address_controller.dart';
+
 import 'package:get/get.dart';
+import 'package:illegalparking_app/controllers/report_controller.dart';
+import 'package:illegalparking_app/utils/time_util.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
 import 'package:path_provider/path_provider.dart';
-import '../utils/time_util.dart';
 
-final ReactiveController c = Get.put(ReactiveController());
-String partImagename = "";
-String wholeImagename = "";
+final ReportController c = Get.put(ReportController());
+String carnumberImagename = "";
+String carreportnumberImage = "";
 
 Future<void> saveImageDirectory(MaskForCameraViewResult res, bool part) async {
   String nametime = getDateToStringForNumber();
@@ -21,13 +22,13 @@ Future<void> saveImageDirectory(MaskForCameraViewResult res, bool part) async {
   imageFile.writeAsBytes(res.croppedImage!);
 
   if (part) {
-    c.partImagewrite(myImagePath);
-    c.partImageMemorywrit(res.croppedImage!);
-    partImagename = nametime;
+    c.carnumberImagewrite(myImagePath);
+    c.carnumberImageMemorywrit(res.croppedImage!);
+    carnumberImagename = nametime;
   } else {
-    c.wholeImagewrite(myImagePath);
-    c.wholeImageMemorywrit(res.croppedImage!);
-    wholeImagename = nametime;
+    c.carreportImagewrite(myImagePath);
+    c.reportImageMemorywrit(res.croppedImage!);
+    carreportnumberImage = nametime;
   }
   //myImagePath
   //20221004152932789426 저장된 파일이름
@@ -40,6 +41,6 @@ Future<void> saveImageDirectory(MaskForCameraViewResult res, bool part) async {
 }
 
 Future<void> saveImageGallery() async {
-  ImageGallerySaver.saveImage(c.wholeImageMemory, name: wholeImagename);
-  ImageGallerySaver.saveImage(c.partImageMemory, name: partImagename);
+  ImageGallerySaver.saveImage(c.reportImageMemory, name: carreportnumberImage);
+  ImageGallerySaver.saveImage(c.carnumberImageMemory, name: carnumberImagename);
 }

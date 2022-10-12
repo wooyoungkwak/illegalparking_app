@@ -5,6 +5,7 @@ import 'package:camera/camera.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_camera_description.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line_direction.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line_position.dart';
@@ -20,8 +21,6 @@ double? _screenWidth;
 double? _screenHeight;
 double? _boxWidthForCrop;
 double? _boxHeightForCrop;
-
-// FlashMode _flashMode = FlashMode.off;
 
 // ignore: must_be_immutable
 class MaskForCameraCustomView extends StatefulWidget {
@@ -74,24 +73,25 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> {
       ResolutionPreset.high,
       enableAudio: false,
     );
-    // _cameraController?.setFlashMode(_flashMode);
-    super.initState();
     _cameraController!.initialize().then((_) async {
       if (!mounted) {
         return;
       }
       setState(() {});
     });
+    super.initState();
   }
 
   @override
   void dispose() {
-    // _cameraController!.dispose();
+    Log.debug("카메라종료###########");
+    _cameraController!.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // _cameraController!.setFlashMode(FlashMode.auto);
     _screenWidth = MediaQuery.of(context).size.width;
     _screenHeight = MediaQuery.of(context).size.height;
 
