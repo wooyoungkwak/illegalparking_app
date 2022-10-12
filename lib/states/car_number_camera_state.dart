@@ -49,19 +49,15 @@ class _NumbercameraState extends State<Numbercamera> {
                 // pd.close();
 
                 // function(res, context, controller, filelist);
-                try {
-                  searchAddress().then((value) {
-                    // showSnackBar(context, controller.carnumberImage.toString());
-                    pd.close();
-                    Get.off(() => const Declaration());
-                    // sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, filelist).then((value) {
-                    //   pd.close();
-                    //   Get.off(() => const Declaration());
-                    // });
-                  });
-                } catch (e) {
-                  Log.debug("신고하기 화면 이동 실패");
-                }
+
+                controller.carNumberwrite("123가12345");
+                showSnackBar(context, controller.carNumber.toString());
+                pd.close();
+                Get.off(() => const Declaration());
+                // sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, filelist).then((value) {
+                //   pd.close();
+                //   Get.off(() => const Declaration());
+                // });
               }),
           CreateContainerByAlignment(0, -0.3, DefaultTextStyle(style: Theme.of(context).textTheme.headline1!, child: const Text("번호판만 촬영해주세요", style: TextStyle(fontSize: 15, color: Colors.white)))),
           CreateContainerByAlignment(0, 0.9, SizedBox(height: 100, width: 200, child: Image.asset("assets/car_number.jpg")))

@@ -62,7 +62,8 @@ class _ConfirmationState extends State<Confirmation> {
                           controller.carreportImagewrite("");
                           controller.carnumberImagewrite("");
 
-                          Get.offAll(const MyPageReport());
+                          Get.offAll(const Home(index: 2));
+                          Get.toNamed("/report");
                         },
                         child: const Text('신고이력'),
                       ),

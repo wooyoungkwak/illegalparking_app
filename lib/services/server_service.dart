@@ -88,7 +88,7 @@ Future<bool> sendFile(String url, List<String> filePath) async {
 
     if (filePath.length == 1) {
       //번호판 사진
-      c.carNumberwrite(respStr); //서버에서 받은 번호판 text 저장
+      await c.carNumberwrite(respStr); //서버에서 받은 번호판 text 저장
     }
 
     // Log.debug("  resonse data length  = ${response.contentLength}");

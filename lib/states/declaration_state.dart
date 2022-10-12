@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
+import 'package:illegalparking_app/services/such_loation_service.dart';
 import 'package:illegalparking_app/states/home.dart';
 import 'package:illegalparking_app/states/confirmation.state.dart';
 import 'package:illegalparking_app/states/car_number_camera_state.dart';
@@ -11,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/utils/time_util.dart';
 import 'package:illegalparking_app/services/server_service.dart';
+import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 class Declaration extends StatefulWidget {
   const Declaration({super.key});
@@ -51,6 +53,16 @@ class _DeclarationState extends State<Declaration> {
 
   @override
   Widget build(BuildContext context) {
+    // ProgressDialog pd = ProgressDialog(context: context);
+    // pd.show(max: 100, msg: '데이터를 생성중입니다');
+    // pd.close();
+    regeocoder().then((value) {
+      // controller.carNumberwrite("tset중 문제네;;;");
+      // _NumberplateContoroller = TextEditingController(text: controller.carNumber.value);
+      // setState(() {});
+      // sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, filelist).then((value) {
+      // });
+    });
     List<String> filelist = [controller.reportImage.value, controller.carnumberImage.value];
     final statusBarHeight = MediaQuery.of(context).padding.top;
     return _createWillPopScope(

@@ -9,7 +9,8 @@ import 'package:illegalparking_app/states/car_report_camera_state.dart';
 import 'package:illegalparking_app/states/widgets/crop.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final int? index;
+  const Home({Key? key, this.index}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -32,7 +33,7 @@ class _HomeState extends State<Home> {
     GuestMyPage(),
   ];
 
-  int _selectedIndex = 0;
+  late int _selectedIndex;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -44,6 +45,7 @@ class _HomeState extends State<Home> {
   void initState() {
     MaskForCameraCustomView.initialize();
     super.initState();
+    _selectedIndex = widget.index ?? 0;
   }
 
   @override
