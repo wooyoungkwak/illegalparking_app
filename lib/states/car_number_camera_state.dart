@@ -50,7 +50,7 @@ class _NumbercameraState extends State<Numbercamera> {
 
                 // function(res, context, controller, filelist);
                 try {
-                  suchAddress().then((value) {
+                  searchAddress().then((value) {
                     // showSnackBar(context, controller.carnumberImage.toString());
                     pd.close();
                     Get.off(() => const Declaration());

@@ -5,18 +5,21 @@ import 'dart:async';
 class Env {
   static bool isDebug = true; // 배포시 false
 
-  static const String AI_SERVER = "http://teraenergy.iptime.org";     // AI 서버
-  static const String ADMIN_SERVER = "http://teraenergy.iptime.org";  // 관리자 서버
+  static const String AI_SERVER = "http://teraenergy.iptime.org"; // AI 서버
+  static const String ADMIN_SERVER = "http://teraenergy.iptime.org"; // 관리자 서버
 
   static const String SERVER_AI_URL = "$AI_SERVER:18091";
   static const String SERVER_ADMIN_URL = "$ADMIN_SERVER:18090";
-  
+
   static const String SERVER_AI_FILE_UPLOAD_URL = '$SERVER_AI_URL/';
   static const String SERVER_LOGIN_URL = '$SERVER_AI_URL/api/login';
-  
+
   static const String SERVER_ADMIN_FILE_UPLOAD_URL = '$SERVER_ADMIN_URL/files/image/set';
 
-  
+  static const String MAP_TEST_SERVER = "http://220.95.46.211:18090/area/map";
+  static const String MAP_REAL_SERVER = "http://49.50.166.205/area/map";
+
+  static const String MAP_REAL_URL = MAP_REAL_SERVER;
 
   static const String USER_NICK_NAME = 'USER_NICK_NAME';
   static const String LOGIN_ID = 'LOGIN_ID';
