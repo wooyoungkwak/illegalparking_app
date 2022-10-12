@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:illegalparking_app/controllers/map_controller.dart';
+import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
@@ -19,6 +21,7 @@ class _WebviewPageState extends State<WebviewPage> {
   final Completer<WebViewController> _controller = Completer<WebViewController>();
   final controller = Get.put(MapController());
   late String changeText = "Web View Test";
+  late WebViewController _webViewController;
 
   @override
   void initState() {
@@ -37,9 +40,11 @@ class _WebviewPageState extends State<WebviewPage> {
         Expanded(
           child: WebView(
             // initialUrl: "http://10.0.2.2:3000",
-            initialUrl: "http://220.95.46.211:18090/area/map",
+            initialUrl: "http://teraenergy.iptime.org:18090/api/area/map",
+            // initialUrl: "http://ipaddr:80/api/area/map",
             onWebViewCreated: (WebViewController webViewController) {
               _controller.complete(webViewController);
+              _webViewController = webViewController;
             },
             onProgress: (int progress) {
               Log.debug("Webview is loading (progress : $progress%");
@@ -56,6 +61,9 @@ class _WebviewPageState extends State<WebviewPage> {
             return const Text("웹에서 앱전달 실패");
           },
         ),
+        createElevatedButton(text: "appToGPS", function: () {
+          _webViewController.runJavascript("appToGps(123, 456)");
+        },),
       ],
     );
   }
@@ -182,6 +190,10 @@ class _WebviewPageState extends State<WebviewPage> {
       JavascriptChannel(
           name: 'webToApp',
           onMessageReceived: (message) {
+            Map<String, dynamic> resultMap = jsonDecode(message.message);
+            Log.debug( resultMap["type"]);
+            Log.debug( resultMap["data"]["pkName"]);
+
             controller.getTestText(message.message);
             controller.getClickedMap(true);
             showBottomDialog();

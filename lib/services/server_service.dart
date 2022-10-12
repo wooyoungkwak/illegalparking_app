@@ -1,13 +1,13 @@
 import 'dart:async';
-// import 'dart:convert';
+import 'dart:convert';
 // import 'dart:html';
 // import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
-// import 'package:illegalparking_app/config/env.dart';
-// import 'package:illegalparking_app/models/result_model.dart';
+import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/models/result_model.dart';
 // import 'package:illegalparking_app/models/storage_model.dart';
 // import 'package:illegalparking_app/utils/log_util.dart';
 // import 'package:illegalparking_app/utils/time_util.dart';
@@ -15,29 +15,27 @@ import 'package:illegalparking_app/utils/log_util.dart';
 Map<String, String> headers = {};
 
 // 로그인
-// Future<LoginInfo> login(String id, String pw) async {
-//   var data = {"loginId": id, "password": pw};
-//   var body = json.encode(data);
+Future<LoginInfo> login(String id, String pw) async {
+  var data = {"loginId": id, "password": pw};
+  var body = json.encode(data);
 
-//   var response = await http.post(Uri.parse(Env.SERVER_LOGIN_URL), headers: {"Content-Type": "application/json"}, body: body);
-//   if (response.statusCode == 200) {
-//     String result = utf8.decode(response.bodyBytes);
-//     Map<String, dynamic> resultMap = jsonDecode(result);
+  var response = await http.post(Uri.parse(Env.SERVER_LOGIN_URL), headers: {"Content-Type": "application/json"}, body: body);
+  if (response.statusCode == 200) {
+    String result = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> resultMap = jsonDecode(result);
 
-//     LoginInfo loginInfo;
+    LoginInfo loginInfo;
 
-//     if (resultMap.values.first) {
-//       //로그인 성공 실패 체크해서 Model 다르게 설정
-//       loginInfo = LoginInfo.fromJson(resultMap);
-//     } else {
-//       loginInfo = LoginInfo.fromJsonByFail(resultMap);
-//     }
+    //로그인 성공 실패 체크해서 Model 다르게 설정
+    // if (resultMap.values.first) {
+      loginInfo = LoginInfo.fromJson(resultMap);
+    // }
 
-//     return loginInfo;
-//   } else {
-//     throw Exception('로그인 서버 오류');
-//   }
-// }
+    return loginInfo;
+  } else {
+    throw Exception('로그인 서버 오류');
+  }
+}
 
 // 로그인
 Future<bool> sendFile(String url, String filePath) async {

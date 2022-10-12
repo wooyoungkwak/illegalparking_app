@@ -47,13 +47,11 @@ class _NumbercameraState extends State<Numbercamera> {
 
                 try {
                   saveImageDirectory(res, true).then((value) => suchAddress().then((value) {
-                        pd.close();
-                        Get.off(() => const Declaration());
                         //파일전송 현재 서버쪽 문제라 막아둠...
-                        // sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((value) {
-                        //   pd.close();
-                        //   Get.off(() => const Declaration());
-                        // });
+                        sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((value) {
+                          pd.close();
+                          Get.off(() => const Declaration());
+                        });
                       }));
                 } catch (e) {
                   Log.debug("신고하기 화면 이동 실패");

@@ -61,13 +61,14 @@ class _LoginState extends State<Login> {
                   createElevatedButton(
                       text: "로그인",
                       function: () {
-                        login("hong@gmail.com", "qwer1234").then((logingInfo) {
-                          if (logingInfo.success!) {
-                            Navigator.pushNamed(context, "/home");
-                          } else {
+                        Navigator.pushNamed(context, "/home");
+                        // login("hong@gmail.com", "qwer1234").then((logingInfo) {
+                        //   if (logingInfo.success!) {
+                        //     Navigator.pushNamed(context, "/home");
+                        //   } else {
 
-                          }
-                        });
+                        //   }
+                        // });
                       }),
                 ],
               ),

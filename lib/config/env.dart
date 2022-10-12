@@ -12,7 +12,11 @@ class Env {
   static const String SERVER_ADMIN_URL = "$ADMIN_SERVER:18090";
   
   static const String SERVER_AI_FILE_UPLOAD_URL = '$SERVER_AI_URL/';
+  static const String SERVER_LOGIN_URL = '$SERVER_AI_URL/api/login';
+  
   static const String SERVER_ADMIN_FILE_UPLOAD_URL = '$SERVER_ADMIN_URL/files/image/set';
+
+  
 
   static const String USER_NICK_NAME = 'USER_NICK_NAME';
   static const String LOGIN_ID = 'LOGIN_ID';
@@ -37,6 +41,8 @@ class Env {
   static const String KEY_SETTING_SOUND = "SOUND";
   static const String KEY_SETTING_ALARM = "ALARM";
   static const String KEY_LOGIN_SUCCESS = "success";
+  static const String KEY_PHOTO_NAME = "photoName";
+  static const String KEY_PHONE_NUMBER = "phoneNumber";
 
   static const String KEY_PHOTO_PATH = "photo_path";
   static const String KEY_KR_NAME = "krName";
