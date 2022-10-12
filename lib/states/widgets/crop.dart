@@ -5,6 +5,7 @@ import 'package:camera/camera.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:illegalparking_app/services/save_image_service.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_camera_description.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line_direction.dart';
@@ -24,22 +25,23 @@ double? _boxHeightForCrop;
 
 // ignore: must_be_immutable
 class MaskForCameraCustomView extends StatefulWidget {
-  MaskForCameraCustomView({
-    super.key,
-    this.boxWidth = 300.0,
-    this.boxHeight = 168.0,
-    this.boxBorderWidth = 1.8,
-    this.boxBorderRadius = 3.2,
-    required this.onTake,
-    this.cameraDescription = MaskForCameraViewCameraDescription.rear,
-    this.borderType = MaskForCameraViewBorderType.solid,
-    this.insideLine,
-    this.appBarColor = Colors.black,
-    this.boxBorderColor = Colors.white,
-    this.takeButtonColor = Colors.white,
-    this.takeButtonActionColor = Colors.black,
-    this.backColor = Colors.black54,
-  });
+  MaskForCameraCustomView(
+      {super.key,
+      this.boxWidth = 300.0,
+      this.boxHeight = 168.0,
+      this.boxBorderWidth = 1.8,
+      this.boxBorderRadius = 3.2,
+      required this.onTake,
+      this.cameraDescription = MaskForCameraViewCameraDescription.rear,
+      this.borderType = MaskForCameraViewBorderType.solid,
+      this.insideLine,
+      this.appBarColor = Colors.black,
+      this.boxBorderColor = Colors.white,
+      this.takeButtonColor = Colors.white,
+      this.takeButtonActionColor = Colors.black,
+      this.backColor = Colors.black54,
+      this.type = true // 카메라 타입 [true:번호판,false:차량]
+      });
 
   double boxWidth;
   double boxHeight;
@@ -55,6 +57,7 @@ class MaskForCameraCustomView extends StatefulWidget {
   Color backColor;
   ValueSetter<MaskForCameraViewResult> onTake;
   MaskForCameraViewBorderType borderType;
+  bool type;
   @override
   State<StatefulWidget> createState() => _MaskForCameraCustomViewState();
 
@@ -177,7 +180,8 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> {
                                 if (res == null) {
                                   throw "Camera expansion is very small";
                                 }
-                                widget.onTake(res);
+                                await saveImageDirectory(res, widget.type).then((value) => widget.onTake(res)); // 저장 type 값에 따라 저장하는 변수가 바뀜
+
                                 setState(() {
                                   isRunning = false;
                                 });

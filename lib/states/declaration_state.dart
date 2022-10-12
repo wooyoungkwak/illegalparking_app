@@ -51,8 +51,7 @@ class _DeclarationState extends State<Declaration> {
 
   @override
   Widget build(BuildContext context) {
-    Log.debug("신고하기 화면");
-    Log.debug("address: ${controller.imageGPS.value.address.toString()}");
+    List<String> filelist = [controller.reportImage.value, controller.carnumberImage.value];
     final statusBarHeight = MediaQuery.of(context).padding.top;
     return _createWillPopScope(
       Padding(
@@ -209,7 +208,8 @@ class _DeclarationState extends State<Declaration> {
                               onPressed: () async {
                                 await saveImageGallery();
                                 Get.off(const Confirmation());
-                                sendFile(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value);
+                                // sendFile(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value);
+                                sendFile(Env.SERVER_ADMIN_FILE_UPLOAD_URL, filelist);
                               },
                               child: const Text('신고하기'),
                             ),

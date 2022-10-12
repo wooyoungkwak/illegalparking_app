@@ -6,6 +6,7 @@ import 'package:illegalparking_app/services/save_image_service.dart';
 import 'package:illegalparking_app/services/such_loation_service.dart';
 import 'package:illegalparking_app/states/declaration_state.dart';
 import 'package:flutter/material.dart';
+import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
 import 'package:get/get.dart';
@@ -28,6 +29,7 @@ class _NumbercameraState extends State<Numbercamera> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> filelist = [controller.reportImage.value, controller.carnumberImage.value];
     ProgressDialog pd = ProgressDialog(context: context);
     return Scaffold(
       body: _createWillPopScope(Stack(
@@ -44,15 +46,19 @@ class _NumbercameraState extends State<Numbercamera> {
               onTake: (MaskForCameraViewResult res) {
                 //saveImageDirectory(res, true).then((value) => addressfunction());
                 pd.show(max: 100, msg: '데이터를 생성중입니다');
+                // pd.close();
 
+                // function(res, context, controller, filelist);
                 try {
-                  saveImageDirectory(res, true).then((value) => suchAddress().then((value) {
-                        //파일전송 현재 서버쪽 문제라 막아둠...
-                        sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((value) {
-                          pd.close();
-                          Get.off(() => const Declaration());
-                        });
-                      }));
+                  suchAddress().then((value) {
+                    // showSnackBar(context, controller.carnumberImage.toString());
+                    pd.close();
+                    Get.off(() => const Declaration());
+                    // sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, filelist).then((value) {
+                    //   pd.close();
+                    //   Get.off(() => const Declaration());
+                    // });
+                  });
                 } catch (e) {
                   Log.debug("신고하기 화면 이동 실패");
                 }
@@ -107,3 +113,19 @@ class _NumbercameraState extends State<Numbercamera> {
   //   });
   // }
 }
+
+// void function(MaskForCameraViewResult res, BuildContext context, ReportController controller, List<String> filelist) {
+//   try {
+//     saveImageDirectory(res, true).then((value) => suchAddress().then((value) {
+//           showSnackBar(context, controller.carnumberImage.toString());
+
+//           Get.off(() => const Declaration());
+//           //파일전송 현재 서버쪽 문제라 막아둠...
+//           sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, filelist).then((value) {
+//             Get.off(() => const Declaration());
+//           });
+//         }));
+//   } catch (e) {
+//     Log.debug("신고하기 화면 이동 실패");
+//   }
+// }

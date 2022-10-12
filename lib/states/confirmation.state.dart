@@ -61,6 +61,7 @@ class _ConfirmationState extends State<Confirmation> {
                         onPressed: () {
                           controller.carreportImagewrite("");
                           controller.carnumberImagewrite("");
+
                           Get.offAll(const MyPageReport());
                         },
                         child: const Text('신고이력'),

@@ -26,7 +26,7 @@ Future<void> regeocoder(double longitude, double latitude) async {
   String RESTAPIKEY = "429eb33ae5e0c87a6d5a400f262ef734"; //나중에 env에 따로 옮길것
   Kakao map;
 
-  c.addresswrite(latitude: latitude, longitude: longitude, address: "실패[데이터 및 WIFI를 확인해주세요]");
+  // c.addresswrite(latitude: latitude, longitude: longitude, address: "실패[데이터 및 WIFI를 확인해주세요]");
   String kakaourl = "https://dapi.kakao.com/v2/local/geo/coord2address.json?x=$longitude&y=$latitude&input_coord=WGS84";
 
   final responseGps = await http.get(Uri.parse(kakaourl), headers: {"Authorization": "KakaoAK $RESTAPIKEY"});

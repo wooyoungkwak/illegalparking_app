@@ -44,4 +44,11 @@ class ReportController extends GetxController {
     carnumberImageMemory = path;
     update();
   }
+
+  initialize() {
+    imageGPS = ImageGPS(latitude: 0, longitude: 0, address: "").obs;
+    carNumber = "".obs;
+    reportImage = "".obs;
+    carnumberImage = "".obs;
+  }
 }
