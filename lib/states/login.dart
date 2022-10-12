@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/sign_up_controller.dart';
+import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -59,7 +61,13 @@ class _LoginState extends State<Login> {
                   createElevatedButton(
                       text: "로그인",
                       function: () {
-                        Navigator.pushNamed(context, "/home");
+                        login("hong@gmail.com", "qwer1234").then((logingInfo) {
+                          if (logingInfo.success!) {
+                            Navigator.pushNamed(context, "/home");
+                          } else {
+
+                          }
+                        });
                       }),
                 ],
               ),

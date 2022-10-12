@@ -143,44 +143,4 @@ DateTime getToDateTime(String date) {
   return DateTime.parse(date);
 }
 
-Map<String, dynamic> getWorkState(WorkInfo workInfo) {
-  Map<String, dynamic> stateMap = {"isAttendTimeOut": false, "isLeaveTime": false, "state": "-"};
 
-  String? attendLeaveTime = workInfo.strAttendLeaveTime;
-
-  if (attendLeaveTime == null) {
-    return stateMap;
-  }
-
-  if (attendLeaveTime.contains("~")) {
-    if (workInfo.attendtime != null) {
-      DateTime defaultStartTime = getToDateTime("${workInfo.solardate} ${workInfo.targetAttendTime}");
-      DateTime startTime = getToDateTime("${workInfo.solardate} ${workInfo.attendtime}");
-
-      if (startTime.difference(defaultStartTime).inMinutes > 0) {
-        stateMap["isAttendTimeOut"] = true;
-      }
-
-      stateMap["state"] = "업무중";
-    }
-
-    if (workInfo.leavetime != null) {
-      DateTime defaultEndTime = getToDateTime("${workInfo.solardate} ${workInfo.targetLeaveTime}");
-      DateTime endTime = getToDateTime("${workInfo.solardate} ${workInfo.leavetime}");
-
-      if (endTime.difference(defaultEndTime).inMinutes > 0) {
-        stateMap["isLeaveTime"] = true;
-      }
-
-      stateMap["state"] = "-";
-    }
-  } else {
-    stateMap["state"] = attendLeaveTime;
-
-    if (workInfo.leavetime != null) {
-      stateMap["isLeaveTime"] = true;
-    }
-  }
-
-  return stateMap;
-}
