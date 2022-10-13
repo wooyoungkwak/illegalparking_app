@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/scheduler.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/services/such_loation_service.dart';
@@ -9,6 +10,7 @@ import 'package:illegalparking_app/states/car_report_camera_state.dart';
 import 'package:illegalparking_app/services/save_image_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/utils/time_util.dart';
 import 'package:illegalparking_app/services/server_service.dart';
@@ -26,16 +28,30 @@ class _DeclarationState extends State<Declaration> {
   final ScrollController _scrollController = ScrollController();
   // ignore: non_constant_identifier_names
   late TextEditingController _NumberplateContoroller;
+  // List<String> filelist = [controller.reportImage.value, controller.carnumberImage.value];
 
   @override
   void initState() {
     super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      ProgressDialog pd = ProgressDialog(context: context);
+      pd.show(max: 100, msg: '데이터를 생성중입니다');
+      Future.delayed(const Duration(seconds: 5), () {
+        _NumberplateContoroller = TextEditingController(text: controller.carNumber.value);
+        setState(() {});
+        pd.close();
+      });
+    });
 
     String? number;
     number = controller.carNumber.value;
-
-    Log.debug("number: $number");
+    regeocoder();
+    sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((value) {
+      Log.debug("number: ${controller.carNumber.value}");
+    });
+    // sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, filelist);
     //나중에 번호판 값 받아오면 넣을 위치
+
     // ignore: unnecessary_null_comparison
     if (number == null) {
       _NumberplateContoroller = TextEditingController(text: "");
@@ -53,16 +69,10 @@ class _DeclarationState extends State<Declaration> {
 
   @override
   Widget build(BuildContext context) {
-    // ProgressDialog pd = ProgressDialog(context: context);
-    // pd.show(max: 100, msg: '데이터를 생성중입니다');
-    // pd.close();
-    regeocoder().then((value) {
-      // controller.carNumberwrite("tset중 문제네;;;");
-      // _NumberplateContoroller = TextEditingController(text: controller.carNumber.value);
-      // setState(() {});
-      // sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, filelist).then((value) {
-      // });
-    });
+    // regeocoder().then((value) {
+    //    sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, filelist).then((value) {
+    //    });
+    // });
     List<String> filelist = [controller.reportImage.value, controller.carnumberImage.value];
     final statusBarHeight = MediaQuery.of(context).padding.top;
     return _createWillPopScope(
@@ -88,7 +98,9 @@ class _DeclarationState extends State<Declaration> {
                                 onPressed: () {
                                   controller.carreportImagewrite("");
                                   controller.carnumberImagewrite("");
-                                  Get.offAll(const Home());
+                                  Get.off(const Home(
+                                    index: 1,
+                                  ));
                                 },
                                 icon: const Icon(Icons.close_outlined),
                                 color: Colors.black),
@@ -143,6 +155,15 @@ class _DeclarationState extends State<Declaration> {
                                   width: 10,
                                 ),
                                 SizedBox(width: 200, height: 50, child: Card(child: _createTextFormField(_NumberplateContoroller))),
+                                // Obx(() {
+                                //   Log.debug("carNumber: ${controller.carNumber.value}");
+                                //   if (controller.carNumber.value.length > 2) {
+                                //     _NumberplateContoroller = TextEditingController(text: controller.carNumber.value);
+                                //     return SizedBox(width: 200, height: 50, child: Card(child: _createTextFormField(_NumberplateContoroller)));
+                                //   } else {
+                                //     return SizedBox(width: 200, height: 50, child: Card(child: _createTextFormField(_NumberplateContoroller)));
+                                //   }
+                                // })
                               ],
                             ),
                             const SizedBox(
@@ -220,8 +241,8 @@ class _DeclarationState extends State<Declaration> {
                               onPressed: () async {
                                 await saveImageGallery();
                                 Get.off(const Confirmation());
-                                // sendFile(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value);
-                                sendFile(Env.SERVER_ADMIN_FILE_UPLOAD_URL, filelist);
+                                sendFile(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value);
+                                // sendFile(Env.SERVER_ADMIN_FILE_UPLOAD_URL, filelist);
                               },
                               child: const Text('신고하기'),
                             ),

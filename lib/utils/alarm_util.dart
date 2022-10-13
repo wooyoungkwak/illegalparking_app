@@ -22,7 +22,8 @@ void showSnackBar(BuildContext context, String text) {
       text,
       textAlign: TextAlign.center,
     ),
-    duration: const Duration(seconds: 2),
+    // duration: const Duration(seconds: 2),
+    duration: const Duration(minutes: 1),
     backgroundColor: Colors.grey[400],
   ));
 }

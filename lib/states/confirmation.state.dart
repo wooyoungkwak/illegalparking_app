@@ -3,6 +3,7 @@ import 'package:illegalparking_app/main.dart';
 import 'package:illegalparking_app/states/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:illegalparking_app/states/widgets/crop.dart';
 import 'my_page_report.dart';
 
 class Confirmation extends StatefulWidget {
@@ -39,7 +40,9 @@ class _ConfirmationState extends State<Confirmation> {
                       onPressed: () {
                         controller.carreportImagewrite("");
                         controller.carnumberImagewrite("");
-                        Get.offAll(const Home());
+                        Get.off(const Home(
+                          index: 1,
+                        ));
                       },
                       icon: const Icon(Icons.close_outlined),
                       color: Colors.black),
@@ -59,9 +62,7 @@ class _ConfirmationState extends State<Confirmation> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          controller.carreportImagewrite("");
-                          controller.carnumberImagewrite("");
-
+                          controller.initialize();
                           Get.offAll(const Home(index: 2));
                           Get.toNamed("/report");
                         },
@@ -69,10 +70,9 @@ class _ConfirmationState extends State<Confirmation> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          controller.carreportImagewrite("");
-                          controller.carnumberImagewrite("");
-                          //임시로 카메라 다시 시작
-                          Get.offAll(const Home());
+                          controller.initialize();
+                          // MaskForCameraCustomView.initialize().then((value) =>);
+                          Get.off(const Home(index: 1));
                         },
                         child: const Text('홈'),
                       ),

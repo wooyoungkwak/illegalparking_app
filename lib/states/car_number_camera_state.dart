@@ -44,20 +44,26 @@ class _NumbercameraState extends State<Numbercamera> {
               boxBorderWidth: 2.8,
               backColor: Colors.black,
               onTake: (MaskForCameraViewResult res) {
-                //saveImageDirectory(res, true).then((value) => addressfunction());
                 pd.show(max: 100, msg: '데이터를 생성중입니다');
                 // pd.close();
 
                 // function(res, context, controller, filelist);
 
-                controller.carNumberwrite("123가12345");
-                showSnackBar(context, controller.carNumber.toString());
+                // saveImageDirectory(res, true).then((value) {});
+                // showSnackBar(context, controller.carNumber.toString());
+                // controller.carNumberwrite("tset중 문제네;;;");
                 pd.close();
                 Get.off(() => const Declaration());
+
                 // sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, filelist).then((value) {
-                //   pd.close();
-                //   Get.off(() => const Declaration());
-                // });
+                // try {
+                //   sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((value) {
+                //     pd.close();
+                //     Get.off(() => const Declaration());
+                //   });
+                // } catch (e) {
+                //   Log.debug(e);
+                // }
               }),
           CreateContainerByAlignment(0, -0.3, DefaultTextStyle(style: Theme.of(context).textTheme.headline1!, child: const Text("번호판만 촬영해주세요", style: TextStyle(fontSize: 15, color: Colors.white)))),
           CreateContainerByAlignment(0, 0.9, SizedBox(height: 100, width: 200, child: Image.asset("assets/car_number.jpg")))
