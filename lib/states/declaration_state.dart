@@ -34,11 +34,14 @@ class _DeclarationState extends State<Declaration> {
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) {
+      //빌드가 끝나고 실행하는걸 예약하는 기능
       ProgressDialog pd = ProgressDialog(context: context);
-      pd.show(max: 100, msg: '데이터를 생성중입니다');
-      Future.delayed(const Duration(seconds: 5), () {
+      pd.show(max: 100, msg: '데이터를 생성중입니다', barrierDismissible: false);
+      Future.delayed(const Duration(seconds: 3), () {
         _NumberplateContoroller = TextEditingController(text: controller.carNumber.value);
         setState(() {});
+      });
+      Future.delayed(const Duration(seconds: 4), () {
         pd.close();
       });
     });
