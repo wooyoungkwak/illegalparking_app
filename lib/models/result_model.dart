@@ -32,3 +32,17 @@ class LoginInfo {
   }
 
 }
+
+class ReportInfo {
+  
+  ReportInfo(this.success, this.message);
+  bool success;
+  String? message;
+
+  static ReportInfo fromJson(Map<String, dynamic> json) {
+    return ReportInfo(json["success"], json["msg"]);
+  }
+
+  Map<String, dynamic> toJson() => {"success": success, "message": message};
+  
+}

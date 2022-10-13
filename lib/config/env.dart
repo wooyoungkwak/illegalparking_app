@@ -15,6 +15,7 @@ class Env {
   static const String SERVER_LOGIN_URL = '$SERVER_AI_URL/api/login';
 
   static const String SERVER_ADMIN_FILE_UPLOAD_URL = '$SERVER_ADMIN_URL/files/image/set';
+  static const String SERVER_ADMIN_REPORT_UPLOAD_URL = '$SERVER_ADMIN_URL/api/receipt/set';
 
   static const String MAP_TEST_SERVER = "http://220.95.46.211:18090/area/map";
   static const String MAP_REAL_SERVER = "http://49.50.166.205/area/map";

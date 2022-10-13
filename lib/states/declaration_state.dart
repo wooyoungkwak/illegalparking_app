@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/scheduler.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
+import 'package:illegalparking_app/models/result_model.dart';
 import 'package:illegalparking_app/services/such_loation_service.dart';
 import 'package:illegalparking_app/states/home.dart';
 import 'package:illegalparking_app/states/confirmation.state.dart';
@@ -33,51 +34,45 @@ class _DeclarationState extends State<Declaration> {
   @override
   void initState() {
     super.initState();
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      //빌드가 끝나고 실행하는걸 예약하는 기능
-      ProgressDialog pd = ProgressDialog(context: context);
-      pd.show(max: 100, msg: '데이터를 생성중입니다', barrierDismissible: false);
-      try {
-        sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((value) {
-          Log.debug("number: ${controller.carNumber.value}");
-          if (controller.carNumber.value == "uploads") {
-            //글자가 없을 때 반환 받는 값
-            _NumberplateContoroller = TextEditingController(text: "문자를 읽지못했습니다.");
-          } else if (controller.carNumber.value == null || controller.carNumber.value == "") {
-            _NumberplateContoroller = TextEditingController(text: "문자를 받지못했습니다.");
-          } else {
-            _NumberplateContoroller = TextEditingController(text: controller.carNumber.value);
-          }
+    
+    // 샘플
+    _NumberplateContoroller = TextEditingController(text: "12가1234");
 
-          setState(() {});
-          pd.close();
-        });
-      } catch (e) {
-        showSnackBar(context, "서버에서 받아 오지 못했습니다.");
-        pd.close();
-      }
-      // Future.delayed(const Duration(seconds: 3), () {
-      //   _NumberplateContoroller = TextEditingController(text: controller.carNumber.value);
-      //   setState(() {});
-      // });
-      // Future.delayed(const Duration(seconds: 4), () {
-      //   pd.close();
-      // });
-    });
+    // SchedulerBinding.instance.addPostFrameCallback((data) {
+    //   //빌드가 끝나고 실행하는걸 예약하는 기능
+    //   ProgressDialog pd = ProgressDialog(context: context);
+    //   pd.show(max: 100, msg: '데이터를 생성중입니다', barrierDismissible: false);
+    //   try {
+    //     sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
+    //       if (carNum == "uploads") {
+    //         //글자가 없을 때 반환 받는 값
+    //         _NumberplateContoroller = TextEditingController(text: "번호판 인식을 실패 하였습니다.");
+    //       } else if (carNum == null || carNum == "") {
+    //         _NumberplateContoroller = TextEditingController(text: "번호판 인식을 실패 하였습니다.");
+    //       } else {
+    //         _NumberplateContoroller = TextEditingController(text: carNum);
+    //       }
 
-    String? number;
-    number = controller.carNumber.value;
+    //       setState(() {});
+    //       pd.close();
+    //     });
+    //   } catch (e) {
+    //     showSnackBar(context, "서버에서 받아 오지 못했습니다.");
+    //     pd.close();
+    //   }
+    //   // Future.delayed(const Duration(seconds: 3), () {
+    //   //   _NumberplateContoroller = TextEditingController(text: controller.carNumber.value);
+    //   //   setState(() {});
+    //   // });
+    //   // Future.delayed(const Duration(seconds: 4), () {
+    //   //   pd.close();
+    //   // });
+    // });
+
     regeocoder();
 
     // sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, filelist);
     //나중에 번호판 값 받아오면 넣을 위치
-
-    // ignore: unnecessary_null_comparison
-    if (number == null) {
-      _NumberplateContoroller = TextEditingController(text: "");
-    } else {
-      _NumberplateContoroller = TextEditingController(text: number);
-    }
   }
 
   @override
@@ -260,8 +255,32 @@ class _DeclarationState extends State<Declaration> {
                             ElevatedButton(
                               onPressed: () async {
                                 await saveImageGallery();
-                                Get.off(const Confirmation());
-                                sendFile(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value);
+                                // Get.off(const Confirmation());
+                                try {
+                                  // sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
+                                  //     if ( result == false) {
+                                  //       // TODO : 알림창 띄우기
+                                        
+                                  //     } else {
+                                  //       // TODO : 빈 곳은 사진 찍은 시간
+                                  //       sendReport(controller.imageGPS.value.address, controller.carNumber.value, "", "", controller.imageGPS.value.latitude, controller.imageGPS.value.longitude).then((reportInfo) => {
+                                  //         if (!reportInfo.success) {
+                                  //           // TODO : 알림창 띄우기
+                                            
+                                  //         } 
+                                  //       })
+                                  //     }
+                                  // });
+
+                                sendReport(controller.imageGPS.value.address, controller.carNumber.value, "", "", controller.imageGPS.value.latitude, controller.imageGPS.value.longitude).then((reportInfo) => {
+                                          Log.debug(reportInfo.toJson())
+                                        });
+                                  Get.off(const Confirmation());
+                                } catch(e) {
+                                  // TODO : 알림창 띄우기 
+
+                                }
+
                                 // sendFile(Env.SERVER_ADMIN_FILE_UPLOAD_URL, filelist);
                               },
                               child: const Text('신고하기'),
