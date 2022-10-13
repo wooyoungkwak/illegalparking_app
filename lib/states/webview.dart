@@ -10,6 +10,9 @@ import 'package:illegalparking_app/utils/log_util.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../models/webview_model.dart';
+import '../services/such_loation_service.dart';
+
 class WebviewPage extends StatefulWidget {
   const WebviewPage({super.key});
 
@@ -18,53 +21,92 @@ class WebviewPage extends StatefulWidget {
 }
 
 class _WebviewPageState extends State<WebviewPage> {
+  Timer? timer;
   final Completer<WebViewController> _controller = Completer<WebViewController>();
   final controller = Get.put(MapController());
-  late String changeText = "Web View Test";
   late WebViewController _webViewController;
+  late String changeText = "Web View Test";
+  String parkingName = "";
+  String parkingAddress = "";
+  String parkingPrice = "";
+  String parkingOperation = "";
+  String parkingCount = "";
+  String parkingTime = "";
+  String personalMobName = "";
+  String personalMobPrice = "";
+
+  void timerGPS() {
+    timer = Timer.periodic(const Duration(milliseconds: 10000), (timer) {
+      searchAddress().then((position) {
+        Log.debug("currentPosition X : ${position.latitude}\ncurrentPosition Y :${position.longitude}");
+        controller.setLatitude(position.latitude);
+        controller.setLongitude(position.longitude);
+        // _webViewController.runJavascript("appToGps(${position.latitude}, ${position.longitude})");
+      });
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    timerGPS();
   }
 
   @override
   void dispose() {
     super.dispose();
+    timer!.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: WebView(
-            // initialUrl: "http://10.0.2.2:3000",
-            initialUrl: "http://teraenergy.iptime.org:18090/api/area/map",
-            // initialUrl: "http://ipaddr:80/api/area/map",
-            onWebViewCreated: (WebViewController webViewController) {
-              _controller.complete(webViewController);
-              _webViewController = webViewController;
-            },
-            onProgress: (int progress) {
-              Log.debug("Webview is loading (progress : $progress%");
-            },
-            javascriptMode: JavascriptMode.unrestricted,
-            javascriptChannels: _createJavascriptChannels(context),
+    final statusBarHeight = MediaQuery.of(context).padding.top;
+    return Container(
+      padding: EdgeInsets.only(top: statusBarHeight),
+      child: Column(
+        children: [
+          Expanded(
+            child: WebView(
+              // initialUrl: "http://10.0.2.2:3000",
+              initialUrl: "http://teraenergy.iptime.org:18090/api/area/map",
+              // initialUrl: "http://ipaddr:80/api/area/map",
+              onWebViewCreated: (WebViewController webViewController) {
+                _controller.complete(webViewController);
+                _webViewController = webViewController;
+              },
+              onProgress: (int progress) {
+                Log.debug("Webview is loading (progress : $progress%");
+              },
+              javascriptMode: JavascriptMode.unrestricted,
+              javascriptChannels: _createJavascriptChannels(context),
+            ),
           ),
-        ),
-        GetBuilder<MapController>(
-          builder: (controller) {
-            if (controller.clickedMap) {
-              return Text(controller.testText);
-            }
-            return const Text("웹에서 앱전달 실패");
-          },
-        ),
-        createElevatedButton(text: "appToGPS", function: () {
-          _webViewController.runJavascript("appToGps(123, 456)");
-        },),
-      ],
+          // GetBuilder<MapController>(
+          //   builder: (controller) {
+          //     if (controller.clickedMap) {
+          //       return Text(controller.testText);
+          //     }
+          //     return const Text("웹에서 앱전달 실패");
+          //   },
+          // ),
+          GetBuilder<MapController>(
+            builder: (controller) {
+              return Column(
+                children: [
+                  Text("위도 : ${controller.latitude.toString()}"),
+                  Text("경도 : ${controller.longitude.toString()}"),
+                ],
+              );
+            },
+          ),
+          createElevatedButton(
+            text: "appToGPS",
+            function: () {
+              _webViewController.runJavascript("appToGps(123, 456)");
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -123,18 +165,18 @@ class _WebviewPageState extends State<WebviewPage> {
                         ),
                       ),
                       Column(
-                        children: const [
-                          Text("빛가람동 제 4 공영 주차장"),
-                          Text("전라남도 나주시 우정로 105"),
+                        children: [
+                          Text(parkingName),
+                          Text(parkingAddress),
                         ],
                       ),
                     ],
                   ),
                 ),
                 // 정보
-                _createInfoItem(info: "주차요금", data: "현재무료"),
-                _createInfoItem(info: "운영시간", data: "00:00~24:00"),
-                _createInfoItem(info: "주차가능면", data: "87면(전체114면)"),
+                _createInfoItem(info: "주차요금", data: parkingOperation),
+                _createInfoItem(info: "운영시간", data: parkingTime),
+                _createInfoItem(info: "주차가능면", data: parkingCount),
               ],
             ),
           ),
@@ -191,10 +233,42 @@ class _WebviewPageState extends State<WebviewPage> {
           name: 'webToApp',
           onMessageReceived: (message) {
             Map<String, dynamic> resultMap = jsonDecode(message.message);
-            Log.debug( resultMap["type"]);
-            Log.debug( resultMap["data"]["pkName"]);
+            MapInfo mapInfo;
+            mapInfo = MapInfo.fromJson(resultMap);
 
-            controller.getTestText(message.message);
+            if (mapInfo.type == "parking") {
+              setState(() {
+                parkingName = mapInfo.getPkName();
+                parkingAddress = mapInfo.getPkAddr();
+                parkingPrice = mapInfo.getPkPrice();
+                parkingOperation = mapInfo.getPkOper();
+                parkingCount = mapInfo.getPkCount();
+                parkingTime = mapInfo.getPkTime();
+              });
+            } else if (mapInfo.type == "pm") {
+              setState(() {
+                personalMobName = mapInfo.getPmName();
+                personalMobPrice = mapInfo.getPmPrice();
+              });
+            } else {
+              setState(() {
+                parkingName = "";
+                parkingAddress = "";
+                parkingPrice = "";
+                parkingOperation = "";
+                parkingCount = "";
+                parkingTime = "";
+                personalMobName = "";
+                personalMobPrice = "";
+              });
+            }
+
+            Log.debug("type : ${mapInfo.type}");
+
+            // Log.debug(resultMap["type"]);
+            // Log.debug(resultMap["data"]["pkName"]);
+
+            // controller.getTestText(message.message);
             controller.getClickedMap(true);
             showBottomDialog();
           })
