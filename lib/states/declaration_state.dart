@@ -37,21 +37,38 @@ class _DeclarationState extends State<Declaration> {
       //빌드가 끝나고 실행하는걸 예약하는 기능
       ProgressDialog pd = ProgressDialog(context: context);
       pd.show(max: 100, msg: '데이터를 생성중입니다', barrierDismissible: false);
-      Future.delayed(const Duration(seconds: 3), () {
-        _NumberplateContoroller = TextEditingController(text: controller.carNumber.value);
-        setState(() {});
-      });
-      Future.delayed(const Duration(seconds: 4), () {
+      try {
+        sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((value) {
+          Log.debug("number: ${controller.carNumber.value}");
+          if (controller.carNumber.value == "uploads") {
+            //글자가 없을 때 반환 받는 값
+            _NumberplateContoroller = TextEditingController(text: "문자를 읽지못했습니다.");
+          } else if (controller.carNumber.value == null || controller.carNumber.value == "") {
+            _NumberplateContoroller = TextEditingController(text: "문자를 받지못했습니다.");
+          } else {
+            _NumberplateContoroller = TextEditingController(text: controller.carNumber.value);
+          }
+
+          setState(() {});
+          pd.close();
+        });
+      } catch (e) {
+        showSnackBar(context, "서버에서 받아 오지 못했습니다.");
         pd.close();
-      });
+      }
+      // Future.delayed(const Duration(seconds: 3), () {
+      //   _NumberplateContoroller = TextEditingController(text: controller.carNumber.value);
+      //   setState(() {});
+      // });
+      // Future.delayed(const Duration(seconds: 4), () {
+      //   pd.close();
+      // });
     });
 
     String? number;
     number = controller.carNumber.value;
     regeocoder();
-    sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((value) {
-      Log.debug("number: ${controller.carNumber.value}");
-    });
+
     // sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, filelist);
     //나중에 번호판 값 받아오면 넣을 위치
 
