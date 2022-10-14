@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 
 Padding createCustomText({
   String? text,
@@ -25,25 +26,35 @@ Padding createCustomText({
 }
 
 Padding createTextFormField({
+  GlobalKey<FormState>? formFieldKey,
   String? labelText,
   String? hintText,
   double? padding,
   bool? obscureText,
+  TextEditingController? controller,
 }) {
   return Padding(
-    padding: EdgeInsets.all(padding ?? 8.0),
+    padding: EdgeInsets.all(padding ?? 32.0),
     child: TextFormField(
+      key: formFieldKey,
+      controller: controller,
       obscureText: obscureText ?? false,
       decoration: InputDecoration(
-        border: const OutlineInputBorder(),
+        border: OutlineInputBorder(),
         labelText: labelText,
         hintText: hintText,
       ),
-      validator: (String? value) {
-        if (value!.isEmpty) {
+      validator: (text) {
+        Log.debug("validator Text: $text");
+        if (text!.isEmpty) {
           return "$labelText를 입력해 주세요";
+        } else if (text.length < 2) {
+          return "필수 입력 사항입니다.";
         }
         return null;
+      },
+      onChanged: (text) {
+        labelText = text;
       },
     ),
   );
@@ -91,8 +102,7 @@ Card createMypageCard({List<Widget>? widgetList, dynamic route}) {
   );
 }
 
-showCustomDialog(
-    {required BuildContext context, String? title, Widget? widget}) {
+showCustomDialog({required BuildContext context, String? title, Widget? widget}) {
   showDialog(
     context: context,
     builder: (BuildContext context) => Scaffold(
@@ -156,10 +166,7 @@ Card createReportList(BuildContext context, List list) {
                           color: reportColors(list[index]["state"]),
                           child: createCustomText(
                             weight: FontWeight.w400,
-                            color: reportColors(list[index]["state"]) ==
-                                    const Color(0xffffffff)
-                                ? Colors.black
-                                : Colors.white,
+                            color: reportColors(list[index]["state"]) == const Color(0xffffffff) ? Colors.black : Colors.white,
                             text: list[index]["state"],
                           ),
                         ),

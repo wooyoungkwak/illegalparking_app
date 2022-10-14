@@ -57,6 +57,8 @@ class Env {
   static const String KEY_BACKGROUND_PATH = 'background_path';
 
   static const String MSG_NOT_TOKEN = "로그인 후 사용 해주세요.";
-  
-  
+
+  static const String NAVER_SERVICE_ID = "ncp:sms:kr:294175196378:sms_auth_test";
+  static const String NAVER_ACCESS_KEY = "4VqjVzPCbUUnTO9nDy92";
+  static const String NAVER_SECRET_KEY = "6Pm4jOKBTTtAYDR3rWQhdSnwXFzk6xxuNx7JJYWJ";
 }

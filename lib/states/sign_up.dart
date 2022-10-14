@@ -3,9 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:illegalparking_app/controllers/sign_up_controller.dart';
+import 'package:illegalparking_app/services/network_service.dart';
 
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -15,6 +18,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ScrollController _termsSummaryController = ScrollController();
   final ScrollController _termsController = ScrollController();
   final controller = Get.put(SignUpController());
@@ -24,6 +28,13 @@ class _SignUpState extends State<SignUp> {
   bool sendAuthentication = false;
   bool authVerification = false;
   Timer? timer;
+  final idCotroller = TextEditingController();
+  final passController = TextEditingController();
+  final passValidController = TextEditingController();
+  final nameCotroller = TextEditingController();
+  final phoneNumController = TextEditingController();
+  final authKeyController = TextEditingController();
+  int? authNum;
 
   void getSetTime() {
     secToTime(limitTime);
@@ -49,7 +60,9 @@ class _SignUpState extends State<SignUp> {
       });
     } else if (limitTime <= 0) {
       setState(() {
-        authVerification = true;
+        authNum = null;
+        sendAuthentication = false;
+        authenticationSendText = "인증번호 발송";
       });
     }
   }
@@ -62,6 +75,16 @@ class _SignUpState extends State<SignUp> {
   @override
   void dispose() {
     super.dispose();
+    idCotroller.dispose();
+    passController.dispose();
+    passValidController.dispose();
+    nameCotroller.dispose();
+    phoneNumController.dispose();
+    authKeyController.dispose();
+
+    if (timer != null) {
+      timer!.cancel();
+    }
   }
 
   @override
@@ -74,38 +97,47 @@ class _SignUpState extends State<SignUp> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Form(
+          key: _formKey,
           child: ListView(
             shrinkWrap: true,
             children: [
               // ID, PW
-              createTextFormField(labelText: "아이디"),
-              createTextFormField(labelText: "패스워드"),
-              createTextFormField(labelText: "패스워드 확인"),
+              createTextFormField(labelText: "아이디", controller: idCotroller),
+              createTextFormField(labelText: "패스워드", controller: passController, obscureText: true),
+              createTextFormField(labelText: "패스워드 확인", controller: passValidController, obscureText: true),
               // 이름,전화번호,인증
-              createTextFormField(labelText: "이름"),
-              createTextFormField(labelText: "전화번호"),
+              createTextFormField(labelText: "이름", controller: nameCotroller),
+              createTextFormField(labelText: "전화번호", controller: phoneNumController),
               if (!authVerification)
                 createElevatedButton(
                     text: authenticationSendText,
                     function: sendAuthentication
                         ? null
                         : () {
-                            setState(() {
-                              sendAuthentication = true;
+                            Log.debug("Phone Number : ${phoneNumController.text}");
+                            sendSMS(phoneNumController.text).then((authKey) {
+                              setState(() {
+                                sendAuthentication = true;
+                                authNum = authKey;
+                              });
+                              getSetTime();
                             });
-                            getSetTime();
                           }),
-              if (sendAuthentication) createTextFormField(labelText: "인증번호"),
+              if (sendAuthentication) createTextFormField(labelText: "인증번호", controller: authKeyController),
               if (sendAuthentication || authVerification)
                 createElevatedButton(
                     color: authVerification ? const Color(0xffd84315) : null,
                     text: authVerification ? "인증번호 확인됨" : "인증번호 확인",
                     function: () {
-                      timer!.cancel();
-                      setState(() {
-                        authVerification = true;
-                        sendAuthentication = false;
-                      });
+                      if (int.parse(authKeyController.text) == authNum && authNum != null) {
+                        timer!.cancel();
+                        setState(() {
+                          authVerification = true;
+                          sendAuthentication = false;
+                        });
+                      } else {
+                        Log.debug("인증번호를 확인해주세요.");
+                      }
                     }),
 
               if (authVerification)
@@ -277,5 +309,10 @@ class _SignUpState extends State<SignUp> {
         ),
       ),
     );
+  }
+
+  // String To num 나중에 Util에 추가
+  int stringToNum(String value) {
+    return int.parse(value);
   }
 }
