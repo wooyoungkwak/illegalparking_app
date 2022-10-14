@@ -34,8 +34,9 @@ class Env {
   static String? WORK_POSITION_NAME;
   static String? WORK_PHOTO_PATH;
   static String? WORK_COMPANY_NAME;
-  static const String LOGIN_STATE = "LOGIN_STATE";
+  static int? USER_SEQ;
 
+  static const String LOGIN_STATE = "LOGIN_STATE";
   static const String KEY_USER_ID = "USER_ID"; // Login 후에 서버로부터 부여 받은 사용자 ID 값
   static const String KEY_ID_CHECK = 'KEY_ID_CHECK';
   static const String KEY_ACCESS_TOKEN = "accessToken";
@@ -56,4 +57,6 @@ class Env {
   static const String KEY_BACKGROUND_PATH = 'background_path';
 
   static const String MSG_NOT_TOKEN = "로그인 후 사용 해주세요.";
+  
+  
 }

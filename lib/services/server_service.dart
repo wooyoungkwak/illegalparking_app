@@ -33,8 +33,10 @@ Future<LoginInfo> login(String id, String pw) async {
   }
 }
 
-Future<ReportInfo> sendReport(String addr, String carNum, String time, String fileName, double latitude, double longitude) async {
+Future<ReportInfo> sendReport(int userSeq, String addr, String carNum, String time, String fileName, double latitude, double longitude) async {
+
   var data = {
+    "userSeq": userSeq,
     "addr": addr, // 주소
     "carNum": carNum, // 차량번호
     "regDt": time, // 시간

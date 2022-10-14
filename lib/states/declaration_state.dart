@@ -35,6 +35,9 @@ class _DeclarationState extends State<Declaration> {
   void initState() {
     super.initState();
 
+    // TODO : 사용자 키 반드시 적용 할것 .. 
+    Env.USER_SEQ = 2;
+
     // 샘플
     _NumberplateContoroller = TextEditingController(text: "12가1234");
 
@@ -51,8 +54,13 @@ class _DeclarationState extends State<Declaration> {
             _NumberplateContoroller = TextEditingController(text: carNum);
           }
 
+          if ( carNum.length > 10) {
+            carNum = "";
+          }
+
+          carNum = carNum.replaceAll('"', '');
+
           controller.carNumberwrite(carNum);
-          Log.debug(controller.carNumber.value);
 
           setState(() {});
           pd.close();
@@ -274,13 +282,12 @@ class _DeclarationState extends State<Declaration> {
                                           }
                                         else
                                           {
-                                            sendReport(controller.imageGPS.value.address, controller.carNumber.value, controller.imageTime.value, controller.reportfileName.value,
+                                            sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, controller.carNumber.value, controller.imageTime.value, controller.reportfileName.value,
                                                     controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
                                                 .then((reportInfo) => {
                                                       if (!reportInfo.success)
                                                         {
-                                                          // TODO : 알림창 띄우기
-                                                          alertDialogByonebutton("알림", "내용")
+                                                          alertDialogByonebutton("알림", reportInfo.message!)
                                                         }
                                                     })
                                           }
