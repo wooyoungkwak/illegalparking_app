@@ -50,8 +50,16 @@ Future<void> regeocoder() async {
 
   if (responseGps.statusCode == 200) {
     map = Kakao.fromJson(json.decode(responseGps.body));
-    Log.debug(map.documents[0]['road_address']['address_name']);
-    c.addresswrite(latitude: latitude, longitude: longitude, address: map.documents[0]['address']['address_name']);
+    String loadAddr = map.documents[0]['road_address']['address_name'];
+    String lnmAddr = map.documents[0]['address']['address_name'];
+    List<String> temp1 = loadAddr.split(" ");
+    List<String> temp2 = lnmAddr.split(" ");
+    String changeAddr = temp2.first;
+    String address = lnmAddr.replaceAll(changeAddr, temp1.first);
+
+    Log.debug(" ************** address = $address" );
+
+    c.addresswrite(latitude: latitude, longitude: longitude, address: address);
   } else {
     throw Exception(responseGps.body);
   }
