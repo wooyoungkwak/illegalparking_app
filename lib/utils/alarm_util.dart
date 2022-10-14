@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:illegalparking_app/config/env.dart';
@@ -15,6 +16,21 @@ import 'package:illegalparking_app/models/storage_model.dart';
 //     gravity: ToastGravity.BOTTOM,
 //   );
 // }
+
+void alertDialogByonebutton(String title, String text) {
+  Get.dialog(
+    AlertDialog(
+      title: Text(title),
+      content: Text(text),
+      actions: [
+        TextButton(
+          child: const Text("확인"),
+          onPressed: () => Get.back(),
+        ),
+      ],
+    ),
+  );
+}
 
 void showSnackBar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(

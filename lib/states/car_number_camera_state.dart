@@ -8,6 +8,7 @@ import 'package:illegalparking_app/states/declaration_state.dart';
 import 'package:flutter/material.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
+import 'package:illegalparking_app/utils/time_util.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
 import 'package:get/get.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';

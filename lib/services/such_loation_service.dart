@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:illegalparking_app/models/kakao_model.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 
 // final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
 final ReportController c = Get.put(ReportController());
@@ -49,6 +50,7 @@ Future<void> regeocoder() async {
 
   if (responseGps.statusCode == 200) {
     map = Kakao.fromJson(json.decode(responseGps.body));
+    Log.debug(map.documents[0]['road_address']['address_name']);
     c.addresswrite(latitude: latitude, longitude: longitude, address: map.documents[0]['address']['address_name']);
   } else {
     throw Exception(responseGps.body);

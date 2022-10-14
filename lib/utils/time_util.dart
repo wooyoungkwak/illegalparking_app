@@ -18,6 +18,10 @@ String getDateToStringForYYMMDD(DateTime datetime) {
   return getDateToString(datetime, "yyyy-MM-dd");
 }
 
+String getDateToStringForYYMMDDHHMM(DateTime datetime) {
+  return getDateToString(datetime, "yyyy-MM-dd kk:mm");
+}
+
 String getDateToStringForAll(DateTime datetime) {
   return getDateToString(datetime, "yyyy-MM-dd kk:mm:ss");
 }
@@ -142,5 +146,3 @@ String getWeekByOneKor() {
 DateTime getToDateTime(String date) {
   return DateTime.parse(date);
 }
-
-

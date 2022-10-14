@@ -7,12 +7,30 @@ class ReportController extends GetxController {
   var carNumber = "".obs;
   var reportImage = "".obs;
   var carnumberImage = "".obs;
+  var reportfileName = "".obs;
+  var carnumfileName = "".obs;
+  var imageTime = "".obs;
 
   late Uint8List reportImageMemory;
   late Uint8List carnumberImageMemory;
 
   carNumberwrite(String number) {
     carNumber = number.obs;
+    update();
+  }
+
+  reportfileNamewrite(String name) {
+    reportfileName = name.obs;
+    update();
+  }
+
+  carnumfileNamewrite(String name) {
+    carnumfileName = name.obs;
+    update();
+  }
+
+  imageTimewrite(String time) {
+    imageTime = time.obs;
     update();
   }
 
@@ -50,5 +68,8 @@ class ReportController extends GetxController {
     carNumber = "".obs;
     reportImage = "".obs;
     carnumberImage = "".obs;
+    reportfileName = "".obs;
+    carnumfileName = "".obs;
+    imageTime = "".obs;
   }
 }

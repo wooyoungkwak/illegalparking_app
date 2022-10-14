@@ -4,6 +4,8 @@ import 'package:illegalparking_app/states/widgets/crop.dart';
 import 'package:illegalparking_app/states/declaration_state.dart';
 import 'package:illegalparking_app/states/car_number_camera_state.dart';
 import 'package:flutter/material.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
+import 'package:illegalparking_app/utils/time_util.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
 import 'package:get/get.dart';
 
@@ -38,6 +40,9 @@ class _ReportcameraState extends State<Reportcamera> {
               boxBorderColor: Colors.blue,
               boxBorderWidth: 1.0,
               onTake: (MaskForCameraViewResult res) {
+                c.imageTimewrite(getDateToStringForYYMMDDHHMM(getNow()));
+                Log.debug(getDateToStringForYYMMDDHHMM(getNow()));
+
                 if (c.carnumberImage.value.isNotEmpty) {
                   Get.off(const Declaration());
                 } else {

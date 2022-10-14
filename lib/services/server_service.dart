@@ -38,7 +38,7 @@ Future<ReportInfo> sendReport(String addr, String carNum, String time, String fi
     "addr": addr, // 주소
     "carNum": carNum, // 차량번호
     "regDt": time, // 시간
-    "fileName" : fileName, // 
+    "fileName": fileName, //
     "latitude": latitude, // 위도
     "longitude": longitude // 경도
   };
@@ -51,7 +51,7 @@ Future<ReportInfo> sendReport(String addr, String carNum, String time, String fi
     Map<String, dynamic> resultMap = jsonDecode(result);
     return ReportInfo.fromJson(resultMap);
   } else {
-    throw Exception('로그인 서버 오류');
+    throw Exception('신고 전송 오류');
   }
 }
 
@@ -62,7 +62,7 @@ Future<dynamic> _sendFile(String url, String filePath) async {
     List<String> temps = filePath.split("/");
     String fileName = temps.last + ".jpg";
     request.files.add(await http.MultipartFile.fromPath('file', filePath, filename: fileName));
-    
+
     return await request.send();
   } catch (e) {
     Log.debug(e.toString());

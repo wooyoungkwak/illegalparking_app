@@ -34,40 +34,41 @@ class _DeclarationState extends State<Declaration> {
   @override
   void initState() {
     super.initState();
-    
+
     // 샘플
     _NumberplateContoroller = TextEditingController(text: "12가1234");
 
-    // SchedulerBinding.instance.addPostFrameCallback((data) {
-    //   //빌드가 끝나고 실행하는걸 예약하는 기능
-    //   ProgressDialog pd = ProgressDialog(context: context);
-    //   pd.show(max: 100, msg: '데이터를 생성중입니다', barrierDismissible: false);
-    //   try {
-    //     sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
-    //       if (carNum == "uploads") {
-    //         //글자가 없을 때 반환 받는 값
-    //         _NumberplateContoroller = TextEditingController(text: "번호판 인식을 실패 하였습니다.");
-    //       } else if (carNum == null || carNum == "") {
-    //         _NumberplateContoroller = TextEditingController(text: "번호판 인식을 실패 하였습니다.");
-    //       } else {
-    //         _NumberplateContoroller = TextEditingController(text: carNum);
-    //       }
+    SchedulerBinding.instance.addPostFrameCallback((data) {
+      //빌드가 끝나고 실행하는걸 예약하는 기능
+      ProgressDialog pd = ProgressDialog(context: context);
+      pd.show(max: 100, msg: '데이터를 생성중입니다', barrierDismissible: false);
+      try {
+        sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
+          if (carNum == null || carNum == "") {
+            //글자가 없을 때 반환 받는 값
+            _NumberplateContoroller = TextEditingController(text: "번호판 인식을 실패 하였습니다.");
+          } else {
+            _NumberplateContoroller = TextEditingController(text: carNum);
+          }
 
-    //       setState(() {});
-    //       pd.close();
-    //     });
-    //   } catch (e) {
-    //     showSnackBar(context, "서버에서 받아 오지 못했습니다.");
-    //     pd.close();
-    //   }
-    //   // Future.delayed(const Duration(seconds: 3), () {
-    //   //   _NumberplateContoroller = TextEditingController(text: controller.carNumber.value);
-    //   //   setState(() {});
-    //   // });
-    //   // Future.delayed(const Duration(seconds: 4), () {
-    //   //   pd.close();
-    //   // });
-    // });
+          controller.carNumberwrite(carNum);
+          Log.debug(controller.carNumber.value);
+
+          setState(() {});
+          pd.close();
+        });
+      } catch (e) {
+        showSnackBar(context, "서버에서 받아 오지 못했습니다.");
+        pd.close();
+      }
+      // Future.delayed(const Duration(seconds: 3), () {
+      //   _NumberplateContoroller = TextEditingController(text: controller.carNumber.value);
+      //   setState(() {});
+      // });
+      // Future.delayed(const Duration(seconds: 4), () {
+      //   pd.close();
+      // });
+    });
 
     regeocoder();
 
@@ -220,10 +221,18 @@ class _DeclarationState extends State<Declaration> {
                                 const SizedBox(
                                   width: 12,
                                 ),
-                                Text(
-                                  getDateToStringForYYYYMMDDHHMMKORInNow(),
-                                  style: const TextStyle(fontSize: 12),
-                                ),
+                                // Text(
+                                //   getDateToStringForYYYYMMDDHHMMKORInNow(),
+                                //   style: const TextStyle(fontSize: 12),
+                                // ),
+                                Obx(() {
+                                  return Flexible(
+                                    child: Text(
+                                      controller.imageTime.value,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                  );
+                                }),
                               ],
                             ),
                             Obx(() {
@@ -257,28 +266,36 @@ class _DeclarationState extends State<Declaration> {
                                 await saveImageGallery();
                                 // Get.off(const Confirmation());
                                 try {
-                                  // sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
-                                  //     if ( result == false) {
-                                  //       // TODO : 알림창 띄우기
-                                        
-                                  //     } else {
-                                  //       // TODO : 빈 곳은 사진 찍은 시간
-                                  //       sendReport(controller.imageGPS.value.address, controller.carNumber.value, "", "", controller.imageGPS.value.latitude, controller.imageGPS.value.longitude).then((reportInfo) => {
-                                  //         if (!reportInfo.success) {
-                                  //           // TODO : 알림창 띄우기
-                                            
-                                  //         } 
-                                  //       })
-                                  //     }
-                                  // });
+                                  sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
+                                        if (result == false)
+                                          {
+                                            // TODO : 알림창 띄우기
+                                            alertDialogByonebutton("알림", "파일 전송에 실패했습니다")
+                                          }
+                                        else
+                                          {
+                                            sendReport(controller.imageGPS.value.address, controller.carNumber.value, controller.imageTime.value, controller.reportfileName.value,
+                                                    controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
+                                                .then((reportInfo) => {
+                                                      if (!reportInfo.success)
+                                                        {
+                                                          // TODO : 알림창 띄우기
+                                                          alertDialogByonebutton("알림", "내용")
+                                                        }
+                                                    })
+                                          }
+                                      });
 
-                                sendReport(controller.imageGPS.value.address, controller.carNumber.value, "", "", controller.imageGPS.value.latitude, controller.imageGPS.value.longitude).then((reportInfo) => {
-                                          Log.debug(reportInfo.toJson())
-                                        });
+                                  // sendReport(controller.imageGPS.value.address, controller.carNumber.value, controller.imageTime.value, controller.reportfileName.value,
+                                  //         controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
+                                  //     .then((reportInfo) => {
+                                  //           alertDialogByonebutton("알림", reportInfo.toJson().toString())
+                                  //           // Log.debug(reportInfo.toJson().toString())
+                                  //         });
                                   Get.off(const Confirmation());
-                                } catch(e) {
-                                  // TODO : 알림창 띄우기 
-
+                                } catch (e) {
+                                  // TODO : 알림창 띄우기
+                                  alertDialogByonebutton("알림", "내용");
                                 }
 
                                 // sendFile(Env.SERVER_ADMIN_FILE_UPLOAD_URL, filelist);
@@ -317,7 +334,7 @@ class _DeclarationState extends State<Declaration> {
     return TextField(
         textAlign: TextAlign.center,
         controller: controller,
-        style: const TextStyle(color: Colors.black),
+        style: const TextStyle(color: Colors.black, fontSize: 12),
         decoration: const InputDecoration(
           filled: true,
           fillColor: Colors.white,
