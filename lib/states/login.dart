@@ -4,6 +4,7 @@ import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/sign_up_controller.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 
 class Login extends StatefulWidget {
@@ -61,14 +62,15 @@ class _LoginState extends State<Login> {
                   createElevatedButton(
                       text: "로그인",
                       function: () {
-                        Navigator.pushNamed(context, "/home");
-                        // login("hong@gmail.com", "qwer1234").then((logingInfo) {
-                        //   if (logingInfo.success!) {
-                        //     Navigator.pushNamed(context, "/home");
-                        //   } else {
-
-                        //   }
-                        // });
+                        // Navigator.pushNamed(context, "/home");
+                        login("hong@gmail.com", "qwer1234").then((logingInfo) {
+                          if (logingInfo.success) {
+                            Navigator.pushNamed(context, "/home");
+                          } else {
+                            // TODO : 확인 해바 .. 
+                            alertDialogByonebutton("알림", logingInfo.message!);
+                          }
+                        });
                       }),
                 ],
               ),

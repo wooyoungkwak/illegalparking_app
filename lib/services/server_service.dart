@@ -18,7 +18,7 @@ Map<String, String> headers = {};
 
 // 로그인
 Future<LoginInfo> login(String id, String pw) async {
-  var data = {"loginId": id, "password": pw};
+  var data = {"userName": id, "password": pw};
   var body = json.encode(data);
 
   var response = await http.post(Uri.parse(Env.SERVER_LOGIN_URL), headers: {"Content-Type": "application/json"}, body: body);
@@ -31,6 +31,49 @@ Future<LoginInfo> login(String id, String pw) async {
   } else {
     throw Exception('로그인 서버 오류');
   }
+}
+
+Future<RegisterInfo> register(String id, String pw, String name, String phoneNumber, String photoName) async {
+  var data = {
+    "userName": id, 
+    "password": pw,
+    "name" : name, 
+    "phoneNumber": phoneNumber,
+    "photoName": photoName
+  };
+  var body = json.encode(data);
+  var response = await http.post(Uri.parse(Env.SERVER_ADMIN_REGISTER_URL), headers: {"Content-Type": "application/json"}, body: body);
+  if (response.statusCode == 200) {
+    String result = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> resultMap = jsonDecode(result);
+    
+    //로그인 성공 실패 체크해서 Model 다르게 설정
+    return RegisterInfo.fromJson(resultMap);
+  } else {
+    throw Exception('서버 오류');
+  }
+}
+
+Future<dynamic> duplicate(String id) async {
+  var data = {
+    "userName": id
+  };
+  var body = json.encode(data);
+  var response = await http.post(Uri.parse(Env.SERVER_ADMIN_IS_EXIST_URL), headers: {"Content-Type": "application/json"}, body: body);
+  if (response.statusCode == 200) {
+    String result = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> resultMap = jsonDecode(result);
+    
+    // resultMap.data
+    // -- resultMap.data["isExist"]   :  존재 여부 ( true / false ) 
+    // -- resultMap.data["msg"] : true 경우 - "존재하지 않는 사용자입니다."
+
+    //로그인 성공 실패 체크해서 Model 다르게 설정
+    return resultMap;
+  } else {
+    throw Exception('서버 오류');
+  }
+
 }
 
 Future<ReportInfo> sendReport(int userSeq, String addr, String carNum, String time, String fileName, double latitude, double longitude) async {

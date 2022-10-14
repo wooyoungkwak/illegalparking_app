@@ -6,14 +6,18 @@ class Env {
   static bool isDebug = true; // 배포시 false
 
   static const String AI_SERVER = "http://teraenergy.iptime.org"; // AI 서버
-  static const String ADMIN_SERVER = "http://teraenergy.iptime.org"; // 관리자 서버
-
   static const String SERVER_AI_URL = "$AI_SERVER:18091";
-  static const String SERVER_ADMIN_URL = "$ADMIN_SERVER:18090";
-
   static const String SERVER_AI_FILE_UPLOAD_URL = '$SERVER_AI_URL/';
-  static const String SERVER_LOGIN_URL = '$SERVER_AI_URL/api/login';
 
+
+  static const String ADMIN_SERVER_TEST = "http://teraenergy.iptime.org"; // 관리자 서버
+  static const String ADMIN_SERVER_REAL = "http://"; // 관리자 서버
+  static const String ADMIN_SERVER = ADMIN_SERVER_TEST ; // 관리자 서버
+
+  static const String SERVER_ADMIN_URL = "$ADMIN_SERVER:18090";
+  static const String SERVER_LOGIN_URL = '$SERVER_ADMIN_URL/api/login';
+  static const String SERVER_ADMIN_REGISTER_URL = '$SERVER_ADMIN_URL/api/user/register';
+  static const String SERVER_ADMIN_IS_EXIST_URL = '$SERVER_ADMIN_URL/api/user/isExist';
   static const String SERVER_ADMIN_FILE_UPLOAD_URL = '$SERVER_ADMIN_URL/files/image/set';
   static const String SERVER_ADMIN_REPORT_UPLOAD_URL = '$SERVER_ADMIN_URL/api/receipt/set';
 
@@ -48,6 +52,7 @@ class Env {
   static const String KEY_LOGIN_SUCCESS = "success";
   static const String KEY_PHOTO_NAME = "photoName";
   static const String KEY_PHONE_NUMBER = "phoneNumber";
+  static const String KEY_USER_SEQ = "userSeq";
 
   static const String KEY_PHOTO_PATH = "photo_path";
   static const String KEY_KR_NAME = "krName";

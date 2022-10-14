@@ -6,8 +6,10 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:illegalparking_app/controllers/sign_up_controller.dart';
 import 'package:illegalparking_app/services/network_service.dart';
+import 'package:illegalparking_app/services/server_service.dart';
 
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 
 class SignUp extends StatefulWidget {
@@ -28,7 +30,7 @@ class _SignUpState extends State<SignUp> {
   bool sendAuthentication = false;
   bool authVerification = false;
   Timer? timer;
-  final idCotroller = TextEditingController();
+  final idController = TextEditingController();
   final passController = TextEditingController();
   final passValidController = TextEditingController();
   final nameCotroller = TextEditingController();
@@ -75,7 +77,7 @@ class _SignUpState extends State<SignUp> {
   @override
   void dispose() {
     super.dispose();
-    idCotroller.dispose();
+    idController.dispose();
     passController.dispose();
     passValidController.dispose();
     nameCotroller.dispose();
@@ -102,7 +104,7 @@ class _SignUpState extends State<SignUp> {
             shrinkWrap: true,
             children: [
               // ID, PW
-              createTextFormField(labelText: "아이디", controller: idCotroller),
+              createTextFormField(labelText: "아이디", controller: idController),
               createTextFormField(labelText: "패스워드", controller: passController, obscureText: true),
               createTextFormField(labelText: "패스워드 확인", controller: passValidController, obscureText: true),
               // 이름,전화번호,인증
@@ -191,7 +193,15 @@ class _SignUpState extends State<SignUp> {
                       text: "회원생성",
                       function: serviceTerms
                           ? () {
-                              showSignUpSuccessDialog();
+                              // TODO : photoName 기능 추가
+                              register(idController.text, passController.text, nameCotroller.text, phoneNumController.text, "photoName").then((registerInfo) {
+                                if ( registerInfo.success ) {
+                                  showSignUpSuccessDialog();
+                                } else {
+                                  // TODO : 확인 해봐 ... 
+                                  alertDialogByonebutton("알림", registerInfo.message!);
+                                }
+                              });
                             }
                           : null,
                     ),
