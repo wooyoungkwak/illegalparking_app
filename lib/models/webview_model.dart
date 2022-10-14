@@ -40,4 +40,8 @@ class MapInfo {
   String getPmPrice() {
     return data!["pmPrice"];
   }
+
+  String getPmTime() {
+    return data!["pmTimer"];
+  }
 }
