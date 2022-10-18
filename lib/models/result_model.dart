@@ -175,16 +175,21 @@ class NoticeListInfo {
 }
 
 class NoticeInfo {
-  NoticeInfo(this.subject, this.content, this.regDt);
+  NoticeInfo(this.noticeType, this.subject, this.content, this.regDt);
+  String noticeType;
   String subject;
   String? content;
   String regDt;
 
   static NoticeInfo fromJson(Map<String, dynamic> json) {
-    return NoticeInfo(json["subject"], json["content"], json["regDt"]);
+    return NoticeInfo(json["noticeType"], json["subject"], json["content"], json["regDt"]);
   }
 
-  Map<String, dynamic> toJson() => {"subject": subject, "content": content, "regDt": regDt};
+  // noticeType 
+  //  DISTRIBUTION("공지"),
+  //  ANNOUNCEMENT("소식")
+
+  Map<String, dynamic> toJson() => {"noticeType": noticeType, "subject": subject, "content": content, "regDt": regDt};
 }
 
 class PointListInfo {
