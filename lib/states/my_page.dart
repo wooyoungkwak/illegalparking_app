@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:illegalparking_app/controllers/my_page_controller.dart';
+import 'package:illegalparking_app/services/server_service.dart';
 
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -13,7 +15,10 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
+
+  
   final controller = Get.put(MyPageController());
+
 
   List testlist = [
     {
@@ -68,6 +73,7 @@ class _MyPageState extends State<MyPage> {
   @override
   void initState() {
     super.initState();
+    requestMyPage(2).then((myPageInfo) => Log.debug(" myPageInfo = ${myPageInfo.toJson()}"));
   }
 
   @override
@@ -246,7 +252,12 @@ class _MyPageState extends State<MyPage> {
               ),
             ],
           ),
-        )
+        ),
+        createElevatedButton(text: "더보기", function: (){
+          requestNotice(2, 5, 5).then((noticeListInfo) {
+            Log.debug("result = ${noticeListInfo.noticeInfos[0].toJson()}");
+            });
+        })
       ],
     );
   }

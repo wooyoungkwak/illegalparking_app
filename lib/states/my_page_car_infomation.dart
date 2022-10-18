@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/utils/time_util.dart';
 
 class MyPageCarInfomatino extends StatefulWidget {
@@ -83,8 +85,14 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                             Switch(
                                 value: checkedAlram,
                                 onChanged: (value) {
-                                  setState(() {
-                                    checkedAlram = value;
+                                  requestMyCarAlarm(2, "123가1234", value).then((defaultInfo) {
+                                    if (defaultInfo.success) {
+                                      setState(() {
+                                        checkedAlram = value;
+                                      });
+                                    } else {
+                                      Log.debug("${defaultInfo.message}");
+                                    }
                                   });
                                 }),
                           ],

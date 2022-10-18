@@ -20,6 +20,23 @@ class Env {
   static const String SERVER_ADMIN_IS_EXIST_URL = '$SERVER_ADMIN_URL/api/user/isExist';
   static const String SERVER_ADMIN_FILE_UPLOAD_URL = '$SERVER_ADMIN_URL/files/image/set';
   static const String SERVER_ADMIN_REPORT_UPLOAD_URL = '$SERVER_ADMIN_URL/api/receipt/set';
+  static const String SERVER_ADMIN_MY_PAGE_URL = '$SERVER_ADMIN_URL/api/myPage/get';
+  static const String SERVER_ADMIN_NOTICE_URL = '$SERVER_ADMIN_URL/api/notice/gets';
+  static const String SERVER_ADMIN_POINT_URL = '$SERVER_ADMIN_URL/api/point/gets';
+  static const String SERVER_ADMIN_PRODUCT_LIST_URL = '$SERVER_ADMIN_URL/api/product/gets';
+  static const String SERVER_ADMIN_PRODUCT_BUY_URL = '$SERVER_ADMIN_URL/api/calculate/set';
+  static const String SERVER_ADMIN_REPORT_GET_URL = '$SERVER_ADMIN_URL/api/receipt/gets';
+
+  static const String SERVER_ADMIN_CAR_ALARMHISTROY_URL = '$SERVER_ADMIN_URL/api/car/alarmHistory';
+  static const String SERVER_ADMIN_CAR_REGISTER_URL = '$SERVER_ADMIN_URL/api/car/set';
+  static const String SERVER_ADMIN_CAR_ALARM_URL = '$SERVER_ADMIN_URL/api/car/modify';
+
+  static const String SERVER_ADMIN_USER_PROFILE_URL = '$SERVER_ADMIN_URL/api/user/profile/change';
+  static const String SERVER_ADMIN_USER_PASSWORD_CHCEK_URL = '$SERVER_ADMIN_URL/api/user/password/check';
+  static const String SERVER_ADMIN_USER_PASSWORD_CHANGE_URL = '$SERVER_ADMIN_URL/api/user/password/change';
+
+
+
 
   static const String MAP_TEST_SERVER = "http://220.95.46.211:18090/area/map";
   static const String MAP_REAL_SERVER = "http://49.50.166.205/area/map";

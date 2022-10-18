@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/utils/time_util.dart';
 
 class MyPageReport extends StatefulWidget {
@@ -75,6 +78,14 @@ class _MyPageReportState extends State<MyPageReport> {
       "message": "불법주정차 단속시간이 아닙니다.",
     },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    requestReportHistory(2).then((value) {
+      Log.debug(value.toString());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/utils/time_util.dart';
 
 class MyPagePoint extends StatefulWidget {
@@ -52,6 +54,11 @@ class _MyPagePointState extends State<MyPagePoint> {
       "type": "모바일상품권",
     },
   ];
+  @override
+  void initState() {
+    super.initState();
+    requestPoint(2).then((pointListInfo) => Log.debug(" result = ${pointListInfo.pointInfos[0].toJson()}"));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +96,7 @@ class _MyPagePointState extends State<MyPagePoint> {
           createMypageCard(
             route: () {
               _showPointDialog();
+              requestProductList(2).then((productListInfo) => Log.debug("${productListInfo.productInfos[0].toJson()}"));
             },
             widgetList: <Widget>[
               createCustomText(
@@ -333,7 +341,16 @@ class _MyPagePointState extends State<MyPagePoint> {
                         padding: 24.0,
                         text: "상품신청",
                         function: () {
-                          Navigator.pop(context);
+                          requestProductBuy(2, 1, 0).then((productBuyInfo) {
+                            if(productBuyInfo.success) {
+                              // 등록 알림 메시지
+                              Log.debug(productBuyInfo.data);
+                              // Navigator.pop(context);
+                            } else {
+                              // 실패 알림 메시지.... 
+                              Log.debug(productBuyInfo.message);
+                            }
+                          });
                         }),
                   ],
                 ),

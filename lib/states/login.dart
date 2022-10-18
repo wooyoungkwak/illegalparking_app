@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/sign_up_controller.dart';
 import 'package:illegalparking_app/services/server_service.dart';
@@ -65,6 +66,7 @@ class _LoginState extends State<Login> {
                         // Navigator.pushNamed(context, "/home");
                         login("hong@gmail.com", "qwer1234").then((logingInfo) {
                           if (logingInfo.success) {
+                            Env.USER_SEQ = logingInfo.getUserSeq();
                             Navigator.pushNamed(context, "/home");
                           } else {
                             // TODO : 확인 해바 .. 

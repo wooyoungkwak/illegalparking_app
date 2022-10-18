@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:illegalparking_app/controllers/my_page_controller.dart';
+import 'package:illegalparking_app/services/server_service.dart';
 
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 
 class MyPageRegistration extends StatefulWidget {
   const MyPageRegistration({super.key});
@@ -35,8 +37,15 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
                   createElevatedButton(
                       text: "다음",
                       function: () {
-                        Navigator.pop(context);
-                        controller.getCertifiedVehicle();
+                        requestCarRegister(2, "123가1234", "투산ix", "SUV").then((defaultInfo) {
+                          if (defaultInfo.success) {
+                            Navigator.pop(context);
+                            controller.getCertifiedVehicle();
+                          } else {
+                            // TODO : 등록 실패 알림 
+                            Log.debug( " message : ${defaultInfo.message} ");
+                          }
+                        });
                       })
                 ],
               )),

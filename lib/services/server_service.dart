@@ -33,6 +33,7 @@ Future<LoginInfo> login(String id, String pw) async {
   }
 }
 
+// 사용자 등록
 Future<RegisterInfo> register(String id, String pw, String name, String phoneNumber, String photoName) async {
   var data = {
     "userName": id, 
@@ -54,6 +55,7 @@ Future<RegisterInfo> register(String id, String pw, String name, String phoneNum
   }
 }
 
+// ID 중복 체크
 Future<dynamic> duplicate(String id) async {
   var data = {
     "userName": id
@@ -76,6 +78,8 @@ Future<dynamic> duplicate(String id) async {
 
 }
 
+
+// 신고 전송
 Future<ReportInfo> sendReport(int userSeq, String addr, String carNum, String time, String fileName, double latitude, double longitude) async {
 
   var data = {
@@ -99,6 +103,28 @@ Future<ReportInfo> sendReport(int userSeq, String addr, String carNum, String ti
     throw Exception('신고 전송 오류');
   }
 }
+
+
+// 신고 이력 정보 요청
+Future<ReportHistoryInfo> requestReportHistory(int userSeq) async {
+
+  var data = {
+    "userSeq": userSeq
+  };
+
+  var body = json.encode(data);
+
+  var response = await http.post(Uri.parse(Env.SERVER_ADMIN_REPORT_GET_URL), headers: {"Content-Type": "application/json"}, body: body);
+  if (response.statusCode == 200) {
+    String result = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> resultMap = jsonDecode(result);
+    return ReportHistoryInfo.fromJson(resultMap);
+  } else {
+    throw Exception('신고 이력 정보 요청 오류');
+  }
+}
+
+
 
 // 서버 이미지 저장
 Future<dynamic> _sendFile(String url, String filePath) async {
@@ -130,7 +156,7 @@ Future<String> sendFileByAI(String url, String filePath) async {
   }
 }
 
-// AI 서버 이미지 전송
+// 관리자 서버 이미지 전송
 Future<bool> sendFileByReport(String url, String filePath) async {
   try {
     var response = await _sendFile(url, filePath);
@@ -147,43 +173,173 @@ Future<bool> sendFileByReport(String url, String filePath) async {
   }
 }
 
-// 서버 이미지 저장 수정
-// Future<bool> sendFile(String url, List<String> filePath) async {
-//   try {
-//     final ReportController c = Get.put(ReportController());
-//     Log.debug(" uri => ${Uri.parse(url)}");
-//     var request = new http.MultipartRequest("POST", Uri.parse(url));
+//  내정보 기본 페이지 정보 요청
+Future<MyPageInfo> requestMyPage(int userSeq) async {
+  var data = {"userSeq": userSeq};
+  var body = json.encode(data);
 
-//     for (var image in filePath) {
-//       Log.debug(image);
-//       List<String> temps = image.split("/");
-//       String fileName = temps.last + ".jpg";
-//       request.files.add(await http.MultipartFile.fromPath('file', image, filename: fileName));
-//     }
+  var response = await http.post(Uri.parse(Env.SERVER_ADMIN_MY_PAGE_URL), headers: {"Content-Type": "application/json"}, body: body);
+  if (response.statusCode == 200) {
+    String result = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> resultMap = jsonDecode(result);
+    return MyPageInfo.fromJson(resultMap);
+  } else {
+    throw Exception('서버 오류');
+  }
+}
 
-//     var response = await request.send();
-//     final respStr = await response.stream.bytesToString(); //번호판 결과값 반환
-//     Log.debug("  stream = ${respStr}");
 
-//     if (filePath.length == 1) {
-//       //번호판 사진
-//       await c.carNumberwrite(respStr); //서버에서 받은 번호판 text 저장
-//     }
+// 추가 공지 정보
+Future<NoticeListInfo> requestNotice(int userSeq, int offset, int count) async {
+  var data = {"userSeq": userSeq, "offset": offset, "count": count};
+  var body = json.encode(data);
 
-//     // Log.debug("  resonse data length  = ${response.contentLength}");
-//     // Log.debug("  resonse data length  = ${response.reasonPhrase}");
-//     // Log.debug("  resonse data length  = ${response.request}");
+  var response = await http.post(Uri.parse(Env.SERVER_ADMIN_NOTICE_URL), headers: {"Content-Type": "application/json"}, body: body);
+  if (response.statusCode == 200) {
+    String result = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> resultMap = jsonDecode(result);
+    return NoticeListInfo.fromJson(resultMap);
+  } else {
+    throw Exception('서버 오류');
+  }
+}
 
-//     if (response.statusCode == 200) {
-//       Log.debug(response.statusCode.toString());
-//       return true;
-//     } else {
-//       // return false;
-//       throw Exception('파일 전송 오류 1111 ');
-//     }
-//   } catch (e) {
-//     Log.debug(e.toString());
-//     // return false;
-//     throw Exception('파일 전송 오류 22222 ');
-//   }
-// }
+
+// 포인트 정보 요청
+Future<PointListInfo> requestPoint(int userSeq) async {
+var data = {"userSeq": userSeq};
+  var body = json.encode(data);
+
+  var response = await http.post(Uri.parse(Env.SERVER_ADMIN_POINT_URL), headers: {"Content-Type": "application/json"}, body: body);
+  if (response.statusCode == 200) {
+    String result = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> resultMap = jsonDecode(result);
+    return PointListInfo.fromJson(resultMap);
+  } else {
+    throw Exception('서버 오류');
+  }
+}
+
+// 제품 정보 리스트 요청
+Future<ProductListInfo> requestProductList(int userSeq) async {
+var data = {"userSeq": userSeq};
+  var body = json.encode(data);
+
+  var response = await http.post(Uri.parse(Env.SERVER_ADMIN_PRODUCT_LIST_URL), headers: {"Content-Type": "application/json"}, body: body);
+  if (response.statusCode == 200) {
+    String result = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> resultMap = jsonDecode(result);
+    return ProductListInfo.fromJson(resultMap);
+  } else {
+    throw Exception('서버 오류');
+  }
+}
+
+// 상품 신청 요청
+Future<ProductBuyInfo> requestProductBuy(int userSeq, int productSeq, int balancePointValue) async {
+var data = {"userSeq": userSeq, "productSeq": productSeq, "balancePointValue": balancePointValue};
+  var body = json.encode(data);
+
+  var response = await http.post(Uri.parse(Env.SERVER_ADMIN_PRODUCT_BUY_URL), headers: {"Content-Type": "application/json"}, body: body);
+  if (response.statusCode == 200) {
+    String result = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> resultMap = jsonDecode(result);
+    return ProductBuyInfo.fromJson(resultMap);
+  } else {
+    throw Exception('서버 오류');
+  }
+}
+
+// 차량 이력 정보 요청
+Future<AlarmHistoryListInfo> requestAlarmHistory(int userSeq, String carNum) async {
+var data = {"userSeq": userSeq, "carNum": carNum};
+  var body = json.encode(data);
+
+  var response = await http.post(Uri.parse(Env.SERVER_ADMIN_PRODUCT_BUY_URL), headers: {"Content-Type": "application/json"}, body: body);
+  if (response.statusCode == 200) {
+    String result = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> resultMap = jsonDecode(result);
+    return AlarmHistoryListInfo.fromJson(resultMap);
+  } else {
+    throw Exception('서버 오류');
+  }
+}
+
+// 차량 이력 정보 등록 요청
+Future<DefaultInfo> requestCarRegister(int userSeq, String carNum, String carName, String carGrade) async {
+  var data = {"userSeq": userSeq, "carNum": carNum,  "carName": carName, "carGrade":carGrade};
+  var body = json.encode(data);
+
+  var response = await http.post(Uri.parse(Env.SERVER_ADMIN_CAR_REGISTER_URL), headers: {"Content-Type": "application/json"}, body: body);
+  if (response.statusCode == 200) {
+    String result = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> resultMap = jsonDecode(result);
+    return DefaultInfo.fromJson(resultMap);
+  } else {
+    throw Exception('서버 오류');
+  }
+}
+
+// 내차 알림 설정 요청
+Future<DefaultInfo> requestMyCarAlarm(int userSeq, String carNum, bool isAlarm) async {
+var data = {"userSeq": userSeq, "carNum": carNum, "isAlarm": isAlarm};
+  var body = json.encode(data);
+
+  var response = await http.post(Uri.parse(Env.SERVER_ADMIN_CAR_ALARM_URL), headers: {"Content-Type": "application/json"}, body: body);
+  if (response.statusCode == 200) {
+    String result = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> resultMap = jsonDecode(result);
+    return DefaultInfo.fromJson(resultMap);
+  } else {
+    throw Exception('서버 오류');
+  }
+}
+
+// 패스워드 체크 요청
+Future<DefaultInfo> requestUserPasswordCheck(int userSeq, String password) async {
+var data = {"userSeq": userSeq, "password": password};
+  var body = json.encode(data);
+
+  var response = await http.post(Uri.parse(Env.SERVER_ADMIN_USER_PASSWORD_CHCEK_URL), headers: {"Content-Type": "application/json"}, body: body);
+  if (response.statusCode == 200) {
+    String result = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> resultMap = jsonDecode(result);
+    return DefaultInfo.fromJson(resultMap);
+  } else {
+    throw Exception('서버 오류');
+  }
+}
+
+// 패스워드 변경 요청
+Future<DefaultInfo> requestUserPasswordChange(int userSeq, String password) async {
+var data = {"userSeq": userSeq, "password": password};
+  var body = json.encode(data);
+
+  var response = await http.post(Uri.parse(Env.SERVER_ADMIN_USER_PASSWORD_CHANGE_URL), headers: {"Content-Type": "application/json"}, body: body);
+  if (response.statusCode == 200) {
+    String result = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> resultMap = jsonDecode(result);
+    return DefaultInfo.fromJson(resultMap);
+  } else {
+    throw Exception('서버 오류');
+  }
+}
+
+// 프로 사진 변경 요청
+Future<DefaultInfo> requestUserProfileChange(int userSeq, String photoName) async {
+var data = {"userSeq": userSeq, "photoName": photoName};
+  var body = json.encode(data);
+
+  var response = await http.post(Uri.parse(Env.SERVER_ADMIN_USER_PROFILE_URL), headers: {"Content-Type": "application/json"}, body: body);
+  if (response.statusCode == 200) {
+    String result = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> resultMap = jsonDecode(result);
+    return DefaultInfo.fromJson(resultMap);
+  } else {
+    throw Exception('서버 오류');
+  }
+}
+
+
+
+
