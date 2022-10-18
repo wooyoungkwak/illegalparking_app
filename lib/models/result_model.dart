@@ -8,7 +8,6 @@ LoginInfo resultInfoFromJson(String str) => LoginInfo.fromJson(json.decode(str))
 
 String resultInfoToJson(LoginInfo loginInfo) => json.encode(loginInfo.toJson());
 
-
 class DefaultInfo {
   DefaultInfo(this.success, this.message, this.data);
   bool success;
@@ -48,7 +47,7 @@ class LoginInfo {
     return data![Env.KEY_USER_SEQ];
   }
 
-  String getPhotoPath() {
+  String getPhotoName() {
     return data![Env.KEY_PHOTO_NAME];
   }
 
@@ -56,7 +55,7 @@ class LoginInfo {
     return data![Env.KEY_KR_NAME];
   }
 
-  String getCompanyName() {
+  String getPhoneNumber() {
     return data![Env.KEY_PHONE_NUMBER];
   }
 }
@@ -304,5 +303,4 @@ class AlarmHistoryInfo {
   }
 
   Map<String, dynamic> toJson() => {"addr": addr, "regDt": regDt, "stateType": stateType, "fileName": fileName};
-
 }

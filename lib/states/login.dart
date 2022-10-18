@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/sign_up_controller.dart';
+import 'package:illegalparking_app/models/result_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
@@ -16,12 +17,21 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  late TextEditingController _idController = TextEditingController();
+  late TextEditingController _passController = TextEditingController();
   final singUpController = Get.put(SignUpController());
   final loginController = Get.put(LoginController());
 
   @override
   void initState() {
     super.initState();
+    if (Env.isDebug) {
+      _idController = TextEditingController(text: "hong@gmail.com");
+      _passController = TextEditingController(text: "qwer1234");
+    } else {
+      _idController = TextEditingController(text: "");
+      _passController = TextEditingController(text: "");
+    }
   }
 
   @override
@@ -40,8 +50,8 @@ class _LoginState extends State<Login> {
               elevation: 5,
               child: Column(
                 children: [
-                  createTextFormField(labelText: "아이디"),
-                  createTextFormField(labelText: "비밀번호"),
+                  createTextFormField(labelText: "아이디", controller: _idController),
+                  createTextFormField(labelText: "비밀번호", controller: _passController),
                   // 자동 로그인
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -64,13 +74,19 @@ class _LoginState extends State<Login> {
                       text: "로그인",
                       function: () {
                         // Navigator.pushNamed(context, "/home");
-                        login("hong@gmail.com", "qwer1234").then((logingInfo) {
-                          if (logingInfo.success) {
-                            Env.USER_SEQ = logingInfo.getUserSeq();
+                        // hong@gmail.com
+                        // qwer1234
+                        login(_idController.text, _passController.text).then((loginInfo) {
+                          if (loginInfo.success) {
+                            // 유저 정보 등록
+                            Env.USER_NAME = loginInfo.getKrName();
+                            Env.USER_SEQ = loginInfo.getUserSeq();
+                            Env.USER_PHOTO_NAME = loginInfo.getPhotoName();
+                            Env.USER_PHONE_NUMBER = loginInfo.getPhoneNumber();
                             Navigator.pushNamed(context, "/home");
                           } else {
-                            // TODO : 확인 해바 .. 
-                            alertDialogByonebutton("알림", logingInfo.message!);
+                            // TODO : 확인 해바 ..
+                            alertDialogByonebutton("알림", loginInfo.message!);
                           }
                         });
                       }),

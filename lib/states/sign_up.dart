@@ -195,10 +195,10 @@ class _SignUpState extends State<SignUp> {
                           ? () {
                               // TODO : photoName 기능 추가
                               register(idController.text, passController.text, nameCotroller.text, phoneNumController.text, "photoName").then((registerInfo) {
-                                if ( registerInfo.success ) {
+                                if (registerInfo.success) {
                                   showSignUpSuccessDialog();
                                 } else {
-                                  // TODO : 확인 해봐 ... 
+                                  // TODO : 확인 해봐 ...
                                   alertDialogByonebutton("알림", registerInfo.message!);
                                 }
                               });
