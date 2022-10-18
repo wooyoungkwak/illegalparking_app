@@ -28,7 +28,6 @@ Padding createCustomText({
 
 String? _errorText(TextEditingController controller) {
   final text = controller.value.text;
-  Log.debug("controller text : $text");
   if (text.isEmpty) {
     return 'Can\t be empty';
   }
