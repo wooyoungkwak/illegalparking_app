@@ -32,21 +32,20 @@ class _ReportcameraState extends State<Reportcamera> {
         children: [
           MaskForCameraCustomView(
               type: false,
-              boxWidth: 300,
+              boxWidth: 280,
               boxHeight: 300,
               appBarColor: Colors.transparent,
               takeButtonActionColor: Colors.white,
               takeButtonColor: Colors.black,
-              boxBorderColor: Colors.blue,
-              boxBorderWidth: 1.0,
+              btomhighbtn: 140, // 버튼위치 조정
               onTake: (MaskForCameraViewResult res) {
                 c.imageTimewrite(getDateToStringForYYMMDDHHMM(getNow()));
                 Log.debug(getDateToStringForYYMMDDHHMM(getNow()));
 
                 if (c.carnumberImage.value.isNotEmpty) {
-                  Get.off(const Declaration());
+                  Get.offAll(const Declaration());
                 } else {
-                  Get.to(const Numbercamera());
+                  Get.off(const Numbercamera());
                 }
               }),
           initContainerByOutlineButton(0, 0.95, "불법주정차 법규", context),
@@ -171,16 +170,17 @@ void widgetbottomsheet(BuildContext context) {
                 ),
               ),
               const SizedBox(height: 5),
-              Expanded(flex: 8, child: Image.asset("assets/parking _rule.png")), //불법주정차에 대한 법규 이미지 넣을 부분
+              Expanded(
+                  flex: 8,
+                  child: Image.asset(
+                    "assets/parking _rule.png",
+                    filterQuality: FilterQuality.high,
+                  )), //불법주정차에 대한 법규 이미지 넣을 부분
               const SizedBox(height: 10),
               Expanded(
-                  flex: 1,
-                  child: Center(
-                      child: ElevatedButton(
-                          child: const Text('확 인'),
-                          onPressed: () {
-                            Get.back();
-                          }))),
+                flex: 1,
+                child: _initInkWellByOnTap(_initContainer(Colors.black, "확인", 24, 300), _okbtn),
+              ),
               const SizedBox(height: 15),
             ],
           ),
@@ -188,4 +188,49 @@ void widgetbottomsheet(BuildContext context) {
       );
     },
   );
+}
+
+//탭기능
+InkWell _initInkWellByOnTap(Widget widget, Function function) {
+  return InkWell(
+    onTap: () {
+      function();
+    },
+    child: widget,
+  );
+}
+
+//버튼디자인
+Container _initContainer(Color color, String text, double radius, double width) {
+  return Container(
+    width: width,
+    child: Card(
+      color: color,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 11),
+        child: Center(child: Text(text, style: TextStyle(color: Colors.white, fontSize: 14))),
+      ),
+    ),
+  );
+}
+
+//바텀에 검은 선
+Padding _createPaddingBybottomline() {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Container(
+      alignment: const Alignment(0, 0),
+      height: 3.0,
+      width: 100.0,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(3),
+        color: Color(0xff2D2D2D),
+      ),
+    ),
+  );
+}
+
+void _okbtn() {
+  Get.back();
 }
