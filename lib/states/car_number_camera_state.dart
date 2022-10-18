@@ -37,15 +37,16 @@ class _NumbercameraState extends State<Numbercamera> {
         children: [
           MaskForCameraCustomView(
               boxWidth: 300,
-              boxHeight: 150,
+              boxHeight: 120,
               appBarColor: const Color.fromARGB(0, 22, 15, 15),
               takeButtonActionColor: Colors.white,
               takeButtonColor: Colors.black,
-              boxBorderColor: Colors.blue,
-              boxBorderWidth: 2.8,
+              boxBorderColor: Colors.white,
+              boxBorderWidth: 1,
+              btomhighbtn: 210,
               backColor: Colors.black,
               onTake: (MaskForCameraViewResult res) {
-                pd.show(max: 100, msg: '데이터를 생성중입니다');
+                // pd.show(max: 100, msg: '데이터를 생성중입니다');
                 // pd.close();
 
                 // function(res, context, controller, filelist);
@@ -53,8 +54,8 @@ class _NumbercameraState extends State<Numbercamera> {
                 // saveImageDirectory(res, true).then((value) {});
                 // showSnackBar(context, controller.carNumber.toString());
                 // controller.carNumberwrite("tset중 문제네;;;");
-                pd.close();
-                Get.off(() => const Declaration());
+                // pd.close();
+                Get.offAll(() => const Declaration());
 
                 // sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, filelist).then((value) {
                 // try {
@@ -66,7 +67,20 @@ class _NumbercameraState extends State<Numbercamera> {
                 //   Log.debug(e);
                 // }
               }),
-          CreateContainerByAlignment(0, -0.3, DefaultTextStyle(style: Theme.of(context).textTheme.headline1!, child: const Text("번호판만 촬영해주세요", style: TextStyle(fontSize: 15, color: Colors.white)))),
+          CreateContainerByAlignment(
+              0, -0.3, DefaultTextStyle(style: Theme.of(context).textTheme.headline1!, child: const Text("번호판을 네모영역 안에서 촬영해주세요", style: TextStyle(fontSize: 15, color: Colors.white)))),
+          CreateContainerByAlignment(
+              0,
+              0.6,
+              DefaultTextStyle(
+                  style: Theme.of(context).textTheme.headline1!,
+                  child: Card(
+                      shape: StadiumBorder(side: BorderSide(color: Colors.white, width: 1)),
+                      color: Colors.transparent,
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: const Text("촬영 예시", style: TextStyle(fontSize: 15, color: Colors.white)),
+                      )))),
           CreateContainerByAlignment(0, 0.9, SizedBox(height: 100, width: 200, child: Image.asset("assets/car_number.jpg")))
         ],
       )),
@@ -87,6 +101,20 @@ class _NumbercameraState extends State<Numbercamera> {
           return Future(() => false);
         },
         child: widget);
+  }
+
+  Container _initContainer(Color color, String text, double radius, double width) {
+    return Container(
+      width: width,
+      child: Card(
+        color: color,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 11),
+          child: Center(child: Text(text, style: TextStyle(color: Colors.white, fontSize: 14))),
+        ),
+      ),
+    );
   }
 
   // void sendfilefunction() {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 
 Padding createCustomText({
@@ -25,6 +26,15 @@ Padding createCustomText({
   );
 }
 
+String? _errorText(TextEditingController controller) {
+  final text = controller.value.text;
+  if (text.isEmpty) {
+    return 'Can\t be empty';
+  }
+
+  return null;
+}
+
 Padding createTextFormField({
   GlobalKey<FormState>? formFieldKey,
   String? labelText,
@@ -33,8 +43,9 @@ Padding createTextFormField({
   bool? obscureText,
   TextEditingController? controller,
 }) {
+  // final text = controller!.value.text;
   return Padding(
-    padding: EdgeInsets.all(padding ?? 32.0),
+    padding: EdgeInsets.all(padding ?? 8.0),
     child: TextFormField(
       key: formFieldKey,
       controller: controller,
@@ -43,6 +54,7 @@ Padding createTextFormField({
         border: OutlineInputBorder(),
         labelText: labelText,
         hintText: hintText,
+        errorText: controller != null ? _errorText(controller) : null,
       ),
       validator: (text) {
         Log.debug("validator Text: $text");

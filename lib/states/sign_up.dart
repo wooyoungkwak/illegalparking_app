@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
@@ -28,7 +29,7 @@ class _SignUpState extends State<SignUp> {
   int limitTime = 180;
   bool serviceTerms = false;
   bool sendAuthentication = false;
-  bool authVerification = false;
+  bool authVerification = true;
   Timer? timer;
   final idController = TextEditingController();
   final passController = TextEditingController();
@@ -37,6 +38,30 @@ class _SignUpState extends State<SignUp> {
   final phoneNumController = TextEditingController();
   final authKeyController = TextEditingController();
   int? authNum;
+  late String photoName;
+
+  List profileCharicterList = [
+    {
+      "value": false,
+      "asset": "assets/noimage.jpg",
+    },
+    {
+      "value": false,
+      "asset": "assets/noimage.jpg",
+    },
+    {
+      "value": false,
+      "asset": "assets/noimage.jpg",
+    },
+    {
+      "value": false,
+      "asset": "assets/noimage.jpg",
+    },
+    {
+      "value": false,
+      "asset": "assets/noimage.jpg",
+    },
+  ];
 
   void getSetTime() {
     secToTime(limitTime);
@@ -144,6 +169,7 @@ class _SignUpState extends State<SignUp> {
 
               if (authVerification)
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // 약관
                     SizedBox(
@@ -188,17 +214,20 @@ class _SignUpState extends State<SignUp> {
                         ],
                       ),
                     ),
+                    // 프로필 캐릭터 선택
+                    createCustomText(text: "프로필 캐릭터 선택", weight: FontWeight.w400),
+                    Row(children: List.generate(profileCharicterList.length, (index) => _createProfileCircleAvatar(list: profileCharicterList, index: index))),
                     // 회원생성
                     createElevatedButton(
                       text: "회원생성",
                       function: serviceTerms
                           ? () {
                               // TODO : photoName 기능 추가
-                              register(idController.text, passController.text, nameCotroller.text, phoneNumController.text, "photoName").then((registerInfo) {
-                                if ( registerInfo.success ) {
+                              register(idController.text, passController.text, nameCotroller.text, phoneNumController.text, photoName).then((registerInfo) {
+                                if (registerInfo.success) {
                                   showSignUpSuccessDialog();
                                 } else {
-                                  // TODO : 확인 해봐 ... 
+                                  // TODO : 확인 해봐 ...
                                   alertDialogByonebutton("알림", registerInfo.message!);
                                 }
                               });
@@ -324,5 +353,42 @@ class _SignUpState extends State<SignUp> {
   // String To num 나중에 Util에 추가
   int stringToNum(String value) {
     return int.parse(value);
+  }
+
+  Padding _createProfileCircleAvatar({required List list, required int index}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _initListReset();
+            photoName = list[index]["asset"];
+            list[index]["value"] = true;
+          });
+        },
+        child: Container(
+          width: 60.0,
+          height: 60.0,
+          decoration: BoxDecoration(
+            color: const Color(0xff7c94b6),
+            image: DecorationImage(
+              image: AssetImage(list[index]["asset"]),
+              fit: BoxFit.cover,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+            border: Border.all(
+              color: list[index]["value"] ? Colors.blue : Colors.transparent,
+              width: 4.0,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _initListReset() {
+    for (var el in profileCharicterList) {
+      el["value"] = false;
+    }
   }
 }

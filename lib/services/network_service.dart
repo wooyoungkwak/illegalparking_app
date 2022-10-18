@@ -92,7 +92,7 @@ Future<int> sendSMS(String phoneNumber) async {
     "type": "SMS",
     "contentType": "COMM",
     "countryCode": "82",
-    "from": "01079297878",
+    "from": Env.NAVER_PHONE_NUMBER,
     "content": "ABCD",
     "messages": [
       {"to": phoneNumber, "content": "인증번호 [$verifyNum]를 입력해주세요."}
