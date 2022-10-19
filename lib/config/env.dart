@@ -70,12 +70,12 @@ class Env {
   // static const String KEY_SETTING_ALARM = "ALARM";
   // static const String KEY_LOGIN_SUCCESS = "success";
   static const String KEY_USER_SEQ = "userSeq";
-  static const String KEY_USER_NAME = "name";
+  static const String KEY_USER_NAME = "userName";
   static const String KEY_PHOTO_NAME = "photoName";
   static const String KEY_PHONE_NUMBER = "phoneNumber";
 
   static const String KEY_PHOTO_PATH = "photo_path";
-  static const String KEY_KR_NAME = "userName";
+  static const String KEY_KR_NAME = "name";
   static const String KEY_POSITION_NAME = "positionName";
   static const String KEY_COMPANY_NAME = "companyName";
   static const String KEY_SHARE_UUID = "share_uuid";

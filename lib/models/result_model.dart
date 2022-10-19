@@ -26,7 +26,7 @@ class LoginInfo {
 
   bool success;
   String? message;
-  Map<String, dynamic>? data = {};
+  Map<String, dynamic> data = {};
 
   // - user-
   // userSeq
@@ -38,25 +38,29 @@ class LoginInfo {
   // userCode - 의미 없음
 
   static LoginInfo fromJson(Map<String, dynamic> json) {
-    return LoginInfo(json["success"], json["msg"], json["data"]);
+    if (json["data"].runtimeType.toString() == 'String') {
+      return LoginInfo(json["success"], json["msg"], {});
+    } else {
+      return LoginInfo(json["success"], json["msg"], json["data"]);
+    }
   }
 
   Map<String, dynamic> toJson() => {"success": success, "message": message, "data": data};
 
   int getUserSeq() {
-    return data![Env.KEY_USER_SEQ];
+    return data[Env.KEY_USER_SEQ];
   }
 
   String getPhotoName() {
-    return data![Env.KEY_PHOTO_NAME];
+    return data[Env.KEY_PHOTO_NAME];
   }
 
   String getKrName() {
-    return data![Env.KEY_KR_NAME];
+    return data[Env.KEY_KR_NAME];
   }
 
   String getPhoneNumber() {
-    return data![Env.KEY_PHONE_NUMBER];
+    return data[Env.KEY_PHONE_NUMBER];
   }
 }
 
@@ -143,12 +147,16 @@ class MyPageInfo {
   List<NoticeInfo> notices;
 
   static MyPageInfo fromJson(Map<String, dynamic> json) {
-    List<NoticeInfo> notices = [];
-    List<dynamic> noticeList = json["data"]["notices"];
-    for (int i = 0; i < noticeList.length; i++) {
-      notices.add(NoticeInfo.fromJson(noticeList[i]));
+    if (json["data"].runtimeType.toString() == 'String') {
+      return MyPageInfo(json["success"], json["msg"], "", "", "", 0, 0, []);
+    } else {
+      List<NoticeInfo> notices = [];
+      List<dynamic> noticeList = json["data"]["notices"];
+      for (int i = 0; i < noticeList.length; i++) {
+        notices.add(NoticeInfo.fromJson(noticeList[i]));
+      }
+      return MyPageInfo(json["success"], json["msg"], json["data"]["carNum"], json["data"]["carLevel"], json["data"]["carName"], json["data"]["reportCount"], json["data"]["currentPoint"], notices);
     }
-    return MyPageInfo(json["success"], json["msg"], json["data"]["carNum"], json["data"]["carLevel"], json["data"]["carName"], json["data"]["reportCount"], json["data"]["currentPoint"], notices);
   }
 
   Map<String, dynamic> toJson() => {"success": success, "carNum": carNum, "carLevel": carLevel, "carName": carName, "reportCount": reportCount, "currentPoint": currentPoint, "notices": notices};

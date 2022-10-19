@@ -12,6 +12,16 @@ class MyPageInfomation extends StatefulWidget {
 }
 
 class _MyPageInfomationState extends State<MyPageInfomation> {
+  late TextEditingController _oldPasswordController = TextEditingController();
+  late TextEditingController _newPasswordController = TextEditingController();
+  late TextEditingController _newPasswordValidationController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    Log.debug("photo name : ${Env.USER_PHOTO_NAME}");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,10 +32,12 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
       body: Center(
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.all(32.0),
+            Padding(
+              padding: const EdgeInsets.all(32.0),
               child: CircleAvatar(
                 radius: 60.0,
+                // 현재 기본 이미지들 적용 안됨
+                // backgroundImage: AssetImage("assets/${Env.USER_PHOTO_NAME}.jpg"),
                 backgroundImage: AssetImage("assets/noimage.jpg"),
               ),
             ),
@@ -40,8 +52,8 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                     }
                   });
                 }),
-            createCustomText(text: "홍길동"),
-            createCustomText(text: "010-1234-4568"),
+            createCustomText(text: Env.USER_NAME),
+            createCustomText(text: Env.USER_PHONE_NUMBER),
             const SizedBox(
               height: 32,
             ),
@@ -56,12 +68,13 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                     children: [
                       createTextFormField(
                         labelText: "기존 비밀번호",
+                        controller: _oldPasswordController,
                       ),
                       createElevatedButton(
                           padding: 24.0,
                           text: "비밀번호 확인",
                           function: () {
-                            requestUserPasswordCheck(Env.USER_SEQ!, "qwer1234").then((defaultInfo) {
+                            requestUserPasswordCheck(Env.USER_SEQ!, _oldPasswordController.text).then((defaultInfo) {
                               if (defaultInfo.success) {
                                 Log.debug(defaultInfo.data);
                               } else {
@@ -71,9 +84,11 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                           }),
                       createTextFormField(
                         labelText: "변경할 비밀번호",
+                        controller: _newPasswordController,
                       ),
                       createTextFormField(
                         labelText: "변경할 비밀번호 확인",
+                        controller: _newPasswordValidationController,
                       ),
                       createElevatedButton(
                         padding: 24.0,
