@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/services/setting_service.dart';
 import 'package:illegalparking_app/states/guest_camera.dart';
@@ -7,6 +8,7 @@ import 'package:illegalparking_app/states/guest_my_page.dart';
 import 'package:illegalparking_app/states/webview.dart';
 import 'package:illegalparking_app/states/my_page.dart';
 import 'package:illegalparking_app/states/car_report_camera_state.dart';
+import 'package:illegalparking_app/states/widgets/form.dart';
 
 class Home extends StatefulWidget {
   final int? index;
@@ -62,14 +64,28 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: _selectedIndex == 2 && !loginController.isGuestMode
           ? AppBar(
+              elevation: 0,
+              backgroundColor: Colors.white,
               automaticallyImplyLeading: false,
-              title: Text(changeText),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  createCustomText(padding: 0.0, text: "안녕하세요"),
+                  Row(
+                    children: [
+                      createCustomText(padding: 0.0, color: Colors.blue, text: Env.USER_NAME),
+                      createCustomText(padding: 0.0, text: "님"),
+                    ],
+                  ),
+                ],
+              ),
               // centerTitle: true,
               actions: [
                 IconButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/infomation');
                     },
+                    color: Colors.black,
                     icon: const Icon(Icons.settings))
               ],
             )

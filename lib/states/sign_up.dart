@@ -40,6 +40,7 @@ class _SignUpState extends State<SignUp> {
   int? authNum;
   late String photoName;
 
+  // TODO : 캐릭터 아이콘 디자인팀에 문의
   List profileCharicterList = [
     {
       "value": false,

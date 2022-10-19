@@ -19,14 +19,30 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   final controller = Get.put(MyPageController());
   late List<NoticeInfo> noticeList = [];
+  late String carName;
+  late String carLevel;
+  String? carNum;
+  late String reportCount = "0";
+  late String currentPoint = "0";
 
   @override
   void initState() {
     super.initState();
-    requestMyPage(2).then((myPageInfo) {
-      Log.debug(" myPageInfo = ${myPageInfo.toJson()}");
-      Log.debug(" notices = ${myPageInfo.notices[1].noticeType}");
+    requestMyPage(Env.USER_SEQ!).then((myPageInfo) {
       setState(() {
+        // 차량 정보
+        if (myPageInfo.carNum != null) {
+          carName = myPageInfo.carName;
+          carLevel = myPageInfo.carLevel;
+          carNum = myPageInfo.carNum.toString();
+        }
+        //신고 건수
+        Log.debug("reportCount ${myPageInfo.reportCount.toString()}");
+        reportCount = myPageInfo.reportCount.toString();
+        //내 포인트
+        currentPoint = myPageInfo.currentPoint.toString();
+
+        // 공지 사항
         noticeList = myPageInfo.notices;
       });
     });
@@ -43,7 +59,7 @@ class _MyPageState extends State<MyPage> {
       shrinkWrap: true,
       children: [
         // 등록, 신고, 포인트
-        if (!controller.certifiedVehicle)
+        if (carNum == null)
           createMypageCard(
             route: () {
               Navigator.pushNamed(
@@ -70,7 +86,7 @@ class _MyPageState extends State<MyPage> {
             ],
           ),
         // 인증 완료
-        if (controller.certifiedVehicle)
+        if (carNum != null)
           Stack(
             children: [
               Card(
@@ -142,7 +158,7 @@ class _MyPageState extends State<MyPage> {
             const Spacer(),
             createCustomText(
               weight: FontWeight.w400,
-              text: "27건",
+              text: "$reportCount건",
             ),
             createCustomText(
               weight: FontWeight.w400,
@@ -162,7 +178,7 @@ class _MyPageState extends State<MyPage> {
             const Spacer(),
             createCustomText(
               weight: FontWeight.w400,
-              text: "3000P",
+              text: "${currentPoint}P",
             ),
             createCustomText(
               weight: FontWeight.w400,
@@ -180,8 +196,7 @@ class _MyPageState extends State<MyPage> {
               Container(
                 padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 16.0),
                 child: createCustomText(
-                  weight: FontWeight.w400,
-                  text: "공지 불법주정차 신고 방법 및 신고 기준",
+                  text: "소식",
                 ),
               ),
               Container(
@@ -432,20 +447,22 @@ class _MyPageState extends State<MyPage> {
     List textList = text.split('\n');
     String sliceText = "";
     // 한 줄이 너무 길 경우
-    if (textList.length < 2) {
-      if (textList[0].length > 10) {
-        // TODO : 자를 텍스트 길이는 화면 비율 확인후 결정
-        sliceText += textList[0].substring(0, 10);
-      }
+    int maxLineLength = 27;
+    if (textList[0].length > 2 * maxLineLength) {
+      // TODO : 자를 텍스트 길이는 화면 비율 확인후 결정
+      sliceText += textList[0].substring(0, 2 * (maxLineLength - 1));
+      sliceText += "...";
     } else {
       // 첫 째 줄은 짧고 둘째 줄 부터 긴경우
       sliceText += textList[0];
-      if (textList[1].length > 10) {
-        sliceText += "\n${textList[1].substring(0, 10)}";
+      if (textList[1].length > maxLineLength) {
+        sliceText += "\n${textList[1].substring(0, maxLineLength)}";
+        sliceText += "...";
       } else {
         sliceText += "\n${textList[1]}";
       }
     }
+
     // Log.debug(textList.toString());
     // Log.debug(textList.length.toString());
     // Log.debug("slice text : $sliceText");
