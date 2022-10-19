@@ -1,3 +1,4 @@
+import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/states/widgets/crop.dart';
 import 'package:illegalparking_app/states/declaration_state.dart';
@@ -35,14 +36,17 @@ class _NumbercameraState extends State<Numbercamera> {
       body: _createWillPopScope(Stack(
         children: [
           MaskForCameraCustomView(
-              boxWidth: 300,
-              boxHeight: 120,
+              // boxWidth: 300,
+              // boxHeight: 120,
+              boxWidth: Env.MEDIA_SIZE_WIDTH! - 50,
+              boxHeight: Env.MEDIA_SIZE_HEIGHT! / 6,
               appBarColor: const Color.fromARGB(0, 22, 15, 15),
               takeButtonActionColor: Colors.white,
               takeButtonColor: Colors.black,
               boxBorderColor: Colors.white,
               boxBorderWidth: 1,
-              btomhighbtn: 210,
+              // btomhighbtn: 210,
+              btomhighbtn: Env.MEDIA_SIZE_HEIGHT! / 1.65,
               backColor: Colors.black,
               onTake: (MaskForCameraViewResult res) {
                 // pd.show(max: 100, msg: '데이터를 생성중입니다');
