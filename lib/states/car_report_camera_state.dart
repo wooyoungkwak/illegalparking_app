@@ -31,6 +31,7 @@ class _ReportcameraState extends State<Reportcamera> {
 
   @override
   Widget build(BuildContext context) {
+    Log.debug("wwwwwwwwwwwwwaaaaaaaaaaaaaaaawwwwwwwwwwwwwwaaaaaaaaaaaaa");
     final double statusBarHeight = Env.MEDIA_SIZE_PADDINGTOP!;
     return Scaffold(
       body: Stack(

@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/services/save_image_service.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_camera_description.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line_direction.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line_position.dart';
@@ -67,7 +68,7 @@ class MaskForCameraCustomView extends StatefulWidget {
   // }
 }
 
-class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> {
+class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with WidgetsBindingObserver {
   bool isRunning = false;
 
   @override
@@ -88,6 +89,28 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> {
       throw Exception("카메라 에러");
     }
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      if (_cameraController == null) {
+        Log.debug("@@@@@@@@@@@@@@카메라 재 활성화@@@@@@@@@@@");
+        _cameraController = CameraController(
+          widget.cameraDescription == MaskForCameraViewCameraDescription.rear ? _cameras!.first : _cameras!.last,
+          ResolutionPreset.high,
+          enableAudio: false,
+        );
+      }
+      _cameraController!.initialize().then((_) async {
+        if (!mounted) {
+          return;
+        }
+        setState(() {});
+      });
+    }
+    Log.debug("##########state : $state");
   }
 
   @override
@@ -358,5 +381,6 @@ int _position(MaskForCameraViewInsideLinePosition? position) {
 }
 
 void cameradipose() {
+  Log.debug("카메라종료");
   _cameraController!.dispose();
 }
