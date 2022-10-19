@@ -134,6 +134,86 @@ showCustomDialog({required BuildContext context, String? title, Widget? widget})
   );
 }
 
+// showNoticeDialog({required BuildContext context, required int index, Widget? widget}) {
+//   showDialog(
+//       context: context,
+//       builder: (context) {
+//         int noticeIndex = index;
+//         return StatefulBuilder(builder: (context, setState) {
+//           return Scaffold(
+//               appBar: AppBar(
+//                 automaticallyImplyLeading: false,
+//                 centerTitle: true,
+//                 title: const Text("소식"),
+//                 actions: [
+//                   IconButton(
+//                       onPressed: () {
+//                         Navigator.pop(context);
+//                       },
+//                       icon: const Icon(Icons.cancel_outlined))
+//                 ],
+//               ),
+//               body: Padding(
+//               padding: const EdgeInsets.all(16.0),
+//               child: ListView(
+//                 children: [
+//                   Row(
+//                     children: [
+//                       IconButton(
+//                           onPressed: () {
+//                             noticeIndex--;
+//                           },
+//                           icon: const Icon(Icons.chevron_left)),
+//                       const Spacer(),
+//                       IconButton(
+//                           onPressed: () {
+//                             noticeIndex++;
+//                           },
+//                           icon: const Icon(Icons.chevron_right)),
+//                     ],
+//                   ),
+//                   // 공지/소식
+//                   Row(
+//                     children: [
+//                       createCustomText(
+//                         text: noticeList[index].noticeType,
+//                       ),
+//                       createCustomText(
+//                         text: noticeList[index].subject,
+//                       ),
+//                     ],
+//                   ),
+
+//                   createCustomText(
+//                     weight: FontWeight.w400,
+//                     text: noticeList[index].regDt,
+//                   ),
+//                   // // 빈공간
+//                   // Expanded(
+//                   //   flex: 5,
+//                   //   child: ConstrainedBox(
+//                   //     constraints: const BoxConstraints(),
+//                   //   ),
+//                   // ),
+//                   createCustomText(
+//                     weight: FontWeight.w400,
+//                     text: noticeList[index].content!,
+//                   ),
+//                   // 빈공간
+//                   // Expanded(
+//                   //   flex: 5,
+//                   //   child: ConstrainedBox(
+//                   //     constraints: const BoxConstraints(),
+//                   //   ),
+//                   // ),
+//                 ],
+//               ),
+//             ),
+//           );
+//         });
+//       });
+// }
+
 Card createReportList(BuildContext context, List list) {
   return Card(
     child: Wrap(

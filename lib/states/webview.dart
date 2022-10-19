@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/map_controller.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
@@ -37,13 +38,9 @@ class _WebviewPageState extends State<WebviewPage> {
   String personalMobTime = "";
 
   void timerGPS() {
-    timer = Timer.periodic(const Duration(milliseconds: 10000), (timer) {
-      searchAddress().then((position) {
-        Log.debug("currentPosition X : ${position.latitude}\ncurrentPosition Y :${position.longitude}");
-        controller.setLatitude(position.latitude);
-        controller.setLongitude(position.longitude);
-        // _webViewController.runJavascript("appToGps(${position.latitude}, ${position.longitude})");
-      });
+    _sendGPS();
+    timer = Timer.periodic(const Duration(seconds: 7), (timer) {
+      _sendGPS();
     });
   }
 
@@ -68,9 +65,7 @@ class _WebviewPageState extends State<WebviewPage> {
         children: [
           Expanded(
             child: WebView(
-              // initialUrl: "http://10.0.2.2:3000",
-              initialUrl: "http://teraenergy.iptime.org:18090/api/area/map",
-              // initialUrl: "http://ipaddr:80/api/area/map",
+              initialUrl: "${Env.SERVER_ADMIN_URL}/api/area/map",
               onWebViewCreated: (WebViewController webViewController) {
                 _controller.complete(webViewController);
                 _webViewController = webViewController;
@@ -283,8 +278,8 @@ class _WebviewPageState extends State<WebviewPage> {
                 parkingAddress = mapInfo.getPkAddr();
                 parkingPrice = mapInfo.getPkPrice();
                 parkingOperation = mapInfo.getPkOper();
-                parkingCount = mapInfo.getPkCount();
-                parkingTime = mapInfo.getPkTime();
+                parkingCount = mapInfo.getPkCount().toString();
+                parkingTime = mapInfo.getPkPhone();
               });
             } else if (mapInfoType == "pm") {
               setState(() {
@@ -308,5 +303,14 @@ class _WebviewPageState extends State<WebviewPage> {
             showBottomDialog();
           })
     };
+  }
+
+  void _sendGPS() {
+    searchAddress().then((position) {
+      Log.debug("currentPosition X : ${position.latitude}\ncurrentPosition Y :${position.longitude}");
+      controller.setLatitude(position.latitude);
+      controller.setLongitude(position.longitude);
+      _webViewController.runJavascript("appToGps(${position.latitude}, ${position.longitude})");
+    });
   }
 }

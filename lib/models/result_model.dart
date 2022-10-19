@@ -184,7 +184,7 @@ class NoticeInfo {
     return NoticeInfo(json["noticeType"], json["subject"], json["content"], json["regDt"]);
   }
 
-  // noticeType 
+  // noticeType
   //  DISTRIBUTION("공지"),
   //  ANNOUNCEMENT("소식")
 

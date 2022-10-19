@@ -18,15 +18,19 @@ class MapInfo {
   }
 
   String getPkPrice() {
-    return data!["pkPice"];
+    return data!["pkPrice"];
   }
 
   String getPkOper() {
     return data!["pkOper"];
   }
 
-  String getPkCount() {
+  int getPkCount() {
     return data!["pkCount"];
+  }
+
+  String getPkPhone() {
+    return data!["pkPhone"];
   }
 
   String getPkTime() {
