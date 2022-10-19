@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:illegalparking_app/services/setting_service.dart';
 import 'package:illegalparking_app/services/permission_service.dart';
 import 'package:illegalparking_app/states/home.dart';
 import 'package:illegalparking_app/states/login.dart';
@@ -13,6 +14,7 @@ import 'package:illegalparking_app/states/sign_up.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   callPermissions();
+  cameraSetting();
   runApp(const MyApp());
 }
 

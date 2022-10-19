@@ -5,8 +5,8 @@ import 'package:camera/camera.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/services/save_image_service.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_camera_description.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line_direction.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line_position.dart';
@@ -16,7 +16,7 @@ import 'package:mask_for_camera_view/mask_for_camera_view_inside_line.dart';
 import 'package:mask_for_camera_view/crop_image.dart';
 
 CameraController? _cameraController;
-List<CameraDescription>? _cameras;
+List<CameraDescription>? _cameras = Env.CAMERA_SETTING;
 // GlobalKey _stickyKey = GlobalKey();
 double? _screenWidth;
 double? _screenHeight;
@@ -62,9 +62,9 @@ class MaskForCameraCustomView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _MaskForCameraCustomViewState();
 
-  static Future<void> initialize() async {
-    _cameras = await availableCameras();
-  }
+  // static Future<void> initialize() async {
+  //   _cameras = await availableCameras();
+  // }
 }
 
 class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> {
@@ -72,22 +72,27 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> {
 
   @override
   void initState() {
-    _cameraController = CameraController(
-      widget.cameraDescription == MaskForCameraViewCameraDescription.rear ? _cameras!.first : _cameras!.last,
-      ResolutionPreset.high,
-      enableAudio: false,
-    );
-    _cameraController!.initialize().then((_) async {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    });
+    try {
+      _cameraController = CameraController(
+        widget.cameraDescription == MaskForCameraViewCameraDescription.rear ? _cameras!.first : _cameras!.last,
+        ResolutionPreset.high,
+        enableAudio: false,
+      );
+      _cameraController!.initialize().then((_) async {
+        if (!mounted) {
+          return;
+        }
+        setState(() {});
+      });
+    } catch (e) {
+      throw Exception("카메라 에러");
+    }
     super.initState();
   }
 
   @override
   void dispose() {
+    // MaskForCameraCustomView.initialize();
     // Log.debug("카메라종료###########");
     // _cameraController!.dispose();
     super.dispose();
@@ -195,10 +200,11 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> {
             ),
             Positioned(
               // bottom: widget.boxHeight > 150 ? 80 : 145,
-              bottom: widget.btomhighbtn,
+              top: widget.btomhighbtn,
               // bottom: widget.boxHeight > 150 ? 80 : 145,
               left: 0,
               right: 0,
+
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12.0),
                 decoration: BoxDecoration(
@@ -349,4 +355,8 @@ int _position(MaskForCameraViewInsideLinePosition? position) {
     p = position.index + 1;
   }
   return p;
+}
+
+void cameradipose() {
+  _cameraController!.dispose();
 }

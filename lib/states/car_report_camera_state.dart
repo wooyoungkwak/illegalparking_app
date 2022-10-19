@@ -1,5 +1,5 @@
+import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
-import 'package:illegalparking_app/services/save_image_service.dart';
 import 'package:illegalparking_app/states/widgets/crop.dart';
 import 'package:illegalparking_app/states/declaration_state.dart';
 import 'package:illegalparking_app/states/car_number_camera_state.dart';
@@ -24,20 +24,29 @@ class _ReportcameraState extends State<Reportcamera> {
   }
 
   @override
+  void dispose() {
+    cameradipose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final double statusBarHeight = MediaQuery.of(context).padding.top;
+    final double statusBarHeight = Env.MEDIA_SIZE_PADDINGTOP!;
     return Scaffold(
       body: Stack(
         alignment: Alignment.center,
         children: [
           MaskForCameraCustomView(
               type: false,
-              boxWidth: 280,
-              boxHeight: 300,
+              // boxWidth: 280,
+              boxWidth: Env.MEDIA_SIZE_WIDTH! / 1.5,
+              // boxHeight: 300,
+              boxHeight: Env.MEDIA_SIZE_HEIGHT! / 2,
               appBarColor: Colors.transparent,
               takeButtonActionColor: Colors.white,
               takeButtonColor: Colors.black,
-              btomhighbtn: 140, // 버튼위치 조정
+              // btomhighbtn: 140, // 버튼위치 조정
+              btomhighbtn: Env.MEDIA_SIZE_HEIGHT! / 1.55, // 버튼위치 조정
               onTake: (MaskForCameraViewResult res) {
                 c.imageTimewrite(getDateToStringForYYMMDDHHMM(getNow()));
                 Log.debug(getDateToStringForYYMMDDHHMM(getNow()));
@@ -45,7 +54,7 @@ class _ReportcameraState extends State<Reportcamera> {
                 if (c.carnumberImage.value.isNotEmpty) {
                   Get.offAll(const Declaration());
                 } else {
-                  Get.off(const Numbercamera());
+                  Get.to(const Numbercamera());
                 }
               }),
           initContainerByOutlineButton(0, 0.95, "불법주정차 법규", context),

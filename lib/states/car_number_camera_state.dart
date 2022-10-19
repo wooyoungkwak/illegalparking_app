@@ -1,14 +1,7 @@
-import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
-import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/crop.dart';
-import 'package:illegalparking_app/services/save_image_service.dart';
-import 'package:illegalparking_app/services/such_loation_service.dart';
 import 'package:illegalparking_app/states/declaration_state.dart';
 import 'package:flutter/material.dart';
-import 'package:illegalparking_app/utils/alarm_util.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
-import 'package:illegalparking_app/utils/time_util.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
 import 'package:get/get.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
@@ -24,8 +17,14 @@ class _NumbercameraState extends State<Numbercamera> {
   final ReportController controller = Get.put(ReportController());
   @override
   void initState() {
-    MaskForCameraCustomView.initialize();
+    // MaskForCameraCustomView.initialize();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    cameradipose();
+    super.dispose();
   }
 
   @override

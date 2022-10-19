@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
+import 'package:illegalparking_app/services/setting_service.dart';
 import 'package:illegalparking_app/states/guest_camera.dart';
 import 'package:illegalparking_app/states/guest_my_page.dart';
 import 'package:illegalparking_app/states/webview.dart';
 import 'package:illegalparking_app/states/my_page.dart';
 import 'package:illegalparking_app/states/car_report_camera_state.dart';
-import 'package:illegalparking_app/states/widgets/crop.dart';
 
 class Home extends StatefulWidget {
   final int? index;
@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    MaskForCameraCustomView.initialize();
+    // MaskForCameraCustomView.initialize();
     super.initState();
     _selectedIndex = widget.index ?? 0;
   }
@@ -58,6 +58,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    mediasizeSetting(context);
     return Scaffold(
       appBar: _selectedIndex == 2 && !loginController.isGuestMode
           ? AppBar(

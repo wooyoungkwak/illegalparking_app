@@ -2,6 +2,8 @@
 
 import 'dart:async';
 
+import 'package:camera/camera.dart';
+
 class Env {
   static bool isDebug = true; // 배포시 false
 
@@ -91,5 +93,9 @@ class Env {
   // static const String NAVER_ACCESS_KEY = "Z5cIzHss1rH6qzBzZDEi";
   // static const String NAVER_SECRET_KEY = "AB4tsaR7TtnFkgCUxC31LeTo6onaI3e0npRNSLc5";
   // static const String NAVER_PHONE_NUMBER = "07047661008 ";
-
+  static List<CameraDescription>? CAMERA_SETTING;
+  static double? MEDIA_SIZE_HEIGHT;
+  static double? MEDIA_SIZE_WIDTH;
+  static double? MEDIA_SIZE_DEVICEPIXELRATIO;
+  static double? MEDIA_SIZE_PADDINGTOP;
 }
