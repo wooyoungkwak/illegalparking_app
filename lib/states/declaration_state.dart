@@ -49,6 +49,7 @@ class _DeclarationState extends State<Declaration> {
         // await regeocoder().then((value) => pd.close());
         await getGPS().then((value) => pd.close());
         sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
+          carNum = carNum.replaceAll('"', '');
           if (carNum == null || carNum == "") {
             //글자가 없을 때 반환 받는 값
             _NumberplateContoroller = TextEditingController(text: "인식 실패");
@@ -61,7 +62,7 @@ class _DeclarationState extends State<Declaration> {
           if (carNum.length > 10) {
             carNum = "";
           }
-          carNum = carNum.replaceAll('"', '');
+
           setState(() {});
           Future.delayed(const Duration(milliseconds: 500), () {
             pd.close();
