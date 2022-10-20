@@ -59,6 +59,12 @@ dependencies:
   kakao_flutter_sdk: ^1.2.2 # 카카오전체 추가
   #
   sn_progress_dialog: ^1.0.8
+  # 문자 인증 관련
+  crypto: ^3.0.2
+  # toast
+  fluttertoast: ^8.1.1
+  # 갤러리에서 이미지 불러오키
+  image_picker: ^0.8.6
 
 dev_dependencies:
   flutter_test:

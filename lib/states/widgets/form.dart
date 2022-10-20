@@ -125,7 +125,7 @@ showCustomDialog({required BuildContext context, String? title, Widget? widget})
           actions: [
             IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.of(context).pop();
                 },
                 icon: const Icon(Icons.cancel_outlined))
           ],

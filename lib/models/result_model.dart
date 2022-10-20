@@ -147,6 +147,7 @@ class MyPageInfo {
   List<NoticeInfo> notices;
 
   static MyPageInfo fromJson(Map<String, dynamic> json) {
+    Log.debug(json["data"].toString());
     if (json["data"].runtimeType.toString() == 'String') {
       return MyPageInfo(json["success"], json["msg"], "", "", "", 0, 0, []);
     } else {

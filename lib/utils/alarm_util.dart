@@ -3,19 +3,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/models/storage_model.dart';
 
-// void showToast(String text) {
-//   Fluttertoast.showToast(
-//     fontSize: 13,
-//     msg: '   $text   ',
-//     backgroundColor: Colors.black,
-//     toastLength: Toast.LENGTH_SHORT,
-//     gravity: ToastGravity.BOTTOM,
-//   );
-// }
+void showToast({String? text}) {
+  Fluttertoast.showToast(
+    fontSize: 13,
+    msg: '   $text   ',
+    backgroundColor: Colors.black,
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.BOTTOM,
+  );
+}
 
 void alertDialogByonebutton(String title, String text) {
   Get.dialog(
