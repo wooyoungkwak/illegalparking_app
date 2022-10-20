@@ -25,7 +25,7 @@ class _ReportcameraState extends State<Reportcamera> {
 
   @override
   void dispose() {
-    cameradipose();
+    // cameradipose();
     super.dispose();
   }
 
@@ -42,7 +42,7 @@ class _ReportcameraState extends State<Reportcamera> {
               // boxWidth: 280,
               boxWidth: Env.MEDIA_SIZE_WIDTH! / 1.5,
               // boxHeight: 300,
-              boxHeight: Env.MEDIA_SIZE_HEIGHT! / 2,
+              boxHeight: c.carnumberImage.value.isNotEmpty ? Env.MEDIA_SIZE_HEIGHT! / 2.2 : Env.MEDIA_SIZE_HEIGHT! / 2,
               appBarColor: Colors.transparent,
               takeButtonActionColor: Colors.white,
               takeButtonColor: Colors.black,
