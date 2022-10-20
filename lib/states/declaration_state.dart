@@ -36,10 +36,10 @@ class _DeclarationState extends State<Declaration> {
     //getGPS();
 
     // TODO : 사용자 키 반드시 적용 할것 ..
-    Env.USER_SEQ = 2;
+    // Env.USER_SEQ = 2;
 
     // 샘플
-    _NumberplateContoroller = TextEditingController(text: "12가1234");
+    _NumberplateContoroller = TextEditingController(text: "");
 
     SchedulerBinding.instance.addPostFrameCallback((data) async {
       //빌드가 끝나고 실행하는걸 예약하는 기능
@@ -48,25 +48,25 @@ class _DeclarationState extends State<Declaration> {
       try {
         // await regeocoder().then((value) => pd.close());
         await getGPS().then((value) => pd.close());
-        // sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
-        //   if (carNum == null || carNum == "") {
-        //     //글자가 없을 때 반환 받는 값
-        //     _NumberplateContoroller = TextEditingController(text: "인식 실패");
-        //     controller.carNumberwrite("인식 실패");
-        //   } else {
-        //     _NumberplateContoroller = TextEditingController(text: carNum);
-        //     controller.carNumberwrite(carNum);
-        //   }
+        sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
+          if (carNum == null || carNum == "") {
+            //글자가 없을 때 반환 받는 값
+            _NumberplateContoroller = TextEditingController(text: "인식 실패");
+            controller.carNumberwrite("인식 실패");
+          } else {
+            _NumberplateContoroller = TextEditingController(text: carNum);
+            controller.carNumberwrite(carNum);
+          }
 
-        //   if (carNum.length > 10) {
-        //     carNum = "";
-        //   }
-        //   carNum = carNum.replaceAll('"', '');
-        //   setState(() {});
-        //   Future.delayed(const Duration(milliseconds: 500), () {
-        //     pd.close();
-        //   });
-        // });
+          if (carNum.length > 10) {
+            carNum = "";
+          }
+          carNum = carNum.replaceAll('"', '');
+          setState(() {});
+          Future.delayed(const Duration(milliseconds: 500), () {
+            pd.close();
+          });
+        });
       } catch (e) {
         showSnackBar(context, "서버 에러");
         pd.close();
@@ -245,31 +245,30 @@ class _DeclarationState extends State<Declaration> {
                 //         onPressed: () async {
                 //           if (valuenullCheck()) {
                 //             await saveImageGallery();
-                //             // Get.off(const Confirmation());
+
                 //             try {
                 //               alertDialogByonebutton("알림", "실행");
-                //               // sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
-                //               //       if (result == false)
-                //               //         {
-                //               //           // TODO : 알림창 띄우기
-                //               //           alertDialogByonebutton("알림", "파일 전송에 실패했습니다")
-                //               //         }
-                //               //       else
-                //               //         {
-                //               //           sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _NumberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
-                //               //                   controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
-                //               //               .then((reportInfo) => {
-                //               //                     if (!reportInfo.success) {alertDialogByonebutton("알림", reportInfo.message!)}
-                //               //                   })
-                //               //         }
-                //               //     });
-
-                //               // sendReport(controller.imageGPS.value.address, controller.carNumber.value, controller.imageTime.value, controller.reportfileName.value,
-                //               //         controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
-                //               //     .then((reportInfo) => {
-                //               //           alertDialogByonebutton("알림", reportInfo.toJson().toString())
-                //               //           // Log.debug(reportInfo.toJson().toString())
-                //               //         });
+                //               sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
+                //                     if (result == false)
+                //                       {
+                //                         // TODO : 알림창 띄우기
+                //                         alertDialogByonebutton("알림", "파일 전송에 실패했습니다")
+                //                       }
+                //                     else
+                //                       {
+                //                         sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _NumberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
+                //                                 controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
+                //                             .then((reportInfo) => {
+                //                                   if (!reportInfo.success) {alertDialogByonebutton("알림", reportInfo.message!)}
+                //                                 })
+                //                       }
+                //                   });
+                //               sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, controller.carNumber.value, controller.imageTime.value, controller.reportfileName.value,
+                //                       controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
+                //                   .then((reportInfo) => {
+                //                         alertDialogByonebutton("알림", reportInfo.toJson().toString())
+                //                         // Log.debug(reportInfo.toJson().toString())
+                //                       });
                 //               Get.off(const Confirmation());
                 //             } catch (e) {
                 //               // TODO : 알림창 띄우기
@@ -441,24 +440,24 @@ class _DeclarationState extends State<Declaration> {
       // Get.off(const Confirmation());
       try {
         alertDialogByonebutton("알림", "실행");
-        // sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
-        //       if (result == false)
-        //         {
-        //           // TODO : 알림창 띄우기
-        //           alertDialogByonebutton("알림", "파일 전송에 실패했습니다")
-        //         }
-        //       else
-        //         {
-        //           sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _NumberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
-        //                   controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
-        //               .then((reportInfo) => {
-        //                     if (!reportInfo.success) {alertDialogByonebutton("알림", reportInfo.message!)}
-        //                   })
-        //         }
-        //     });
+        sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
+              if (result == false)
+                {
+                  // TODO : 알림창 띄우기
+                  alertDialogByonebutton("알림", "파일 전송에 실패했습니다")
+                }
+              else
+                {
+                  sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _NumberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
+                          controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
+                      .then((reportInfo) => {
+                            if (!reportInfo.success) {alertDialogByonebutton("알림", reportInfo.message!)}
+                          })
+                }
+            });
 
-        // sendReport(controller.imageGPS.value.address, controller.carNumber.value, controller.imageTime.value, controller.reportfileName.value,
-        //         controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
+        // sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, controller.carNumber.value, controller.imageTime.value, controller.reportfileName.value, controller.imageGPS.value.latitude,
+        //         controller.imageGPS.value.longitude)
         //     .then((reportInfo) => {
         //           alertDialogByonebutton("알림", reportInfo.toJson().toString())
         //           // Log.debug(reportInfo.toJson().toString())
