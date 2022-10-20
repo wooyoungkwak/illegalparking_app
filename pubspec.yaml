@@ -65,7 +65,9 @@ dependencies:
   fluttertoast: ^8.1.1
   # 갤러리에서 이미지 불러오키
   image_picker: ^0.8.6
-
+  #카카오지도,네이버지도열기
+  url_launcher: ^6.1.6
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
