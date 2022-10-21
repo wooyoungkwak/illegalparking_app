@@ -33,12 +33,12 @@ class _SignUpState extends State<SignUp> {
   Timer? timer;
   final idController = TextEditingController();
   final passController = TextEditingController();
-  final passValidController = TextEditingController();
   final nameCotroller = TextEditingController();
   final phoneNumController = TextEditingController();
   final authKeyController = TextEditingController();
   int? authNum;
   late String photoName;
+  bool _loginBtnEnabled = false;
 
   // TODO : 캐릭터 아이콘 디자인팀에 문의
   List profileCharicterList = [
@@ -105,7 +105,6 @@ class _SignUpState extends State<SignUp> {
     super.dispose();
     idController.dispose();
     passController.dispose();
-    passValidController.dispose();
     nameCotroller.dispose();
     phoneNumController.dispose();
     authKeyController.dispose();
@@ -130,19 +129,41 @@ class _SignUpState extends State<SignUp> {
             shrinkWrap: true,
             children: [
               // ID, PW
-              createTextFormField(labelText: "아이디", controller: idController),
-              createTextFormField(labelText: "패스워드", controller: passController, obscureText: true),
-              createTextFormField(labelText: "패스워드 확인", controller: passValidController, obscureText: true),
+              createTextFormField(
+                labelText: "아이디",
+                helperText: "사용가능한 아이디 입니다.",
+                controller: idController,
+                validation: idValidator,
+              ),
+              createTextFormField(
+                labelText: "패스워드",
+                helperText: "보안에 안전한 암호 입니다.",
+                controller: passController,
+                obscureText: true,
+                validation: passwordValidator,
+              ),
+              createTextFormField(
+                labelText: "패스워드 확인",
+                obscureText: true,
+                validation: passwordConfirmValidator,
+              ),
               // 이름,전화번호,인증
-              createTextFormField(labelText: "이름", controller: nameCotroller),
-              createTextFormField(labelText: "전화번호", controller: phoneNumController),
+              createTextFormField(
+                labelText: "이름",
+                controller: nameCotroller,
+                validation: nameValidator,
+              ),
+              createTextFormField(
+                labelText: "전화번호",
+                controller: phoneNumController,
+                validation: phoneNumValidator,
+              ),
               if (!authVerification)
                 createElevatedButton(
                     text: authenticationSendText,
                     function: sendAuthentication
                         ? null
                         : () {
-                            Log.debug("Phone Number : ${phoneNumController.text}");
                             sendSMS(phoneNumController.text).then((authKey) {
                               setState(() {
                                 sendAuthentication = true;
@@ -151,23 +172,40 @@ class _SignUpState extends State<SignUp> {
                               getSetTime();
                             });
                           }),
-              if (sendAuthentication) createTextFormField(labelText: "인증번호", controller: authKeyController),
+              if (sendAuthentication)
+                createTextFormField(
+                  labelText: "인증번호",
+                  controller: authKeyController,
+                ),
               if (sendAuthentication || authVerification)
-                createElevatedButton(
-                    color: authVerification ? const Color(0xffd84315) : null,
-                    text: authVerification ? "인증번호 확인됨" : "인증번호 확인",
-                    function: () {
-                      if (int.parse(authKeyController.text) == authNum && authNum != null) {
-                        timer!.cancel();
-                        setState(() {
-                          authVerification = true;
-                          sendAuthentication = false;
-                        });
-                      } else {
-                        Log.debug("인증번호를 확인해주세요.");
-                      }
-                    }),
-
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: 40,
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue,
+                        disabledBackgroundColor: const Color(0xffd84315),
+                        disabledForegroundColor: const Color(0xffffffff),
+                      ),
+                      onPressed: authVerification
+                          ? null
+                          : () {
+                              if (int.parse(authKeyController.text) == authNum && authNum != null) {
+                                timer!.cancel();
+                                setState(() {
+                                  authVerification = true;
+                                  sendAuthentication = false;
+                                });
+                              } else {
+                                Log.debug("인증번호를 확인해주세요.");
+                              }
+                            },
+                      child: Text(authVerification ? "인증번호 확인됨" : "인증번호 확인"),
+                    ),
+                  ),
+                ),
               if (authVerification)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,12 +254,15 @@ class _SignUpState extends State<SignUp> {
                       ),
                     ),
                     // 프로필 캐릭터 선택
-                    createCustomText(text: "프로필 캐릭터 선택", weight: FontWeight.w400),
+                    createCustomText(
+                      text: "프로필 캐릭터 선택",
+                      weight: FontWeight.w400,
+                    ),
                     Row(children: List.generate(profileCharicterList.length, (index) => _createProfileCircleAvatar(list: profileCharicterList, index: index))),
                     // 회원생성
                     createElevatedButton(
                       text: "회원생성",
-                      function: serviceTerms
+                      function: serviceTerms && _loginBtnEnabled
                           ? () {
                               // TODO : photoName 기능 추가
                               register(idController.text, passController.text, nameCotroller.text, phoneNumController.text, photoName).then((registerInfo) {
@@ -305,7 +346,7 @@ class _SignUpState extends State<SignUp> {
           actions: [
             IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pushNamedAndRemoveUntil(context, "/login", (route) => false);
                 },
                 icon: const Icon(Icons.cancel_outlined))
           ],
@@ -316,13 +357,15 @@ class _SignUpState extends State<SignUp> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text("안녕하세요 OOO님\n회원가입이 완료되었습니다."),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: createCustomText(text: "안녕하세요 ${nameCotroller.text}님\n회원가입이 완료되었습니다."),
               ),
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Center(child: Text("ID-000001")),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Center(
+                  child: createCustomText(text: "ID-000001"),
+                ),
               ),
               Row(
                 children: [
@@ -334,7 +377,7 @@ class _SignUpState extends State<SignUp> {
                       },
                     ),
                   ),
-                  const Text("자동로그인")
+                  createCustomText(text: "자동로그인")
                 ],
               ),
               createElevatedButton(
@@ -391,5 +434,54 @@ class _SignUpState extends State<SignUp> {
     for (var el in profileCharicterList) {
       el["value"] = false;
     }
+  }
+
+  String? idValidator(String? text) {
+    final validSpecial = RegExp(r'^[a-zA-Z0-9 ]+$');
+
+    if (text!.isEmpty) {
+      return "아이디를 입력해 주세요";
+    }
+
+    if (!validSpecial.hasMatch(text)) {
+      return "특수문자를 사용할 수 없습니다.";
+    }
+    return null;
+  }
+
+  String? passwordValidator(String? text) {
+    if (text!.isEmpty) {
+      return "비밀번호를 입력해 주세요";
+    }
+
+    if (text.length > 8) {
+      return "영문, 숫자 포함 8자 이상 가능합니다.";
+    }
+    return null;
+  }
+
+  String? passwordConfirmValidator(String? text) {
+    if (text!.isEmpty) {
+      return "비밀번호를 입력해 주세요";
+    }
+
+    if (passController.text != text) {
+      return "비밀번호가 맞지 않습니다.";
+    }
+    return null;
+  }
+
+  String? nameValidator(String? text) {
+    if (text!.isEmpty) {
+      return "비밀번호를 입력해 주세요";
+    }
+    return null;
+  }
+
+  String? phoneNumValidator(String? text) {
+    if (text!.isEmpty) {
+      return "비밀번호를 입력해 주세요";
+    }
+    return null;
   }
 }

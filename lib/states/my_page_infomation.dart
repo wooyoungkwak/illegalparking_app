@@ -94,7 +94,6 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                           ),
                           borderRadius: BorderRadius.circular(30),
                           onTap: () {
-                            Log.debug("사진첩 이동");
                             takePhoto(ImageSource.gallery);
                           },
                           child: const Icon(
@@ -111,14 +110,13 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                   text: "프로필 변경",
                   function: () {
                     String modifyImagePath = _imageFile!.path.substring(50);
-                    Log.debug("imagePath : $imagePath");
                     requestUserProfileChange(Env.USER_SEQ!, modifyImagePath).then((defaultInfo) {
                       if (defaultInfo.success) {
                         Log.debug(defaultInfo.data);
                         setState(() {
                           imagePath = modifyImagePath;
                         });
-                        Env.USER_PHONE_NUMBER = imagePath;
+                        Env.USER_PHOTO_NAME = imagePath;
                       } else {
                         Log.debug(defaultInfo.message);
                       }
@@ -189,7 +187,6 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                                     padding: 24.0,
                                     text: "변경하기",
                                     function: () {
-                                      Log.debug("_newPasswordController ${_newPasswordController.text}");
                                       requestUserPasswordChange(Env.USER_SEQ!, _newPasswordController.text).then((defaultInfo) {
                                         if (defaultInfo.success) {
                                           // 공통적으로 쓰는 다이얼로그면 하나 통합해서 만들기
@@ -251,7 +248,6 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
   }
 
   ImageProvider<Object> _checkFileImage(String photoName) {
-    Log.debug("photoName : $photoName");
     // 갤러리에서 저장된 이미지, 프로필 아이콘 구분
     bool isFilePath;
     if (photoName.length > 12 && "image_picker" == photoName.substring(0, 12)) {

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
 
 Padding createCustomText({
   String? text,
@@ -30,22 +28,15 @@ Padding createCustomText({
   );
 }
 
-String? _errorText(TextEditingController controller) {
-  final text = controller.value.text;
-  if (text.isEmpty) {
-    return 'Can\t be empty';
-  }
-
-  return null;
-}
-
 Padding createTextFormField({
   GlobalKey<FormState>? formFieldKey,
   String? labelText,
   String? hintText,
+  String? helperText,
   double? padding,
   bool? obscureText,
   TextEditingController? controller,
+  Function? validation,
 }) {
   // final text = controller!.value.text;
   return Padding(
@@ -55,20 +46,16 @@ Padding createTextFormField({
       controller: controller,
       obscureText: obscureText ?? false,
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         labelText: labelText,
         hintText: hintText,
-        errorText: controller != null ? _errorText(controller) : null,
+        helperText: (controller?.text != "") && (helperText != null) ? helperText : null,
+        helperStyle: const TextStyle(
+          color: Colors.blue,
+        ),
       ),
-      validator: (text) {
-        Log.debug("validator Text: $text");
-        if (text!.isEmpty) {
-          return "$labelText를 입력해 주세요";
-        } else if (text.length < 2) {
-          return "필수 입력 사항입니다.";
-        }
-        return null;
-      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: validation != null ? (text) => validation(text) : null,
       onChanged: (text) {
         labelText = text;
       },
@@ -88,7 +75,9 @@ Padding createElevatedButton({
       height: 40,
       width: double.infinity,
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(primary: color ?? Colors.blue),
+        style: ElevatedButton.styleFrom(
+          primary: color ?? Colors.blue,
+        ),
         onPressed: function,
         child: Text(text ?? ""),
       ),
@@ -244,9 +233,7 @@ Color reportColors(String state) {
 // 신고이력, 내차정보 관련
 BoxConstraints addrTextWidthLimit(String state) {
   if (state.length > 5) {
-    Log.debug("report state 5: $state");
     return const BoxConstraints(maxWidth: 198); // 4글자 : 218, 5글자 : 198
   }
-  Log.debug("report state 4 : $state");
   return const BoxConstraints(maxWidth: 218);
 }

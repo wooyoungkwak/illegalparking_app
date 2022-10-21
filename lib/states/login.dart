@@ -50,8 +50,33 @@ class _LoginState extends State<Login> {
               elevation: 5,
               child: Column(
                 children: [
-                  createTextFormField(labelText: "아이디", controller: _idController),
-                  createTextFormField(labelText: "비밀번호", controller: _passController),
+                  // 아이디
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: TextFormField(
+                  //     controller: _idController,
+                  //     // obscureText: true,
+                  //     decoration: const InputDecoration(
+                  //       border: OutlineInputBorder(),
+                  //       labelText: "아이디",
+                  //       hintText: "예) example@example.com",
+                  //     ),
+                  //     autovalidateMode: AutovalidateMode.onUserInteraction,
+                  //     validator: (text) {
+                  //       if (text!.isEmpty) {
+                  //         return "아이디를 입력해 주세요";
+                  //       }
+
+                  //       if (text.length < 2) {
+                  //         return "필수 입력 사항입니다.";
+                  //       }
+                  //       return null;
+                  //     },
+                  //   ),
+                  // ),
+                  createTextFormField(labelText: "아이디", controller: _idController, validation: idValidator),
+
+                  createTextFormField(labelText: "비밀번호", controller: _passController, validation: passwordValidator),
                   // 자동 로그인
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -115,5 +140,19 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  String? idValidator(String? text) {
+    if (text!.isEmpty) {
+      return "아이디를 입력해 주세요";
+    }
+    return null;
+  }
+
+  String? passwordValidator(String? text) {
+    if (text!.isEmpty) {
+      return "비밀번호를 입력해 주세요";
+    }
+    return null;
   }
 }

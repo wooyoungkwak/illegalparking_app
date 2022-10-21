@@ -39,13 +39,11 @@ class LoginController extends GetxController {
   Widget get currentPages => _isGuestMode ? _guestModeWidgetOption[currentIndex.value] : _widgetOption[currentPageIdex.value];
 
   void onGuesMode() {
-    Log.debug("onGuesMode");
     _isGuestMode = true;
     update();
   }
 
   void offGuesMode() {
-    Log.debug("offGuesMode");
     _isGuestMode = false;
     update();
   }
