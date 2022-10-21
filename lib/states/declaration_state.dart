@@ -88,15 +88,14 @@ class _DeclarationState extends State<Declaration> {
     //    sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, filelist).then((value) {
     //    });
     // });
-    List<String> filelist = [controller.reportImage.value, controller.carnumberImage.value];
+    // List<String> filelist = [controller.reportImage.value, controller.carnumberImage.value];
     final statusBarHeight = Env.MEDIA_SIZE_PADDINGTOP!;
-
     return _createWillPopScope(
       Padding(
         padding: EdgeInsets.only(top: statusBarHeight),
         child: Scaffold(
           resizeToAvoidBottomInset: true,
-          body: Container(
+          body: _createscrollView(Container(
             margin: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -300,7 +299,7 @@ class _DeclarationState extends State<Declaration> {
                 ),
               ],
             ),
-          ),
+          )),
           bottomNavigationBar: SizedBox(width: 200, child: _createPaddingBybottomline()),
         ),
       ),
@@ -348,6 +347,10 @@ class _DeclarationState extends State<Declaration> {
     );
   }
 
+  SingleChildScrollView _createscrollView(Widget widget) {
+    return SingleChildScrollView(child: Container(child: widget));
+  }
+
   TextField _createTextFormField(TextEditingController controller) {
     return TextField(
         textAlign: TextAlign.start,
@@ -376,6 +379,9 @@ class _DeclarationState extends State<Declaration> {
       return false;
     } else if (controller.imageGPS.value.address == null || controller.imageGPS.value.address == "") {
       alertDialogByonebutton("알림", "주소가 없습니다");
+      return false;
+    } else if (_NumberplateContoroller.text == "인식실패") {
+      alertDialogByonebutton("알림", "차량번호가 없습니다");
       return false;
     } else if (_NumberplateContoroller.text == null || _NumberplateContoroller.text == "") {
       alertDialogByonebutton("알림", "차량번호가 없습니다");
