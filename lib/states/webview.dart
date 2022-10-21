@@ -14,6 +14,9 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../models/webview_model.dart';
 import '../services/such_loation_service.dart';
 
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:io';
+
 class WebviewPage extends StatefulWidget {
   const WebviewPage({super.key});
 
@@ -23,7 +26,8 @@ class WebviewPage extends StatefulWidget {
 
 class _WebviewPageState extends State<WebviewPage> {
   Timer? timer;
-  final Completer<WebViewController> _controller = Completer<WebViewController>();
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
   final controller = Get.put(MapController());
   late WebViewController _webViewController;
   String mapInfoType = "parking";
@@ -213,10 +217,12 @@ class _WebviewPageState extends State<WebviewPage> {
               Row(
                 children: [
                   Expanded(
-                    child: _createInfoButton(color: Colors.purple, text: "벨울리기"),
+                    child:
+                        _createInfoButton(color: Colors.purple, text: "벨울리기"),
                   ),
                   Expanded(
-                    child: _createInfoButton(color: Colors.purple, text: "대여하기"),
+                    child:
+                        _createInfoButton(color: Colors.purple, text: "대여하기"),
                   ),
                 ],
               ),
@@ -245,7 +251,58 @@ class _WebviewPageState extends State<WebviewPage> {
         color: color ?? Colors.blue,
         height: 40,
         child: InkWell(
-          onTap: () {},
+          onTap: () async {
+            if (text == "길안내") {
+              print("네이버지도");
+              if (Platform.isIOS) {
+                //
+                print("ios");
+
+                //
+              } else if (Platform.isAndroid) {
+                print("Android");
+                Uri navermap = Uri.parse(
+                    "nmap://route/car?slat=${controller.latitude.toString()}&slng=${controller.longitude.toString()}&sname=내위치&dlat=37.5209436&dlng=127.1230074&dname=올림픽공원");
+                try {
+                  //nmap 은 canlaunchUrl 안되고  try ~ catch 만 된다
+                  await launchUrl(navermap);
+                } catch (e) {
+                  print("Can't launch $navermap");
+                  Uri url =
+                      Uri.parse('market://details?id=com.nhn.android.nmap');
+                  launchUrl(url);
+                }
+              }
+            } else if (text == "전화하기") {
+              print("카카오지도");
+              if (Platform.isIOS) {
+                //
+                print("ios");
+                Uri kakaomap = Uri.parse(
+                    "kakaomap://route?sp=${controller.latitude.toString()},${controller.longitude.toString()}&ep=37.4979502,127.0276368&by=CAR");
+                try {
+                  await launchUrl(kakaomap);
+                } catch (e) {
+                  print("Can't launch $kakaomap");
+                  Uri url =
+                      Uri.parse('https://apps.apple.com/kr/app/id304608425');
+                  launchUrl(url);
+                }
+              } else if (Platform.isAndroid) {
+                print("Android");
+                Uri kakaomap = Uri.parse(
+                    "kakaomap://route?sp=${controller.latitude.toString()},${controller.longitude.toString()}&ep=37.4979502,127.0276368&by=CAR");
+                try {
+                  await launchUrl(kakaomap);
+                } catch (e) {
+                  print("Can't launch $kakaomap");
+                  Uri url =
+                      Uri.parse('market://details?id=net.daum.android.map');
+                  launchUrl(url);
+                }
+              }
+            }
+          },
           child: Center(
             child: Text(
               text ?? "",
@@ -307,10 +364,12 @@ class _WebviewPageState extends State<WebviewPage> {
 
   void _sendGPS() {
     searchAddress().then((position) {
-      Log.debug("currentPosition X : ${position.latitude}\ncurrentPosition Y :${position.longitude}");
+      Log.debug(
+          "currentPosition X : ${position.latitude}\ncurrentPosition Y :${position.longitude}");
       controller.setLatitude(position.latitude);
       controller.setLongitude(position.longitude);
-      _webViewController.runJavascript("appToGps(${position.latitude}, ${position.longitude})");
+      _webViewController.runJavascript(
+          "appToGps(${position.latitude}, ${position.longitude})");
     });
   }
 }
