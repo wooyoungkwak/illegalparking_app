@@ -40,6 +40,8 @@ class _WebviewPageState extends State<WebviewPage> {
   String personalMobName = "";
   String personalMobPrice = "";
   String personalMobTime = "";
+  double parkingLat = 0.0;
+  double parkingLng = 0.0;
 
   void timerGPS() {
     _sendGPS();
@@ -257,7 +259,7 @@ class _WebviewPageState extends State<WebviewPage> {
               if (Platform.isIOS) {
                 print("ios");
                 Uri navermap = Uri.parse(
-                    "nmap://route/car?slat=${controller.latitude.toString()}&slng=${controller.longitude.toString()}&sname=내위치&dlat=37.5209436&dlng=127.1230074&dname=올림픽공원");
+                    "nmap://route/car?slat=${controller.latitude.toString()}&slng=${controller.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=${parkingName}");
                 try {
                   //nmap 은 canlaunchUrl 안되고  try ~ catch 만 된다
                   await launchUrl(navermap);
@@ -270,7 +272,7 @@ class _WebviewPageState extends State<WebviewPage> {
               } else if (Platform.isAndroid) {
                 print("Android");
                 Uri navermap = Uri.parse(
-                    "nmap://route/car?slat=${controller.latitude.toString()}&slng=${controller.longitude.toString()}&sname=내위치&dlat=37.5209436&dlng=127.1230074&dname=올림픽공원");
+                    "nmap://route/car?slat=${controller.latitude.toString()}&slng=${controller.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=${parkingName}");
                 try {
                   //nmap 은 canlaunchUrl 안되고  try ~ catch 만 된다
                   await launchUrl(navermap);
@@ -287,7 +289,7 @@ class _WebviewPageState extends State<WebviewPage> {
                 //
                 print("ios");
                 Uri kakaomap = Uri.parse(
-                    "kakaomap://route?sp=${controller.latitude.toString()},${controller.longitude.toString()}&ep=37.4979502,127.0276368&by=CAR");
+                    "kakaomap://route?sp=${controller.latitude.toString()},${controller.longitude.toString()}&ep=${parkingLat.toString()},${parkingLng.toString()}&by=CAR");
                 try {
                   await launchUrl(kakaomap);
                 } catch (e) {
@@ -299,7 +301,7 @@ class _WebviewPageState extends State<WebviewPage> {
               } else if (Platform.isAndroid) {
                 print("Android");
                 Uri kakaomap = Uri.parse(
-                    "kakaomap://route?sp=${controller.latitude.toString()},${controller.longitude.toString()}&ep=37.4979502,127.0276368&by=CAR");
+                    "kakaomap://route?sp=${controller.latitude.toString()},${controller.longitude.toString()}&ep=${parkingLat.toString()},${parkingLng.toString()}&by=CAR");
                 try {
                   await launchUrl(kakaomap);
                 } catch (e) {
@@ -345,6 +347,8 @@ class _WebviewPageState extends State<WebviewPage> {
                 parkingOperation = mapInfo.getPkOper();
                 parkingCount = mapInfo.getPkCount().toString();
                 parkingTime = mapInfo.getPkPhone();
+                parkingLat = mapInfo.getPkLat();
+                parkingLng = mapInfo.getPkLng();
               });
             } else if (mapInfoType == "pm") {
               setState(() {
