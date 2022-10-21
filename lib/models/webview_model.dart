@@ -48,4 +48,12 @@ class MapInfo {
   String getPmTime() {
     return data!["pmTimer"];
   }
+
+  String getPkLat() {
+    return data!["pkLat"];
+  }
+
+  String getPkLng() {
+    return data!["pkLng"];
+  }
 }
