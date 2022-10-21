@@ -15,6 +15,8 @@ class Env {
   static const String ADMIN_SERVER_REAL = "http://"; // 관리자 서버
   static const String ADMIN_SERVER = ADMIN_SERVER_TEST; // 관리자 서버
 
+  static const String FILE_SERVER_URL = "http://49.50.166.205:8090/";
+
   static const String SERVER_ADMIN_URL = "$ADMIN_SERVER:18090";
   // static const String SERVER_ADMIN_URL = "http://192.168.0.175:8090";
   static const String SERVER_LOGIN_URL = '$SERVER_ADMIN_URL/api/login';
@@ -58,6 +60,7 @@ class Env {
   static String? USER_NAME;
   static String? USER_PHOTO_NAME;
   static String? USER_PHONE_NUMBER;
+  static String? USER_CAR_NUMBER;
 
   static const String LOGIN_STATE = "LOGIN_STATE";
   static const String KEY_USER_ID = "USER_ID"; // Login 후에 서버로부터 부여 받은 사용자 ID 값

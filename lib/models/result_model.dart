@@ -148,7 +148,8 @@ class MyPageInfo {
   List<NoticeInfo> notices;
 
   static MyPageInfo fromJson(Map<String, dynamic> json) {
-    Log.debug(json["data"].toString());
+    Log.debug("MyPageInfo ${json.toString()}");
+
     if (json["data"].runtimeType.toString() == 'String') {
       return MyPageInfo(json["success"], json["msg"], "", "", "", 0, 0, []);
     } else {
@@ -298,11 +299,26 @@ class AlarmHistoryListInfo {
   AlarmHistoryListInfo(this.success, this.message, this.alarmHistoryInfos);
   bool success;
   String? message;
-  List<AlarmHistoryInfo> alarmHistoryInfos;
+  List<AlarmHistoryInfo>? alarmHistoryInfos;
 
   static fromJson(Map<String, dynamic> json) {
-    return AlarmHistoryListInfo(json["success"], json["msg"], json["data"]);
+    bool success = json["success"];
+    String? message = json["msg"];
+    List<dynamic>? alarmHistoryInfoList = json["data"];
+    List<AlarmHistoryInfo> alarmHistoryInfo = [];
+
+    for (int i = 0; i < alarmHistoryInfoList!.length; i++) {
+      alarmHistoryInfo.add(AlarmHistoryInfo.fromJson(alarmHistoryInfoList[i]));
+    }
+
+    if (alarmHistoryInfoList == null || alarmHistoryInfoList == "") {
+      return AlarmHistoryListInfo(success, message, []);
+    } else {
+      return AlarmHistoryListInfo(success, message, alarmHistoryInfo);
+    }
   }
+
+  Map<String, dynamic> toJson() => {"success": success, "message": message, "alarmHistoryInfos": alarmHistoryInfos};
 }
 
 class AlarmHistoryInfo {

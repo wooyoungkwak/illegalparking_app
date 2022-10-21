@@ -218,3 +218,35 @@ showCustomDialog({required BuildContext context, String? title, Widget? widget})
 //       });
 // }
 
+// 신고이력, 내차정보 관련
+Color reportColors(String state) {
+  Color color = const Color(0xffffffff);
+  switch (state) {
+    case "신고발생":
+      color = const Color(0xffffc107);
+      break;
+    case "신고대기":
+      color = const Color(0xffffc107);
+      break;
+    case "신고접수":
+      color = const Color(0xffd84315);
+      break;
+    case "신고제외":
+      color = const Color(0xff9e9e9e);
+      break;
+    case "과태료 대상":
+      color = const Color(0xffbf360c);
+      break;
+  }
+  return color;
+}
+
+// 신고이력, 내차정보 관련
+BoxConstraints addrTextWidthLimit(String state) {
+  if (state.length > 5) {
+    Log.debug("report state 5: $state");
+    return const BoxConstraints(maxWidth: 198); // 4글자 : 218, 5글자 : 198
+  }
+  Log.debug("report state 4 : $state");
+  return const BoxConstraints(maxWidth: 218);
+}
