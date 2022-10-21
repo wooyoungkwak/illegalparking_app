@@ -118,7 +118,7 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                         setState(() {
                           imagePath = modifyImagePath;
                         });
-                        Env.USER_NAME = imagePath;
+                        Env.USER_PHONE_NUMBER = imagePath;
                       } else {
                         Log.debug(defaultInfo.message);
                       }
@@ -231,6 +231,8 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                     Env.USER_NAME = null;
                     Env.USER_PHOTO_NAME = null;
                     Env.USER_PHONE_NUMBER = null;
+                    loginController.changeRealPage(0);
+                    loginController.changePage(0);
                     Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
                   }),
             ],

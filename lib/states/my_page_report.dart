@@ -144,14 +144,14 @@ class _MyPageReportState extends State<MyPageReport> {
                 ),
               ],
             ),
-            createReportList(context, reportHistoryList)
+            _createReportList(context, reportHistoryList)
           ],
         ),
       ),
     );
   }
 
-  Card createReportList(BuildContext context, List reportHistoryList) {
+  Card _createReportList(BuildContext context, List reportHistoryList) {
     return Card(
       child: Wrap(
         alignment: WrapAlignment.center,
@@ -172,7 +172,7 @@ class _MyPageReportState extends State<MyPageReport> {
                         //   height: 80,
                         //   width: 80,
                         //   fit: BoxFit.cover,
-                        //   "http://49.50.166.205:8090/${reportHistoryList[index].fileName}",
+                        //   "${Env.FILE_SERVER_URL}${reportHistoryList[index].fileName}",
                         //   errorBuilder: (context, error, stackTrace) => Image.asset(
                         //     height: 80,
                         //     width: 80,
@@ -185,7 +185,7 @@ class _MyPageReportState extends State<MyPageReport> {
                           children: [
                             //주소
                             Container(
-                              constraints: _addrTextWidthLimit(reportHistoryList[index].reportState),
+                              constraints: addrTextWidthLimit(reportHistoryList[index].reportState),
                               child: createCustomText(
                                 padding: 0.0,
                                 size: 16.0,
@@ -242,36 +242,5 @@ class _MyPageReportState extends State<MyPageReport> {
         ),
       ),
     );
-  }
-
-  Color reportColors(String state) {
-    Color color = const Color(0xffffffff);
-    switch (state) {
-      case "신고발생":
-        color = const Color(0xffffc107);
-        break;
-      case "신고대기":
-        color = const Color(0xffffc107);
-        break;
-      case "신고접수":
-        color = const Color(0xffd84315);
-        break;
-      case "신고제외":
-        color = const Color(0xff9e9e9e);
-        break;
-      case "과태료 대상":
-        color = const Color(0xffbf360c);
-        break;
-    }
-    return color;
-  }
-
-  BoxConstraints _addrTextWidthLimit(String state) {
-    if (state.length > 5) {
-      Log.debug("report state 5: $state");
-      return const BoxConstraints(maxWidth: 198); // 4글자 : 218, 5글자 : 198
-    }
-    Log.debug("report state 4 : $state");
-    return const BoxConstraints(maxWidth: 218);
   }
 }

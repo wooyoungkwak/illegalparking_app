@@ -165,7 +165,6 @@ Future<MyPageInfo> requestMyPage(int userSeq) async {
   var response = await http.post(Uri.parse(Env.SERVER_ADMIN_MY_PAGE_URL), headers: {"Content-Type": "application/json"}, body: body);
   if (response.statusCode == 200) {
     String result = utf8.decode(response.bodyBytes);
-    Log.debug("MyPageInfo : $result");
     Map<String, dynamic> resultMap = jsonDecode(result);
     return MyPageInfo.fromJson(resultMap);
   } else {
@@ -196,7 +195,6 @@ Future<PointListInfo> requestPoint(int userSeq) async {
   var response = await http.post(Uri.parse(Env.SERVER_ADMIN_POINT_URL), headers: {"Content-Type": "application/json"}, body: body);
   if (response.statusCode == 200) {
     String result = utf8.decode(response.bodyBytes);
-    Log.debug("PointRe : $result");
     Map<String, dynamic> resultMap = jsonDecode(result);
     return PointListInfo.fromJson(resultMap);
   } else {
@@ -239,7 +237,7 @@ Future<AlarmHistoryListInfo> requestAlarmHistory(int userSeq, String carNum) asy
   var data = {"userSeq": userSeq, "carNum": carNum};
   var body = json.encode(data);
 
-  var response = await http.post(Uri.parse(Env.SERVER_ADMIN_PRODUCT_BUY_URL), headers: {"Content-Type": "application/json"}, body: body);
+  var response = await http.post(Uri.parse(Env.SERVER_ADMIN_CAR_ALARMHISTROY_URL), headers: {"Content-Type": "application/json"}, body: body);
   if (response.statusCode == 200) {
     String result = utf8.decode(response.bodyBytes);
     Map<String, dynamic> resultMap = jsonDecode(result);

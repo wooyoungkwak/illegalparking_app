@@ -33,12 +33,16 @@ class _MyPageState extends State<MyPage> {
   void initState() {
     super.initState();
     requestMyPage(Env.USER_SEQ!).then((myPageInfo) {
+      Log.debug("Car Info : ${myPageInfo.carName}");
+      Log.debug("Car Info : ${myPageInfo.carLevel}");
+      Log.debug("Car Info : ${myPageInfo.carNum.toString()}");
       setState(() {
         // 차량 정보
         if (myPageInfo.carNum != null) {
           carName = myPageInfo.carName;
           carLevel = myPageInfo.carLevel;
           carNum = myPageInfo.carNum.toString();
+          Env.USER_CAR_NUMBER = myPageInfo.carNum.toString();
         }
         //신고 건수
         reportCount = myPageInfo.reportCount.toString();
@@ -62,7 +66,7 @@ class _MyPageState extends State<MyPage> {
       shrinkWrap: true,
       children: [
         // 등록, 신고, 포인트
-        if (carNum == null)
+        if (carNum == "")
           createMypageCard(
             route: () {
               loginController.changeRealPage(4);
@@ -86,7 +90,7 @@ class _MyPageState extends State<MyPage> {
             ],
           ),
         // 인증 완료
-        if (carNum != null)
+        if (carNum != "")
           Stack(
             children: [
               Card(
@@ -117,7 +121,7 @@ class _MyPageState extends State<MyPage> {
                                     ),
                                     createCustomText(
                                       weight: FontWeight.w400,
-                                      text: "123가 4567",
+                                      text: Env.USER_CAR_NUMBER,
                                     ),
                                   ],
                                 ),
