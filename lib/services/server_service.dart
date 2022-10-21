@@ -26,6 +26,7 @@ Future<LoginInfo> login(String id, String pw) async {
     String result = utf8.decode(response.bodyBytes);
     Map<String, dynamic> resultMap = jsonDecode(result);
 
+    Log.debug("Login Info : ${resultMap["data"].toString()}");
     //로그인 성공 실패 체크해서 Model 다르게 설정
     return LoginInfo.fromJson(resultMap);
   } else {
@@ -35,19 +36,13 @@ Future<LoginInfo> login(String id, String pw) async {
 
 // 사용자 등록
 Future<RegisterInfo> register(String id, String pw, String name, String phoneNumber, String photoName) async {
-  var data = {
-    "userName": id, 
-    "password": pw,
-    "name" : name, 
-    "phoneNumber": phoneNumber,
-    "photoName": photoName
-  };
+  var data = {"userName": id, "password": pw, "name": name, "phoneNumber": phoneNumber, "photoName": photoName};
   var body = json.encode(data);
   var response = await http.post(Uri.parse(Env.SERVER_ADMIN_REGISTER_URL), headers: {"Content-Type": "application/json"}, body: body);
   if (response.statusCode == 200) {
     String result = utf8.decode(response.bodyBytes);
     Map<String, dynamic> resultMap = jsonDecode(result);
-    
+
     //로그인 성공 실패 체크해서 Model 다르게 설정
     return RegisterInfo.fromJson(resultMap);
   } else {
@@ -57,17 +52,15 @@ Future<RegisterInfo> register(String id, String pw, String name, String phoneNum
 
 // ID 중복 체크
 Future<dynamic> duplicate(String id) async {
-  var data = {
-    "userName": id
-  };
+  var data = {"userName": id};
   var body = json.encode(data);
   var response = await http.post(Uri.parse(Env.SERVER_ADMIN_IS_EXIST_URL), headers: {"Content-Type": "application/json"}, body: body);
   if (response.statusCode == 200) {
     String result = utf8.decode(response.bodyBytes);
     Map<String, dynamic> resultMap = jsonDecode(result);
-    
+
     // resultMap.data
-    // -- resultMap.data["isExist"]   :  존재 여부 ( true / false ) 
+    // -- resultMap.data["isExist"]   :  존재 여부 ( true / false )
     // -- resultMap.data["msg"] : true 경우 - "존재하지 않는 사용자입니다."
 
     //로그인 성공 실패 체크해서 Model 다르게 설정
@@ -75,13 +68,10 @@ Future<dynamic> duplicate(String id) async {
   } else {
     throw Exception('서버 오류');
   }
-
 }
-
 
 // 신고 전송
 Future<ReportInfo> sendReport(int userSeq, String addr, String carNum, String time, String fileName, double latitude, double longitude) async {
-
   var data = {
     "userSeq": userSeq,
     "addr": addr, // 주소
@@ -104,13 +94,9 @@ Future<ReportInfo> sendReport(int userSeq, String addr, String carNum, String ti
   }
 }
 
-
 // 신고 이력 정보 요청
 Future<ReportHistoryInfo> requestReportHistory(int userSeq) async {
-
-  var data = {
-    "userSeq": userSeq
-  };
+  var data = {"userSeq": userSeq};
 
   var body = json.encode(data);
 
@@ -123,8 +109,6 @@ Future<ReportHistoryInfo> requestReportHistory(int userSeq) async {
     throw Exception('신고 이력 정보 요청 오류');
   }
 }
-
-
 
 // 서버 이미지 저장
 Future<dynamic> _sendFile(String url, String filePath) async {
@@ -181,13 +165,13 @@ Future<MyPageInfo> requestMyPage(int userSeq) async {
   var response = await http.post(Uri.parse(Env.SERVER_ADMIN_MY_PAGE_URL), headers: {"Content-Type": "application/json"}, body: body);
   if (response.statusCode == 200) {
     String result = utf8.decode(response.bodyBytes);
+    Log.debug("MyPageInfo : $result");
     Map<String, dynamic> resultMap = jsonDecode(result);
     return MyPageInfo.fromJson(resultMap);
   } else {
     throw Exception('서버 오류');
   }
 }
-
 
 // 추가 공지 정보
 Future<NoticeListInfo> requestNotice(int userSeq, int offset, int count) async {
@@ -204,15 +188,15 @@ Future<NoticeListInfo> requestNotice(int userSeq, int offset, int count) async {
   }
 }
 
-
 // 포인트 정보 요청
 Future<PointListInfo> requestPoint(int userSeq) async {
-var data = {"userSeq": userSeq};
+  var data = {"userSeq": userSeq};
   var body = json.encode(data);
 
   var response = await http.post(Uri.parse(Env.SERVER_ADMIN_POINT_URL), headers: {"Content-Type": "application/json"}, body: body);
   if (response.statusCode == 200) {
     String result = utf8.decode(response.bodyBytes);
+    Log.debug("PointRe : $result");
     Map<String, dynamic> resultMap = jsonDecode(result);
     return PointListInfo.fromJson(resultMap);
   } else {
@@ -222,7 +206,7 @@ var data = {"userSeq": userSeq};
 
 // 제품 정보 리스트 요청
 Future<ProductListInfo> requestProductList(int userSeq) async {
-var data = {"userSeq": userSeq};
+  var data = {"userSeq": userSeq};
   var body = json.encode(data);
 
   var response = await http.post(Uri.parse(Env.SERVER_ADMIN_PRODUCT_LIST_URL), headers: {"Content-Type": "application/json"}, body: body);
@@ -237,7 +221,7 @@ var data = {"userSeq": userSeq};
 
 // 상품 신청 요청
 Future<ProductBuyInfo> requestProductBuy(int userSeq, int productSeq, int balancePointValue) async {
-var data = {"userSeq": userSeq, "productSeq": productSeq, "balancePointValue": balancePointValue};
+  var data = {"userSeq": userSeq, "productSeq": productSeq, "balancePointValue": balancePointValue};
   var body = json.encode(data);
 
   var response = await http.post(Uri.parse(Env.SERVER_ADMIN_PRODUCT_BUY_URL), headers: {"Content-Type": "application/json"}, body: body);
@@ -252,7 +236,7 @@ var data = {"userSeq": userSeq, "productSeq": productSeq, "balancePointValue": b
 
 // 차량 이력 정보 요청
 Future<AlarmHistoryListInfo> requestAlarmHistory(int userSeq, String carNum) async {
-var data = {"userSeq": userSeq, "carNum": carNum};
+  var data = {"userSeq": userSeq, "carNum": carNum};
   var body = json.encode(data);
 
   var response = await http.post(Uri.parse(Env.SERVER_ADMIN_PRODUCT_BUY_URL), headers: {"Content-Type": "application/json"}, body: body);
@@ -267,7 +251,7 @@ var data = {"userSeq": userSeq, "carNum": carNum};
 
 // 차량 이력 정보 등록 요청
 Future<DefaultInfo> requestCarRegister(int userSeq, String carNum, String carName, String carGrade) async {
-  var data = {"userSeq": userSeq, "carNum": carNum,  "carName": carName, "carGrade":carGrade};
+  var data = {"userSeq": userSeq, "carNum": carNum, "carName": carName, "carGrade": carGrade};
   var body = json.encode(data);
 
   var response = await http.post(Uri.parse(Env.SERVER_ADMIN_CAR_REGISTER_URL), headers: {"Content-Type": "application/json"}, body: body);
@@ -282,7 +266,7 @@ Future<DefaultInfo> requestCarRegister(int userSeq, String carNum, String carNam
 
 // 내차 알림 설정 요청
 Future<DefaultInfo> requestMyCarAlarm(int userSeq, String carNum, bool isAlarm) async {
-var data = {"userSeq": userSeq, "carNum": carNum, "isAlarm": isAlarm};
+  var data = {"userSeq": userSeq, "carNum": carNum, "isAlarm": isAlarm};
   var body = json.encode(data);
 
   var response = await http.post(Uri.parse(Env.SERVER_ADMIN_CAR_ALARM_URL), headers: {"Content-Type": "application/json"}, body: body);
@@ -297,7 +281,7 @@ var data = {"userSeq": userSeq, "carNum": carNum, "isAlarm": isAlarm};
 
 // 패스워드 체크 요청
 Future<DefaultInfo> requestUserPasswordCheck(int userSeq, String password) async {
-var data = {"userSeq": userSeq, "password": password};
+  var data = {"userSeq": userSeq, "password": password};
   var body = json.encode(data);
 
   var response = await http.post(Uri.parse(Env.SERVER_ADMIN_USER_PASSWORD_CHCEK_URL), headers: {"Content-Type": "application/json"}, body: body);
@@ -312,7 +296,7 @@ var data = {"userSeq": userSeq, "password": password};
 
 // 패스워드 변경 요청
 Future<DefaultInfo> requestUserPasswordChange(int userSeq, String password) async {
-var data = {"userSeq": userSeq, "password": password};
+  var data = {"userSeq": userSeq, "password": password};
   var body = json.encode(data);
 
   var response = await http.post(Uri.parse(Env.SERVER_ADMIN_USER_PASSWORD_CHANGE_URL), headers: {"Content-Type": "application/json"}, body: body);
@@ -327,7 +311,7 @@ var data = {"userSeq": userSeq, "password": password};
 
 // 프로 사진 변경 요청
 Future<DefaultInfo> requestUserProfileChange(int userSeq, String photoName) async {
-var data = {"userSeq": userSeq, "photoName": photoName};
+  var data = {"userSeq": userSeq, "photoName": photoName};
   var body = json.encode(data);
 
   var response = await http.post(Uri.parse(Env.SERVER_ADMIN_USER_PROFILE_URL), headers: {"Content-Type": "application/json"}, body: body);
@@ -339,7 +323,3 @@ var data = {"userSeq": userSeq, "photoName": photoName};
     throw Exception('서버 오류');
   }
 }
-
-
-
-

@@ -122,16 +122,17 @@ class ReportHistoryInfo {
 }
 
 class ReportResultInfo {
-  ReportResultInfo(this.carNum, this.addr, this.firstRegDt, this.secondRegDt, this.reportState, this.comments);
+  ReportResultInfo(this.carNum, this.addr, this.firstRegDt, this.secondRegDt, this.reportState, this.fileName, this.comments);
   String carNum;
   String addr;
   String firstRegDt;
   String? secondRegDt;
   String reportState;
+  String fileName;
   List<dynamic> comments;
 
   static ReportResultInfo fromJson(Map<String, dynamic> json) {
-    return ReportResultInfo(json["carNum"], json["addr"], json["firstRegDt"], json["secondRegDt"], json["reportState"], json["comments"]);
+    return ReportResultInfo(json["carNum"], json["addr"], json["firstRegDt"], json["secondRegDt"], json["reportState"], json["fileName"], json["comments"]);
   }
 }
 
@@ -232,8 +233,15 @@ class PointInfo {
   String regDt; // 등록 일자 ( yyyy-MM-dd HH:mm)
 
   // pointType : PLUS / MINUS
-
   static PointInfo fromJson(Map<String, dynamic> json) {
+    // 정보가 제대로면 이건 필요 없음...
+    if (json["locationType"] == null) {
+      return PointInfo(json["value"], "", "", json["pointType"], json["regDt"]);
+    } else if (json["locationType"] == null) {
+      return PointInfo(json["value"], "", json["productName"], json["pointType"], json["regDt"]);
+    } else if (json["productName"] == null) {
+      return PointInfo(json["value"], json["locationType"], "", json["pointType"], json["regDt"]);
+    }
     return PointInfo(json["value"], json["locationType"], json["productName"], json["pointType"], json["regDt"]);
   }
 

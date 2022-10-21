@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
@@ -12,6 +14,8 @@ class MyPageCarInfomatino extends StatefulWidget {
 }
 
 class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
+  final loginController = Get.put(LoginController());
+
   bool checkedAlram = false;
   List testList = [
     {
@@ -53,79 +57,99 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: createCustomText(text: "내차정보"),
-      ),
-      body: ListView(
-        children: [
-          // 차량정보
-          Stack(
-            children: [
-              Card(
-                elevation: 4,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Image(
-                          image: AssetImage("assets/testVehicle.jpg"),
-                          height: 100,
-                          width: 100,
-                        ),
-                        createCustomText(text: "123가 4567"),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            createCustomText(text: "내차번호 신고발생 시 바로 알림"),
-                            Switch(
-                                value: checkedAlram,
-                                onChanged: (value) {
-                                  requestMyCarAlarm(2, "123가1234", value).then((defaultInfo) {
-                                    if (defaultInfo.success) {
-                                      setState(() {
-                                        checkedAlram = value;
-                                      });
-                                    } else {
-                                      Log.debug("${defaultInfo.message}");
-                                    }
-                                  });
-                                }),
-                          ],
-                        )
-                      ],
+    return WillPopScope(
+      onWillPop: () {
+        loginController.changeRealPage(2);
+        return Future(() => false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          leading: Material(
+            color: Colors.blue,
+            child: InkWell(
+              onTap: () {
+                loginController.changeRealPage(2);
+              },
+              child: const Icon(
+                Icons.chevron_left,
+                color: Colors.black,
+                size: 40,
+              ),
+            ),
+          ),
+          title: createCustomText(text: "내차정보"),
+        ),
+        body: ListView(
+          children: [
+            // 차량정보
+            Stack(
+              children: [
+                Card(
+                  elevation: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Image(
+                            image: AssetImage("assets/testVehicle.jpg"),
+                            height: 100,
+                            width: 100,
+                          ),
+                          createCustomText(text: "123가 4567"),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              createCustomText(text: "내차번호 신고발생 시 바로 알림"),
+                              Switch(
+                                  value: checkedAlram,
+                                  onChanged: (value) {
+                                    requestMyCarAlarm(2, "123가1234", value).then((defaultInfo) {
+                                      if (defaultInfo.success) {
+                                        setState(() {
+                                          checkedAlram = value;
+                                        });
+                                      } else {
+                                        Log.debug("${defaultInfo.message}");
+                                      }
+                                    });
+                                  }),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const Positioned(
-                top: 15,
-                left: 15,
-                child: Text(
-                  "인증 완료",
-                  style: TextStyle(color: Colors.blue),
+                const Positioned(
+                  top: 15,
+                  left: 15,
+                  child: Text(
+                    "인증 완료",
+                    style: TextStyle(color: Colors.blue),
+                  ),
                 ),
-              ),
-              Positioned(
-                top: 15,
-                right: 15,
-                child: IconButton(
-                  iconSize: 32.0,
-                  icon: const Icon(Icons.settings),
-                  onPressed: () {},
+                Positioned(
+                  top: 15,
+                  right: 15,
+                  child: IconButton(
+                    iconSize: 32.0,
+                    icon: const Icon(Icons.settings),
+                    onPressed: () {},
+                  ),
                 ),
-              ),
-            ],
-          ),
-          // 차량추가 버튼
-          createElevatedButton(text: "차량 추가"),
-          // 신고된 내용 리스트
-          createReportList(context, testList),
-        ],
+              ],
+            ),
+            // 차량추가 버튼
+            createElevatedButton(text: "차량 추가"),
+            // 신고된 내용 리스트
+            // createReportList(context, testList),
+          ],
+        ),
       ),
     );
   }

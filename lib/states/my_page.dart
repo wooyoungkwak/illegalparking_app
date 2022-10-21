@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/my_page_controller.dart';
 import 'package:illegalparking_app/models/result_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
+import 'package:illegalparking_app/states/home.dart';
 
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
@@ -17,7 +19,9 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
-  final controller = Get.put(MyPageController());
+  final myPagecontroller = Get.put(MyPageController());
+  final loginController = Get.put(LoginController());
+
   late List<NoticeInfo> noticeList = [];
   late String carName;
   late String carLevel;
@@ -37,11 +41,10 @@ class _MyPageState extends State<MyPage> {
           carNum = myPageInfo.carNum.toString();
         }
         //신고 건수
-        Log.debug("reportCount ${myPageInfo.reportCount.toString()}");
         reportCount = myPageInfo.reportCount.toString();
         //내 포인트
         currentPoint = myPageInfo.currentPoint.toString();
-
+        myPagecontroller.setCurrentPotin(myPageInfo.currentPoint);
         // 공지 사항
         noticeList = myPageInfo.notices;
       });
@@ -62,10 +65,7 @@ class _MyPageState extends State<MyPage> {
         if (carNum == null)
           createMypageCard(
             route: () {
-              Navigator.pushNamed(
-                context,
-                "/registration",
-              );
+              loginController.changeRealPage(4);
             },
             widgetList: <Widget>[
               Column(
@@ -95,7 +95,7 @@ class _MyPageState extends State<MyPage> {
                   child: Ink(
                     child: InkWell(
                       onTap: () {
-                        Navigator.pushNamed(context, "/car_infomation");
+                        loginController.changeRealPage(5);
                       },
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(minHeight: 100),
@@ -148,7 +148,7 @@ class _MyPageState extends State<MyPage> {
           ),
         createMypageCard(
           route: () {
-            Navigator.pushNamed(context, "/report");
+            loginController.changeRealPage(6);
           },
           widgetList: <Widget>[
             createCustomText(
@@ -168,7 +168,7 @@ class _MyPageState extends State<MyPage> {
         ),
         createMypageCard(
           route: () {
-            Navigator.pushNamed(context, "/point");
+            loginController.changeRealPage(7);
           },
           widgetList: <Widget>[
             createCustomText(
@@ -286,7 +286,6 @@ class _MyPageState extends State<MyPage> {
             text: "더보기",
             function: () {
               requestNotice(Env.USER_SEQ!, noticeList.length, 5).then((noticeListInfo) {
-                Log.debug("result = ${noticeListInfo.noticeInfos[0].toJson()}");
                 setState(() {
                   noticeList.addAll(noticeListInfo.noticeInfos);
                 });
@@ -320,10 +319,8 @@ class _MyPageState extends State<MyPage> {
                 resizeDuration: null,
                 confirmDismiss: (direction) {
                   if (direction == DismissDirection.endToStart) {
-                    Log.debug("오른쪽 이동");
                     if (noticeIndex == (noticeList.length - 1)) {
                       requestNotice(Env.USER_SEQ!, noticeList.length, 5).then((noticeListInfo) {
-                        // Log.debug("result = ${noticeListInfo.noticeInfos[0].toJson()}");
                         setState(() {
                           noticeList.addAll(noticeListInfo.noticeInfos);
                         });
@@ -333,12 +330,10 @@ class _MyPageState extends State<MyPage> {
                   }
 
                   if (direction == DismissDirection.startToEnd) {
-                    Log.debug("왼쪽 이동");
                     if (noticeIndex == 0) {
                       return Future.value(false);
                     }
                   }
-                  Log.debug("이동 불가");
 
                   return Future.value(true);
                 },
@@ -347,7 +342,6 @@ class _MyPageState extends State<MyPage> {
                     setState(() {
                       if (noticeIndex < noticeList.length - 1) {
                         noticeIndex++;
-                        Log.debug(noticeIndex.toString());
                       }
                     });
                   }
@@ -356,7 +350,6 @@ class _MyPageState extends State<MyPage> {
                     setState(() {
                       if (noticeIndex > 0) {
                         noticeIndex--;
-                        Log.debug(noticeIndex.toString());
                       }
                     });
                   }
@@ -436,7 +429,6 @@ class _MyPageState extends State<MyPage> {
   }
 
   bool _textLengthValidation(String text) {
-    Log.debug("text length : ${text.length}");
     if (text.length > 20) {
       return false;
     }
@@ -462,10 +454,6 @@ class _MyPageState extends State<MyPage> {
         sliceText += "\n${textList[1]}";
       }
     }
-
-    // Log.debug(textList.toString());
-    // Log.debug(textList.length.toString());
-    // Log.debug("slice text : $sliceText");
     return sliceText;
   }
 }

@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:illegalparking_app/config/env.dart';
@@ -17,6 +19,8 @@ class MyPageInfomation extends StatefulWidget {
 }
 
 class _MyPageInfomationState extends State<MyPageInfomation> {
+  final loginController = Get.put(LoginController());
+
   late TextEditingController _oldPasswordController = TextEditingController();
   late TextEditingController _newPasswordController = TextEditingController();
   late TextEditingController _newPasswordValidationController = TextEditingController();
@@ -24,6 +28,7 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
   XFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
   late String imagePath = Env.USER_PHOTO_NAME!;
+  late bool isExistImgae;
   @override
   void initState() {
     super.initState();
@@ -31,185 +36,205 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: createCustomText(text: "내정보"),
-        centerTitle: false,
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: CircleAvatar(
-                    radius: 60.0,
-                    // 현재 기본 이미지들 적용 안됨
-                    // backgroundImage: AssetImage("assets/noimage.jpg"),
-                    // backgroundImage: AssetImage("assets/${Env.USER_PHOTO_NAME}.jpg"),
-                    backgroundImage: _checkFileImage(imagePath),
-                  ),
-                ),
-                Positioned(
-                  bottom: 30,
-                  left: 110,
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(30),
-                      color: Colors.white,
+    return WillPopScope(
+      onWillPop: () {
+        loginController.changeRealPage(2);
+        return Future(() => false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: createCustomText(text: "내정보"),
+          centerTitle: false,
+          automaticallyImplyLeading: false,
+          leading: Material(
+            color: Colors.blue,
+            child: InkWell(
+              onTap: () {
+                loginController.changeRealPage(2);
+              },
+              child: const Icon(
+                Icons.chevron_left,
+                color: Colors.black,
+                size: 40,
+              ),
+            ),
+          ),
+        ),
+        body: Center(
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: CircleAvatar(
+                      radius: 60.0,
+                      // 현재 기본 이미지들 적용 안됨
+                      // backgroundImage: AssetImage("assets/noimage.jpg"),
+                      // backgroundImage: AssetImage("assets/${Env.USER_PHOTO_NAME}.jpg"),
+                      backgroundImage: _checkFileImage(imagePath),
                     ),
-                    child: Material(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                      child: InkWell(
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                  ),
+                  Positioned(
+                    bottom: 30,
+                    left: 110,
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
                         borderRadius: BorderRadius.circular(30),
-                        onTap: () {
-                          Log.debug("사진첩 이동");
-                          takePhoto(ImageSource.gallery);
-                        },
-                        child: Icon(
-                          Icons.camera_alt,
-                          size: 30,
+                        color: Colors.white,
+                      ),
+                      child: Material(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                        child: InkWell(
+                          customBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          borderRadius: BorderRadius.circular(30),
+                          onTap: () {
+                            Log.debug("사진첩 이동");
+                            takePhoto(ImageSource.gallery);
+                          },
+                          child: const Icon(
+                            Icons.camera_alt,
+                            size: 30,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            createElevatedButton(
-                text: "프로필 변경",
-                function: () {
-                  String modifyImagePath = _imageFile!.path.substring(50);
-                  Log.debug("imagePath : $imagePath");
-                  requestUserProfileChange(Env.USER_SEQ!, modifyImagePath).then((defaultInfo) {
-                    if (defaultInfo.success) {
-                      Log.debug(defaultInfo.data);
-                      setState(() {
-                        imagePath = modifyImagePath;
-                      });
-                      Env.USER_NAME = imagePath;
-                    } else {
-                      Log.debug(defaultInfo.message);
-                    }
-                  });
-                }),
-            createCustomText(text: Env.USER_NAME),
-            createCustomText(text: Env.USER_PHONE_NUMBER),
-            const SizedBox(
-              height: 32,
-            ),
-            createElevatedButton(
-              padding: 16.0,
-              text: "비밀번호 변경",
-              function: () {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      bool _oldPasswordValidation = false;
-                      return StatefulBuilder(builder: (context, setState) {
-                        return Scaffold(
-                          appBar: AppBar(
-                            automaticallyImplyLeading: false,
-                            centerTitle: true,
-                            title: const Text("소식"),
-                            actions: [
-                              IconButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    _newPasswordController.text = "";
-                                  },
-                                  icon: const Icon(Icons.cancel_outlined))
-                            ],
-                          ),
-                          body: Column(
-                            children: [
-                              createTextFormField(
-                                labelText: "기존 비밀번호",
-                                controller: _oldPasswordController,
-                              ),
-                              createElevatedButton(
-                                  color: _oldPasswordValidation ? const Color(0xffd84315) : null,
-                                  text: _oldPasswordValidation ? "비밀번호 확인됨" : "비밀번호 확인",
-                                  function: () {
-                                    requestUserPasswordCheck(Env.USER_SEQ!, _oldPasswordController.text).then((defaultInfo) {
-                                      if (defaultInfo.success) {
-                                        Log.debug(defaultInfo.data);
-                                        setState(() {
-                                          _oldPasswordValidation = true;
-                                        });
-                                      } else {
-                                        Log.debug(defaultInfo.message);
-                                        showToast(text: defaultInfo.message);
-                                      }
-                                    });
-                                  }),
-                              if (_oldPasswordValidation)
-                                createTextFormField(
-                                  labelText: "변경할 비밀번호",
-                                  controller: _newPasswordController,
-                                ),
-                              if (_oldPasswordValidation)
-                                createTextFormField(
-                                  labelText: "변경할 비밀번호 확인",
-                                  controller: _newPasswordValidationController,
-                                ),
-                              if (_oldPasswordValidation && (_newPasswordController.text == _newPasswordValidationController.text))
-                                createElevatedButton(
-                                  padding: 24.0,
-                                  text: "변경하기",
-                                  function: () {
-                                    Log.debug("_newPasswordController ${_newPasswordController.text}");
-                                    requestUserPasswordChange(Env.USER_SEQ!, _newPasswordController.text).then((defaultInfo) {
-                                      if (defaultInfo.success) {
-                                        // 공통적으로 쓰는 다이얼로그면 하나 통합해서 만들기
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) => AlertDialog(
-                                            title: const Text('알림'),
-                                            content: createCustomText(text: "비밀번호가 변경되었습니다."),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context, 'OK');
-                                                  Navigator.popUntil(context, ModalRoute.withName('/infomation'));
-                                                  // Navigator.pushNamed(context, '/infomation');
-                                                },
-                                                child: const Text('확인'),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      } else {
-                                        Log.debug(defaultInfo.message);
-                                      }
-                                    });
-                                  },
-                                ),
-                            ],
-                          ),
-                        );
-                      });
+                ],
+              ),
+              createElevatedButton(
+                  text: "프로필 변경",
+                  function: () {
+                    String modifyImagePath = _imageFile!.path.substring(50);
+                    Log.debug("imagePath : $imagePath");
+                    requestUserProfileChange(Env.USER_SEQ!, modifyImagePath).then((defaultInfo) {
+                      if (defaultInfo.success) {
+                        Log.debug(defaultInfo.data);
+                        setState(() {
+                          imagePath = modifyImagePath;
+                        });
+                        Env.USER_NAME = imagePath;
+                      } else {
+                        Log.debug(defaultInfo.message);
+                      }
                     });
-              },
-            ),
-            createElevatedButton(
+                  }),
+              createCustomText(text: Env.USER_NAME),
+              createCustomText(text: Env.USER_PHONE_NUMBER),
+              const SizedBox(
+                height: 32,
+              ),
+              createElevatedButton(
                 padding: 16.0,
-                text: "로그아웃",
+                text: "비밀번호 변경",
                 function: () {
-                  Env.USER_SEQ = null;
-                  Env.USER_NAME = null;
-                  Env.USER_PHOTO_NAME = null;
-                  Env.USER_PHONE_NUMBER = null;
-                  Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
-                }),
-          ],
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        bool _oldPasswordValidation = false;
+                        return StatefulBuilder(builder: (context, setState) {
+                          return Scaffold(
+                            appBar: AppBar(
+                              automaticallyImplyLeading: false,
+                              centerTitle: true,
+                              title: const Text("소식"),
+                              actions: [
+                                IconButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      _newPasswordController.text = "";
+                                    },
+                                    icon: const Icon(Icons.cancel_outlined))
+                              ],
+                            ),
+                            body: Column(
+                              children: [
+                                createTextFormField(
+                                  labelText: "기존 비밀번호",
+                                  controller: _oldPasswordController,
+                                ),
+                                createElevatedButton(
+                                    color: _oldPasswordValidation ? const Color(0xffd84315) : null,
+                                    text: _oldPasswordValidation ? "비밀번호 확인됨" : "비밀번호 확인",
+                                    function: () {
+                                      requestUserPasswordCheck(Env.USER_SEQ!, _oldPasswordController.text).then((defaultInfo) {
+                                        if (defaultInfo.success) {
+                                          Log.debug(defaultInfo.data);
+                                          setState(() {
+                                            _oldPasswordValidation = true;
+                                          });
+                                        } else {
+                                          Log.debug(defaultInfo.message);
+                                          showToast(text: defaultInfo.message);
+                                        }
+                                      });
+                                    }),
+                                if (_oldPasswordValidation)
+                                  createTextFormField(
+                                    labelText: "변경할 비밀번호",
+                                    controller: _newPasswordController,
+                                  ),
+                                if (_oldPasswordValidation)
+                                  createTextFormField(
+                                    labelText: "변경할 비밀번호 확인",
+                                    controller: _newPasswordValidationController,
+                                  ),
+                                if (_oldPasswordValidation && (_newPasswordController.text == _newPasswordValidationController.text))
+                                  createElevatedButton(
+                                    padding: 24.0,
+                                    text: "변경하기",
+                                    function: () {
+                                      Log.debug("_newPasswordController ${_newPasswordController.text}");
+                                      requestUserPasswordChange(Env.USER_SEQ!, _newPasswordController.text).then((defaultInfo) {
+                                        if (defaultInfo.success) {
+                                          // 공통적으로 쓰는 다이얼로그면 하나 통합해서 만들기
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) => AlertDialog(
+                                              title: const Text('알림'),
+                                              content: createCustomText(text: "비밀번호가 변경되었습니다."),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context, 'OK');
+                                                    Navigator.popUntil(context, ModalRoute.withName('/infomation'));
+                                                    // Navigator.pushNamed(context, '/infomation');
+                                                  },
+                                                  child: const Text('확인'),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        } else {
+                                          Log.debug(defaultInfo.message);
+                                        }
+                                      });
+                                    },
+                                  ),
+                              ],
+                            ),
+                          );
+                        });
+                      });
+                },
+              ),
+              createElevatedButton(
+                  padding: 16.0,
+                  text: "로그아웃",
+                  function: () {
+                    Env.USER_SEQ = null;
+                    Env.USER_NAME = null;
+                    Env.USER_PHOTO_NAME = null;
+                    Env.USER_PHONE_NUMBER = null;
+                    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                  }),
+            ],
+          ),
         ),
       ),
     );
@@ -224,6 +249,7 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
   }
 
   ImageProvider<Object> _checkFileImage(String photoName) {
+    Log.debug("photoName : $photoName");
     // 갤러리에서 저장된 이미지, 프로필 아이콘 구분
     bool isFilePath;
     if (photoName.length > 12 && "image_picker" == photoName.substring(0, 12)) {
@@ -233,8 +259,10 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
     }
 
     // 갤러리에서 저장된 이미지, 프로필 아이콘 구분에 따른 화면 출력 이미지
-    if (isFilePath) {
-      return FileImage(File("/data/user/0/com.example.illegalparking_app/cache/$photoName"));
+    String filePath = "/data/user/0/com.example.illegalparking_app/cache/$photoName";
+    bool isExist = File(filePath).existsSync();
+    if (isFilePath && isExist) {
+      return FileImage(File(filePath));
     } else {
       return const AssetImage("assets/noimage.jpg");
     }

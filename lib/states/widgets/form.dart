@@ -10,9 +10,13 @@ Padding createCustomText({
   FontWeight? weight,
   Color? color,
   double? padding,
+  double? top,
+  double? bottom,
+  double? left,
+  double? right,
 }) {
   return Padding(
-    padding: EdgeInsets.all(padding ?? 8.0),
+    padding: EdgeInsets.only(top: padding ?? top ?? 8.0, bottom: padding ?? bottom ?? 8.0, left: padding ?? left ?? 8.0, right: padding ?? right ?? 8.0),
     child: Text(
       text ?? "",
       style: TextStyle(
@@ -214,98 +218,3 @@ showCustomDialog({required BuildContext context, String? title, Widget? widget})
 //       });
 // }
 
-Card createReportList(BuildContext context, List list) {
-  return Card(
-    child: Wrap(
-      alignment: WrapAlignment.center,
-      children: List.generate(
-        list.length,
-        (index) => SizedBox(
-          child: Wrap(
-            children: [
-              Column(
-                children: [
-                  //주 정보
-                  Row(
-                    children: [
-                      // 이미지
-                      Image(
-                        height: 80,
-                        width: 80,
-                        image: AssetImage(
-                          list[index]["image"],
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //주소
-                          createCustomText(
-                            size: 16.0,
-                            text: list[index]["address"],
-                          ),
-                          //시간
-                          createCustomText(
-                            size: 12.0,
-                            text: list[index]["time"],
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Card(
-                          color: reportColors(list[index]["state"]),
-                          child: createCustomText(
-                            weight: FontWeight.w400,
-                            color: reportColors(list[index]["state"]) == const Color(0xffffffff) ? Colors.black : Colors.white,
-                            text: list[index]["state"],
-                          ),
-                        ),
-                      )
-                      // 상태
-                    ],
-                  ),
-                ],
-              ),
-              //메세지
-              createCustomText(
-                padding: 16.0,
-                size: 12.0,
-                text: "* ${list[index]["message"]}",
-              ),
-              if (list.length != (index + 1))
-                Container(
-                  color: Colors.grey,
-                  height: 1,
-                  width: MediaQuery.of(context).size.width,
-                )
-            ],
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
-Color reportColors(String state) {
-  Color color = const Color(0xffffffff);
-  switch (state) {
-    case "신고발생":
-      color = const Color(0xffffc107);
-      break;
-    case "신고대기":
-      color = const Color(0xffffc107);
-      break;
-    case "신고접수":
-      color = const Color(0xffd84315);
-      break;
-    case "신고제외":
-      color = const Color(0xff9e9e9e);
-      break;
-    case "과태료대상":
-      color = const Color(0xffbf360c);
-      break;
-  }
-  return color;
-}

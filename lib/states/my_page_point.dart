@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/controllers/login_controller.dart';
+import 'package:illegalparking_app/controllers/my_page_controller.dart';
+import 'package:illegalparking_app/models/result_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
@@ -12,157 +17,177 @@ class MyPagePoint extends StatefulWidget {
 }
 
 class _MyPagePointState extends State<MyPagePoint> {
-  List testList = [
-    {
-      "point": "+2,000",
-      "message": "나주시로 부터 포상금 2,000포인트 지급되었습니다.",
-      "time": getDateToStringForAll(getNow()),
-    },
-    {
-      "point": "-4,500",
-      "message": "스타벅스 커피 교환권으로 4500포인트를 사용하셨습니다.",
-      "time": "2020-10-04 14:23",
-    },
-    {
-      "point": "+5,000",
-      "message": "광양시로 부터 포상금 5,000포인트 제공되었습니다.",
-      "time": "2022-09-30 10:09",
-    },
-    {
-      "point": "+500",
-      "message": "웰컴 포인트 5,000포인트 제공되었습니다.",
-      "time": "2022-09-27 12:03",
-    },
-    {
-      "point": "+2000",
-      "message": "나주시로 부터 포상금 2,000포인트 지급되었습니다.",
-      "time": "2022-09-24 11:33",
-    },
-  ];
+  final loginController = Get.put(LoginController());
+  final myPageController = Get.put(MyPageController());
 
-  List pointList = [
-    {
-      "image": "assets/noimage.jpg",
-      "gift": "스타벅스 아메리카노 교환권",
-      "point": "4,500",
-      "type": "모바일상품권",
-    },
-    {
-      "image": "assets/noimage.jpg",
-      "gift": "베스킨라빈스 아이스크림 교환권",
-      "point": "10,500",
-      "type": "모바일상품권",
-    },
-  ];
+  List<dynamic> pointInfoList = [];
+
+  List<dynamic> productList = [];
+
+  Color _setPointColor(String pointType) {
+    if (pointType == "PLUS") {
+      return Colors.blue;
+    } else {
+      return Colors.red;
+    }
+  }
+
+  String _setPointValue(String pointType, int value) {
+    if (pointType == "PLUS") {
+      return "+${value.toString()}";
+    } else {
+      return "-${value.toString()}";
+    }
+  }
+
+  String _setPointContent(String pointType, String locationType, String productName, int point) {
+    if (pointType == "PLUS") {
+      return "$locationType로 부터 포상금 ${point.toString()}포인트제공되었습니다.";
+    } else {
+      return "-$productName으로 ${point.toString()}를 사용하셨습니다.";
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    requestPoint(2).then((pointListInfo) => Log.debug(" result = ${pointListInfo.pointInfos[0].toJson()}"));
+    requestPoint(Env.USER_SEQ!).then((pointListInfo) {
+      setState(() {
+        for (int i = 0; i < pointListInfo.pointInfos.length; i++) {
+          pointInfoList.add(pointListInfo.pointInfos[i]);
+        }
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: createCustomText(
-          color: Colors.white,
-          text: "내 포인트",
+    return WillPopScope(
+      onWillPop: () {
+        loginController.changeRealPage(2);
+        return Future(() => false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          leading: Material(
+            color: Colors.blue,
+            child: InkWell(
+              onTap: () {
+                loginController.changeRealPage(2);
+              },
+              child: const Icon(
+                Icons.chevron_left,
+                color: Colors.black,
+                size: 40,
+              ),
+            ),
+          ),
+          title: createCustomText(
+            color: Colors.white,
+            text: "내 포인트",
+          ),
         ),
-      ),
-      body: ListView(
-        shrinkWrap: true,
-        children: [
-          // 현재 포인트
-          createMypageCard(
-            widgetList: <Widget>[
-              createCustomText(
-                weight: FontWeight.w400,
-                text: "현재 나의 포인트",
-              ),
-              const Spacer(),
-              createCustomText(
-                padding: 0.0,
-                size: 32.0,
-                text: "3000",
-              ),
-              createCustomText(
-                padding: 0.0,
-                weight: FontWeight.w400,
-                text: "P",
-              ),
-            ],
-          ),
-          createMypageCard(
-            route: () {
-              _showPointDialog();
-              requestProductList(2).then((productListInfo) => Log.debug("${productListInfo.productInfos[0].toJson()}"));
-            },
-            widgetList: <Widget>[
-              createCustomText(
-                weight: FontWeight.w400,
-                text: "포인트 사용하기",
-              ),
-              const Spacer(),
-              createCustomText(
-                padding: 0.0,
-                size: 32.0,
-                weight: FontWeight.w400,
-                text: ">",
-              ),
-            ],
-          ),
-          Card(
-            child: Wrap(
-              children: List.generate(
-                testList.length,
-                (index) => SizedBox(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            createCustomText(
-                              size: 24.0,
-                              color: testList[index]["point"].substring(0, 1) == "+" ? Colors.blue : Colors.red,
-                              text: testList[index]["point"],
-                            ),
-                            createCustomText(
-                              padding: 0.0,
-                              size: 16.0,
-                              weight: FontWeight.w400,
-                              text: testList[index]["message"],
-                            ),
-                            createCustomText(
-                              padding: 0.0,
-                              size: 12.0,
-                              weight: FontWeight.w200,
-                              text: testList[index]["time"],
-                            ),
-                          ],
+        body: ListView(
+          shrinkWrap: true,
+          children: [
+            // 현재 포인트
+            createMypageCard(
+              widgetList: <Widget>[
+                createCustomText(
+                  weight: FontWeight.w400,
+                  text: "현재 나의 포인트",
+                ),
+                const Spacer(),
+                Obx(
+                  () => createCustomText(
+                    padding: 0.0,
+                    size: 32.0,
+                    text: myPageController.currentPoint.value.toString(),
+                  ),
+                ),
+                createCustomText(
+                  padding: 0.0,
+                  weight: FontWeight.w400,
+                  text: "P",
+                ),
+              ],
+            ),
+            createMypageCard(
+              route: () {
+                requestProductList(Env.USER_SEQ!).then((productListInfo) {
+                  _showPointDialog(productListInfo);
+                  Log.debug("${productListInfo.productInfos[0].toJson()}");
+                });
+              },
+              widgetList: <Widget>[
+                createCustomText(
+                  weight: FontWeight.w400,
+                  text: "포인트 사용하기",
+                ),
+                const Spacer(),
+                createCustomText(
+                  padding: 0.0,
+                  size: 32.0,
+                  weight: FontWeight.w400,
+                  text: ">",
+                ),
+              ],
+            ),
+            Card(
+              child: Wrap(
+                children: List.generate(
+                  pointInfoList.length,
+                  (index) => SizedBox(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              createCustomText(
+                                size: 24.0,
+                                color: _setPointColor(pointInfoList[index].pointType),
+                                text: _setPointValue(pointInfoList[index].pointType, pointInfoList[index].value),
+                              ),
+                              createCustomText(
+                                padding: 0.0,
+                                size: 16.0,
+                                weight: FontWeight.w400,
+                                text: _setPointContent(pointInfoList[index].pointType, pointInfoList[index].locationType, pointInfoList[index].productName, pointInfoList[index].value),
+                              ),
+                              createCustomText(
+                                padding: 0.0,
+                                size: 12.0,
+                                weight: FontWeight.w200,
+                                text: pointInfoList[index].regDt,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      if (testList.length != (index + 1))
-                        Container(
-                          color: Colors.grey,
-                          height: 1,
-                          width: MediaQuery.of(context).size.width,
-                        )
-                    ],
+                        if (pointInfoList.length != (index + 1))
+                          Container(
+                            color: Colors.grey,
+                            height: 1,
+                            width: MediaQuery.of(context).size.width,
+                          )
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
 
-  _showPointDialog() {
+  _showPointDialog(ProductListInfo productListInfo) {
+    productList = productListInfo.productInfos;
     showCustomDialog(
       context: context,
       title: "포인트 사용하기",
@@ -171,11 +196,11 @@ class _MyPagePointState extends State<MyPagePoint> {
         child: ListView(
           shrinkWrap: true,
           children: List.generate(
-            pointList.length,
+            productList.length,
             (index) => Material(
               child: InkWell(
                 onTap: () {
-                  _showGiftDialog(pointList[index]);
+                  _showGiftDialog(productList[index]);
                 },
                 child: Column(
                   children: [
@@ -185,11 +210,11 @@ class _MyPagePointState extends State<MyPagePoint> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Image(
-                            height: 80,
-                            width: 80,
-                            image: AssetImage("assets/noimage.jpg"),
-                          ),
-                          Spacer(),
+                              height: 80,
+                              width: 80,
+                              // image: AssetImage("assets/noimage.jpg"),
+                              image: NetworkImage("http://49.50.166.205:8090/${productList[index].thumbnail}")),
+                          const Spacer(),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
@@ -197,7 +222,7 @@ class _MyPagePointState extends State<MyPagePoint> {
                                 padding: 0.0,
                                 size: 14.0,
                                 weight: FontWeight.w400,
-                                text: pointList[index]["gift"],
+                                text: "${productList[index].brandType} ${productList[index].productName} 교환권",
                               ),
                               // 포인트
                               Row(
@@ -206,7 +231,7 @@ class _MyPagePointState extends State<MyPagePoint> {
                                   createCustomText(
                                     padding: 0.0,
                                     size: 18.0,
-                                    text: pointList[index]["point"],
+                                    text: productList[index].pointValue.toString(),
                                   ),
                                   createCustomText(
                                     padding: 0.0,
@@ -220,14 +245,14 @@ class _MyPagePointState extends State<MyPagePoint> {
                                 padding: 0.0,
                                 size: 12.0,
                                 weight: FontWeight.w200,
-                                text: pointList[index]["type"],
+                                text: "모바일상품권",
                               ),
                             ],
                           ),
                         ],
                       ),
                     ),
-                    if (pointList.length != (index + 1))
+                    if (productList.length != (index + 1))
                       Container(
                         color: Colors.grey,
                         height: 1,
@@ -243,7 +268,8 @@ class _MyPagePointState extends State<MyPagePoint> {
     );
   }
 
-  _showGiftDialog(dynamic object) {
+  _showGiftDialog(dynamic productInfo) {
+    int balancePointValue = (myPageController.currentPoint.value - productInfo.pointValue).toInt();
     showCustomDialog(
       context: context,
       title: "상품 신청하기",
@@ -257,10 +283,8 @@ class _MyPagePointState extends State<MyPagePoint> {
                 child: Column(
                   children: [
                     Image(
-                      image: AssetImage(
-                        object["image"],
-                      ),
-                    ),
+                        // image: AssetImage(productInfo["image"]),),
+                        image: NetworkImage("http://49.50.166.205:8090/${productInfo.thumbnail}")),
                     // 상품권 정보
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -269,7 +293,7 @@ class _MyPagePointState extends State<MyPagePoint> {
                           padding: 2.0,
                           size: 14.0,
                           weight: FontWeight.w400,
-                          text: object["gift"],
+                          text: "${productInfo.brandType} ${productInfo.productName} 교환권",
                         ),
                         // 포인트
                         Row(
@@ -279,7 +303,7 @@ class _MyPagePointState extends State<MyPagePoint> {
                             createCustomText(
                               padding: 0.0,
                               size: 18.0,
-                              text: object["point"],
+                              text: productInfo.pointValue.toString(),
                             ),
                             createCustomText(
                               padding: 0.0,
@@ -293,7 +317,7 @@ class _MyPagePointState extends State<MyPagePoint> {
                           padding: 2.0,
                           size: 12.0,
                           weight: FontWeight.w200,
-                          text: object["type"],
+                          text: "모바일상품권",
                         ),
                       ],
                     ),
@@ -308,7 +332,7 @@ class _MyPagePointState extends State<MyPagePoint> {
                             padding: 2.0,
                             size: 14.0,
                             weight: FontWeight.w400,
-                            text: "보낼곳: 010-1234-4568",
+                            text: "보낼곳: ${Env.USER_PHONE_NUMBER}",
                           ),
                           createCustomText(
                             padding: 2.0,
@@ -320,7 +344,7 @@ class _MyPagePointState extends State<MyPagePoint> {
                             padding: 2.0,
                             size: 14.0,
                             weight: FontWeight.w400,
-                            text: "상품형태:${object["type"]}",
+                            text: "상품형태: 모바일상품권",
                           ),
                         ],
                       ),
@@ -330,9 +354,9 @@ class _MyPagePointState extends State<MyPagePoint> {
                       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                       child: Column(
                         children: [
-                          _createPointPadding(text: "현재 포인트", point: "9000"),
-                          _createPointPadding(text: "사용 포인트", point: "4500"),
-                          _createPointPadding(text: "사용후 잔액", point: "4500"),
+                          _createPointPadding(text: "현재 포인트", point: myPageController.currentPoint.value.toString()),
+                          _createPointPadding(text: "사용 포인트", point: productInfo.pointValue.toString()),
+                          _createPointPadding(text: "사용후 잔액", point: (myPageController.currentPoint.value - productInfo.pointValue).toString()),
                         ],
                       ),
                     ),
@@ -340,18 +364,21 @@ class _MyPagePointState extends State<MyPagePoint> {
                     createElevatedButton(
                         padding: 24.0,
                         text: "상품신청",
-                        function: () {
-                          requestProductBuy(2, 1, 0).then((productBuyInfo) {
-                            if(productBuyInfo.success) {
-                              // 등록 알림 메시지
-                              Log.debug(productBuyInfo.data);
-                              // Navigator.pop(context);
-                            } else {
-                              // 실패 알림 메시지.... 
-                              Log.debug(productBuyInfo.message);
-                            }
-                          });
-                        }),
+                        function: balancePointValue < 0
+                            ? null
+                            : () {
+                                requestProductBuy(Env.USER_SEQ!, productInfo.productSeq, balancePointValue).then((productBuyInfo) {
+                                  if (productBuyInfo.success) {
+                                    // 등록 알림 메시지
+                                    Log.debug(productBuyInfo.data);
+                                    myPageController.setCurrentPotin(balancePointValue);
+                                    // Navigator.pop(context);
+                                  } else {
+                                    // 실패 알림 메시지....
+                                    Log.debug(productBuyInfo.message);
+                                  }
+                                });
+                              }),
                   ],
                 ),
               ),

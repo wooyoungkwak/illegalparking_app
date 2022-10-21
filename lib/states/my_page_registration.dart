@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/my_page_controller.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 
@@ -16,12 +17,33 @@ class MyPageRegistration extends StatefulWidget {
 
 class _MyPageRegistrationState extends State<MyPageRegistration> {
   final controller = Get.put(MyPageController());
+  final loginController = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () {
+        loginController.changeRealPage(2);
+        return Future(() => false);
+      },
+      child: Scaffold(
         appBar: AppBar(
           title: const Text("내차등록"),
+          centerTitle: false,
+          automaticallyImplyLeading: false,
+          leading: Material(
+            color: Colors.blue,
+            child: InkWell(
+              onTap: () {
+                loginController.changeRealPage(2);
+              },
+              child: const Icon(
+                Icons.chevron_left,
+                color: Colors.black,
+                size: 40,
+              ),
+            ),
+          ),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -42,13 +64,15 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
                             Navigator.pop(context);
                             controller.getCertifiedVehicle();
                           } else {
-                            // TODO : 등록 실패 알림 
-                            Log.debug( " message : ${defaultInfo.message} ");
+                            // TODO : 등록 실패 알림
+                            Log.debug(" message : ${defaultInfo.message} ");
                           }
                         });
                       })
                 ],
               )),
-        ));
+        ),
+      ),
+    );
   }
 }
