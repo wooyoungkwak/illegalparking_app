@@ -255,10 +255,18 @@ class _WebviewPageState extends State<WebviewPage> {
             if (text == "길안내") {
               print("네이버지도");
               if (Platform.isIOS) {
-                //
                 print("ios");
-
-                //
+                Uri navermap = Uri.parse(
+                    "nmap://route/car?slat=${controller.latitude.toString()}&slng=${controller.longitude.toString()}&sname=내위치&dlat=37.5209436&dlng=127.1230074&dname=올림픽공원");
+                try {
+                  //nmap 은 canlaunchUrl 안되고  try ~ catch 만 된다
+                  await launchUrl(navermap);
+                } catch (e) {
+                  print("Can't launch $navermap");
+                  Uri url =
+                      Uri.parse('https://apps.apple.com/kr/app/id311867728');
+                  launchUrl(url);
+                }
               } else if (Platform.isAndroid) {
                 print("Android");
                 Uri navermap = Uri.parse(
