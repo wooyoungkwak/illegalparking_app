@@ -122,17 +122,18 @@ class ReportHistoryInfo {
 }
 
 class ReportResultInfo {
-  ReportResultInfo(this.carNum, this.addr, this.firstRegDt, this.secondRegDt, this.reportState, this.fileName, this.comments);
+  ReportResultInfo(this.carNum, this.addr, this.firstRegDt, this.secondRegDt, this.reportState, this.firstFileName, this.secondFileName, this.comments);
   String carNum;
   String addr;
   String firstRegDt;
   String? secondRegDt;
   String reportState;
-  String fileName;
+  String firstFileName;
+  String? secondFileName;
   List<dynamic> comments;
 
   static ReportResultInfo fromJson(Map<String, dynamic> json) {
-    return ReportResultInfo(json["carNum"], json["addr"], json["firstRegDt"], json["secondRegDt"], json["reportState"], json["fileName"], json["comments"]);
+    return ReportResultInfo(json["carNum"], json["addr"], json["firstRegDt"], json["secondRegDt"], json["reportState"], json["firstFileName"], json["secondFileName"], json["comments"]);
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
+import 'package:illegalparking_app/models/result_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
@@ -90,6 +91,12 @@ class _MyPageReportState extends State<MyPageReport> {
       setState(() {
         reportHistoryList = reportHistoryInfo.reportResultInfos;
       });
+      for (int i = 0; i < reportHistoryList.length - 1; i++) {
+        Log.debug("firstfileName $i: ${reportHistoryList[i].firstFileName}");
+        Log.debug("secondfileName $i: ${reportHistoryList[i].secondFileName}");
+        Log.debug("firstRegDt $i: ${reportHistoryList[i].firstRegDt}");
+        Log.debug("secondRegDt $i: ${reportHistoryList[i].secondRegDt}");
+      }
     });
   }
 
@@ -161,45 +168,27 @@ class _MyPageReportState extends State<MyPageReport> {
               children: [
                 Column(
                   children: [
-                    //주 정보
                     Row(
                       children: [
-                        // 이미지
-                        // const Image(height: 80, width: 80, image: AssetImage("assets/noimage.jpg")),
-                        // Network Error가 계속 발생해서 잠시 막아둠
-                        Image.network(
-                          height: 80,
-                          width: 80,
-                          fit: BoxFit.cover,
-                          "${Env.FILE_SERVER_URL}${reportHistoryList[index].fileName}",
-                          errorBuilder: (context, error, stackTrace) => Image.asset(
-                            height: 80,
-                            width: 80,
-                            fit: BoxFit.cover,
-                            "assets/noimage.jpg",
-                          ),
-                        ),
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            //주소
-                            Container(
-                              constraints: addrTextWidthLimit(reportHistoryList[index].reportState),
-                              child: createCustomText(
-                                padding: 0.0,
-                                size: 16.0,
-                                // text: _addrTextLengthLimit(reportHistoryList[index].addr),
-                                text: reportHistoryList[index].addr,
-                              ),
+                            _createReportInfo(
+                              reportHistoryList[index].firstFileName,
+                              reportHistoryList[index].firstRegDt,
+                              reportHistoryList[index].addr,
+                              reportHistoryList[index].reportState,
                             ),
-                            //시간
-                            createCustomText(
-                              padding: 0.0,
-                              size: 12.0,
-                              text: reportHistoryList[index].firstRegDt,
-                            ),
+                            // 두 번재 이미지, 주소, 사진
+                            if (reportHistoryList[index].secondFileName != null && reportHistoryList[index].secondRegDt != null)
+                              _createReportInfo(
+                                reportHistoryList[index].secondFileName,
+                                reportHistoryList[index].secondRegDt,
+                                reportHistoryList[index].addr,
+                                reportHistoryList[index].reportState,
+                              )
                           ],
                         ),
+
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -240,6 +229,53 @@ class _MyPageReportState extends State<MyPageReport> {
           ),
         ),
       ),
+    );
+  }
+
+  Row _createReportInfo(String fileName, String regDt, String addr, String reportState) {
+    return Row(
+      // 이미지
+      // const Image(height: 80, width: 80, image: AssetImage("assets/noimage.jpg")),
+      // Network Error가 계속 발생해서 잠시 막아둠
+      children: [
+        Container(
+          width: 80,
+          height: 80,
+          padding: const EdgeInsets.all(8.0),
+          child: Image.network(
+            height: 70,
+            width: 70,
+            fit: BoxFit.none,
+            "${Env.FILE_SERVER_URL}$fileName",
+            errorBuilder: (context, error, stackTrace) => Image.asset(
+              height: 80,
+              width: 80,
+              fit: BoxFit.cover,
+              "assets/noimage.jpg",
+            ),
+          ),
+        ),
+        //주소 및 시간
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              constraints: addrTextWidthLimit(reportState),
+              child: createCustomText(
+                padding: 0.0,
+                size: 16.0,
+                // text: _addrTextLengthLimit(reportHistoryList[index].addr),
+                text: addr,
+              ),
+            ),
+            createCustomText(
+              padding: 0.0,
+              size: 12.0,
+              text: regDt,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

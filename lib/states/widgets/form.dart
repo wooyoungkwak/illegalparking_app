@@ -47,6 +47,7 @@ Padding createTextFormField({
       obscureText: obscureText ?? false,
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
+        suffixText: "@teraenergy.co.kr",
         labelText: labelText,
         hintText: hintText,
         helperText: (controller?.text != "") && (helperText != null) ? helperText : null,
