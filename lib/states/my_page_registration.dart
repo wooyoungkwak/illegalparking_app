@@ -24,7 +24,7 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
   final carGradeController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String selectedValue = "소형";
+  String carGradeselected = "소형";
 
   List<DropdownMenuItem<String>> get dropDownItems {
     List<DropdownMenuItem<String>> menuItems = [
@@ -121,31 +121,27 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
                           padding: EdgeInsets.only(top: 16.0, left: 10.0, right: 10.0, bottom: 8.0),
                           child: Text("차량 번호를 입력해 주세요"),
                         ),
-                        // createTextFormField(hintText: "쏘나타", controller: carNameController),
-                        TextFormField(
-                          onSaved: (val) => carName = val!,
-                          decoration: InputDecoration(helperText: "쏘나타", labelText: "차종"),
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return "차종을 입력해주세요";
-                            }
-                          },
-                        ),
+                        createTextFormField(hintText: "쏘나타", controller: carNameController, validation: _carNameValidator),
                         Container(
                           padding: const EdgeInsets.all(8.0),
                           width: double.infinity,
                           child: DropdownButton(
                               isExpanded: true,
-                              value: selectedValue,
+                              value: carGradeselected,
                               items: dropDownItems,
                               onChanged: (value) {
                                 setState(() {
-                                  selectedValue = value!;
+                                  carGradeselected = value!;
                                 });
                               }),
                         ),
-                        createElevatedButton(text: "완료", function: () {}),
+                        createElevatedButton(
+                            text: "완료",
+                            function: () {
+                              requestCarRegister(Env.USER_SEQ!, carNumController.text, carNameController.text, carGradeselected).then((defaultInfo) {
+                                Log.debug("requestCarRegister result : ${defaultInfo.message}");
+                              });
+                            }),
                       ],
                     ),
                   ),
@@ -161,5 +157,13 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
     setState(() {
       _formChanged = true;
     });
+  }
+
+  String? _carNameValidator(String? text) {
+    if (text!.isEmpty) {
+      return "차종을 입력해주세요";
+    }
+    // RegExp(r'[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]')
+    return null;
   }
 }

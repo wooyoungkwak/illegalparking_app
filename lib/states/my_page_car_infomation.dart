@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
+import 'package:illegalparking_app/controllers/my_page_controller.dart';
 import 'package:illegalparking_app/models/result_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
@@ -17,6 +18,7 @@ class MyPageCarInfomatino extends StatefulWidget {
 
 class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
   final loginController = Get.put(LoginController());
+  final myPageController = Get.put(MyPageController());
 
   bool checkedAlram = false;
   List<dynamic> alarmInfoList = [];
@@ -108,8 +110,8 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const Image(
-                            image: AssetImage("assets/testVehicle.jpg"),
+                          Image(
+                            image: carGradeImage(myPageController.carLevel),
                             height: 100,
                             width: 100,
                           ),
@@ -184,16 +186,21 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                         // 이미지
                         // const Image(height: 80, width: 80, image: AssetImage("assets/noimage.jpg")),
                         // Network Error가 계속 발생해서 잠시 막아둠
-                        Image.network(
-                          height: 80,
+                        Container(
                           width: 80,
-                          fit: BoxFit.cover,
-                          "${Env.FILE_SERVER_URL}${alarmInfoList[index].fileName}",
-                          errorBuilder: (context, error, stackTrace) => Image.asset(
-                            height: 80,
-                            width: 80,
-                            fit: BoxFit.cover,
-                            "assets/noimage.jpg",
+                          height: 80,
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.network(
+                            "${Env.FILE_SERVER_URL}${alarmInfoList[index].fileName}",
+                            height: 70,
+                            width: 70,
+                            fit: BoxFit.none,
+                            errorBuilder: (context, error, stackTrace) => Image.asset(
+                              height: 80,
+                              width: 80,
+                              fit: BoxFit.cover,
+                              "assets/noimage.jpg",
+                            ),
                           ),
                         ),
                         Column(
@@ -201,7 +208,7 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                           children: [
                             //주소
                             Container(
-                              constraints: addrTextWidthLimit(alarmInfoList[index].stateType),
+                              constraints: addrTextWidthLimit(alarmInfoList[index].stateType, context),
                               child: createCustomText(
                                 padding: 0.0,
                                 size: 16.0,

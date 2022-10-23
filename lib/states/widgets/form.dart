@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 
 Padding createCustomText({
   String? text,
@@ -232,9 +233,30 @@ Color reportColors(String state) {
 }
 
 // 신고이력, 내차정보 관련
-BoxConstraints addrTextWidthLimit(String state) {
+BoxConstraints addrTextWidthLimit(String state, BuildContext context) {
+  double appWidthSize = MediaQuery.of(context).size.width;
+  Log.debug("appWidthSize : $appWidthSize");
   if (state.length > 5) {
-    return const BoxConstraints(maxWidth: 198); // 4글자 : 218, 5글자 : 198
+    return BoxConstraints(maxWidth: appWidthSize - 212.6); // 4글자 : 218, 5글자 : 198
   }
-  return const BoxConstraints(maxWidth: 218);
+  return BoxConstraints(maxWidth: appWidthSize - 193);
+}
+
+// 차종별 이미지
+ImageProvider<Object> carGradeImage(String? carGrade) {
+  String imagePath = "assets/";
+  switch (carGrade) {
+    case "소형":
+      return AssetImage("${imagePath}segment_subcompact.jpg");
+    case "중형":
+      return AssetImage("${imagePath}segment_mid.jpg");
+    case "SUV":
+      return AssetImage("${imagePath}segment_suv.jpg");
+    case "트럭":
+      return AssetImage("${imagePath}segment_truck.jpg");
+    case "중장비":
+      return AssetImage("${imagePath}segment_equipment.jpg");
+  }
+
+  return const AssetImage("assets/testVehicle.jpg");
 }

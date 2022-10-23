@@ -260,7 +260,7 @@ class _MyPageReportState extends State<MyPageReport> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              constraints: addrTextWidthLimit(reportState),
+              constraints: addrTextWidthLimit(reportState, context),
               child: createCustomText(
                 padding: 0.0,
                 size: 16.0,

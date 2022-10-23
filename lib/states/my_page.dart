@@ -24,7 +24,7 @@ class _MyPageState extends State<MyPage> {
 
   late List<NoticeInfo> noticeList = [];
   late String carName;
-  late String carLevel;
+  late String carLevel = myPagecontroller.carLevel;
   String? carNum;
   late String reportCount = "0";
   late String currentPoint = "0";
@@ -33,6 +33,8 @@ class _MyPageState extends State<MyPage> {
   void initState() {
     super.initState();
     requestMyPage(Env.USER_SEQ!).then((myPageInfo) {
+      Log.debug("carLevel : ${myPageInfo.carLevel}");
+      myPagecontroller.setCarLevel(myPageInfo.carLevel);
       setState(() {
         // 차량 정보
         if (myPageInfo.carNum != null) {
@@ -111,8 +113,8 @@ class _MyPageState extends State<MyPage> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Image(
-                                      image: AssetImage("assets/testVehicle.jpg"),
+                                    Image(
+                                      image: carGradeImage(carLevel),
                                       height: 100,
                                       width: 100,
                                     ),
