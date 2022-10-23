@@ -94,21 +94,25 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      if (_cameraController == null) {
-        Log.debug("@@@@@@@@@@@@@@카메라 재 활성화@@@@@@@@@@@");
-        _cameraController = CameraController(
-          widget.cameraDescription == MaskForCameraViewCameraDescription.rear ? _cameras!.first : _cameras!.last,
-          ResolutionPreset.high,
-          enableAudio: false,
-        );
-      }
-      _cameraController!.initialize().then((_) async {
-        if (!mounted) {
-          return;
+    try {
+      if (state == AppLifecycleState.resumed) {
+        if (_cameraController == null) {
+          Log.debug("@@@@@@@@@@@@@@카메라 재 활성화@@@@@@@@@@@");
+          _cameraController = CameraController(
+            widget.cameraDescription == MaskForCameraViewCameraDescription.rear ? _cameras!.first : _cameras!.last,
+            ResolutionPreset.high,
+            enableAudio: false,
+          );
         }
-        setState(() {});
-      });
+        _cameraController!.initialize().then((_) async {
+          if (!mounted) {
+            return;
+          }
+          setState(() {});
+        });
+      }
+    } catch (e) {
+      throw Exception("카메라 에러");
     }
     Log.debug("##########state : $state");
   }
