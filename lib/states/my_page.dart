@@ -216,12 +216,13 @@ class _MyPageState extends State<MyPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // 제목(subject)
                         Padding(
                           padding: const EdgeInsets.only(
-                            top: 16.0,
+                            top: 8.0,
                             left: 16.0,
                             right: 16.0,
-                            bottom: 8.0,
+                            bottom: 4.0,
                           ),
                           child: Row(
                             children: [
@@ -235,28 +236,31 @@ class _MyPageState extends State<MyPage> {
                             ],
                           ),
                         ),
+                        // 내용(contents)
                         Padding(
                           padding: const EdgeInsets.only(
-                            top: 8.0,
+                            top: 4.0,
                             left: 16.0,
                             right: 16.0,
                           ),
                           child: createCustomText(
                             weight: FontWeight.w400,
-                            text: _textLengthValidation(noticeList[index].content!) ? noticeList[index].content! : _textSlice(noticeList[index].content!),
+                            // text: _textLengthValidation(noticeList[index].content!) ? noticeList[index].content! : _textSlice(noticeList[index].content!),
+                            text: _textSlice(noticeList[index].content!),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
-                            top: 8.0,
+                            top: 4.0,
                             left: 16.0,
                             right: 16.0,
                           ),
                           child: Row(
                             children: [
+                              // 날짜(regDt)
                               createCustomText(
                                 weight: FontWeight.w400,
-                                text: "현재시간",
+                                text: noticeList[index].regDt,
                               ),
                               const Spacer(),
                               TextButton(
@@ -449,13 +453,15 @@ class _MyPageState extends State<MyPage> {
       sliceText += textList[0].substring(0, 2 * (maxLineLength - 1));
       sliceText += "...";
     } else {
-      // 첫 째 줄은 짧고 둘째 줄 부터 긴경우
       sliceText += textList[0];
-      if (textList[1].length > maxLineLength) {
-        sliceText += "\n${textList[1].substring(0, maxLineLength)}";
-        sliceText += "...";
-      } else {
-        sliceText += "\n${textList[1]}";
+      // 첫 째 줄은 짧고 둘째 줄 부터 긴경우
+      if (textList.length > 1) {
+        if (textList[1].length > maxLineLength) {
+          sliceText += "\n${textList[1].substring(0, maxLineLength)}";
+          sliceText += "...";
+        } else {
+          sliceText += "\n${textList[1]}";
+        }
       }
     }
     return sliceText;

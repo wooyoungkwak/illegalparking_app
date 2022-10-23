@@ -213,7 +213,7 @@ class _MyPagePointState extends State<MyPagePoint> {
                               height: 80,
                               width: 80,
                               // image: AssetImage("assets/noimage.jpg"),
-                              image: NetworkImage("http://49.50.166.205:8090/${productList[index].thumbnail}")),
+                              image: NetworkImage("${Env.FILE_SERVER_URL}${productList[index].thumbnail}")),
                           const Spacer(),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
@@ -284,7 +284,7 @@ class _MyPagePointState extends State<MyPagePoint> {
                   children: [
                     Image(
                         // image: AssetImage(productInfo["image"]),),
-                        image: NetworkImage("http://49.50.166.205:8090/${productInfo.thumbnail}")),
+                        image: NetworkImage("${Env.FILE_SERVER_URL}${productInfo.thumbnail}")),
                     // 상품권 정보
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,

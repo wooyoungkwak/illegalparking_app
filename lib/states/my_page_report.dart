@@ -87,7 +87,6 @@ class _MyPageReportState extends State<MyPageReport> {
   void initState() {
     super.initState();
     requestReportHistory(Env.USER_SEQ!).then((reportHistoryInfo) {
-      Log.debug("requestReportHistory ${reportHistoryInfo.reportResultInfos[0].toString()}");
       setState(() {
         reportHistoryList = reportHistoryInfo.reportResultInfos;
       });
@@ -166,20 +165,20 @@ class _MyPageReportState extends State<MyPageReport> {
                     Row(
                       children: [
                         // 이미지
-                        const Image(height: 80, width: 80, image: AssetImage("assets/noimage.jpg")),
+                        // const Image(height: 80, width: 80, image: AssetImage("assets/noimage.jpg")),
                         // Network Error가 계속 발생해서 잠시 막아둠
-                        // Image.network(
-                        //   height: 80,
-                        //   width: 80,
-                        //   fit: BoxFit.cover,
-                        //   "${Env.FILE_SERVER_URL}${reportHistoryList[index].fileName}",
-                        //   errorBuilder: (context, error, stackTrace) => Image.asset(
-                        //     height: 80,
-                        //     width: 80,
-                        //     fit: BoxFit.cover,
-                        //     "assets/noimage.jpg",
-                        //   ),
-                        // ),
+                        Image.network(
+                          height: 80,
+                          width: 80,
+                          fit: BoxFit.cover,
+                          "${Env.FILE_SERVER_URL}${reportHistoryList[index].fileName}",
+                          errorBuilder: (context, error, stackTrace) => Image.asset(
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.cover,
+                            "assets/noimage.jpg",
+                          ),
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

@@ -121,7 +121,7 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                               Switch(
                                   value: checkedAlram,
                                   onChanged: (value) {
-                                    requestMyCarAlarm(2, "123가1234", value).then((defaultInfo) {
+                                    requestMyCarAlarm(2, Env.USER_CAR_NUMBER!, value).then((defaultInfo) {
                                       if (defaultInfo.success) {
                                         setState(() {
                                           checkedAlram = value;
@@ -182,20 +182,20 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                     Row(
                       children: [
                         // 이미지
-                        const Image(height: 80, width: 80, image: AssetImage("assets/noimage.jpg")),
+                        // const Image(height: 80, width: 80, image: AssetImage("assets/noimage.jpg")),
                         // Network Error가 계속 발생해서 잠시 막아둠
-                        // Image.network(
-                        //   height: 80,
-                        //   width: 80,
-                        //   fit: BoxFit.cover,
-                        //   "${Env.FILE_SERVER_URL}${alarmInfoList[index].fileName}",
-                        //   errorBuilder: (context, error, stackTrace) => Image.asset(
-                        //     height: 80,
-                        //     width: 80,
-                        //     fit: BoxFit.cover,
-                        //     "assets/noimage.jpg",
-                        //   ),
-                        // ),
+                        Image.network(
+                          height: 80,
+                          width: 80,
+                          fit: BoxFit.cover,
+                          "${Env.FILE_SERVER_URL}${alarmInfoList[index].fileName}",
+                          errorBuilder: (context, error, stackTrace) => Image.asset(
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.cover,
+                            "assets/noimage.jpg",
+                          ),
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

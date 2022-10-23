@@ -49,11 +49,11 @@ class MapInfo {
     return data!["pmTimer"];
   }
 
-  String getPkLat() {
+  double getPkLat() {
     return data!["pkLat"];
   }
 
-  String getPkLng() {
+  double getPkLng() {
     return data!["pkLng"];
   }
 }
