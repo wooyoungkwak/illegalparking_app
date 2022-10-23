@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/map_controller.dart';
+import 'package:illegalparking_app/services/ponecall_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 
@@ -26,8 +27,7 @@ class WebviewPage extends StatefulWidget {
 
 class _WebviewPageState extends State<WebviewPage> {
   Timer? timer;
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+  final Completer<WebViewController> _controller = Completer<WebViewController>();
   final controller = Get.put(MapController());
   late WebViewController _webViewController;
   String mapInfoType = "parking";
@@ -37,6 +37,7 @@ class _WebviewPageState extends State<WebviewPage> {
   String parkingOperation = "";
   String parkingCount = "";
   String parkingTime = "";
+  String parkingPhoneNumber = "";
   String personalMobName = "";
   String personalMobPrice = "";
   String personalMobTime = "";
@@ -190,6 +191,7 @@ class _WebviewPageState extends State<WebviewPage> {
                       children: [
                         _createInfoItem(info: "주차요금", data: parkingOperation),
                         _createInfoItem(info: "운영시간", data: parkingTime),
+                        _createInfoItem(info: "전화번호", data: parkingPhoneNumber),
                         _createInfoItem(info: "주차가능면", data: parkingCount),
                       ],
                     ),
@@ -219,12 +221,10 @@ class _WebviewPageState extends State<WebviewPage> {
               Row(
                 children: [
                   Expanded(
-                    child:
-                        _createInfoButton(color: Colors.purple, text: "벨울리기"),
+                    child: _createInfoButton(color: Colors.purple, text: "벨울리기"),
                   ),
                   Expanded(
-                    child:
-                        _createInfoButton(color: Colors.purple, text: "대여하기"),
+                    child: _createInfoButton(color: Colors.purple, text: "대여하기"),
                   ),
                 ],
               ),
@@ -265,8 +265,7 @@ class _WebviewPageState extends State<WebviewPage> {
                   await launchUrl(navermap);
                 } catch (e) {
                   print("Can't launch $navermap");
-                  Uri url =
-                      Uri.parse('https://apps.apple.com/kr/app/id311867728');
+                  Uri url = Uri.parse('https://apps.apple.com/kr/app/id311867728');
                   launchUrl(url);
                 }
               } else if (Platform.isAndroid) {
@@ -278,39 +277,39 @@ class _WebviewPageState extends State<WebviewPage> {
                   await launchUrl(navermap);
                 } catch (e) {
                   print("Can't launch $navermap");
-                  Uri url =
-                      Uri.parse('market://details?id=com.nhn.android.nmap');
+                  Uri url = Uri.parse('market://details?id=com.nhn.android.nmap');
                   launchUrl(url);
                 }
               }
             } else if (text == "전화하기") {
-              print("카카오지도");
-              if (Platform.isIOS) {
-                //
-                print("ios");
-                Uri kakaomap = Uri.parse(
-                    "kakaomap://route?sp=${controller.latitude.toString()},${controller.longitude.toString()}&ep=${parkingLat.toString()},${parkingLng.toString()}&by=CAR");
-                try {
-                  await launchUrl(kakaomap);
-                } catch (e) {
-                  print("Can't launch $kakaomap");
-                  Uri url =
-                      Uri.parse('https://apps.apple.com/kr/app/id304608425');
-                  launchUrl(url);
-                }
-              } else if (Platform.isAndroid) {
-                print("Android");
-                Uri kakaomap = Uri.parse(
-                    "kakaomap://route?sp=${controller.latitude.toString()},${controller.longitude.toString()}&ep=${parkingLat.toString()},${parkingLng.toString()}&by=CAR");
-                try {
-                  await launchUrl(kakaomap);
-                } catch (e) {
-                  print("Can't launch $kakaomap");
-                  Uri url =
-                      Uri.parse('market://details?id=net.daum.android.map');
-                  launchUrl(url);
-                }
-              }
+              // print("카카오지도");
+              // if (Platform.isIOS) {
+              //   //
+              //   print("ios");
+              //   Uri kakaomap = Uri.parse(
+              //       "kakaomap://route?sp=${controller.latitude.toString()},${controller.longitude.toString()}&ep=${parkingLat.toString()},${parkingLng.toString()}&by=CAR");
+              //   try {
+              //     await launchUrl(kakaomap);
+              //   } catch (e) {
+              //     print("Can't launch $kakaomap");
+              //     Uri url =
+              //         Uri.parse('https://apps.apple.com/kr/app/id304608425');
+              //     launchUrl(url);
+              //   }
+              // } else if (Platform.isAndroid) {
+              //   print("Android");
+              //   Uri kakaomap = Uri.parse(
+              //       "kakaomap://route?sp=${controller.latitude.toString()},${controller.longitude.toString()}&ep=${parkingLat.toString()},${parkingLng.toString()}&by=CAR");
+              //   try {
+              //     await launchUrl(kakaomap);
+              //   } catch (e) {
+              //     print("Can't launch $kakaomap");
+              //     Uri url =
+              //         Uri.parse('market://details?id=net.daum.android.map');
+              //     launchUrl(url);
+              //   }
+              // }
+              makePhoneCall(parkingPhoneNumber);
             }
           },
           child: Center(
@@ -346,7 +345,8 @@ class _WebviewPageState extends State<WebviewPage> {
                 parkingPrice = mapInfo.getPkPrice();
                 parkingOperation = mapInfo.getPkOper();
                 parkingCount = mapInfo.getPkCount().toString();
-                parkingTime = mapInfo.getPkPhone();
+                parkingTime = mapInfo.getPkTime();
+                parkingPhoneNumber = mapInfo.getPkPhone();
                 parkingLat = mapInfo.getPkLat();
                 parkingLng = mapInfo.getPkLng();
               });
@@ -364,6 +364,7 @@ class _WebviewPageState extends State<WebviewPage> {
                 parkingOperation = "";
                 parkingCount = "";
                 parkingTime = "";
+                parkingPhoneNumber = "";
                 personalMobName = "";
                 personalMobPrice = "";
               });
@@ -376,12 +377,10 @@ class _WebviewPageState extends State<WebviewPage> {
 
   void _sendGPS() {
     searchAddress().then((position) {
-      Log.debug(
-          "currentPosition X : ${position.latitude}\ncurrentPosition Y :${position.longitude}");
+      Log.debug("currentPosition X : ${position.latitude}\ncurrentPosition Y :${position.longitude}");
       controller.setLatitude(position.latitude);
       controller.setLongitude(position.longitude);
-      _webViewController.runJavascript(
-          "appToGps(${position.latitude}, ${position.longitude})");
+      _webViewController.runJavascript("appToGps(${position.latitude}, ${position.longitude})");
     });
   }
 }

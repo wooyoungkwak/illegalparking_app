@@ -34,7 +34,7 @@ class MapInfo {
   }
 
   String getPkTime() {
-    return data!["pkTime"];
+    return data!["pkTime"] ?? "";
   }
 
   String getPmName() {
