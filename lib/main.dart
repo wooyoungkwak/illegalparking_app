@@ -36,11 +36,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: Env.isDebug
-          ? "/Firstuse"
-          : Env.BOOL_FIRSTUSE == true
-              ? "/login"
-              : "/Firstuse", // 정식버전시
+      initialRoute: Env.BOOL_FIRSTUSE == true ? "/login" : "/Firstuse",
       // initialRoute: "/login",
       routes: <String, WidgetBuilder>{
         "/Firstuse": (BuildContext context) => Firstuse(),

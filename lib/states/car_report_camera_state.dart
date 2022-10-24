@@ -26,7 +26,7 @@ class _ReportcameraState extends State<Reportcamera> {
 
   @override
   void dispose() {
-    // cameradipose();
+    cameradipose();
     super.dispose();
   }
 

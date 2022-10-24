@@ -43,7 +43,7 @@ class Firstuse extends StatelessWidget {
 
   Container initContainerBytitle() {
     return Container(
-      padding: EdgeInsets.all(30.0),
+      padding: EdgeInsets.symmetric(horizontal: 30.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -97,7 +97,7 @@ class Firstuse extends StatelessWidget {
           color: color,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 15),
+            padding: EdgeInsets.symmetric(vertical: 12),
             child: Center(
                 child: CustomText(
               text: text,

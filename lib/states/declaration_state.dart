@@ -12,6 +12,7 @@ import 'package:illegalparking_app/states/car_report_camera_state.dart';
 import 'package:illegalparking_app/services/save_image_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
@@ -23,6 +24,7 @@ class Declaration extends StatefulWidget {
 }
 
 class _DeclarationState extends State<Declaration> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ReportController controller = Get.put(ReportController());
   final ScrollController _scrollController = ScrollController();
   late TextEditingController _numberplateContoroller;
@@ -115,7 +117,17 @@ class _DeclarationState extends State<Declaration> {
                           const SizedBox(
                             width: 10,
                           ),
-                          SizedBox(width: 140, height: 40, child: Card(child: _createTextFormField(_numberplateContoroller))),
+                          SizedBox(
+                            width: 140,
+                            height: 40,
+                            child: Form(
+                              key: _formKey,
+                              child: Card(
+                                // child: _createTextFormField(_numberplateContoroller),
+                                child: _createTextFormField(_numberplateContoroller),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 10),
@@ -236,8 +248,8 @@ class _DeclarationState extends State<Declaration> {
     return SingleChildScrollView(child: Container(child: widget));
   }
 
-  TextField _createTextFormField(TextEditingController controller) {
-    return TextField(
+  TextFormField _createTextFormField(TextEditingController controller) {
+    return TextFormField(
         textAlign: TextAlign.start,
         controller: controller,
         style: const TextStyle(color: Colors.black, fontSize: 12),
@@ -247,7 +259,22 @@ class _DeclarationState extends State<Declaration> {
           fillColor: Colors.white,
           hintText: '번호판 입력란',
           hintStyle: TextStyle(color: Colors.black),
-        ));
+        ),
+        validator: (text) => passwordValidator(text));
+  }
+
+  String? passwordValidator(String? text) {
+    final validSpecial = RegExp(r'^[0-9]{2,3}[가-힣]{1}[0-9]{4}$');
+
+    if (text!.isEmpty) {
+      return "차량번호를 입력해주세요";
+    }
+
+    if (!validSpecial.hasMatch(text)) {
+      return "차량번호 형식이 다릅니다. ";
+    }
+
+    return null;
   }
 
   WillPopScope _createWillPopScope(Widget widget) {
