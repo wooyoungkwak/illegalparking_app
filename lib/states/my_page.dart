@@ -33,7 +33,6 @@ class _MyPageState extends State<MyPage> {
   void initState() {
     super.initState();
     requestMyPage(Env.USER_SEQ!).then((myPageInfo) {
-      Log.debug("carLevel : ${myPageInfo.carLevel}");
       myPagecontroller.setCarLevel(myPageInfo.carLevel);
       setState(() {
         // 차량 정보

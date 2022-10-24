@@ -15,6 +15,8 @@ import 'package:illegalparking_app/states/webview.dart';
 
 class LoginController extends GetxController {
   static LoginController get to => Get.find();
+  bool _isBottomOpen = false;
+  bool get isBottomOpen => _isBottomOpen;
   bool _isGuestMode = false;
   bool get isGuestMode => _isGuestMode;
   final currentIndex = 0.obs;
@@ -48,9 +50,23 @@ class LoginController extends GetxController {
     update();
   }
 
+  void onBottomNav() {
+    _isBottomOpen = true;
+    update();
+  }
+
+  void offBottomNav() {
+    _isBottomOpen = false;
+    update();
+  }
+
   void changePage(int _index) {
     currentIndex.value = _index;
     currentPageIdex.value = _index;
+    if (_isBottomOpen) {
+      Get.back();
+      offBottomNav();
+    }
   }
 
   void changeRealPage(int index) {

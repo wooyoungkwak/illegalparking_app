@@ -119,7 +119,7 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
                       children: [
                         const Padding(
                           padding: EdgeInsets.only(top: 16.0, left: 10.0, right: 10.0, bottom: 8.0),
-                          child: Text("차량 번호를 입력해 주세요"),
+                          child: Text("차종을 입력해 주세요"),
                         ),
                         createTextFormField(hintText: "쏘나타", controller: carNameController, validation: _carNameValidator),
                         Container(

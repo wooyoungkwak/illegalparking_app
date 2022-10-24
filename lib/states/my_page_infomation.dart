@@ -32,6 +32,7 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
   @override
   void initState() {
     super.initState();
+    Log.debug("USER_PHOTO_NAME : $imagePath");
   }
 
   @override
@@ -155,6 +156,8 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                                 createTextFormField(
                                   labelText: "기존 비밀번호",
                                   controller: _oldPasswordController,
+                                  obscureText: true,
+                                  validation: passwordValidator,
                                 ),
                                 createElevatedButton(
                                     color: _oldPasswordValidation ? const Color(0xffd84315) : null,
@@ -176,11 +179,14 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                                   createTextFormField(
                                     labelText: "변경할 비밀번호",
                                     controller: _newPasswordController,
+                                    obscureText: true,
+                                    validation: passwordValidator,
                                   ),
                                 if (_oldPasswordValidation)
                                   createTextFormField(
                                     labelText: "변경할 비밀번호 확인",
-                                    controller: _newPasswordValidationController,
+                                    obscureText: true,
+                                    validation: passwordConfirmValidator,
                                   ),
                                 if (_oldPasswordValidation && (_newPasswordController.text == _newPasswordValidationController.text))
                                   createElevatedButton(
@@ -199,8 +205,8 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                                                 TextButton(
                                                   onPressed: () {
                                                     Navigator.pop(context, 'OK');
-                                                    Navigator.popUntil(context, ModalRoute.withName('/infomation'));
-                                                    // Navigator.pushNamed(context, '/infomation');
+                                                    Get.back();
+                                                    loginController.changeRealPage(3);
                                                   },
                                                   child: const Text('확인'),
                                                 ),
@@ -261,8 +267,35 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
     bool isExist = File(filePath).existsSync();
     if (isFilePath && isExist) {
       return FileImage(File(filePath));
+    } else if (photoName.substring(0, 6) == "assets") {
+      return AssetImage(photoName);
     } else {
       return const AssetImage("assets/noimage.jpg");
     }
+  }
+
+  String? passwordValidator(String? text) {
+    final validSpecial = RegExp(r'^[a-zA-Z0-9]{8,}$'); // 영어만
+
+    if (text!.isEmpty) {
+      return "비밀번호를 입력해 주세요";
+    }
+
+    if (!validSpecial.hasMatch(text)) {
+      return "영문, 숫자 포함 8자 이상 가능합니다. ";
+    }
+
+    return null;
+  }
+
+  String? passwordConfirmValidator(String? text) {
+    if (text!.isEmpty) {
+      return "비밀번호를 입력해 주세요";
+    }
+
+    if (_newPasswordController.text != text) {
+      return "비밀번호가 맞지 않습니다.";
+    }
+    return null;
   }
 }

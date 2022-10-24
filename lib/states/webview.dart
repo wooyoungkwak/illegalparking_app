@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/map_controller.dart';
 import 'package:illegalparking_app/services/ponecall_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
@@ -26,9 +27,12 @@ class WebviewPage extends StatefulWidget {
 }
 
 class _WebviewPageState extends State<WebviewPage> {
+  final showKey = GlobalKey();
   Timer? timer;
   final Completer<WebViewController> _controller = Completer<WebViewController>();
-  final controller = Get.put(MapController());
+  final mapController = Get.put(MapController());
+  final loginController = Get.put(LoginController());
+
   late WebViewController _webViewController;
   String mapInfoType = "parking";
   String parkingName = "";
@@ -115,6 +119,7 @@ class _WebviewPageState extends State<WebviewPage> {
   }
 
   void showBottomDialog() {
+    loginController.onBottomNav();
     showBottomSheet(
       context: context,
       builder: buildBottomSheet,
@@ -123,6 +128,7 @@ class _WebviewPageState extends State<WebviewPage> {
 
   Widget buildBottomSheet(BuildContext context) {
     return GestureDetector(
+      key: showKey,
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -259,7 +265,7 @@ class _WebviewPageState extends State<WebviewPage> {
               if (Platform.isIOS) {
                 print("ios");
                 Uri navermap = Uri.parse(
-                    "nmap://route/car?slat=${controller.latitude.toString()}&slng=${controller.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=${parkingName}");
+                    "nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=${parkingName}");
                 try {
                   //nmap 은 canlaunchUrl 안되고  try ~ catch 만 된다
                   await launchUrl(navermap);
@@ -271,7 +277,7 @@ class _WebviewPageState extends State<WebviewPage> {
               } else if (Platform.isAndroid) {
                 print("Android");
                 Uri navermap = Uri.parse(
-                    "nmap://route/car?slat=${controller.latitude.toString()}&slng=${controller.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=${parkingName}");
+                    "nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=${parkingName}");
                 try {
                   //nmap 은 canlaunchUrl 안되고  try ~ catch 만 된다
                   await launchUrl(navermap);
@@ -287,7 +293,7 @@ class _WebviewPageState extends State<WebviewPage> {
               //   //
               //   print("ios");
               //   Uri kakaomap = Uri.parse(
-              //       "kakaomap://route?sp=${controller.latitude.toString()},${controller.longitude.toString()}&ep=${parkingLat.toString()},${parkingLng.toString()}&by=CAR");
+              //       "kakaomap://route?sp=${mapController.latitude.toString()},${mapController.longitude.toString()}&ep=${parkingLat.toString()},${parkingLng.toString()}&by=CAR");
               //   try {
               //     await launchUrl(kakaomap);
               //   } catch (e) {
@@ -299,7 +305,7 @@ class _WebviewPageState extends State<WebviewPage> {
               // } else if (Platform.isAndroid) {
               //   print("Android");
               //   Uri kakaomap = Uri.parse(
-              //       "kakaomap://route?sp=${controller.latitude.toString()},${controller.longitude.toString()}&ep=${parkingLat.toString()},${parkingLng.toString()}&by=CAR");
+              //       "kakaomap://route?sp=${mapController.latitude.toString()},${mapController.longitude.toString()}&ep=${parkingLat.toString()},${parkingLng.toString()}&by=CAR");
               //   try {
               //     await launchUrl(kakaomap);
               //   } catch (e) {
@@ -369,7 +375,7 @@ class _WebviewPageState extends State<WebviewPage> {
                 personalMobPrice = "";
               });
             }
-            controller.getClickedMap(true);
+            mapController.getClickedMap(true);
             showBottomDialog();
           })
     };
@@ -378,8 +384,8 @@ class _WebviewPageState extends State<WebviewPage> {
   void _sendGPS() {
     searchAddress().then((position) {
       Log.debug("currentPosition X : ${position.latitude}\ncurrentPosition Y :${position.longitude}");
-      controller.setLatitude(position.latitude);
-      controller.setLongitude(position.longitude);
+      mapController.setLatitude(position.latitude);
+      mapController.setLongitude(position.longitude);
       _webViewController.runJavascript("appToGps(${position.latitude}, ${position.longitude})");
     });
   }

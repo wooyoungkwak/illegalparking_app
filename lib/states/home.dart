@@ -35,6 +35,10 @@ class _HomeState extends State<Home> {
     return Obx(
       () => WillPopScope(
         onWillPop: () {
+          if (loginController.isBottomOpen) {
+            loginController.offBottomNav();
+            Get.back();
+          }
           loginController.changeRealPage(loginController.currentIndex.value);
           return Future(() => false);
         },

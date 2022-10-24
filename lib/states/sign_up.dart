@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/sign_up_controller.dart';
 import 'package:illegalparking_app/services/network_service.dart';
 import 'package:illegalparking_app/services/server_service.dart';
@@ -12,6 +13,7 @@ import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -22,45 +24,52 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final ScrollController _termsSummaryController = ScrollController();
   final ScrollController _termsController = ScrollController();
-  final controller = Get.put(SignUpController());
-  String authenticationSendText = "인증번호 발송";
-  int limitTime = 180;
-  bool serviceTerms = false;
-  bool sendAuthentication = false;
-  bool authVerification = true;
-  Timer? timer;
+
   final idController = TextEditingController();
   final passController = TextEditingController();
   final nameCotroller = TextEditingController();
   final phoneNumController = TextEditingController();
   final authKeyController = TextEditingController();
-  int? authNum;
+
+  final controller = Get.put(SignUpController());
+
   late String photoName;
-  bool _loginBtnEnabled = false;
+  FocusNode _idfocusNode = FocusNode();
+  String? idHelperText = "사용 가능한 아이디입니다.";
+  String? idErrorText = "사용 가능한 아이디입니다.";
+  String authenticationSendText = "인증번호 발송";
+  int limitTime = 180;
+  bool serviceTerms = false;
+  bool sendAuthentication = false;
+  bool authVerification = false;
+  bool duplicatedId = false;
+  Timer? timer;
+  int? authNum;
 
   // TODO : 캐릭터 아이콘 디자인팀에 문의
   List profileCharicterList = [
     {
       "value": false,
-      "asset": "assets/noimage.jpg",
+      "asset": "assets/profile_1.jpg",
     },
     {
       "value": false,
-      "asset": "assets/noimage.jpg",
+      "asset": "assets/profile_2.jpg",
     },
     {
       "value": false,
-      "asset": "assets/noimage.jpg",
+      "asset": "assets/profile_3.jpg",
     },
     {
       "value": false,
-      "asset": "assets/noimage.jpg",
+      "asset": "assets/profile_4.jpg",
     },
     {
       "value": false,
-      "asset": "assets/noimage.jpg",
+      "asset": "assets/profile_5.jpg",
     },
   ];
 
@@ -98,20 +107,22 @@ class _SignUpState extends State<SignUp> {
   @override
   void initState() {
     super.initState();
+    _idfocusNode.addListener(_onFocusChange);
   }
 
   @override
   void dispose() {
-    super.dispose();
     idController.dispose();
     passController.dispose();
     nameCotroller.dispose();
     phoneNumController.dispose();
     authKeyController.dispose();
-
     if (timer != null) {
       timer!.cancel();
     }
+    _idfocusNode.removeListener(_onFocusChange);
+    _idfocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -131,10 +142,15 @@ class _SignUpState extends State<SignUp> {
               // ID, PW
               createTextFormField(
                 labelText: "아이디",
-                helperText: "사용가능한 아이디 입니다.",
+                focusNode: _idfocusNode,
+                hintText: "예시) example@teraenergy.co.kr",
+                helperText: duplicatedId ? idHelperText : null,
+                errorText: duplicatedId ? idErrorText : null,
                 controller: idController,
                 validation: idValidator,
+                onChanged: idChanged,
               ),
+
               createTextFormField(
                 labelText: "패스워드",
                 helperText: "보안에 안전한 암호 입니다.",
@@ -222,8 +238,7 @@ class _SignUpState extends State<SignUp> {
                             itemCount: 1,
                             controller: _termsSummaryController,
                             itemBuilder: (BuildContext context, int index) {
-                              return const Text(
-                                  "datadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadata");
+                              return const Text(Env.USER_TERMS);
                             },
                           ),
                         ),
@@ -239,6 +254,7 @@ class _SignUpState extends State<SignUp> {
                             onChanged: (bool? value) {
                               setState(() {
                                 serviceTerms = value!;
+                                _formKey.currentState!.save();
                               });
                             },
                           ),
@@ -258,21 +274,33 @@ class _SignUpState extends State<SignUp> {
                       text: "프로필 캐릭터 선택",
                       weight: FontWeight.w400,
                     ),
-                    Row(children: List.generate(profileCharicterList.length, (index) => _createProfileCircleAvatar(list: profileCharicterList, index: index))),
+                    Row(
+                      children: List.generate(
+                        profileCharicterList.length,
+                        (index) => _createProfileCircleAvatar(
+                          list: profileCharicterList,
+                          index: index,
+                        ),
+                      ),
+                    ),
                     // 회원생성
                     createElevatedButton(
                       text: "회원생성",
-                      function: serviceTerms && _loginBtnEnabled
+                      function: serviceTerms
                           ? () {
-                              // TODO : photoName 기능 추가
-                              register(idController.text, passController.text, nameCotroller.text, phoneNumController.text, photoName).then((registerInfo) {
-                                if (registerInfo.success) {
-                                  showSignUpSuccessDialog();
-                                } else {
-                                  // TODO : 확인 해봐 ...
-                                  alertDialogByonebutton("알림", registerInfo.message!);
-                                }
-                              });
+                              if (_formKey.currentState!.validate()) {
+                                // TODO : photoName 기능 추가
+                                register(idController.text, passController.text, nameCotroller.text, phoneNumController.text, photoName).then((registerInfo) {
+                                  if (registerInfo.success) {
+                                    showSignUpSuccessDialog();
+                                  } else {
+                                    // TODO : 확인 해봐 ...
+                                    alertDialogByonebutton("알림", registerInfo.message!);
+                                  }
+                                });
+                              } else {
+                                showToast(text: "입력 사항을 확인해주세요");
+                              }
                             }
                           : null,
                     ),
@@ -313,8 +341,7 @@ class _SignUpState extends State<SignUp> {
                     itemCount: 1,
                     controller: _termsController,
                     itemBuilder: (BuildContext context, int index) {
-                      return const Text(
-                          "datadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadata");
+                      return const Text(Env.USER_TERMS);
                     },
                   ),
                 ),
@@ -364,7 +391,7 @@ class _SignUpState extends State<SignUp> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Center(
-                  child: createCustomText(text: "ID-000001"),
+                  child: createCustomText(text: idController.text),
                 ),
               ),
               Row(
@@ -437,26 +464,33 @@ class _SignUpState extends State<SignUp> {
   }
 
   String? idValidator(String? text) {
-    final validSpecial = RegExp(r'^[a-zA-Z0-9 ]+$');
+    final validEmail = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 
     if (text!.isEmpty) {
       return "아이디를 입력해 주세요";
     }
 
-    if (!validSpecial.hasMatch(text)) {
-      return "특수문자를 사용할 수 없습니다.";
+    if (!validEmail.hasMatch(text)) {
+      return "아이디를 확인해 주세요.";
     }
     return null;
   }
 
   String? passwordValidator(String? text) {
+    final validSpecial = RegExp(r'^[a-zA-Z0-9 ]+$'); // 영어만
+
     if (text!.isEmpty) {
       return "비밀번호를 입력해 주세요";
     }
 
-    if (text.length > 8) {
+    if (text.length < 8) {
       return "영문, 숫자 포함 8자 이상 가능합니다.";
     }
+
+    if (!validSpecial.hasMatch(text)) {
+      return "영문, 숫자 포함 8자 이상 가능합니다. ";
+    }
+
     return null;
   }
 
@@ -472,16 +506,63 @@ class _SignUpState extends State<SignUp> {
   }
 
   String? nameValidator(String? text) {
+    // final validSpecial = RegExp(r'^[a-zA-Z0-9 ]+$'); // 영어 및 숫자
+    final validHangle = RegExp(r'^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2,6}$');
+
     if (text!.isEmpty) {
-      return "비밀번호를 입력해 주세요";
+      return "이름을 입력해 주세요";
+    }
+
+    if (!validHangle.hasMatch(text)) {
+      return "이름은 한글 2~6자 사이 입니다.";
     }
     return null;
   }
 
   String? phoneNumValidator(String? text) {
+    // final validPhoneNum = RegExp(r'^010?([0-9]{4})([0-9]{4})$');
+    final validPhoneNum = RegExp(r'^010?([0-9]{8})$');
+
     if (text!.isEmpty) {
-      return "비밀번호를 입력해 주세요";
+      return "전화번호를 입력해 주세요";
+    }
+
+    if (!validPhoneNum.hasMatch(text)) {
+      return "전화번호를 확인해 주세요.";
     }
     return null;
+  }
+
+  void idChanged(String text) {
+    if (duplicatedId) {
+      setState(() {
+        duplicatedId = false;
+      });
+    }
+  }
+
+  void _onFocusChange() {
+    if (!_idfocusNode.hasFocus) {
+      Log.debug("중복확인");
+      duplicate(idController.text).then((value) {
+        Log.debug("duplicate : ${value.toString()}");
+
+        if (value["data"]["isExist"]) {
+          // showToast(text: "중복된 아이디 입니다.");
+          setState(() {
+            duplicatedId = true;
+            idHelperText = null;
+            idErrorText = "중복된 아이디 입니다.";
+          });
+        } else {
+          // showToast(text: "사용 가능한 아이디입니다.");
+          setState(() {
+            duplicatedId = true;
+            idHelperText = "사용 가능한 아이디입니다.";
+            idErrorText = null;
+          });
+        }
+      });
+    }
   }
 }

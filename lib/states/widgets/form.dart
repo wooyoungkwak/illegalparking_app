@@ -31,36 +31,40 @@ Padding createCustomText({
 
 Padding createTextFormField({
   GlobalKey<FormState>? formFieldKey,
+  double? padding,
   String? labelText,
   String? hintText,
   String? helperText,
-  double? padding,
+  String? errorText,
   bool? obscureText,
   TextEditingController? controller,
   Function? validation,
+  Function? onChanged,
+  FocusNode? focusNode,
 }) {
   // final text = controller!.value.text;
   return Padding(
     padding: EdgeInsets.all(padding ?? 8.0),
     child: TextFormField(
       key: formFieldKey,
+      focusNode: focusNode,
       controller: controller,
       obscureText: obscureText ?? false,
+      textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
-        suffixText: "@teraenergy.co.kr",
         labelText: labelText,
         hintText: hintText,
         helperText: (controller?.text != "") && (helperText != null) ? helperText : null,
         helperStyle: const TextStyle(
           color: Colors.blue,
         ),
+        errorText: errorText,
       ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: validation != null ? (text) => validation(text) : null,
-      onChanged: (text) {
-        labelText = text;
-      },
+      onChanged: onChanged != null ? (text) => onChanged(text) : null,
+      autofocus: true,
     ),
   );
 }

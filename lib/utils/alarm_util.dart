@@ -11,7 +11,7 @@ void showToast({String? text}) {
   Fluttertoast.showToast(
     fontSize: 13,
     msg: '   $text   ',
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.blue,
     toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.BOTTOM,
   );
