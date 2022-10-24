@@ -11,7 +11,7 @@ import 'package:illegalparking_app/states/my_page_point.dart';
 import 'package:illegalparking_app/states/my_page_registration.dart';
 import 'package:illegalparking_app/states/my_page_report.dart';
 import 'package:illegalparking_app/states/sign_up.dart';
-import 'package:illegalparking_app/states/firstuse_state.dart';
+import 'package:illegalparking_app/states/first_use_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {

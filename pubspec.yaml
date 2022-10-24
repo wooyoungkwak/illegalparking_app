@@ -90,6 +90,15 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+  fonts:
+    - family: NotoSansKR
+      fonts:
+        - asset: assets/fonts/NotoSansKR-Black.otf
+        - asset: assets/fonts/NotoSansKR-Bold.otf
+        - asset: assets/fonts/NotoSansKR-Light.otf
+        - asset: assets/fonts/NotoSansKR-Medium.otf
+        - asset: assets/fonts/NotoSansKR-Regular.otf
+        - asset: assets/fonts/NotoSansKR-Thin.otf
 
   # To add assets to your application, add an assets section, like this:
   # assets:
