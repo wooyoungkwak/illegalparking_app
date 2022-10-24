@@ -17,6 +17,16 @@ void showToast({String? text}) {
   );
 }
 
+void showErrorToast({String? text}) {
+  Fluttertoast.showToast(
+    fontSize: 13,
+    msg: '   $text   ',
+    backgroundColor: Colors.red,
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.BOTTOM,
+  );
+}
+
 void alertDialogByonebutton(String title, String text) {
   Get.dialog(
     AlertDialog(
@@ -44,7 +54,7 @@ void showSnackBar(BuildContext context, String text) {
   ));
 }
 
-void showAlertDialog(BuildContext context, {String? text, dynamic action}) {
+void showAlertDialog(BuildContext context, {String? text, VoidCallback? action}) {
   showDialog(
     context: context,
     builder: (BuildContext context) => AlertDialog(
@@ -52,15 +62,15 @@ void showAlertDialog(BuildContext context, {String? text, dynamic action}) {
       content: Text(text ?? ""),
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.pop(context, 'Cancel'),
-          child: const Text('취소'),
-        ),
-        TextButton(
           onPressed: () {
             Navigator.pop(context, 'OK');
-            action();
+            action!();
           },
           child: const Text('확인'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'Cancel'),
+          child: const Text('취소'),
         ),
       ],
     ),

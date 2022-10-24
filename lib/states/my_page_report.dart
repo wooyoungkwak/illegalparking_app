@@ -208,6 +208,7 @@ class _MyPageReportState extends State<MyPageReport> {
                 ),
                 //메세지
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: List.generate(
                     reportHistoryList[index].comments.length,
                     (commentIndex) => createCustomText(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 
 class GuestCamera extends StatefulWidget {
@@ -9,6 +11,8 @@ class GuestCamera extends StatefulWidget {
 }
 
 class _GuestCameraState extends State<GuestCamera> {
+  final loginController = Get.put(LoginController());
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -42,7 +46,9 @@ class _GuestCameraState extends State<GuestCamera> {
 
           createElevatedButton(
             text: "바로가기",
-            function: () {},
+            function: () {
+              loginController.changePage(2);
+            },
           ),
 
           // 불법주정차 신고 프로세스
@@ -54,7 +60,7 @@ class _GuestCameraState extends State<GuestCamera> {
           _createProcessItem(text: "불법주정차 단속구역 분석"),
           _createProcessItem(text: "불법주정차 단속시간 분석"),
           _createProcessItem(text: "차량번호판 활영은 필수 입니다."),
-          _createProcessItem(text: "노란색 실선 지역은 1분 이산 간격으로 신고가 한번더 닥성되어야 합니다."),
+          _createProcessItem(text: "노란색 실선 지역은 1분 이산 간격으로 신고가 한번더 작성되어야 합니다."),
           _createProcessItem(text: "노란색 점선 지역은 5분 이상 간격으로 사진이 신고가 한번 더 작성되어야 합니다."),
         ],
       ),
@@ -65,15 +71,22 @@ class _GuestCameraState extends State<GuestCamera> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(
-            Icons.fiber_manual_record_sharp,
-            size: 12.0,
+          const Padding(
+            padding: EdgeInsets.only(top: 11.0, right: 0.0),
+            child: Icon(
+              Icons.fiber_manual_record_sharp,
+              size: 12.0,
+            ),
           ),
-          createCustomText(
-            size: 16.0,
-            weight: FontWeight.w400,
-            text: text ?? "",
+          Container(
+            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 92),
+            child: createCustomText(
+              size: 16.0,
+              weight: FontWeight.w400,
+              text: text ?? "",
+            ),
           ),
         ],
       ),

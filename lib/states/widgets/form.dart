@@ -40,6 +40,7 @@ Padding createTextFormField({
   TextEditingController? controller,
   Function? validation,
   Function? onChanged,
+  Function? onSaved,
   FocusNode? focusNode,
 }) {
   // final text = controller!.value.text;
@@ -64,7 +65,7 @@ Padding createTextFormField({
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: validation != null ? (text) => validation(text) : null,
       onChanged: onChanged != null ? (text) => onChanged(text) : null,
-      autofocus: true,
+      onSaved: onSaved != null ? (text) => onSaved(text) : null,
     ),
   );
 }

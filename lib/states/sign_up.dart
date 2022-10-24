@@ -411,7 +411,7 @@ class _SignUpState extends State<SignUp> {
                 text: "로그인하기",
                 function: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, "/login");
+                  Navigator.pushNamedAndRemoveUntil(context, "/login", (route) => false);
                 },
               ),
             ],
