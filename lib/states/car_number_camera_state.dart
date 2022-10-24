@@ -24,7 +24,7 @@ class _NumbercameraState extends State<Numbercamera> {
 
   @override
   void dispose() {
-    cameradipose();
+    // cameradipose();
     super.dispose();
   }
 
@@ -58,7 +58,9 @@ class _NumbercameraState extends State<Numbercamera> {
                 // showSnackBar(context, controller.carNumber.toString());
                 // controller.carNumberwrite("tset중 문제네;;;");
                 // pd.close();
-                Get.offAll(() => const Declaration());
+
+                // Get.offAll(() => const Declaration());
+                Get.to(() => const Declaration());
 
                 // sendFile(Env.SERVER_AI_FILE_UPLOAD_URL, filelist).then((value) {
                 // try {

@@ -32,7 +32,6 @@ class _ReportcameraState extends State<Reportcamera> {
 
   @override
   Widget build(BuildContext context) {
-    Log.debug("wwwwwwwwwwwwwaaaaaaaaaaaaaaaawwwwwwwwwwwwwwaaaaaaaaaaaaa");
     final double statusBarHeight = Env.MEDIA_SIZE_PADDINGTOP!;
     return Scaffold(
       body: Stack(
@@ -57,6 +56,7 @@ class _ReportcameraState extends State<Reportcamera> {
                   Get.offAll(const Declaration());
                 } else {
                   Get.to(const Numbercamera());
+                  // Get.off(const Numbercamera());
                 }
               }),
           initContainerByOutlineButton(0, 0.95, "불법주정차 법규", context),

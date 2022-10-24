@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/services/setting_service.dart';
 import 'package:illegalparking_app/services/permission_service.dart';
 import 'package:illegalparking_app/states/home.dart';
@@ -10,17 +11,24 @@ import 'package:illegalparking_app/states/my_page_point.dart';
 import 'package:illegalparking_app/states/my_page_registration.dart';
 import 'package:illegalparking_app/states/my_page_report.dart';
 import 'package:illegalparking_app/states/sign_up.dart';
+import 'package:illegalparking_app/states/firstuse_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   callPermissions();
   cameraSetting();
   runApp(const MyApp());
+  await SharedPreferences.getInstance().then((value) {
+    Env.BOOL_FIRSTUSE = value.getBool(Env.KEY_FIRSTUSE);
+    if (Env.BOOL_FIRSTUSE == null) {
+      Env.BOOL_FIRSTUSE = false;
+    }
+  });
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -28,8 +36,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: "/login",
+      initialRoute: Env.isDebug
+          ? "/Firstuse"
+          : Env.BOOL_FIRSTUSE == true
+              ? "/login"
+              : "/Firstuse", // 정식버전시
+      // initialRoute: "/login",
       routes: <String, WidgetBuilder>{
+        "/Firstuse": (BuildContext context) => Firstuse(),
         "/login": (BuildContext context) => const Login(),
         "/sign_up": (BuildContext context) => const SignUp(),
         "/home": (BuildContext context) => const Home(),

@@ -101,4 +101,7 @@ class Env {
   static double? MEDIA_SIZE_WIDTH;
   static double? MEDIA_SIZE_DEVICEPIXELRATIO;
   static double? MEDIA_SIZE_PADDINGTOP;
+
+  static const String KEY_FIRSTUSE = "FirstUse";
+  static bool? BOOL_FIRSTUSE;
 }

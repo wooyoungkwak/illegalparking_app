@@ -96,8 +96,8 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
   void didChangeAppLifecycleState(AppLifecycleState state) {
     try {
       if (state == AppLifecycleState.resumed) {
+        Log.debug("@@@@@@@@@@@@@@카메라 재 활성화@@@@@@@@@@@");
         if (_cameraController == null) {
-          Log.debug("@@@@@@@@@@@@@@카메라 재 활성화@@@@@@@@@@@");
           _cameraController = CameraController(
             widget.cameraDescription == MaskForCameraViewCameraDescription.rear ? _cameras!.first : _cameras!.last,
             ResolutionPreset.high,
@@ -385,6 +385,6 @@ int _position(MaskForCameraViewInsideLinePosition? position) {
 }
 
 void cameradipose() {
-  Log.debug("카메라종료");
+  Log.debug("@@@@카메라종료@@@@");
   _cameraController!.dispose();
 }
