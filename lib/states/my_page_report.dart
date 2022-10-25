@@ -246,7 +246,7 @@ class _MyPageReportState extends State<MyPageReport> {
           child: Image.network(
             height: 70,
             width: 70,
-            fit: BoxFit.none,
+            fit: BoxFit.cover,
             "${Env.FILE_SERVER_URL}$fileName",
             errorBuilder: (context, error, stackTrace) => Image.asset(
               height: 80,

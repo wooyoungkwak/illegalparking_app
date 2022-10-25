@@ -197,7 +197,7 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                             "${Env.FILE_SERVER_URL}${alarmInfoList[index].fileName}",
                             height: 70,
                             width: 70,
-                            fit: BoxFit.none,
+                            fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) => Image.asset(
                               height: 80,
                               width: 80,
