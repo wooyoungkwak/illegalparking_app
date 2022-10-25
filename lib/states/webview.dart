@@ -90,29 +90,21 @@ class _WebviewPageState extends State<WebviewPage> {
           ),
           // GetBuilder<MapController>(
           //   builder: (controller) {
-          //     if (controller.clickedMap) {
-          //       return Text(controller.testText);
-          //     }
-          //     return const Text("웹에서 앱전달 실패");
+          //     return Column(
+          //       children: [
+          //         Text("위도 : ${controller.latitude.toString()}"),
+          //         Text("경도 : ${controller.longitude.toString()}"),
+          //       ],
+          //     );
           //   },
           // ),
-          GetBuilder<MapController>(
-            builder: (controller) {
-              return Column(
-                children: [
-                  Text("위도 : ${controller.latitude.toString()}"),
-                  Text("경도 : ${controller.longitude.toString()}"),
-                ],
-              );
-            },
-          ),
-          createElevatedButton(
-            text: "appToGPS",
-            function: () {
-              showBottomDialog();
-              _webViewController.runJavascript("appToGps(123, 456)");
-            },
-          ),
+          // createElevatedButton(
+          //   text: "appToGPS",
+          //   function: () {
+          //     showBottomDialog();
+          //     _webViewController.runJavascript("appToGps(123, 456)");
+          //   },
+          // ),
         ],
       ),
     );
