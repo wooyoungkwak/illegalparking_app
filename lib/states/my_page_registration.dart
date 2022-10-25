@@ -80,7 +80,7 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
                     child: Text("차량 번호를 입력해 주세요"),
                   ),
                   createTextFormField(
-                    hintText: "예) 123가4567, 서울 12가 3456",
+                    hintText: "예) 123가4567, 65호4321",
                     controller: carNumController,
                     validation: _carNumValidator,
                   ),

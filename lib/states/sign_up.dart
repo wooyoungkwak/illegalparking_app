@@ -171,6 +171,7 @@ class _SignUpState extends State<SignUp> {
               ),
               createTextFormField(
                 labelText: "전화번호",
+                helperText: "'-' 없이 입력해주세요",
                 controller: phoneNumController,
                 validation: phoneNumValidator,
               ),
