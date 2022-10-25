@@ -24,7 +24,7 @@ class _NumbercameraState extends State<Numbercamera> {
 
   @override
   void dispose() {
-    cameradipose();
+    // cameradipose();
     super.dispose();
   }
 

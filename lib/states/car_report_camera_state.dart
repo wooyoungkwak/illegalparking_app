@@ -26,7 +26,7 @@ class _ReportcameraState extends State<Reportcamera> {
 
   @override
   void dispose() {
-    cameradipose();
+    // cameradipose();
     super.dispose();
   }
 
@@ -55,8 +55,8 @@ class _ReportcameraState extends State<Reportcamera> {
                 if (c.carnumberImage.value.isNotEmpty) {
                   Get.offAll(const Declaration());
                 } else {
-                  Get.to(const Numbercamera());
-                  // Get.off(const Numbercamera());
+                  // Get.to(const Numbercamera());
+                  Get.off(const Numbercamera());
                 }
               }),
           initContainerByOutlineButton(0, 0.95, "불법주정차 법규", context),

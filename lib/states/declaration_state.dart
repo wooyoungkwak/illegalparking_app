@@ -37,7 +37,7 @@ class _DeclarationState extends State<Declaration> {
       ProgressDialog pd = ProgressDialog(context: context);
       pd.show(max: 100, msg: '데이터를 생성중입니다', barrierDismissible: false);
       try {
-        await getGPS().then((value) => pd.close());
+        await getGPS();
         sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
           carNum = carNum.replaceAll('"', '');
           if (carNum == null || carNum == "") {
@@ -53,7 +53,7 @@ class _DeclarationState extends State<Declaration> {
           }
 
           setState(() {});
-          Future.delayed(const Duration(milliseconds: 500), () {
+          Future.delayed(const Duration(milliseconds: 1000), () {
             pd.close();
           });
         });

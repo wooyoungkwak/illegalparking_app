@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/services/save_image_service.dart';
+import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_camera_description.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line_direction.dart';
@@ -16,7 +17,7 @@ import 'package:mask_for_camera_view/mask_for_camera_view_border_type.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line.dart';
 import 'package:mask_for_camera_view/crop_image.dart';
 
-CameraController? _cameraController;
+CameraController? controller;
 List<CameraDescription>? _cameras = Env.CAMERA_SETTING;
 // GlobalKey _stickyKey = GlobalKey();
 double? _screenWidth;
@@ -74,12 +75,12 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
   @override
   void initState() {
     try {
-      _cameraController = CameraController(
+      controller = CameraController(
         widget.cameraDescription == MaskForCameraViewCameraDescription.rear ? _cameras!.first : _cameras!.last,
         ResolutionPreset.high,
         enableAudio: false,
       );
-      _cameraController!.initialize().then((_) async {
+      controller!.initialize().then((_) async {
         if (!mounted) {
           return;
         }
@@ -94,40 +95,32 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    try {
-      if (state == AppLifecycleState.resumed) {
-        Log.debug("@@@@@@@@@@@@@@카메라 재 활성화@@@@@@@@@@@");
-        if (_cameraController == null) {
-          _cameraController = CameraController(
-            widget.cameraDescription == MaskForCameraViewCameraDescription.rear ? _cameras!.first : _cameras!.last,
-            ResolutionPreset.high,
-            enableAudio: false,
-          );
-        }
-        _cameraController!.initialize().then((_) async {
-          if (!mounted) {
-            return;
-          }
-          setState(() {});
-        });
-      }
-    } catch (e) {
-      throw Exception("카메라 에러");
+    final CameraController? cameraController = controller;
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@state :$state");
+    // App state changed before we got the chance to initialize.
+    if (cameraController == null || !cameraController.value.isInitialized) {
+      return;
     }
-    Log.debug("##########state : $state");
+
+    if (state == AppLifecycleState.inactive) {
+      cameraController.dispose();
+    } else if (state == AppLifecycleState.resumed) {
+      onNewCameraSelected(cameraController.description);
+    }
   }
 
   @override
   void dispose() {
     // MaskForCameraCustomView.initialize();
     // Log.debug("카메라종료###########");
-    // _cameraController!.dispose();
+    // controller!.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // _cameraController!.setFlashMode(FlashMode.auto);
+    // controller!.setFlashMode(FlashMode.auto);
     _screenWidth = MediaQuery.of(context).size.width;
     _screenHeight = MediaQuery.of(context).size.height;
 
@@ -143,11 +136,11 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
               bottom: 0,
               left: 0,
               right: 0,
-              child: !_cameraController!.value.isInitialized
+              child: !controller!.value.isInitialized
                   ? Container()
                   : SizedBox(
                       child: CameraPreview(
-                        _cameraController!,
+                        controller!,
                       ),
                     ),
             ),
@@ -313,10 +306,80 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
       ),
     );
   }
+
+  Future<void> onNewCameraSelected(CameraDescription cameraDescription) async {
+    final CameraController? oldController = controller;
+    if (oldController != null) {
+      // `controller` needs to be set to null before getting disposed,
+      // to avoid a race condition when we use the controller that is being
+      // disposed. This happens when camera permission dialog shows up,
+      // which triggers `didChangeAppLifecycleState`, which disposes and
+      // re-creates the controller.
+      controller = null;
+      await oldController.dispose();
+    }
+
+    final CameraController cameraController = CameraController(
+      Env.CAMERA_SETTING!.first,
+      ResolutionPreset.high,
+      enableAudio: false,
+    );
+
+    controller = cameraController;
+
+    // If the controller is updated then update the UI.
+    cameraController.addListener(() {
+      if (mounted) {
+        setState(() {});
+      }
+      if (cameraController.value.hasError) {
+        alertDialogByonebutton("카메라에러", "'Camera error ${cameraController.value.errorDescription}'");
+      }
+    });
+    try {
+      await cameraController.initialize();
+    } on CameraException catch (e) {
+      switch (e.code) {
+        case 'CameraAccessDenied':
+          alertDialogByonebutton("카메라에러", "You have denied camera access.");
+
+          break;
+        case 'CameraAccessDeniedWithoutPrompt':
+          // iOS only
+          alertDialogByonebutton("카메라에러", "Please go to Settings app to enable camera access.");
+
+          break;
+        case 'CameraAccessRestricted':
+          // iOS only
+          alertDialogByonebutton("카메라에러", "Camera access is restricted.");
+          break;
+        case 'AudioAccessDenied':
+          alertDialogByonebutton("카메라에러", "You have denied audio access.");
+          ('You have denied audio access.');
+          break;
+        case 'AudioAccessDeniedWithoutPrompt':
+          // iOS only
+          alertDialogByonebutton("카메라에러", "Please go to Settings app to enable audio access.");
+          break;
+        case 'AudioAccessRestricted':
+          // iOS only
+          alertDialogByonebutton("카메라에러", "Audio access is restricted.");
+          break;
+        default:
+          alertDialogByonebutton("카메라에러", "Camera error $e");
+
+          break;
+      }
+    }
+
+    if (mounted) {
+      setState(() {});
+    }
+  }
 }
 
 Future<MaskForCameraViewResult?> _cropPicture(MaskForCameraViewInsideLine? insideLine) async {
-  XFile xFile = await _cameraController!.takePicture();
+  XFile xFile = await controller!.takePicture();
   File imageFile = File(xFile.path);
   // 원래 위 아래  appbar 사이즈 계산하던 변수
   // RenderBox box =  _stickyKey.currentContext!.findRenderObject() as RenderBox: ;
@@ -386,5 +449,5 @@ int _position(MaskForCameraViewInsideLinePosition? position) {
 
 void cameradipose() {
   Log.debug("@@@@카메라종료@@@@");
-  _cameraController!.dispose();
+  controller!.dispose();
 }
