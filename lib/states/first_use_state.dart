@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
-import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/services/setting_service.dart';
 import 'package:illegalparking_app/states/login.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Firstuse extends StatelessWidget {
+  const Firstuse({super.key});
+
   @override
   Widget build(BuildContext context) {
     mediasizeSetting(context);
     double devicHeight = Env.MEDIA_SIZE_HEIGHT!;
     double devicWidth = Env.MEDIA_SIZE_WIDTH!;
-    double devicePaddingtop = Env.MEDIA_SIZE_PADDINGTOP!;
 
     return MaterialApp(
         home: Scaffold(
@@ -29,10 +29,11 @@ class Firstuse extends StatelessWidget {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [Color(0xff1A1C1E), Colors.black], begin: Alignment.topCenter, end: Alignment.bottomCenter), border: Border.all(color: Color(0xff1A1C1E))),
+                  gradient: const LinearGradient(colors: [Color(0xff1A1C1E), Colors.black], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+                  border: Border.all(color: const Color(0xff1A1C1E))),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [initContainerBytitle(), _initInkWellByOnTap(_initContainer(Color(0xffFFFFFF), "시작하기", 30.0, devicWidth - 30, Colors.black), startbtn), _createPaddingBybottomline()],
+                children: [initContainerBytitle(), _initInkWellByOnTap(_initContainer(const Color(0xffFFFFFF), "시작하기", 30.0, devicWidth - 30, Colors.black), startbtn), _createPaddingBybottomline()],
               ),
             ),
           ),
@@ -43,17 +44,17 @@ class Firstuse extends StatelessWidget {
 
   Container initContainerBytitle() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 30.0),
+      padding: const EdgeInsets.symmetric(horizontal: 30.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomText(
+          const CustomText(
             text: "주차의정석,",
             weight: FontWeight.w700,
             size: 25,
           ),
           Row(
-            children: [
+            children: const [
               CustomText(
                 text: "SOP",
                 weight: FontWeight.w900,
@@ -67,8 +68,8 @@ class Firstuse extends StatelessWidget {
               )
             ],
           ),
-          SizedBox(height: 10),
-          CustomText(
+          const SizedBox(height: 10),
+          const CustomText(
             text: "SOP는 새로운 이동 기준을 제시하는 모빌리티 앱 입니다.\n우리의 이동은 도로 위 스트레스 없는 세상을 만들어 갑니다.",
             weight: FontWeight.w500,
             size: 12,
@@ -91,13 +92,14 @@ class Firstuse extends StatelessWidget {
 
   //버튼디자인
   Container _initContainer(Color color, String text, double radius, double width, Color textcolor) {
+    // ignore: sized_box_for_whitespace
     return Container(
         width: width,
         child: Card(
           color: color,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 12),
+            padding: const EdgeInsets.symmetric(vertical: 12),
             child: Center(
                 child: CustomText(
               text: text,
@@ -119,7 +121,7 @@ class Firstuse extends StatelessWidget {
         width: 110.0,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3),
-          color: Color(0xff2D2D2D),
+          color: const Color(0xff2D2D2D),
         ),
       ),
     );
@@ -127,7 +129,7 @@ class Firstuse extends StatelessWidget {
 
   startbtn() {
     firstusecheck();
-    Get.off(Login());
+    Get.off(const Login());
   }
 
   firstusecheck() async {

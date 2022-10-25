@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/services/save_image_service.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_camera_description.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line_direction.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_inside_line_position.dart';
@@ -96,7 +95,6 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final CameraController? cameraController = controller;
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@state :$state");
     // App state changed before we got the chance to initialize.
     if (cameraController == null || !cameraController.value.isInitialized) {
       return;
@@ -327,6 +325,7 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
 
     controller = cameraController;
 
+    //중요... 컨트롤러 업데이트 되면 화면 변경해주는 기능..
     // If the controller is updated then update the UI.
     cameraController.addListener(() {
       if (mounted) {
@@ -396,8 +395,6 @@ Future<MaskForCameraViewResult?> _cropPicture(MaskForCameraViewInsideLine? insid
   return result;
 }
 
-///
-///
 // Line inside box
 
 class _Line extends StatelessWidget {
@@ -414,8 +411,6 @@ class _Line extends StatelessWidget {
   }
 }
 
-///
-///
 // Progress widget. Used during cropping.
 
 class _IsCropping extends StatelessWidget {
@@ -435,8 +430,6 @@ class _IsCropping extends StatelessWidget {
   }
 }
 
-///
-///
 // To get position index for crop
 
 int _position(MaskForCameraViewInsideLinePosition? position) {
@@ -445,9 +438,4 @@ int _position(MaskForCameraViewInsideLinePosition? position) {
     p = position.index + 1;
   }
   return p;
-}
-
-void cameradipose() {
-  Log.debug("@@@@카메라종료@@@@");
-  controller!.dispose();
 }

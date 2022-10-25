@@ -1,26 +1,12 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
-import 'package:mask_for_camera_view/mask_for_camera_view_camera_description.dart';
 
 Future<void> cameraSetting() async {
-  CameraController cameraController;
-  bool onecheck = true;
-
   try {
-    if (onecheck) {
-      await availableCameras().then((cameras) {
-        Env.CAMERA_SETTING = cameras;
-        cameraController = CameraController(
-          cameras.first,
-          ResolutionPreset.high,
-          enableAudio: false,
-        );
-      });
-      onecheck = false;
-    }
+    await availableCameras().then((cameras) {
+      Env.CAMERA_SETTING = cameras;
+    });
   } catch (e) {
     throw Exception(e);
   }

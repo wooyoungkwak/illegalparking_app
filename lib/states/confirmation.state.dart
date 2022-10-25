@@ -4,8 +4,7 @@ import 'package:illegalparking_app/main.dart';
 import 'package:illegalparking_app/states/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:illegalparking_app/states/widgets/crop.dart';
-import 'my_page_report.dart';
+import 'package:illegalparking_app/states/widgets/custom_text.dart';
 
 class Confirmation extends StatefulWidget {
   const Confirmation({super.key});
@@ -44,29 +43,14 @@ class _ConfirmationState extends State<Confirmation> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("신고가 기록되어 데이터 분석이 진행됩니다.\n\n감사합니다"),
+                      const CustomText(text: "신고가 기록되어 데이터 분석이 진행됩니다.", weight: FontWeight.w200),
+                      const CustomText(text: "감사합니다.", weight: FontWeight.w400),
                       const SizedBox(
                         height: 50,
                       ),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     controller.initialize();
-                      //     Get.offAll(const Home(index: 2));
-                      //     Get.toNamed("/report");
-                      //   },
-                      //   child: const Text('신고이력'),
-                      // ),
                       _initInkWellByOnTap(_initContainer(Colors.black, "신고이력"), _reportlistbtn),
-                      SizedBox(height: 15),
-                      _initInkWellByOnTap(_initContainer(Color(0xffC9C9C9), "홈"), _homebtn),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     controller.initialize();
-                      //     // MaskForCameraCustomView.initialize().then((value) =>);
-                      //     Get.off(const Home(index: 1));
-                      //   },
-                      //   child: const Text('홈'),
-                      // ),
+                      const SizedBox(height: 15),
+                      _initInkWellByOnTap(_initContainer(const Color(0xffC9C9C9), "홈"), _homebtn),
                     ],
                   ),
                 ),
@@ -94,14 +78,21 @@ class _ConfirmationState extends State<Confirmation> {
         color: color,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 11),
-          child: Center(child: Text(text, style: TextStyle(color: Colors.white, fontSize: 14))),
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 11),
+          // child: Center(child: Text(text, style: TextStyle(color: Colors.white, fontSize: 14))),
+          child: Center(
+              child: CustomText(
+            text: text,
+            weight: FontWeight.w400,
+            color: Colors.white,
+          )),
         ),
       ),
     );
   }
 
   Container _createContainerByTopWidget() {
+    // ignore: avoid_unnecessary_containers
     return Container(
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Padding(
@@ -109,7 +100,7 @@ class _ConfirmationState extends State<Confirmation> {
           padding: const EdgeInsets.all(8.0),
           child: IconButton(onPressed: () {}, icon: const Icon(Icons.close_outlined), color: Colors.white),
         ),
-        Text("신고하기"),
+        const CustomText(text: "신고하기", weight: FontWeight.w200),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: IconButton(
@@ -121,7 +112,7 @@ class _ConfirmationState extends State<Confirmation> {
                 ));
               },
               icon: const Icon(Icons.close_outlined),
-              color: Color(0xff707070)),
+              color: const Color(0xff707070)),
         ),
       ]),
     );
@@ -145,7 +136,7 @@ class _ConfirmationState extends State<Confirmation> {
         width: 100.0,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3),
-          color: Color(0xff2D2D2D),
+          color: const Color(0xff2D2D2D),
         ),
       ),
     );

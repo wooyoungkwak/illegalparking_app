@@ -44,12 +44,14 @@ class MyApp extends StatelessWidget {
           "/report": (BuildContext context) => const MyPageReport(),
           "/point": (BuildContext context) => const MyPagePoint(),
         },
-        home: MyHomePage());
+        home: const MyHomePage());
   }
 }
 
 // deprecated
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -62,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _checkLogin().then((value) {
       if (Env.BOOL_FIRSTUSE == true) {
-        Get.off(Login());
+        Get.off(const Login());
       } else {
         Get.off(Firstuse());
       }
@@ -84,9 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<bool?> _checkLogin() async {
     await SharedPreferences.getInstance().then((value) {
       Env.BOOL_FIRSTUSE = value.getBool(Env.KEY_FIRSTUSE);
-      if (Env.BOOL_FIRSTUSE == null) {
-        Env.BOOL_FIRSTUSE = false;
-      }
+      Env.BOOL_FIRSTUSE ??= false;
     });
     return Env.BOOL_FIRSTUSE;
   }

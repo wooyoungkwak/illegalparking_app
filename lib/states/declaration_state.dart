@@ -12,7 +12,7 @@ import 'package:illegalparking_app/states/car_report_camera_state.dart';
 import 'package:illegalparking_app/services/save_image_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/states/widgets/custom_text.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
@@ -40,6 +40,7 @@ class _DeclarationState extends State<Declaration> {
         await getGPS();
         sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
           carNum = carNum.replaceAll('"', '');
+          // ignore: unnecessary_null_comparison
           if (carNum == null || carNum == "") {
             _numberplateContoroller = TextEditingController(text: "인식실패");
             controller.carNumberwrite("인식실패");
@@ -94,12 +95,12 @@ class _DeclarationState extends State<Declaration> {
                             fit: BoxFit.contain,
                           ),
                         ))),
-                    SizedBox(height: 10),
-                    _initInkWellByOnTap(_initContainer(Color(0xff9B9B9B), "재촬영", 22.0, 210), _reportcamerabtn),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
+                    _initInkWellByOnTap(_initContainer(const Color(0xff9B9B9B), "재촬영", 22.0, 210), _reportcamerabtn),
+                    const SizedBox(height: 10),
                     Obx((() => SizedBox(width: 200, child: Image.file(File(controller.carnumberImage.value))))),
-                    SizedBox(height: 10),
-                    _initInkWellByOnTap(_initContainer(Color(0xff9B9B9B), "재촬영", 22.0, 210), _numbercamerabtn),
+                    const SizedBox(height: 10),
+                    _initInkWellByOnTap(_initContainer(const Color(0xff9B9B9B), "재촬영", 22.0, 210), _numbercamerabtn),
                   ],
                 ),
                 SizedBox(
@@ -110,10 +111,7 @@ class _DeclarationState extends State<Declaration> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const Text(
-                            "차량번호",
-                            style: TextStyle(fontSize: 12),
-                          ),
+                          const CustomText(text: "차량번호", weight: FontWeight.w500, size: 12),
                           const SizedBox(
                             width: 10,
                           ),
@@ -134,9 +132,10 @@ class _DeclarationState extends State<Declaration> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const Text(
-                            "접수위치",
-                            style: TextStyle(fontSize: 12),
+                          const CustomText(
+                            text: "접수위치",
+                            weight: FontWeight.w500,
+                            size: 12,
                           ),
                           const SizedBox(
                             width: 10,
@@ -147,7 +146,7 @@ class _DeclarationState extends State<Declaration> {
                                 controller.imageGPS.value.address.length > 1 ? controller.imageGPS.value.address : "위치를 찾을 수 없습니다.",
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(fontSize: 10),
+                                style: const TextStyle(fontSize: 10),
                               ),
                             );
                           })
@@ -159,19 +158,25 @@ class _DeclarationState extends State<Declaration> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const Text(
-                            "접수시간",
-                            style: TextStyle(fontSize: 12),
+                          const CustomText(
+                            text: "접수시간",
+                            weight: FontWeight.w500,
+                            size: 12,
                           ),
                           const SizedBox(
                             width: 12,
                           ),
                           Obx(() {
                             return Flexible(
-                              child: Text(
-                                controller.imageTime.value,
-                                style: const TextStyle(fontSize: 12),
+                              child: CustomText(
+                                text: controller.imageTime.value,
+                                weight: FontWeight.w300,
+                                size: 12,
                               ),
+                              // Text(
+                              //   controller.imageTime.value,
+                              //   style: const TextStyle(fontSize: 12),
+                              // ),
                             );
                           }),
                         ],
@@ -180,17 +185,14 @@ class _DeclarationState extends State<Declaration> {
                   ),
                 ),
                 _initInkWellByOnTap(_initContainer(Colors.black, "신고하기", 13.0, 250), _reportbtn),
-                SizedBox(height: 5),
-                Container(
+                const SizedBox(height: 5),
+                SizedBox(
                   width: 200,
                   child: Wrap(
                     direction: Axis.horizontal,
                     alignment: WrapAlignment.center,
                     children: const [
-                      Text(
-                        "불법주정차 단속 구간에 따라 1분, 5분 이후 해당 차량에 대해 재신고가 기록되어야 과태료 대상 신고접수가 해당기관에 접수됩니다.",
-                        style: TextStyle(fontSize: 10, color: Color(0xffE82525)),
-                      ),
+                      CustomText(text: "불법주정차 단속 구간에 따라 1분, 5분 이후 해당 차량에 대해 재신고가 기록되어야 과태료 대상 신고접수가 해당기관에 접수됩니다.", weight: FontWeight.w100, size: 10, color: Color(0xffE82525)),
                     ],
                   ),
                 ),
@@ -213,7 +215,7 @@ class _DeclarationState extends State<Declaration> {
         width: 110.0,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3),
-          color: Color(0xff2D2D2D),
+          color: const Color(0xff2D2D2D),
         ),
       ),
     );
@@ -231,17 +233,20 @@ class _DeclarationState extends State<Declaration> {
 
   //버튼디자인
   Container _initContainer(Color color, String text, double radius, double width) {
+    // ignore: sized_box_for_whitespace
     return Container(
-      width: width,
-      child: Card(
-        color: color,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 11),
-          child: Center(child: Text(text, style: TextStyle(color: Colors.white, fontSize: 14))),
-        ),
-      ),
-    );
+        width: width,
+        child: Card(
+          color: color,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 11),
+            child: Center(
+              child: CustomText(text: text, weight: FontWeight.w400, color: Colors.white, size: 14),
+              // Text(text, style: const TextStyle(color: Colors.white, fontSize: 14))),
+            ),
+          ),
+        ));
   }
 
   SingleChildScrollView _createscrollView(Widget widget) {
@@ -257,7 +262,6 @@ class _DeclarationState extends State<Declaration> {
         decoration: const InputDecoration(
           filled: true,
           fillColor: Colors.white,
-          hintText: '번호판 입력란',
           hintStyle: TextStyle(color: Colors.black),
         ),
         validator: (text) => passwordValidator(text));
@@ -287,6 +291,7 @@ class _DeclarationState extends State<Declaration> {
   }
 
   bool valuenullCheck() {
+    // ignore: unrelated_type_equality_checks
     if (Env.USER_SEQ == null || Env.USER_SEQ == "") {
       alertDialogByonebutton("알림", "USER_SEQ null");
       return false;
@@ -316,6 +321,7 @@ class _DeclarationState extends State<Declaration> {
   }
 
   Container _createContainerByTopWidget() {
+    // ignore: avoid_unnecessary_containers
     return Container(
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Padding(
@@ -323,7 +329,7 @@ class _DeclarationState extends State<Declaration> {
           padding: const EdgeInsets.all(8.0),
           child: IconButton(onPressed: () {}, icon: const Icon(Icons.close_outlined), color: Colors.white),
         ),
-        Text("신고하기"),
+        const CustomText(text: "신고하기", weight: FontWeight.w200),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: IconButton(
@@ -335,7 +341,7 @@ class _DeclarationState extends State<Declaration> {
                 ));
               },
               icon: const Icon(Icons.close_outlined),
-              color: Color(0xff707070)),
+              color: const Color(0xff707070)),
         ),
       ]),
     );
