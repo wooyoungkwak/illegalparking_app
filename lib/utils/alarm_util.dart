@@ -49,8 +49,20 @@ void showSnackBar(BuildContext context, String text) {
       textAlign: TextAlign.center,
     ),
     // duration: const Duration(seconds: 2),
-    duration: const Duration(minutes: 1),
-    backgroundColor: Colors.grey[400],
+    duration: const Duration(seconds: 2),
+    backgroundColor: Colors.blue,
+  ));
+}
+
+void showErrorSnackBar(BuildContext context, String text) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(
+      text,
+      textAlign: TextAlign.center,
+    ),
+    // duration: const Duration(seconds: 2),
+    duration: const Duration(seconds: 2),
+    backgroundColor: Colors.red,
   ));
 }
 

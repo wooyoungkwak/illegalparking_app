@@ -41,6 +41,7 @@ class _MyPageState extends State<MyPage> {
           carLevel = myPageInfo.carLevel;
           carNum = myPageInfo.carNum.toString();
           Env.USER_CAR_NUMBER = myPageInfo.carNum.toString();
+          Env.USER_CAR_ALARM = myPageInfo.isAlarm;
         }
         //신고 건수
         reportCount = myPageInfo.reportCount.toString();
@@ -64,7 +65,7 @@ class _MyPageState extends State<MyPage> {
       shrinkWrap: true,
       children: [
         // 등록, 신고, 포인트
-        if (carNum == "")
+        if (carNum == "" || carNum == null)
           createMypageCard(
             route: () {
               loginController.changeRealPage(4);
@@ -88,7 +89,7 @@ class _MyPageState extends State<MyPage> {
             ],
           ),
         // 인증 완료
-        if (carNum != "")
+        if (carNum != "" && carNum != null)
           Stack(
             children: [
               Card(
@@ -225,6 +226,7 @@ class _MyPageState extends State<MyPage> {
                           child: Row(
                             children: [
                               createCustomText(
+                                color: Colors.blue,
                                 text: noticeList[index].noticeType,
                               ),
                               createCustomText(
@@ -320,109 +322,120 @@ class _MyPageState extends State<MyPage> {
                       icon: const Icon(Icons.cancel_outlined))
                 ],
               ),
-              body: Dismissible(
-                key: ValueKey<int>(noticeIndex),
-                resizeDuration: null,
-                confirmDismiss: (direction) {
-                  if (direction == DismissDirection.endToStart) {
-                    if (noticeIndex == (noticeList.length - 1)) {
-                      requestNotice(Env.USER_SEQ!, noticeList.length, 5).then((noticeListInfo) {
-                        setState(() {
-                          noticeList.addAll(noticeListInfo.noticeInfos);
-                        });
-                      });
-                      return Future.value(false);
-                    }
-                  }
+              body: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ListView(
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                if (noticeIndex > 0) {
+                                  noticeIndex--;
+                                }
+                              });
+                            },
+                            icon: const Icon(Icons.chevron_left)),
+                        const Spacer(),
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                if (noticeIndex < noticeList.length - 1) {
+                                  noticeIndex++;
+                                }
+                              });
+                            },
+                            icon: const Icon(Icons.chevron_right)),
+                      ],
+                    ),
+                    // 공지/소식
+                    Dismissible(
+                      key: ValueKey<int>(noticeIndex),
+                      resizeDuration: null,
+                      confirmDismiss: (direction) {
+                        if (direction == DismissDirection.endToStart) {
+                          if (noticeIndex == (noticeList.length - 1)) {
+                            requestNotice(Env.USER_SEQ!, noticeList.length, 5).then((noticeListInfo) {
+                              setState(() {
+                                noticeList.addAll(noticeListInfo.noticeInfos);
+                              });
+                            });
+                            return Future.value(false);
+                          }
+                        }
 
-                  if (direction == DismissDirection.startToEnd) {
-                    if (noticeIndex == 0) {
-                      return Future.value(false);
-                    }
-                  }
+                        if (direction == DismissDirection.startToEnd) {
+                          if (noticeIndex == 0) {
+                            return Future.value(false);
+                          }
+                        }
 
-                  return Future.value(true);
-                },
-                onDismissed: (direction) {
-                  if (direction == DismissDirection.endToStart) {
-                    setState(() {
-                      if (noticeIndex < noticeList.length - 1) {
-                        noticeIndex++;
-                      }
-                    });
-                  }
+                        return Future.value(true);
+                      },
+                      onDismissed: (direction) {
+                        if (direction == DismissDirection.endToStart) {
+                          setState(() {
+                            if (noticeIndex < noticeList.length - 1) {
+                              noticeIndex++;
+                            }
+                          });
+                        }
 
-                  if (direction == DismissDirection.startToEnd) {
-                    setState(() {
-                      if (noticeIndex > 0) {
-                        noticeIndex--;
-                      }
-                    });
-                  }
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: ListView(
-                    children: [
-                      Row(
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (noticeIndex > 0) {
-                                    noticeIndex--;
-                                  }
-                                });
-                              },
-                              icon: const Icon(Icons.chevron_left)),
-                          const Spacer(),
-                          IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (noticeIndex < noticeList.length - 1) {
-                                    noticeIndex++;
-                                  }
-                                });
-                              },
-                              icon: const Icon(Icons.chevron_right)),
-                        ],
-                      ),
-                      // 공지/소식
-                      Row(
-                        children: [
-                          createCustomText(
-                            text: noticeList[noticeIndex].noticeType,
-                          ),
-                          createCustomText(
-                            text: noticeList[noticeIndex].subject,
-                          ),
-                        ],
-                      ),
+                        if (direction == DismissDirection.startToEnd) {
+                          setState(() {
+                            if (noticeIndex > 0) {
+                              noticeIndex--;
+                            }
+                          });
+                        }
+                      },
+                      child: Container(
+                        height: MediaQuery.of(context).size.height - 170,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                createCustomText(
+                                  color: Colors.blue,
+                                  text: noticeList[noticeIndex].noticeType,
+                                ),
+                                createCustomText(
+                                  text: noticeList[noticeIndex].subject,
+                                ),
+                              ],
+                            ),
 
-                      createCustomText(
-                        weight: FontWeight.w400,
-                        text: noticeList[noticeIndex].regDt,
+                            createCustomText(
+                              weight: FontWeight.w400,
+                              text: noticeList[noticeIndex].regDt,
+                            ),
+                            // // 빈공간
+                            // Expanded(
+                            //   flex: 5,
+                            //   child: ConstrainedBox(
+                            //     constraints: const BoxConstraints(),
+                            //   ),
+                            // ),
+
+                            createCustomText(
+                              weight: FontWeight.w400,
+                              text: noticeList[noticeIndex].content!,
+                            ),
+
+                            // // 빈공간
+                            // Expanded(
+                            //   flex: 5,
+                            //   child: ConstrainedBox(
+                            //     constraints: const BoxConstraints(),
+                            //   ),
+                            // ),
+                          ],
+                        ),
                       ),
-                      // // 빈공간
-                      // Expanded(
-                      //   flex: 5,
-                      //   child: ConstrainedBox(
-                      //     constraints: const BoxConstraints(),
-                      //   ),
-                      // ),
-                      createCustomText(
-                        weight: FontWeight.w400,
-                        text: noticeList[noticeIndex].content!,
-                      ),
-                      // 빈공간
-                      // Expanded(
-                      //   flex: 5,
-                      //   child: ConstrainedBox(
-                      //     constraints: const BoxConstraints(),
-                      //   ),
-                      // ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             );

@@ -3,11 +3,9 @@ import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/sign_up_controller.dart';
-import 'package:illegalparking_app/models/result_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -18,7 +16,6 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  FocusNode _idFocusNode = FocusNode();
 
   late TextEditingController _idController = TextEditingController();
   late TextEditingController _passController = TextEditingController();
@@ -82,37 +79,17 @@ class _LoginState extends State<Login> {
               elevation: 5,
               child: Column(
                 children: [
-                  // 아이디
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: TextFormField(
-                  //     controller: _idController,
-                  //     // obscureText: true,
-                  //     decoration: const InputDecoration(
-                  //       border: OutlineInputBorder(),
-                  //       labelText: "아이디",
-                  //       hintText: "예) example@example.com",
-                  //     ),
-                  //     autovalidateMode: AutovalidateMode.onUserInteraction,
-                  //     validator: (text) {
-                  //       if (text!.isEmpty) {
-                  //         return "아이디를 입력해 주세요";
-                  //       }
-
-                  //       if (text.length < 2) {
-                  //         return "필수 입력 사항입니다.";
-                  //       }
-                  //       return null;
-                  //     },
-                  //   ),
-                  // ),
                   createTextFormField(
                     labelText: "아이디",
                     controller: _idController,
                     validation: idValidator,
-                    focusNode: _idFocusNode,
                   ),
-                  createTextFormField(labelText: "비밀번호", controller: _passController, validation: passwordValidator),
+                  createTextFormField(
+                    labelText: "비밀번호",
+                    obscureText: true,
+                    controller: _passController,
+                    validation: passwordValidator,
+                  ),
                   // 자동 로그인
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -153,14 +130,12 @@ class _LoginState extends State<Login> {
                                 Navigator.pushNamedAndRemoveUntil(context, "/home", (route) => false);
                               } else {
                                 // TODO : 확인 해바 ..
-                                alertDialogByonebutton("알림", loginInfo.message!);
+                                showErrorSnackBar(context, loginInfo.message!);
                               }
                             },
                           );
                         } else {
-                          showToast(
-                            text: "아이디 또는 비밀번호를 확인해 주세요.",
-                          );
+                          showErrorToast(text: "아이디 또는 비밀번호를 확인해 주세요.");
                         }
                       },
                     ),

@@ -180,13 +180,17 @@ class _SignUpState extends State<SignUp> {
                     function: sendAuthentication
                         ? null
                         : () {
-                            sendSMS(phoneNumController.text).then((authKey) {
-                              setState(() {
-                                sendAuthentication = true;
-                                authNum = authKey;
+                            if (_formKey.currentState!.validate()) {
+                              sendSMS(phoneNumController.text).then((authKey) {
+                                setState(() {
+                                  sendAuthentication = true;
+                                  authNum = authKey;
+                                });
+                                getSetTime();
                               });
-                              getSetTime();
-                            });
+                            } else {
+                              showErrorToast(text: "입력사항을 확인해 주세요.");
+                            }
                           }),
               if (sendAuthentication)
                 createTextFormField(
@@ -208,14 +212,18 @@ class _SignUpState extends State<SignUp> {
                       onPressed: authVerification
                           ? null
                           : () {
-                              if (int.parse(authKeyController.text) == authNum && authNum != null) {
-                                timer!.cancel();
-                                setState(() {
-                                  authVerification = true;
-                                  sendAuthentication = false;
-                                });
-                              } else {
-                                Log.debug("인증번호를 확인해주세요.");
+                              try {
+                                if (int.parse(authKeyController.text) == authNum && authNum != null) {
+                                  timer!.cancel();
+                                  setState(() {
+                                    authVerification = true;
+                                    sendAuthentication = false;
+                                  });
+                                } else {
+                                  showErrorToast(text: "인증번호를 확인해 주세요.");
+                                }
+                              } catch (e) {
+                                showErrorToast(text: "인증번호를 확인해 주세요.");
                               }
                             },
                       child: Text(authVerification ? "인증번호 확인됨" : "인증번호 확인"),
@@ -295,11 +303,11 @@ class _SignUpState extends State<SignUp> {
                                     showSignUpSuccessDialog();
                                   } else {
                                     // TODO : 확인 해봐 ...
-                                    alertDialogByonebutton("알림", registerInfo.message!);
+                                    showErrorSnackBar(context, registerInfo.message!);
                                   }
                                 });
                               } else {
-                                showToast(text: "입력 사항을 확인해주세요");
+                                showErrorToast(text: "입력 사항을 확인해주세요");
                               }
                             }
                           : null,
@@ -548,14 +556,12 @@ class _SignUpState extends State<SignUp> {
         Log.debug("duplicate : ${value.toString()}");
 
         if (value["data"]["isExist"]) {
-          // showToast(text: "중복된 아이디 입니다.");
           setState(() {
             duplicatedId = true;
             idHelperText = null;
             idErrorText = "중복된 아이디 입니다.";
           });
         } else {
-          // showToast(text: "사용 가능한 아이디입니다.");
           setState(() {
             duplicatedId = true;
             idHelperText = "사용 가능한 아이디입니다.";

@@ -165,13 +165,11 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                                     function: () {
                                       requestUserPasswordCheck(Env.USER_SEQ!, _oldPasswordController.text).then((defaultInfo) {
                                         if (defaultInfo.success) {
-                                          Log.debug(defaultInfo.data);
                                           setState(() {
                                             _oldPasswordValidation = true;
                                           });
                                         } else {
-                                          Log.debug(defaultInfo.message);
-                                          showToast(text: defaultInfo.message);
+                                          showErrorSnackBar(context, defaultInfo.message!);
                                         }
                                       });
                                     }),

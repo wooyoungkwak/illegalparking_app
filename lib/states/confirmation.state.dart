@@ -1,3 +1,4 @@
+import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/main.dart';
 import 'package:illegalparking_app/states/home.dart';
@@ -15,6 +16,8 @@ class Confirmation extends StatefulWidget {
 
 class _ConfirmationState extends State<Confirmation> {
   final ReportController controller = Get.put(ReportController());
+  final loginController = Get.put(LoginController());
+
   @override
   void initState() {
     super.initState();
@@ -150,13 +153,15 @@ class _ConfirmationState extends State<Confirmation> {
 
   void _reportlistbtn() {
     controller.initialize();
-    Get.offAll(const Home(index: 2));
-    Get.toNamed("/report");
+    Get.offAll(const Home());
+    loginController.changePage(2);
+    loginController.changeRealPage(6);
   }
 
   void _homebtn() {
     controller.initialize();
     // MaskForCameraCustomView.initialize().then((value) =>);
-    Get.off(const Home(index: 1));
+    Get.off(const Home());
+    loginController.changePage(1);
   }
 }

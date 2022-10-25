@@ -6,6 +6,7 @@ import 'package:illegalparking_app/controllers/my_page_controller.dart';
 import 'package:illegalparking_app/models/result_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/utils/time_util.dart';
 
@@ -20,7 +21,7 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
   final loginController = Get.put(LoginController());
   final myPageController = Get.put(MyPageController());
 
-  bool checkedAlram = false;
+  bool checkedAlram = Env.USER_CAR_ALARM ?? false;
   List<dynamic> alarmInfoList = [];
   List testList = [
     {
@@ -123,13 +124,15 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                               Switch(
                                   value: checkedAlram,
                                   onChanged: (value) {
-                                    requestMyCarAlarm(2, Env.USER_CAR_NUMBER!, value).then((defaultInfo) {
+                                    requestMyCarAlarm(Env.USER_SEQ!, Env.USER_CAR_NUMBER!, value).then((defaultInfo) {
                                       if (defaultInfo.success) {
                                         setState(() {
                                           checkedAlram = value;
                                         });
+                                        showToast(text: "알람 설정이 설정되었습니다.");
                                       } else {
                                         Log.debug("${defaultInfo.message}");
+                                        showErrorToast(text: "알람 설정에 실패하였습니다.");
                                       }
                                     });
                                   }),

@@ -31,8 +31,8 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
     List<DropdownMenuItem<String>> menuItems = [
       const DropdownMenuItem(value: "소형", child: Text("소형")),
       const DropdownMenuItem(value: "중형", child: Text("중형")),
-      const DropdownMenuItem(value: "대형", child: Text("대형")),
-      const DropdownMenuItem(value: "SUV", child: Text("SUV")),
+      const DropdownMenuItem(value: "SuV", child: Text("SUV")),
+      const DropdownMenuItem(value: "트럭", child: Text("트럭")),
       const DropdownMenuItem(value: "중장비", child: Text("중장비")),
     ];
     return menuItems;
@@ -149,9 +149,13 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
                           text: "완료",
                           function: () {
                             requestCarRegister(Env.USER_SEQ!, carNumController.text, carNameController.text, carGradeselected).then((defaultInfo) {
-                              Log.debug("requestCarRegister result : ${defaultInfo.message}");
-                              Get.back();
-                              loginController.changeRealPage(3);
+                              if (defaultInfo.success) {
+                                Get.back();
+                                loginController.changeRealPage(3);
+                                showToast(text: "차량 등록이 완료되었습니다.");
+                              } else {
+                                showErrorToast(text: "등록하신 차량 정보를 확인해주세요.");
+                              }
                             });
                           }),
                     ],

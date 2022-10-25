@@ -138,30 +138,33 @@ class ReportResultInfo {
 }
 
 class MyPageInfo {
-  MyPageInfo(this.success, this.message, this.carNum, this.carLevel, this.carName, this.reportCount, this.currentPoint, this.notices);
+  MyPageInfo(this.success, this.message, this.carNum, this.carLevel, this.carName, this.isAlarm, this.reportCount, this.currentPoint, this.notices);
   bool success;
   String? message;
   String? carNum;
   String carLevel;
   String carName;
+  bool isAlarm;
   int reportCount;
   int currentPoint;
   List<NoticeInfo> notices;
 
   static MyPageInfo fromJson(Map<String, dynamic> json) {
     if (json["data"].runtimeType.toString() == 'String') {
-      return MyPageInfo(json["success"], json["msg"], "", "", "", 0, 0, []);
+      return MyPageInfo(json["success"], json["msg"], "", "", "", false, 0, 0, []);
     } else {
       List<NoticeInfo> notices = [];
       List<dynamic> noticeList = json["data"]["notices"];
       for (int i = 0; i < noticeList.length; i++) {
         notices.add(NoticeInfo.fromJson(noticeList[i]));
       }
-      return MyPageInfo(json["success"], json["msg"], json["data"]["carNum"], json["data"]["carLevel"], json["data"]["carName"], json["data"]["reportCount"], json["data"]["currentPoint"], notices);
+      return MyPageInfo(json["success"], json["msg"], json["data"]["carNum"], json["data"]["carLevel"], json["data"]["carName"], json["data"]["isAlarm"], json["data"]["reportCount"],
+          json["data"]["currentPoint"], notices);
     }
   }
 
-  Map<String, dynamic> toJson() => {"success": success, "carNum": carNum, "carLevel": carLevel, "carName": carName, "reportCount": reportCount, "currentPoint": currentPoint, "notices": notices};
+  Map<String, dynamic> toJson() =>
+      {"success": success, "carNum": carNum, "carLevel": carLevel, "carName": carName, "isAlarm": isAlarm, "reportCount": reportCount, "currentPoint": currentPoint, "notices": notices};
 }
 
 class NoticeListInfo {
