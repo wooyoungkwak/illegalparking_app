@@ -93,7 +93,7 @@ class _MyPagePointState extends State<MyPagePoint> {
           shrinkWrap: true,
           children: [
             // 현재 포인트
-            createMypageCard(
+            createMypageContainer(
               widgetList: <Widget>[
                 createCustomText(
                   weight: FontWeight.w400,
@@ -114,7 +114,7 @@ class _MyPagePointState extends State<MyPagePoint> {
                 ),
               ],
             ),
-            createMypageCard(
+            createMypageContainer(
               route: () {
                 requestProductList(Env.USER_SEQ!).then((productListInfo) {
                   _showPointDialog(productListInfo);

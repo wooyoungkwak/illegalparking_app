@@ -11,9 +11,10 @@ class AppColors {
   static const Color textBlack = Color(0xff232329);
   static const Color textGrey = Color(0xff8E8E8E);
   static const Color passIcon = Color(0xffFFC117);
+  static const Color carRegistBackground = Color(0xff939393);
 }
 
-class AppFontWeigth {
+class AppFontWeight {
   static const FontWeight black = FontWeight.w900;
   static const FontWeight extraBold = FontWeight.w800;
   static const FontWeight bold = FontWeight.w700;
