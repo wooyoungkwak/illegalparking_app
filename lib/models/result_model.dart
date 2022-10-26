@@ -92,15 +92,16 @@ class RegisterInfo {
 }
 
 class ReportInfo {
-  ReportInfo(this.success, this.message);
+  ReportInfo(this.success, this.message, this.data);
   bool success;
   String? message;
+  String? data;
 
   static ReportInfo fromJson(Map<String, dynamic> json) {
-    return ReportInfo(json["success"], json["msg"]);
+    return ReportInfo(json["success"], json["msg"], json["data"]);
   }
 
-  Map<String, dynamic> toJson() => {"success": success, "message": message};
+  Map<String, dynamic> toJson() => {"success": success, "message": message, "data": data};
 }
 
 class ReportHistoryInfo {
