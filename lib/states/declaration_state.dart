@@ -75,131 +75,131 @@ class _DeclarationState extends State<Declaration> {
   @override
   Widget build(BuildContext context) {
     final statusBarHeight = Env.MEDIA_SIZE_PADDINGTOP!;
-    return _createWillPopScope(
-      Padding(
-        padding: EdgeInsets.only(top: statusBarHeight),
-        child: Scaffold(
-          resizeToAvoidBottomInset: true,
-          body: _createscrollView(Container(
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _createContainerByTopWidget(),
-                Column(
+    return Container(
+      child: _createWillPopScope(
+        Padding(
+          padding: EdgeInsets.only(top: statusBarHeight),
+          child: Scaffold(
+            resizeToAvoidBottomInset: true,
+            body: Form(
+              key: _formKey,
+              child: _createscrollView(Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Obx((() => SizedBox(
-                          width: 200,
-                          child: Image.file(
-                            File(controller.reportImage.value),
-                            fit: BoxFit.contain,
+                    _createContainerByTopWidget(),
+                    Column(
+                      children: [
+                        Obx((() => SizedBox(
+                              width: 200,
+                              child: Image.file(
+                                File(controller.reportImage.value),
+                                fit: BoxFit.contain,
+                              ),
+                            ))),
+                        const SizedBox(height: 10),
+                        _initInkWellByOnTap(_initContainer(const Color(0xff9B9B9B), "재촬영", 22.0, 210), _reportcamerabtn),
+                        const SizedBox(height: 10),
+                        Obx((() => SizedBox(width: 200, child: Image.file(File(controller.carnumberImage.value))))),
+                        const SizedBox(height: 10),
+                        _initInkWellByOnTap(_initContainer(const Color(0xff9B9B9B), "재촬영", 22.0, 210), _numbercamerabtn),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 200,
+                      height: 100,
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const CustomText(
+                                text: "차량번호",
+                                weight: FontWeight.w700,
+                                size: 12,
+                                color: Colors.black,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              SizedBox(
+                                width: 140,
+                                height: 40,
+                                child: Card(
+                                    // child: _createTextFormField(_numberplateContoroller),
+                                    child: _createTextFormField(_numberplateContoroller)),
+                              ),
+                            ],
                           ),
-                        ))),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const CustomText(text: "접수위치", weight: FontWeight.w700, size: 12, color: Colors.black),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Obx(() {
+                                return Flexible(
+                                  child: Text(
+                                    controller.imageGPS.value.address.length > 1 ? controller.imageGPS.value.address : "위치를 찾을 수 없습니다.",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 10, fontFamily: "NotoSansKR", fontWeight: FontWeight.w400),
+                                  ),
+                                );
+                              })
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const CustomText(text: "접수시간", weight: FontWeight.w700, size: 12, color: Colors.black),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              Obx(() {
+                                return Flexible(
+                                  child: CustomText(text: controller.imageTime.value, weight: FontWeight.w400, size: 12, color: Colors.black),
+                                  // Text(
+                                  //   controller.imageTime.value,
+                                  //   style: const TextStyle(fontSize: 12),
+                                  // ),
+                                );
+                              }),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                     const SizedBox(height: 10),
-                    _initInkWellByOnTap(_initContainer(const Color(0xff9B9B9B), "재촬영", 22.0, 210), _reportcamerabtn),
-                    const SizedBox(height: 10),
-                    Obx((() => SizedBox(width: 200, child: Image.file(File(controller.carnumberImage.value))))),
-                    const SizedBox(height: 10),
-                    _initInkWellByOnTap(_initContainer(const Color(0xff9B9B9B), "재촬영", 22.0, 210), _numbercamerabtn),
+                    _initInkWellByOnTap(_initContainer(Colors.black, "신고하기", 13.0, 250), _reportbtn),
+                    const SizedBox(height: 5),
+                    SizedBox(
+                      width: 210,
+                      child: Wrap(
+                        direction: Axis.horizontal,
+                        alignment: WrapAlignment.center,
+                        children: const [
+                          CustomText(
+                            text: "불법주정차 단속 구간에 따라 1분, 5분 이후 해당 차량에 대해 재신고가 기록되어야 과태료 대상 신고접수가 해당기관에 접수됩니다.",
+                            weight: FontWeight.w500,
+                            size: 10,
+                            color: Color(0xffE82525),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-                SizedBox(
-                  width: 200,
-                  height: 100,
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const CustomText(text: "차량번호", weight: FontWeight.w500, size: 12),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          SizedBox(
-                            width: 140,
-                            height: 40,
-                            child: Form(
-                              key: _formKey,
-                              child: Card(
-                                // child: _createTextFormField(_numberplateContoroller),
-                                child: _createTextFormField(_numberplateContoroller),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const CustomText(
-                            text: "접수위치",
-                            weight: FontWeight.w500,
-                            size: 12,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Obx(() {
-                            return Flexible(
-                              child: Text(
-                                controller.imageGPS.value.address.length > 1 ? controller.imageGPS.value.address : "위치를 찾을 수 없습니다.",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 10),
-                              ),
-                            );
-                          })
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const CustomText(
-                            text: "접수시간",
-                            weight: FontWeight.w500,
-                            size: 12,
-                          ),
-                          const SizedBox(
-                            width: 12,
-                          ),
-                          Obx(() {
-                            return Flexible(
-                              child: CustomText(
-                                text: controller.imageTime.value,
-                                weight: FontWeight.w300,
-                                size: 12,
-                              ),
-                              // Text(
-                              //   controller.imageTime.value,
-                              //   style: const TextStyle(fontSize: 12),
-                              // ),
-                            );
-                          }),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                _initInkWellByOnTap(_initContainer(Colors.black, "신고하기", 13.0, 250), _reportbtn),
-                const SizedBox(height: 5),
-                SizedBox(
-                  width: 200,
-                  child: Wrap(
-                    direction: Axis.horizontal,
-                    alignment: WrapAlignment.center,
-                    children: const [
-                      CustomText(text: "불법주정차 단속 구간에 따라 1분, 5분 이후 해당 차량에 대해 재신고가 기록되어야 과태료 대상 신고접수가 해당기관에 접수됩니다.", weight: FontWeight.w100, size: 10, color: Color(0xffE82525)),
-                    ],
-                  ),
-                ),
-              ],
+              )),
             ),
-          )),
-          bottomNavigationBar: SizedBox(width: 200, child: _createPaddingBybottomline()),
+            bottomNavigationBar: SizedBox(width: 200, child: _createPaddingBybottomline()),
+          ),
         ),
       ),
     );
@@ -268,14 +268,8 @@ class _DeclarationState extends State<Declaration> {
   }
 
   String? passwordValidator(String? text) {
-    final validSpecial = RegExp(r'^[0-9]{2,3}[가-힣]{1}[0-9]{4}$');
-
     if (text!.isEmpty) {
       return "차량번호를 입력해주세요";
-    }
-
-    if (!validSpecial.hasMatch(text)) {
-      return "차량번호 형식이 다릅니다. ";
     }
 
     return null;
@@ -291,6 +285,7 @@ class _DeclarationState extends State<Declaration> {
   }
 
   bool valuenullCheck() {
+    final validSpecial = RegExp(r'^[0-9]{2,3}[가-힣]{1}[0-9]{4}$');
     // ignore: unrelated_type_equality_checks
     if (Env.USER_SEQ == null || Env.USER_SEQ == "") {
       alertDialogByonebutton("알림", "USER_SEQ null");
@@ -316,6 +311,9 @@ class _DeclarationState extends State<Declaration> {
     } else if (controller.imageGPS.value.latitude == null || controller.imageGPS.value.longitude == null || controller.imageGPS.value.latitude == "" || controller.imageGPS.value.longitude == "") {
       alertDialogByonebutton("알림", "위도 경도가 없습니다");
       return false;
+    } else if (validSpecial.hasMatch(_numberplateContoroller.text) == false) {
+      alertDialogByonebutton("알림", "차량번호 형식에 문제가 있습니다");
+      return false;
     }
     return true;
   }
@@ -329,7 +327,12 @@ class _DeclarationState extends State<Declaration> {
           padding: const EdgeInsets.all(8.0),
           child: IconButton(onPressed: () {}, icon: const Icon(Icons.close_outlined), color: Colors.white),
         ),
-        const CustomText(text: "신고하기", weight: FontWeight.w200),
+        const CustomText(
+          text: "신고하기",
+          size: 16,
+          weight: FontWeight.w500,
+          color: Colors.black,
+        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: IconButton(
@@ -364,24 +367,24 @@ class _DeclarationState extends State<Declaration> {
     if (valuenullCheck()) {
       await saveImageGallery();
       try {
-        String text = _numberplateContoroller.text;
-        text = text.replaceAll(' ', '');
-        alertDialogByonebutton("알림", "실행");
-        sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
-              if (result == false)
-                {
-                  // TODO : 알림창 띄우기
-                  alertDialogByonebutton("알림", "파일 전송에 실패했습니다")
-                }
-              else
-                {
-                  sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
-                          controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
-                      .then((reportInfo) => {
-                            if (!reportInfo.success) {alertDialogByonebutton("알림", reportInfo.message!)}
-                          })
-                }
-            });
+        // String text = _numberplateContoroller.text;
+        // text = text.replaceAll(' ', '');
+        // alertDialogByonebutton("알림", "실행");
+        // sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
+        //       if (result == false)
+        //         {
+        //           // TODO : 알림창 띄우기
+        //           alertDialogByonebutton("알림", "파일 전송에 실패했습니다")
+        //         }
+        //       else
+        //         {
+        //           sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
+        //                   controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
+        //               .then((reportInfo) => {
+        //                     if (!reportInfo.success) {alertDialogByonebutton("알림", reportInfo.message!)}
+        //                   })
+        //         }
+        //     });
         Get.offAll(const Confirmation());
       } catch (e) {
         // TODO : 알림창 띄우기

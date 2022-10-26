@@ -43,10 +43,29 @@ class _ConfirmationState extends State<Confirmation> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const CustomText(text: "신고가 기록되어 데이터 분석이 진행됩니다.", weight: FontWeight.w200),
-                      const CustomText(text: "감사합니다.", weight: FontWeight.w400),
+                      SizedBox(
+                        width: 250,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const CustomText(
+                              text: "신고가 기록되어 데이터 분석이 진행됩니다.",
+                              weight: FontWeight.w400,
+                              color: Colors.black,
+                              size: 14,
+                            ),
+                            SizedBox(height: 10),
+                            const CustomText(
+                              text: "감사합니다.",
+                              weight: FontWeight.w600,
+                              color: Colors.black,
+                              size: 16,
+                            ),
+                          ],
+                        ),
+                      ),
                       const SizedBox(
-                        height: 50,
+                        height: 20,
                       ),
                       _initInkWellByOnTap(_initContainer(Colors.black, "신고이력"), _reportlistbtn),
                       const SizedBox(height: 15),
@@ -83,7 +102,7 @@ class _ConfirmationState extends State<Confirmation> {
           child: Center(
               child: CustomText(
             text: text,
-            weight: FontWeight.w400,
+            weight: FontWeight.w500,
             color: Colors.white,
           )),
         ),
@@ -100,7 +119,7 @@ class _ConfirmationState extends State<Confirmation> {
           padding: const EdgeInsets.all(8.0),
           child: IconButton(onPressed: () {}, icon: const Icon(Icons.close_outlined), color: Colors.white),
         ),
-        const CustomText(text: "신고하기", weight: FontWeight.w200),
+        const CustomText(text: "신고하기", weight: FontWeight.w500, color: Colors.black),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: IconButton(
