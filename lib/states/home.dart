@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/services/setting_service.dart';
+import 'package:illegalparking_app/states/widgets/bottom_nav.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 
 class Home extends StatefulWidget {
@@ -43,53 +45,45 @@ class _HomeState extends State<Home> {
           return Future(() => false);
         },
         child: Scaffold(
-          appBar: loginController.currentIndex.value == 2 && !loginController.isGuestMode && loginController.currentPageIdex.value == 2
-              ? AppBar(
-                  elevation: 0,
-                  backgroundColor: Colors.white,
-                  automaticallyImplyLeading: false,
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      createCustomText(padding: 0.0, text: "안녕하세요"),
-                      Row(
-                        children: [
-                          createCustomText(padding: 0.0, color: Colors.blue, text: Env.USER_NAME),
-                          createCustomText(padding: 0.0, text: "님"),
-                        ],
-                      ),
-                    ],
-                  ),
-                  // centerTitle: true,
-                  actions: [
-                    IconButton(
-                        onPressed: () {
-                          loginController.changeRealPage(3);
-                        },
-                        color: Colors.black,
-                        icon: const Icon(Icons.settings))
-                  ],
-                )
-              : null,
+          extendBody: true,
           body: loginController.currentPages,
-          bottomNavigationBar: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.map_outlined),
-                label: "지도",
+          bottomNavigationBar: Container(
+            height: 70,
+            decoration: BoxDecoration(
+                color: Colors.grey,
+                border: Border.all(color: Colors.grey, width: 1),
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(29),
+                  topLeft: Radius.circular(29),
+                )),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(29),
+                topLeft: Radius.circular(29),
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.camera_alt_outlined),
-                label: "카메라",
+              child: BottomNavigationBar(
+                backgroundColor: AppColors.appBackground,
+                items: const <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.map_outlined),
+                    label: "지도",
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.camera_alt_outlined),
+                    label: "카메라",
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.people),
+                    label: "내정보",
+                  ),
+                ],
+                currentIndex: loginController.currentIndex.value,
+                selectedItemColor: AppColors.bottomNavSelected,
+                unselectedItemColor: Colors.white,
+                iconSize: 27,
+                onTap: loginController.changePage,
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.people),
-                label: "내정보",
-              ),
-            ],
-            currentIndex: loginController.currentIndex.value,
-            selectedItemColor: Colors.amber,
-            onTap: loginController.changePage,
+            ),
           ),
         ),
       ),

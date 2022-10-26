@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -70,42 +72,50 @@ class _WebviewPageState extends State<WebviewPage> {
   @override
   Widget build(BuildContext context) {
     final statusBarHeight = MediaQuery.of(context).padding.top;
-    return Container(
-      padding: EdgeInsets.only(top: statusBarHeight),
-      child: Column(
-        children: [
-          Expanded(
-            child: WebView(
-              initialUrl: "${Env.SERVER_ADMIN_URL}/api/area/map",
-              onWebViewCreated: (WebViewController webViewController) {
-                _controller.complete(webViewController);
-                _webViewController = webViewController;
-              },
-              onProgress: (int progress) {
-                Log.debug("Webview is loading (progress : $progress%");
-              },
-              javascriptMode: JavascriptMode.unrestricted,
-              javascriptChannels: _createJavascriptChannels(context),
+    return GestureDetector(
+      onTapDown: (value) {
+        closeBottomNav();
+      },
+      child: Container(
+        padding: EdgeInsets.only(top: statusBarHeight),
+        child: Column(
+          children: [
+            Expanded(
+              child: WebView(
+                initialUrl: "${Env.SERVER_ADMIN_URL}/api/area/map",
+                onWebViewCreated: (WebViewController webViewController) {
+                  _controller.complete(webViewController);
+                  _webViewController = webViewController;
+                },
+                onProgress: (int progress) {
+                  Log.debug("Webview is loading (progress : $progress%");
+                },
+                gestureRecognizers: Set()..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()..onTapDown = (tap) {})),
+                // ..add(Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer()..onEnd = (tap) {}))
+                // ..add(Factory<HorizontalDragGestureRecognizer>(() => HorizontalDragGestureRecognizer()..onStart = (tap) {})),
+                javascriptMode: JavascriptMode.unrestricted,
+                javascriptChannels: _createJavascriptChannels(context),
+              ),
             ),
-          ),
-          // GetBuilder<MapController>(
-          //   builder: (controller) {
-          //     return Column(
-          //       children: [
-          //         Text("위도 : ${controller.latitude.toString()}"),
-          //         Text("경도 : ${controller.longitude.toString()}"),
-          //       ],
-          //     );
-          //   },
-          // ),
-          // createElevatedButton(
-          //   text: "appToGPS",
-          //   function: () {
-          //     showBottomDialog();
-          //     _webViewController.runJavascript("appToGps(123, 456)");
-          //   },
-          // ),
-        ],
+            // GetBuilder<MapController>(
+            //   builder: (controller) {
+            //     return Column(
+            //       children: [
+            //         Text("위도 : ${controller.latitude.toString()}"),
+            //         Text("경도 : ${controller.longitude.toString()}"),
+            //       ],
+            //     );
+            //   },
+            // ),
+            // createElevatedButton(
+            //   text: "appToGPS",
+            //   function: () {
+            //     showBottomDialog();
+            //     _webViewController.runJavascript("appToGps(123, 456)");
+            //   },
+            // ),
+          ],
+        ),
       ),
     );
   }
@@ -380,5 +390,12 @@ class _WebviewPageState extends State<WebviewPage> {
       mapController.setLongitude(position.longitude);
       _webViewController.runJavascript("appToGps(${position.latitude}, ${position.longitude})");
     });
+  }
+
+  void closeBottomNav() {
+    if (loginController.isBottomOpen) {
+      loginController.offBottomNav();
+      Get.back();
+    }
   }
 }

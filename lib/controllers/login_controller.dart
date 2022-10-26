@@ -15,12 +15,22 @@ import 'package:illegalparking_app/states/webview.dart';
 
 class LoginController extends GetxController {
   static LoginController get to => Get.find();
+
   bool _isBottomOpen = false;
   bool get isBottomOpen => _isBottomOpen;
+
   bool _isGuestMode = false;
   bool get isGuestMode => _isGuestMode;
+
+  bool _checkedAutoLogin = false; // 이 아이는 무조건 상태관리자로 관리해야된다.;;
+  bool get checkedAutoLogin => _checkedAutoLogin;
+
+  bool _idSaved = false; // 이 아이는 무조건 상태관리자로 관리해야된다.;;
+  bool get idSaved => _idSaved;
+
   final currentIndex = 0.obs;
   final currentPageIdex = 0.obs;
+
   static const List<Widget> _widgetOption = <Widget>[
     WebviewPage(),
     Reportcamera(),
@@ -39,6 +49,16 @@ class LoginController extends GetxController {
   ];
 
   Widget get currentPages => _isGuestMode ? _guestModeWidgetOption[currentIndex.value] : _widgetOption[currentPageIdex.value];
+
+  void getAutoLogin(bool value) {
+    _checkedAutoLogin = value;
+    update();
+  }
+
+  void setIdSaved(bool value) {
+    _idSaved = value;
+    update();
+  }
 
   void onGuesMode() {
     _isGuestMode = true;

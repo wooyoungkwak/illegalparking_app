@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 
 Padding createCustomText({
   String? text,
   String? family,
+  FontWeight? weight,
+  FontStyle? style,
   double? size,
   double? height,
-  FontWeight? weight,
   Color? color,
   double? padding,
   double? top,
@@ -21,9 +23,10 @@ Padding createCustomText({
       style: TextStyle(
         color: color ?? Colors.black,
         height: height,
-        fontSize: size ?? 18.0,
-        fontWeight: weight ?? FontWeight.bold,
-        fontFamily: family,
+        fontSize: size ?? 14.0,
+        fontWeight: weight ?? FontWeight.w400,
+        fontFamily: family ?? "NotoSansKR",
+        fontStyle: style,
       ),
     ),
   );
@@ -31,17 +34,18 @@ Padding createCustomText({
 
 Padding createTextFormField({
   GlobalKey<FormState>? formFieldKey,
+  TextEditingController? controller,
+  FocusNode? focusNode,
+  Color? fillColor,
   double? padding,
   String? labelText,
   String? hintText,
   String? helperText,
   String? errorText,
   bool? obscureText,
-  TextEditingController? controller,
   Function? validation,
   Function? onChanged,
   Function? onSaved,
-  FocusNode? focusNode,
 }) {
   // final text = controller!.value.text;
   return Padding(
@@ -52,8 +56,12 @@ Padding createTextFormField({
       controller: controller,
       obscureText: obscureText ?? false,
       textInputAction: TextInputAction.next,
+      style: const TextStyle(fontFamily: "NotoSansKR", fontWeight: FontWeight.w500, fontSize: 12.0),
       decoration: InputDecoration(
-        border: const OutlineInputBorder(),
+        border: InputBorder.none,
+        filled: true,
+        fillColor: fillColor ?? Colors.white,
+        contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
         labelText: labelText,
         hintText: hintText,
         helperText: (controller?.text != "") && (helperText != null) ? helperText : null,
@@ -72,6 +80,7 @@ Padding createTextFormField({
 
 Padding createElevatedButton({
   String? text,
+  Color? textColors,
   Color? color,
   double? padding,
   dynamic? function,
@@ -83,10 +92,14 @@ Padding createElevatedButton({
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
+          shape: const StadiumBorder(),
           primary: color ?? Colors.blue,
         ),
         onPressed: function,
-        child: Text(text ?? ""),
+        child: createCustomText(
+          text: text ?? "",
+          color: textColors ?? Colors.white,
+        ),
       ),
     ),
   );
@@ -95,9 +108,16 @@ Padding createElevatedButton({
 Card createMypageCard({List<Widget>? widgetList, dynamic route}) {
   return Card(
     elevation: 4,
+    // Round 처리하는데 3개를 수정해야됨
+    // 1
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
     child: Material(
+      // 2
+      borderRadius: const BorderRadius.all(Radius.circular(18)),
       child: Ink(
         child: InkWell(
+          // 3
+          borderRadius: const BorderRadius.all(Radius.circular(18)),
           onTap: route,
           child: ConstrainedBox(
             constraints: const BoxConstraints(minHeight: 100),
@@ -252,16 +272,32 @@ ImageProvider<Object> carGradeImage(String? carGrade) {
   String imagePath = "assets/";
   switch (carGrade) {
     case "소형":
-      return AssetImage("${imagePath}segment_subcompact.jpg");
+      return AssetImage("${imagePath}segment_subcompact.png");
     case "중형":
-      return AssetImage("${imagePath}segment_mid.jpg");
+      return AssetImage("${imagePath}segment_mid.png");
     case "SUV":
-      return AssetImage("${imagePath}segment_suv.jpg");
+      return AssetImage("${imagePath}segment_suv.png");
     case "트럭":
-      return AssetImage("${imagePath}segment_truck.jpg");
+      return AssetImage("${imagePath}segment_truck.png");
     case "중장비":
-      return AssetImage("${imagePath}segment_equipment.jpg");
+      return AssetImage("${imagePath}segment_equipment.png");
   }
 
   return const AssetImage("assets/testVehicle.jpg");
+}
+
+Icon chevronRight() {
+  return const Icon(
+    color: AppColors.textGrey,
+    size: 32,
+    Icons.chevron_right,
+  );
+}
+
+Icon chevronLeft() {
+  return const Icon(
+    color: AppColors.textGrey,
+    size: 32,
+    Icons.chevron_left,
+  );
 }

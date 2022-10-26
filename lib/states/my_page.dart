@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/my_page_controller.dart';
@@ -61,254 +62,352 @@ class _MyPageState extends State<MyPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        // 등록, 신고, 포인트
-        if (carNum == "" || carNum == null)
+    return Container(
+      color: AppColors.appBackground,
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    createCustomText(
+                      padding: 0.0,
+                      color: AppColors.white,
+                      weight: AppFontWeigth.semiBold,
+                      size: 24,
+                      text: "안녕하세요",
+                    ),
+                    Row(
+                      children: [
+                        createCustomText(
+                          padding: 0.0,
+                          color: AppColors.blue,
+                          weight: AppFontWeigth.bold,
+                          size: 24,
+                          text: Env.USER_NAME,
+                        ),
+                        createCustomText(
+                          padding: 0.0,
+                          color: AppColors.white,
+                          weight: AppFontWeigth.semiBold,
+                          size: 24,
+                          text: "님",
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: AppColors.white,
+                    shape: const CircleBorder(),
+                  ),
+                  child: const Icon(
+                    Icons.settings,
+                    color: AppColors.black,
+                    size: 32,
+                  ),
+                  onPressed: () {
+                    loginController.changeRealPage(3);
+                  },
+                ),
+              ],
+            ),
+          ),
+          // 등록, 신고, 포인트
+          // if (carNum == "" || carNum == null)
           createMypageCard(
             route: () {
               loginController.changeRealPage(4);
             },
             widgetList: <Widget>[
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   createCustomText(
-                    weight: FontWeight.w400,
+                    padding: 0.0,
+                    color: AppColors.textBlack,
+                    weight: AppFontWeigth.bold,
+                    size: 16.0,
                     text: "내 차 등록을 진행해 주세요",
                   ),
                   createCustomText(
-                    weight: FontWeight.w400,
+                    padding: 0.0,
+                    color: AppColors.textGrey,
+                    weight: AppFontWeigth.medium,
+                    size: 10.0,
                     text: "실시간 신고 알림을 받을 수 있습니다",
                   ),
                 ],
               ),
               const Spacer(),
-              createCustomText(weight: FontWeight.w400, text: ">")
+              chevronRight(),
             ],
           ),
-        // 인증 완료
-        if (carNum != "" && carNum != null)
-          Stack(
-            children: [
-              Card(
-                elevation: 4,
-                child: Material(
-                  child: Ink(
-                    child: InkWell(
-                      onTap: () {
-                        loginController.changeRealPage(5);
-                      },
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(minHeight: 100),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Spacer(),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image(
-                                      image: carGradeImage(carLevel),
-                                      height: 100,
-                                      width: 100,
-                                    ),
-                                    createCustomText(
-                                      weight: FontWeight.w400,
-                                      text: Env.USER_CAR_NUMBER,
-                                    ),
-                                  ],
+
+          // 인증 완료
+          if (carNum != "" && carNum != null)
+            Stack(
+              children: [
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(18.0),
+                    child: Ink(
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(18.0),
+                        onTap: () {
+                          loginController.changeRealPage(5);
+                        },
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(minHeight: 100),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                            child: Row(
+                              children: [
+                                const Spacer(),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Image(
+                                        image: carGradeImage(carLevel),
+                                        height: 80,
+                                        width: 160,
+                                      ),
+                                      createCustomText(
+                                        padding: 0.0,
+                                        weight: AppFontWeigth.semiBold,
+                                        size: 12,
+                                        text: carName,
+                                      ),
+                                      createCustomText(
+                                        padding: 0.0,
+                                        weight: AppFontWeigth.bold,
+                                        size: 24,
+                                        text: carNum,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              const Spacer(),
-                              createCustomText(
-                                weight: FontWeight.w400,
-                                text: ">",
-                              )
-                            ],
+                                const Spacer(),
+                                chevronRight(),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Positioned(
-                top: 15,
-                left: 15,
-                child: createCustomText(
-                  weight: FontWeight.w400,
-                  text: "인증 완료",
-                  color: Colors.blue,
-                ),
-              ),
-            ],
-          ),
-        createMypageCard(
-          route: () {
-            loginController.changeRealPage(6);
-          },
-          widgetList: <Widget>[
-            createCustomText(
-              weight: FontWeight.w400,
-              text: "신고이력",
-            ),
-            const Spacer(),
-            createCustomText(
-              weight: FontWeight.w400,
-              text: "$reportCount건",
-            ),
-            createCustomText(
-              weight: FontWeight.w400,
-              text: ">",
-            ),
-          ],
-        ),
-        createMypageCard(
-          route: () {
-            loginController.changeRealPage(7);
-          },
-          widgetList: <Widget>[
-            createCustomText(
-              weight: FontWeight.w400,
-              text: "내포인트",
-            ),
-            const Spacer(),
-            createCustomText(
-              weight: FontWeight.w400,
-              text: "${currentPoint}P",
-            ),
-            createCustomText(
-              weight: FontWeight.w400,
-              text: ">",
-            ),
-          ],
-        ),
-        // 공지
-        Card(
-          elevation: 5,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header
-              Container(
-                padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 16.0),
-                child: createCustomText(
-                  text: "소식",
-                ),
-              ),
-              Container(
-                color: Colors.grey,
-                height: 1,
-                width: MediaQuery.of(context).size.width,
-              ),
-              // 공지사항 content
-              Wrap(
-                children: List.generate(
-                  noticeList.length,
-                  (index) => SizedBox(
+                // 인증 마크
+                Positioned(
+                  top: 4,
+                  left: 20,
+                  child: Container(
+                    height: 80,
+                    width: 48,
+                    decoration: const BoxDecoration(
+                      color: AppColors.blue,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10),
+                      ),
+                    ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // 제목(subject)
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 8.0,
-                            left: 16.0,
-                            right: 16.0,
-                            bottom: 4.0,
-                          ),
-                          child: Row(
-                            children: [
-                              createCustomText(
-                                color: Colors.blue,
-                                text: noticeList[index].noticeType,
-                              ),
-                              createCustomText(
-                                weight: FontWeight.w400,
-                                text: noticeList[index].subject,
-                              ),
-                            ],
-                          ),
+                        createCustomText(
+                          weight: AppFontWeigth.semiBold,
+                          text: "인증\n완료",
+                          color: AppColors.white,
                         ),
-                        // 내용(contents)
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 4.0,
-                            left: 16.0,
-                            right: 16.0,
-                          ),
-                          child: createCustomText(
-                            weight: FontWeight.w400,
-                            // text: _textLengthValidation(noticeList[index].content!) ? noticeList[index].content! : _textSlice(noticeList[index].content!),
-                            text: _textSlice(noticeList[index].content!),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 4.0,
-                            left: 16.0,
-                            right: 16.0,
-                          ),
-                          child: Row(
-                            children: [
-                              // 날짜(regDt)
-                              createCustomText(
-                                weight: FontWeight.w400,
-                                text: noticeList[index].regDt,
-                              ),
-                              const Spacer(),
-                              TextButton(
-                                onPressed: () {
-                                  _showNoticeDialog(context: context, index: index);
-                                },
-                                child: createCustomText(
-                                  weight: FontWeight.w400,
-                                  color: Colors.grey,
-                                  text: "더보기 >",
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        if (noticeList.length != (index + 1))
-                          Container(
-                            color: Colors.grey,
-                            height: 1,
-                            width: MediaQuery.of(context).size.width,
-                          )
                       ],
                     ),
                   ),
                 ),
+                const Positioned(
+                  top: 4,
+                  left: 32,
+                  child: Icon(
+                    Icons.gpp_good,
+                    color: AppColors.passIcon,
+                  ),
+                )
+              ],
+            ),
+          createMypageCard(
+            route: () {
+              loginController.changeRealPage(6);
+            },
+            widgetList: <Widget>[
+              createCustomText(
+                weight: FontWeight.w400,
+                text: "신고이력",
+              ),
+              const Spacer(),
+              createCustomText(
+                weight: FontWeight.w400,
+                text: "$reportCount건",
+              ),
+              createCustomText(
+                weight: FontWeight.w400,
+                text: ">",
               ),
             ],
           ),
-        ),
-        createElevatedButton(
-            text: "더보기",
-            function: () {
-              requestNotice(Env.USER_SEQ!, noticeList.length, 5).then((noticeListInfo) {
-                setState(() {
-                  noticeList.addAll(noticeListInfo.noticeInfos);
+          createMypageCard(
+            route: () {
+              loginController.changeRealPage(7);
+            },
+            widgetList: <Widget>[
+              createCustomText(
+                weight: FontWeight.w400,
+                text: "내포인트",
+              ),
+              const Spacer(),
+              createCustomText(
+                weight: FontWeight.w400,
+                text: "${currentPoint}P",
+              ),
+              createCustomText(
+                weight: FontWeight.w400,
+                text: ">",
+              ),
+            ],
+          ),
+          // 공지
+          Card(
+            elevation: 5,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header
+                Container(
+                  padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 16.0),
+                  child: createCustomText(
+                    text: "소식",
+                  ),
+                ),
+                Container(
+                  color: Colors.grey,
+                  height: 1,
+                  width: MediaQuery.of(context).size.width,
+                ),
+                // 공지사항 content
+                Wrap(
+                  children: List.generate(
+                    noticeList.length,
+                    (index) => SizedBox(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // 제목(subject)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 8.0,
+                              left: 16.0,
+                              right: 16.0,
+                              bottom: 4.0,
+                            ),
+                            child: Row(
+                              children: [
+                                createCustomText(
+                                  color: Colors.blue,
+                                  text: noticeList[index].noticeType,
+                                ),
+                                createCustomText(
+                                  weight: FontWeight.w400,
+                                  text: noticeList[index].subject,
+                                ),
+                              ],
+                            ),
+                          ),
+                          // 내용(contents)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 4.0,
+                              left: 16.0,
+                              right: 16.0,
+                            ),
+                            child: createCustomText(
+                              weight: FontWeight.w400,
+                              // text: _textLengthValidation(noticeList[index].content!) ? noticeList[index].content! : _textSlice(noticeList[index].content!),
+                              text: _textSlice(noticeList[index].content!),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 4.0,
+                              left: 16.0,
+                              right: 16.0,
+                            ),
+                            child: Row(
+                              children: [
+                                // 날짜(regDt)
+                                createCustomText(
+                                  weight: FontWeight.w400,
+                                  text: noticeList[index].regDt,
+                                ),
+                                const Spacer(),
+                                TextButton(
+                                  onPressed: () {
+                                    _showNoticeDialog(context: context, index: index);
+                                  },
+                                  child: createCustomText(
+                                    weight: FontWeight.w400,
+                                    color: Colors.grey,
+                                    text: "더보기 >",
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          if (noticeList.length != (index + 1))
+                            Container(
+                              color: Colors.grey,
+                              height: 1,
+                              width: MediaQuery.of(context).size.width,
+                            )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          createElevatedButton(
+              text: "더보기",
+              function: () {
+                requestNotice(Env.USER_SEQ!, noticeList.length, 5).then((noticeListInfo) {
+                  setState(() {
+                    noticeList.addAll(noticeListInfo.noticeInfos);
+                  });
                 });
-              });
-            })
-      ],
+              })
+        ],
+      ),
     );
   }
 
   _showNoticeDialog({required BuildContext context, required int index}) {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          int noticeIndex = index;
-          return StatefulBuilder(builder: (context, setState) {
+      context: context,
+      builder: (BuildContext context) {
+        int noticeIndex = index;
+        return StatefulBuilder(
+          builder: (context, setState) {
             return Scaffold(
               appBar: AppBar(
                 automaticallyImplyLeading: false,
@@ -439,8 +538,10 @@ class _MyPageState extends State<MyPage> {
                 ),
               ),
             );
-          });
-        });
+          },
+        );
+      },
+    );
   }
 
   Future<bool?> setTrue() {
@@ -478,3 +579,20 @@ class _MyPageState extends State<MyPage> {
     return sliceText;
   }
 }
+
+// class _RoundedContainer extends StatelessWidget {
+//   final Widget child;
+//   const _RoundedContainer({required this.child});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       decoration: const BoxDecoration(
+//         borderRadius: BorderRadius.all(
+//           Radius.circular(18),
+//         ),
+//       ),
+//       child: child,
+//     );
+//   }
+// }

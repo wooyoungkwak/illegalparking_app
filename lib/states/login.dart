@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
-import 'package:illegalparking_app/controllers/sign_up_controller.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
@@ -19,7 +19,6 @@ class _LoginState extends State<Login> {
 
   late TextEditingController _idController = TextEditingController();
   late TextEditingController _passController = TextEditingController();
-  final singUpController = Get.put(SignUpController());
   final loginController = Get.put(LoginController());
 
   @override
@@ -42,71 +41,138 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.appBackground,
       body: Form(
         key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (loginController.isGuestMode == true)
-              Row(
-                children: [
-                  createCustomText(
-                    bottom: 0.0,
-                    right: 0.0,
-                    left: 8.0,
-                    size: 24.0,
-                    color: Colors.blue,
-                    text: " 로그인",
-                  ),
-                  createCustomText(
-                    top: 12.0,
-                    bottom: 0.0,
-                    left: 0.0,
-                    size: 16.0,
-                    text: "이 필요한",
-                  ),
-                ],
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+          child: ListView(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 150,
               ),
-            if (loginController.isGuestMode == true)
-              createCustomText(
-                top: 0.0,
-                left: 8.0,
-                size: 16.0,
-                text: "  서비스입니다.",
-              ),
-            Card(
-              elevation: 5,
-              child: Column(
+              // 로그인 Title
+              if (loginController.isGuestMode == false)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    createCustomText(
+                      family: "NotoSansKR",
+                      weight: FontWeight.w900,
+                      style: FontStyle.italic,
+                      color: Colors.white,
+                      padding: 0.0,
+                      size: 36.0,
+                      text: "주차의정석,",
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        createCustomText(
+                          family: "NotoSansKR",
+                          weight: FontWeight.w900,
+                          style: FontStyle.italic,
+                          color: Colors.white,
+                          padding: 0.0,
+                          size: 46.0,
+                          text: "SOP",
+                        ),
+                        createCustomText(
+                          family: "NotoSansKR",
+                          style: FontStyle.italic,
+                          color: const Color(0xff848484),
+                          size: 21.0,
+                          text: "(Standard of parking)",
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              // Geust Mode Title
+              if (loginController.isGuestMode == true)
+                Row(
+                  children: [
+                    createCustomText(
+                      bottom: 0.0,
+                      right: 0.0,
+                      left: 8.0,
+                      size: 24.0,
+                      color: Colors.blue,
+                      text: " 로그인",
+                    ),
+                    createCustomText(
+                      top: 12.0,
+                      bottom: 0.0,
+                      left: 0.0,
+                      size: 16.0,
+                      text: "이 필요한",
+                    ),
+                  ],
+                ),
+              if (loginController.isGuestMode == true)
+                createCustomText(
+                  top: 0.0,
+                  left: 8.0,
+                  size: 16.0,
+                  text: "  서비스입니다.",
+                ),
+              // 아이디 비밀번호 입력
+              Column(
                 children: [
-                  createTextFormField(
-                    labelText: "아이디",
-                    controller: _idController,
-                    validation: idValidator,
+                  Container(
+                    child: createTextFormField(
+                      hintText: "아이디 또는 이메일을 입력해주세요.",
+                      controller: _idController,
+                      validation: idValidator,
+                    ),
                   ),
                   createTextFormField(
-                    labelText: "비밀번호",
+                    hintText: "비밀번호를 입력해주세요.",
                     obscureText: true,
                     controller: _passController,
                     validation: passwordValidator,
                   ),
-                  // 자동 로그인
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        GetBuilder<SignUpController>(
-                          builder: (controller) => Checkbox(
-                            value: controller.checkedAutoLogin,
-                            onChanged: (bool? value) {
-                              controller.getAutoLogin(value ?? false);
-                            },
-                          ),
+                  Row(
+                    children: [
+                      // 자동 로그인
+                      GetBuilder<LoginController>(
+                        builder: (controller) => Checkbox(
+                          checkColor: Colors.white,
+                          fillColor: MaterialStateProperty.resolveWith((states) => const Color(0xff9B9B9B)),
+                          shape: const CircleBorder(),
+                          value: controller.checkedAutoLogin,
+                          onChanged: (bool? value) {
+                            controller.getAutoLogin(value ?? false);
+                          },
                         ),
-                        const Text("자동 로그인")
-                      ],
-                    ),
+                      ),
+                      createCustomText(
+                        left: 0.0,
+                        color: Colors.white,
+                        text: "자동 로그인",
+                      ),
+                      // 아이디 저장
+                      GetBuilder<LoginController>(
+                        builder: (controller) => Checkbox(
+                          checkColor: Colors.white,
+                          fillColor: MaterialStateProperty.resolveWith((states) => const Color(0xff9B9B9B)),
+                          shape: const CircleBorder(),
+                          value: controller.idSaved,
+                          onChanged: (bool? value) {
+                            controller.setIdSaved(value ?? false);
+                          },
+                        ),
+                      ),
+                      createCustomText(
+                        left: 0.0,
+                        color: Colors.white,
+                        text: "아이디 저장",
+                      ),
+                    ],
                   ),
+
                   // 로그인 버튼
                   GetBuilder<LoginController>(
                     builder: (controller) => createElevatedButton(
@@ -142,27 +208,37 @@ class _LoginState extends State<Login> {
                   ),
                 ],
               ),
-            ),
-            GetBuilder<SignUpController>(
-              builder: (controller) => createElevatedButton(
-                text: "회원가입",
-                function: () {
-                  controller.getAutoLogin(false);
-                  Navigator.pushNamed(context, "/sign_up");
-                },
-              ),
-            ),
-            if (loginController.isGuestMode == false)
+
               GetBuilder<LoginController>(
                 builder: (controller) => createElevatedButton(
-                  text: "GUEST 입장",
+                  color: Colors.white,
+                  textColors: Colors.black,
+                  text: "회원가입",
                   function: () {
-                    controller.onGuesMode();
-                    Navigator.pushNamed(context, "/home");
+                    controller.getAutoLogin(false);
+                    Navigator.pushNamed(context, "/sign_up");
                   },
                 ),
               ),
-          ],
+
+              if (!loginController.isGuestMode)
+                const SizedBox(
+                  height: 100,
+                ),
+              if (!loginController.isGuestMode)
+                GetBuilder<LoginController>(
+                  builder: (controller) => createElevatedButton(
+                    color: Colors.grey[300],
+                    textColors: Colors.black,
+                    text: "GUEST 입장",
+                    function: () {
+                      controller.onGuesMode();
+                      Navigator.pushNamed(context, "/home");
+                    },
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
