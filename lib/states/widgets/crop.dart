@@ -80,12 +80,11 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
         enableAudio: false,
       );
 
-      // await controller!.setFlashMode(FlashMode.off);
       controller!.initialize().then((_) async {
         if (!mounted) {
           return;
         }
-
+        // await controller!.setFlashMode(FlashMode.off);
         setState(() {});
       });
     } catch (e) {
@@ -129,6 +128,8 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
     _boxHeightForCrop = widget.boxHeight;
 
     return Scaffold(
+      extendBody: true,
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: Stack(
           children: [
@@ -442,4 +443,8 @@ int _position(MaskForCameraViewInsideLinePosition? position) {
     p = position.index + 1;
   }
   return p;
+}
+
+void cameradispose() {
+  controller!.dispose();
 }

@@ -24,6 +24,8 @@ class _ReportcameraState extends State<Reportcamera> {
   Widget build(BuildContext context) {
     final double statusBarHeight = Env.MEDIA_SIZE_PADDINGTOP!;
     return Scaffold(
+      extendBody: true,
+      backgroundColor: Colors.transparent,
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -40,13 +42,14 @@ class _ReportcameraState extends State<Reportcamera> {
                 c.imageTimewrite(getDateToStringForYYMMDDHHMM(getNow()));
                 Log.debug(getDateToStringForYYMMDDHHMM(getNow()));
                 if (c.carnumberImage.value.isNotEmpty) {
+                  cameradispose();
                   Get.offAll(const Declaration());
                 } else {
                   Get.off(const Numbercamera());
                 }
               }),
-          initContainerByOutlineButton(0, 0.95, "주정차관련법규보기", context),
-          Positioned(top: statusBarHeight + 20, child: initColumnByText(10))
+          initContainerByOutlineButton(0, 0.7, "주정차관련법규보기", context),
+          Positioned(top: statusBarHeight + 10, child: initColumnByText(10))
         ],
       ),
     );

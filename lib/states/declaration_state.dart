@@ -92,7 +92,8 @@ class _DeclarationState extends State<Declaration> {
                     Column(
                       children: [
                         Obx((() => SizedBox(
-                              width: 200,
+                              // width: 200,
+                              width: Env.MEDIA_SIZE_WIDTH! / 2,
                               child: Image.file(
                                 File(controller.reportImage.value),
                                 fit: BoxFit.contain,
@@ -101,13 +102,13 @@ class _DeclarationState extends State<Declaration> {
                         const SizedBox(height: 10),
                         _initInkWellByOnTap(_initContainer(const Color(0xff9B9B9B), "재촬영", 22.0, 210), _reportcamerabtn),
                         const SizedBox(height: 10),
-                        Obx((() => SizedBox(width: 200, child: Image.file(File(controller.carnumberImage.value))))),
+                        Obx((() => SizedBox(width: Env.MEDIA_SIZE_WIDTH! / 2, child: Image.file(File(controller.carnumberImage.value))))),
                         const SizedBox(height: 10),
                         _initInkWellByOnTap(_initContainer(const Color(0xff9B9B9B), "재촬영", 22.0, 210), _numbercamerabtn),
                       ],
                     ),
                     SizedBox(
-                      width: 200,
+                      width: Env.MEDIA_SIZE_WIDTH! / 1.5,
                       height: 100,
                       child: Column(
                         children: [
@@ -124,7 +125,7 @@ class _DeclarationState extends State<Declaration> {
                                 width: 10,
                               ),
                               SizedBox(
-                                width: 140,
+                                width: Env.MEDIA_SIZE_WIDTH! / 2,
                                 height: 40,
                                 child: Card(
                                     // child: _createTextFormField(_numberplateContoroller),
@@ -180,7 +181,7 @@ class _DeclarationState extends State<Declaration> {
                     _initInkWellByOnTap(_initContainer(Colors.black, "신고하기", 13.0, 250), _reportbtn),
                     const SizedBox(height: 5),
                     SizedBox(
-                      width: 210,
+                      width: Env.MEDIA_SIZE_WIDTH! / 2.3,
                       child: Wrap(
                         direction: Axis.horizontal,
                         alignment: WrapAlignment.center,
@@ -198,7 +199,7 @@ class _DeclarationState extends State<Declaration> {
                 ),
               )),
             ),
-            bottomNavigationBar: SizedBox(width: 200, child: _createPaddingBybottomline()),
+            bottomNavigationBar: SizedBox(width: Env.MEDIA_SIZE_WIDTH! / 2.5, child: _createPaddingBybottomline()),
           ),
         ),
       ),
@@ -212,7 +213,7 @@ class _DeclarationState extends State<Declaration> {
       child: Container(
         alignment: const Alignment(0, 0),
         height: 5.0,
-        width: 110.0,
+        width: Env.MEDIA_SIZE_WIDTH! / 3,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3),
           color: const Color(0xff2D2D2D),
@@ -257,7 +258,7 @@ class _DeclarationState extends State<Declaration> {
     return TextFormField(
         textAlign: TextAlign.start,
         controller: controller,
-        style: const TextStyle(color: Colors.black, fontSize: 12),
+        style: const TextStyle(color: Colors.black, fontSize: 13, fontFamily: "NotoSansKR", fontWeight: FontWeight.w500),
         inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]'))],
         decoration: const InputDecoration(
           filled: true,
@@ -352,10 +353,6 @@ class _DeclarationState extends State<Declaration> {
 
   void _reportcamerabtn() {
     Get.to(const Reportcamera());
-    // Get.to(const Home(
-    //   index: 1,
-    // ));
-    //카메라 화면에서 내정보나 맵 이동시 문제생김
   }
 
   void _numbercamerabtn() {
@@ -365,6 +362,8 @@ class _DeclarationState extends State<Declaration> {
 
   void _reportbtn() async {
     if (valuenullCheck()) {
+      ProgressDialog pd = ProgressDialog(context: context);
+      pd.show(max: 100, msg: '데이터를 생성중입니다', barrierDismissible: false);
       await saveImageGallery();
       try {
         String text = _numberplateContoroller.text;
@@ -380,12 +379,17 @@ class _DeclarationState extends State<Declaration> {
                 {
                   sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
                           controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
-                      .then((reportInfo) => {
-                            if (!reportInfo.success) {alertDialogByonebutton("알림", reportInfo.message!)} else {alertDialogByonebutton("신고알림", reportInfo.data!)}
-                          })
+                      .then((reportInfo) {
+                    if (!reportInfo.success) {
+                      alertDialogByonebutton("알림", reportInfo.message!);
+                    } else {
+                      alertDialogByonebutton("신고알림", reportInfo.data!);
+                    }
+                    pd.close();
+                    Get.offAll(const Confirmation());
+                  })
                 }
             });
-        Get.offAll(const Confirmation());
       } catch (e) {
         // TODO : 알림창 띄우기
         alertDialogByonebutton("알림", "신고 중 에러 발생");
