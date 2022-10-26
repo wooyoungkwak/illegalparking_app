@@ -131,7 +131,7 @@ class _MyPageReportState extends State<MyPageReport> {
         body: ListView(
           shrinkWrap: true,
           children: [
-            createMypageCard(
+            createMypageContainer(
               widgetList: <Widget>[
                 createCustomText(
                   weight: FontWeight.w400,

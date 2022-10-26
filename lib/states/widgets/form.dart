@@ -105,12 +105,14 @@ Padding createElevatedButton({
   );
 }
 
-Card createMypageCard({List<Widget>? widgetList, dynamic route}) {
-  return Card(
-    elevation: 4,
+Container createMypageContainer({List<Widget>? widgetList, dynamic route}) {
+  return Container(
     // Round 처리하는데 3개를 수정해야됨
     // 1
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+    padding: const EdgeInsets.only(top: 4, bottom: 4),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(18.0),
+    ),
     child: Material(
       // 2
       borderRadius: const BorderRadius.all(Radius.circular(18)),
