@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static const Color black = Color(0xff000000);
+  static const Color grey = Color(0xffC6C6C6);
   static const Color white = Color(0xffffffff);
   static const Color blue = Color(0xff1D71F8);
   static const Color textField = Color(0xffEDEDED);

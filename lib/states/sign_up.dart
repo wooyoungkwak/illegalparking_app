@@ -469,13 +469,14 @@ class _SignUpState extends State<SignUp> {
           ),
           actions: [
             IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(
-                  Icons.close,
-                  color: AppColors.black,
-                ))
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.close,
+                color: AppColors.black,
+              ),
+            )
           ],
         ),
         body: Container(

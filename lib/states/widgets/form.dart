@@ -79,9 +79,10 @@ Padding createTextFormField({
 }
 
 Padding createElevatedButton({
-  String? text,
   Color? textColors,
   Color? color,
+  String? text,
+  double? width,
   double? padding,
   dynamic? function,
 }) {
@@ -89,7 +90,7 @@ Padding createElevatedButton({
     padding: EdgeInsets.all(padding ?? 8.0),
     child: SizedBox(
       height: 40,
-      width: double.infinity,
+      width: width ?? double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: const StadiumBorder(),
@@ -97,8 +98,9 @@ Padding createElevatedButton({
         ),
         onPressed: function,
         child: createCustomText(
-          text: text ?? "",
           color: textColors ?? Colors.white,
+          weight: AppFontWeight.bold,
+          text: text ?? "",
         ),
       ),
     ),
