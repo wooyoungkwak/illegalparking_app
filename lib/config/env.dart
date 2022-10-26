@@ -17,8 +17,8 @@ class Env {
 
   static const String FILE_SERVER_URL = "http://49.50.166.205:8090/";
 
-  // static const String SERVER_ADMIN_URL = "$ADMIN_SERVER:18090";
-  static const String SERVER_ADMIN_URL = "http://192.168.0.175:8090";
+  static const String SERVER_ADMIN_URL = "$ADMIN_SERVER:18090";
+  // static const String SERVER_ADMIN_URL = "http://192.168.0.175:8090";
   static const String SERVER_LOGIN_URL = '$SERVER_ADMIN_URL/api/login';
   static const String SERVER_ADMIN_REGISTER_URL = '$SERVER_ADMIN_URL/api/user/register';
   static const String SERVER_ADMIN_IS_EXIST_URL = '$SERVER_ADMIN_URL/api/user/isExist';

@@ -367,24 +367,24 @@ class _DeclarationState extends State<Declaration> {
     if (valuenullCheck()) {
       await saveImageGallery();
       try {
-        // String text = _numberplateContoroller.text;
-        // text = text.replaceAll(' ', '');
-        // alertDialogByonebutton("알림", "실행");
-        // sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
-        //       if (result == false)
-        //         {
-        //           // TODO : 알림창 띄우기
-        //           alertDialogByonebutton("알림", "파일 전송에 실패했습니다")
-        //         }
-        //       else
-        //         {
-        //           sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
-        //                   controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
-        //               .then((reportInfo) => {
-        //                     if (!reportInfo.success) {alertDialogByonebutton("알림", reportInfo.message!)}
-        //                   })
-        //         }
-        //     });
+        String text = _numberplateContoroller.text;
+        text = text.replaceAll(' ', '');
+        alertDialogByonebutton("알림", "실행");
+        sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
+              if (result == false)
+                {
+                  // TODO : 알림창 띄우기
+                  alertDialogByonebutton("알림", "파일 전송에 실패했습니다")
+                }
+              else
+                {
+                  sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
+                          controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
+                      .then((reportInfo) => {
+                            if (!reportInfo.success) {alertDialogByonebutton("알림", reportInfo.message!)} else {alertDialogByonebutton("신고알림", reportInfo.data!)}
+                          })
+                }
+            });
         Get.offAll(const Confirmation());
       } catch (e) {
         // TODO : 알림창 띄우기

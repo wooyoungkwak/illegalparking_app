@@ -80,11 +80,12 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
         enableAudio: false,
       );
 
+      // await controller!.setFlashMode(FlashMode.off);
       controller!.initialize().then((_) async {
         if (!mounted) {
           return;
         }
-        await controller!.setFlashMode(FlashMode.off);
+
         setState(() {});
       });
     } catch (e) {
@@ -324,7 +325,7 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
       ResolutionPreset.high,
       enableAudio: false,
     );
-    await controller!.setFlashMode(FlashMode.off);
+    // await cameraController.setFlashMode(FlashMode.off);
 
     controller = cameraController;
 
