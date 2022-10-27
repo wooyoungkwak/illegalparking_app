@@ -62,6 +62,7 @@ class Env {
   static String? USER_PHONE_NUMBER;
   static String? USER_CAR_NUMBER;
   static bool? USER_CAR_ALARM;
+  static String? USER_CAR_NAME;
 
   static const String LOGIN_STATE = "LOGIN_STATE";
   static const String KEY_USER_ID = "USER_ID"; // Login 후에 서버로부터 부여 받은 사용자 ID 값

@@ -38,6 +38,7 @@ class _MyPageState extends State<MyPage> {
           carName = myPageInfo.carName;
           carLevel = myPageInfo.carLevel;
           carNum = myPageInfo.carNum.toString();
+          Env.USER_CAR_NAME = myPageInfo.carName;
           Env.USER_CAR_NUMBER = myPageInfo.carNum.toString();
           Env.USER_CAR_ALARM = myPageInfo.isAlarm;
         }
@@ -157,17 +158,17 @@ class _MyPageState extends State<MyPage> {
               child: Stack(
                 children: [
                   Container(
-                    height: 148,
+                    height: 180,
                     decoration: BoxDecoration(
                       color: AppColors.carRegistBackground,
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                   ),
                   Positioned(
-                    top: 68,
+                    top: 85,
                     child: Container(
-                      width: MediaQuery.of(context).size.width - 30,
-                      height: 80,
+                      width: MediaQuery.of(context).size.width - 32,
+                      height: 95,
                       decoration: BoxDecoration(
                         color: AppColors.white,
                         borderRadius: BorderRadius.circular(18.0),
@@ -184,7 +185,7 @@ class _MyPageState extends State<MyPage> {
                           loginController.changeRealPage(5);
                         },
                         child: ConstrainedBox(
-                          constraints: const BoxConstraints(minHeight: 100),
+                          constraints: const BoxConstraints(minHeight: 180),
                           child: Padding(
                             padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                             child: Row(

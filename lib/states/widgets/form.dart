@@ -95,7 +95,7 @@ Padding createElevatedButton({
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: const StadiumBorder(),
-          primary: color ?? Colors.blue,
+          backgroundColor: color ?? Colors.blue,
         ),
         onPressed: function,
         child: createCustomText(

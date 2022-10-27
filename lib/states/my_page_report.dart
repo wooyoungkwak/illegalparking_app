@@ -186,7 +186,6 @@ class _MyPageReportState extends State<MyPageReport> {
         children: List.generate(
           reportHistoryList.length,
           (index) => SizedBox(
-            // padding: const EdgeInsets.only(bottom: 8.0),
             child: Wrap(
               children: [
                 Column(
@@ -213,6 +212,7 @@ class _MyPageReportState extends State<MyPageReport> {
                         ),
 
                         const Spacer(),
+                        // 상태
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
@@ -229,7 +229,6 @@ class _MyPageReportState extends State<MyPageReport> {
                             ),
                           ),
                         )
-                        // 상태
                       ],
                     ),
                   ],
@@ -292,7 +291,7 @@ class _MyPageReportState extends State<MyPageReport> {
           padding: const EdgeInsets.all(8.0),
           // child: Container(decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Image.asset("assets/noimage.jpg")),
           child: Container(
-            decoration: BoxDecoration(border: Border.all(color: AppColors.black)),
+            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
             child: Image.network(
               height: 70,
               width: 70,
@@ -316,7 +315,6 @@ class _MyPageReportState extends State<MyPageReport> {
               child: createCustomText(
                 padding: 0.0,
                 weight: AppFontWeight.bold,
-                size: 14.0,
                 // text: _addrTextLengthLimit(reportHistoryList[index].addr),
                 text: addr,
               ),
