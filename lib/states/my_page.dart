@@ -407,7 +407,7 @@ class _MyPageState extends State<MyPage> {
                                   left: 24.0,
                                   right: 24.0,
                                   bottom: 8.0,
-                                  weight: AppFontWeight.regula,
+                                  weight: AppFontWeight.regular,
                                   color: AppColors.textGrey,
                                   text: noticeList[index].regDt,
                                 ),
@@ -445,14 +445,21 @@ class _MyPageState extends State<MyPage> {
             ),
           ),
           createElevatedButton(
-              text: "더보기",
-              function: () {
-                requestNotice(Env.USER_SEQ!, noticeList.length, 5).then((noticeListInfo) {
-                  setState(() {
-                    noticeList.addAll(noticeListInfo.noticeInfos);
-                  });
-                });
-              })
+            color: AppColors.white,
+            textColors: AppColors.black,
+            text: "더보기",
+            function: () {
+              requestNotice(Env.USER_SEQ!, noticeList.length, 5).then(
+                (noticeListInfo) {
+                  setState(
+                    () {
+                      noticeList.addAll(noticeListInfo.noticeInfos);
+                    },
+                  );
+                },
+              );
+            },
+          ),
         ],
       ),
     );
@@ -518,6 +525,12 @@ class _MyPageState extends State<MyPage> {
                                 setState(() {
                                   if (noticeIndex < noticeList.length - 1) {
                                     noticeIndex++;
+                                  } else if (noticeIndex == (noticeList.length - 1)) {
+                                    requestNotice(Env.USER_SEQ!, noticeList.length, 5).then((noticeListInfo) {
+                                      setState(() {
+                                        noticeList.addAll(noticeListInfo.noticeInfos);
+                                      });
+                                    });
                                   }
                                 });
                               },
@@ -589,7 +602,7 @@ class _MyPageState extends State<MyPage> {
                                 createCustomText(
                                   top: 0.0,
                                   left: 16.0,
-                                  weight: AppFontWeight.regula,
+                                  weight: AppFontWeight.regular,
                                   color: AppColors.textGrey,
                                   text: noticeList[noticeIndex].regDt,
                                 ),

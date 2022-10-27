@@ -6,6 +6,7 @@ class AppColors {
   static const Color grey = Color(0xffC6C6C6);
   static const Color white = Color(0xffffffff);
   static const Color blue = Color(0xff1D71F8);
+  static const Color red = Color(0xffE83922);
   static const Color textField = Color(0xffEDEDED);
   static const Color appBackground = Color(0xff1A1C1E);
   static const Color bottomNavSelected = Color(0xffFFC117);
@@ -21,7 +22,7 @@ class AppFontWeight {
   static const FontWeight bold = FontWeight.w700;
   static const FontWeight semiBold = FontWeight.w600;
   static const FontWeight medium = FontWeight.w500;
-  static const FontWeight regula = FontWeight.w400;
+  static const FontWeight regular = FontWeight.w400;
   static const FontWeight light = FontWeight.w300;
   static const FontWeight extraLight = FontWeight.w200;
   static const FontWeight ting = FontWeight.w100;

@@ -95,11 +95,11 @@ Padding createElevatedButton({
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: const StadiumBorder(),
-          backgroundColor: color ?? Colors.blue,
+          backgroundColor: color ?? AppColors.blue,
         ),
         onPressed: function,
         child: createCustomText(
-          color: textColors ?? Colors.white,
+          color: textColors ?? AppColors.white,
           weight: AppFontWeight.bold,
           text: text ?? "",
         ),
