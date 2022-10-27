@@ -130,181 +130,189 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
     return Scaffold(
       extendBody: true,
       backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: !controller!.value.isInitialized
-                  ? Container()
-                  : SizedBox(
-                      child: CameraPreview(
-                        controller!,
-                      ),
-                    ),
-            ),
-            ColorFiltered(
-              colorFilter: ColorFilter.mode(widget.backColor, BlendMode.srcOut),
-              child: Stack(
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.transparent,
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: widget.borderType == MaskForCameraViewBorderType.solid ? widget.boxWidth + widget.boxBorderWidth * 2 : widget.boxWidth,
-                        height: widget.borderType == MaskForCameraViewBorderType.solid ? widget.boxHeight + widget.boxBorderWidth * 2 : widget.boxHeight,
-                        decoration: BoxDecoration(color: Colors.amber, borderRadius: BorderRadius.circular(8)),
-                      ),
+      body: Stack(
+        children: [
+          // Container(
+          //   child: !controller!.value.isInitialized
+          //       ? Container()
+          //       : SizedBox(
+          //           height: 600,
+          //           child: CameraPreview(
+          //             controller!,
+          //           ),
+          //         ),
+          // ),
+          Positioned(
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: !controller!.value.isInitialized
+                ? Container()
+                : SizedBox(
+                    child: CameraPreview(
+                      controller!,
                     ),
                   ),
-                ],
-              ),
-            ),
-            Positioned(
-              top: 0.0,
-              bottom: 0.0,
-              left: 0.0,
-              right: 0.0,
-              child: Center(
-                child: DottedBorder(
-                  borderType: BorderType.RRect,
-                  strokeWidth: widget.borderType == MaskForCameraViewBorderType.dotted ? widget.boxBorderWidth : 0.0,
-                  color: widget.borderType == MaskForCameraViewBorderType.dotted ? widget.boxBorderColor : Colors.transparent,
-                  dashPattern: const [4, 3],
-                  radius: Radius.circular(
-                    widget.boxBorderRadius,
+          ),
+          ColorFiltered(
+            colorFilter: ColorFilter.mode(widget.backColor, BlendMode.srcOut),
+            child: Stack(
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent,
                   ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: isRunning ? Colors.white60 : Colors.transparent,
-                      borderRadius: BorderRadius.circular(widget.boxBorderRadius),
-                    ),
+                  child: Align(
+                    alignment: Alignment.center,
                     child: Container(
                       width: widget.borderType == MaskForCameraViewBorderType.solid ? widget.boxWidth + widget.boxBorderWidth * 2 : widget.boxWidth,
                       height: widget.borderType == MaskForCameraViewBorderType.solid ? widget.boxHeight + widget.boxBorderWidth * 2 : widget.boxHeight,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          width: widget.borderType == MaskForCameraViewBorderType.solid ? widget.boxBorderWidth : 0.0,
-                          // color: widget.borderType == MaskForCameraViewBorderType.solid ? widget.boxBorderColor : Colors.transparent,
-                          color: widget.borderType == MaskForCameraViewBorderType.solid ? widget.boxBorderColor : Colors.transparent,
-                        ),
-                        borderRadius: BorderRadius.circular(
-                          widget.boxBorderRadius,
-                        ),
+                      decoration: BoxDecoration(color: Colors.amber, borderRadius: BorderRadius.circular(8)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 0.0,
+            bottom: 0.0,
+            left: 0.0,
+            right: 0.0,
+            child: Center(
+              child: DottedBorder(
+                borderType: BorderType.RRect,
+                strokeWidth: widget.borderType == MaskForCameraViewBorderType.dotted ? widget.boxBorderWidth : 0.0,
+                color: widget.borderType == MaskForCameraViewBorderType.dotted ? widget.boxBorderColor : Colors.transparent,
+                dashPattern: const [4, 3],
+                radius: Radius.circular(
+                  widget.boxBorderRadius,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: isRunning ? Colors.white60 : Colors.transparent,
+                    borderRadius: BorderRadius.circular(widget.boxBorderRadius),
+                  ),
+                  child: Container(
+                    width: widget.borderType == MaskForCameraViewBorderType.solid ? widget.boxWidth + widget.boxBorderWidth * 2 : widget.boxWidth,
+                    height: widget.borderType == MaskForCameraViewBorderType.solid ? widget.boxHeight + widget.boxBorderWidth * 2 : widget.boxHeight,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: widget.borderType == MaskForCameraViewBorderType.solid ? widget.boxBorderWidth : 0.0,
+                        // color: widget.borderType == MaskForCameraViewBorderType.solid ? widget.boxBorderColor : Colors.transparent,
+                        color: widget.borderType == MaskForCameraViewBorderType.solid ? widget.boxBorderColor : Colors.transparent,
                       ),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            top: widget.insideLine != null && widget.insideLine!.direction == null ||
-                                    widget.insideLine != null && widget.insideLine!.direction == MaskForCameraViewInsideLineDirection.horizontal
-                                ? ((widget.boxHeight / 10) * _position(widget.insideLine!.position))
-                                : 0.0,
-                            left: widget.insideLine != null && widget.insideLine!.direction == MaskForCameraViewInsideLineDirection.vertical
-                                ? ((widget.boxWidth / 10) * _position(widget.insideLine!.position))
-                                : 0.0,
-                            child: widget.insideLine != null ? _Line(widget) : Container(),
-                          ),
-                          Positioned(
-                            child: _IsCropping(isRunning: isRunning, widget: widget),
-                          ),
-                        ],
+                      borderRadius: BorderRadius.circular(
+                        widget.boxBorderRadius,
                       ),
+                    ),
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          top: widget.insideLine != null && widget.insideLine!.direction == null ||
+                                  widget.insideLine != null && widget.insideLine!.direction == MaskForCameraViewInsideLineDirection.horizontal
+                              ? ((widget.boxHeight / 10) * _position(widget.insideLine!.position))
+                              : 0.0,
+                          left: widget.insideLine != null && widget.insideLine!.direction == MaskForCameraViewInsideLineDirection.vertical
+                              ? ((widget.boxWidth / 10) * _position(widget.insideLine!.position))
+                              : 0.0,
+                          child: widget.insideLine != null ? _Line(widget) : Container(),
+                        ),
+                        Positioned(
+                          child: _IsCropping(isRunning: isRunning, widget: widget),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
             ),
-            Positioned(
-              // bottom: widget.boxHeight > 150 ? 80 : 145,
-              top: widget.btomhighbtn,
-              // bottom: widget.boxHeight > 150 ? 80 : 145,
-              left: 0,
-              right: 0,
+          ),
+          Positioned(
+            // bottom: widget.boxHeight > 150 ? 80 : 145,
+            top: widget.btomhighbtn,
+            // bottom: widget.boxHeight > 150 ? 80 : 145,
+            left: 0,
+            right: 0,
 
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
-                decoration: BoxDecoration(
-                  color: widget.appBarColor,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(24.0),
-                    topRight: Radius.circular(24.0),
-                  ),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              decoration: BoxDecoration(
+                color: widget.appBarColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(24.0),
+                  topRight: Radius.circular(24.0),
                 ),
-                child: SafeArea(
-                  top: false,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 60.0,
-                        height: 60.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: widget.takeButtonColor,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(60.0),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              splashColor: widget.takeButtonActionColor.withOpacity(0.26),
-                              onTap: () async {
-                                if (isRunning) {
-                                  return;
-                                }
-                                setState(() {
-                                  isRunning = true;
-                                });
-                                MaskForCameraViewResult? res = await _cropPicture(widget.insideLine);
-                                if (res == null) {
-                                  throw "Camera expansion is very small";
-                                }
-                                await saveImageDirectory(res, widget.type).then((value) => widget.onTake(res)); // 저장 type 값에 따라 저장하는 변수가 바뀜
+              ),
+              child: SafeArea(
+                top: false,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 60.0,
+                      height: 60.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: widget.takeButtonColor,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(60.0),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            splashColor: widget.takeButtonActionColor.withOpacity(0.26),
+                            onTap: () async {
+                              if (isRunning) {
+                                return;
+                              }
+                              setState(() {
+                                isRunning = true;
+                              });
+                              MaskForCameraViewResult? res = await _cropPicture(widget.insideLine);
+                              if (res == null) {
+                                throw "Camera expansion is very small";
+                              }
+                              await saveImageDirectory(res, widget.type).then((value) => widget.onTake(res)); // 저장 type 값에 따라 저장하는 변수가 바뀜
 
-                                setState(() {
-                                  isRunning = false;
-                                });
-                              },
+                              setState(() {
+                                isRunning = false;
+                              });
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  width: 2,
+                                  color: widget.takeButtonActionColor,
+                                ),
+                              ),
+                              // child: Icon(
+                              //   Icons.camera_alt_outlined,
+                              //   color: widget.takeButtonActionColor,
+                              // ),
                               child: Container(
-                                margin: const EdgeInsets.all(5),
+                                margin: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    width: 2,
-                                    color: widget.takeButtonActionColor,
-                                  ),
-                                ),
-                                // child: Icon(
-                                //   Icons.camera_alt_outlined,
-                                //   color: widget.takeButtonActionColor,
-                                // ),
-                                child: Container(
-                                  margin: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white,
-                                      border: Border.all(
-                                        width: 2,
-                                      )),
-                                ),
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      width: 2,
+                                    )),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

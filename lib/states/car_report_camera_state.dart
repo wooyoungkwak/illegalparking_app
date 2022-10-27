@@ -31,18 +31,19 @@ class _ReportcameraState extends State<Reportcamera> {
         children: [
           MaskForCameraCustomView(
               type: false,
-              boxWidth: Env.MEDIA_SIZE_WIDTH! / 1.5,
+              // boxWidth: Env.MEDIA_SIZE_WIDTH! / 1.5,
+              boxWidth: Env.MEDIA_SIZE_WIDTH! - 50,
               boxHeight: c.carnumberImage.value.isNotEmpty ? Env.MEDIA_SIZE_HEIGHT! / 2.2 : Env.MEDIA_SIZE_HEIGHT! / 2,
               appBarColor: Colors.transparent,
               takeButtonActionColor: Colors.white,
               takeButtonColor: Colors.black,
+              // btomhighbtn: 630,
               // btomhighbtn: 140, // 버튼위치 조정
-              btomhighbtn: Env.MEDIA_SIZE_HEIGHT! / 1.55, // 버튼위치 조정
+              btomhighbtn: !c.carnumberImage.value.isNotEmpty ? Env.MEDIA_SIZE_HEIGHT! / 1.45 : Env.MEDIA_SIZE_HEIGHT! / 1.5, // 버튼위치 조정
               onTake: (MaskForCameraViewResult res) {
                 c.imageTimewrite(getDateToStringForYYMMDDHHMM(getNow()));
                 Log.debug(getDateToStringForYYMMDDHHMM(getNow()));
                 if (c.carnumberImage.value.isNotEmpty) {
-                  cameradispose();
                   Get.offAll(const Declaration());
                 } else {
                   Get.off(const Numbercamera());
@@ -106,11 +107,16 @@ void widgetbottomsheet(BuildContext context) {
           decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
           child: Column(
             children: [
-              const SizedBox(width: 50, child: Divider(color: Colors.blueGrey, thickness: 4.0)),
+              const SizedBox(width: 50, child: Divider(color: Color(0xffCCCCCC), thickness: 4.0)),
               const SizedBox(height: 15),
               const Expanded(
                 flex: 1,
-                child: CustomText(text: "불법주정차 법규", weight: FontWeight.w300, color: Colors.black),
+                child: CustomText(
+                  text: "불법주정차 법규",
+                  weight: FontWeight.w700,
+                  color: Colors.black,
+                  size: 20,
+                ),
               ),
               const SizedBox(height: 5),
               Expanded(
@@ -153,7 +159,12 @@ Container _initContainer(Color color, String text, double radius, double width) 
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 11),
-        child: Center(child: Text(text, style: const TextStyle(color: Colors.white, fontSize: 14))),
+        child: Center(
+            child: CustomText(
+          text: text,
+          size: 16,
+          weight: FontWeight.w500,
+        )),
       ),
     ),
   );
