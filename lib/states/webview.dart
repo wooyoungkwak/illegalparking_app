@@ -73,9 +73,9 @@ class _WebviewPageState extends State<WebviewPage> {
   Widget build(BuildContext context) {
     final statusBarHeight = MediaQuery.of(context).padding.top;
     return GestureDetector(
-      onTapDown: (value) {
-        closeBottomNav();
-      },
+      // onTapDown: (value) {
+      //   closeBottomNav();
+      // },
       child: Container(
         padding: EdgeInsets.only(top: statusBarHeight),
         child: Column(
@@ -90,7 +90,7 @@ class _WebviewPageState extends State<WebviewPage> {
                 onProgress: (int progress) {
                   Log.debug("Webview is loading (progress : $progress%");
                 },
-                gestureRecognizers: Set()..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()..onTapDown = (tap) {})),
+                // gestureRecognizers: Set()..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()..onTapDown = (tap) {})),
                 // ..add(Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer()..onEnd = (tap) {}))
                 // ..add(Factory<HorizontalDragGestureRecognizer>(() => HorizontalDragGestureRecognizer()..onStart = (tap) {})),
                 javascriptMode: JavascriptMode.unrestricted,
@@ -336,49 +336,53 @@ class _WebviewPageState extends State<WebviewPage> {
       JavascriptChannel(
           name: 'webToApp',
           onMessageReceived: (message) {
-            Map<String, dynamic> resultMap = jsonDecode(message.message);
-            MapInfo mapInfo;
-            mapInfo = MapInfo.fromJson(resultMap);
-            setState(() {
-              mapInfoType = mapInfo.type;
-            });
-
-            Log.debug("type : ${mapInfo.type}");
-            Log.debug("type : ${mapInfo.data.toString()}");
-
-            if (mapInfoType == "parking") {
+            if (jsonDecode(message.message).runtimeType.toString() != "String") {
+              Map<String, dynamic> resultMap = jsonDecode(message.message);
+              MapInfo mapInfo;
+              mapInfo = MapInfo.fromJson(resultMap);
               setState(() {
-                parkingName = mapInfo.getPkName();
-                parkingAddress = mapInfo.getPkAddr();
-                parkingPrice = mapInfo.getPkPrice();
-                parkingOperation = mapInfo.getPkOper();
-                parkingCount = mapInfo.getPkCount().toString();
-                parkingTime = mapInfo.getPkTime();
-                parkingPhoneNumber = mapInfo.getPkPhone();
-                parkingLat = mapInfo.getPkLat();
-                parkingLng = mapInfo.getPkLng();
+                mapInfoType = mapInfo.type;
               });
-            } else if (mapInfoType == "pm") {
-              setState(() {
-                personalMobName = mapInfo.getPmName();
-                personalMobPrice = mapInfo.getPmPrice();
-                personalMobTime = mapInfo.getPmTime();
-              });
+
+              Log.debug("type : ${mapInfo.type}");
+              Log.debug("type : ${mapInfo.data.toString()}");
+
+              if (mapInfoType == "parking") {
+                setState(() {
+                  parkingName = mapInfo.getPkName();
+                  parkingAddress = mapInfo.getPkAddr();
+                  parkingPrice = mapInfo.getPkPrice();
+                  parkingOperation = mapInfo.getPkOper();
+                  parkingCount = mapInfo.getPkCount().toString();
+                  parkingTime = mapInfo.getPkTime();
+                  parkingPhoneNumber = mapInfo.getPkPhone();
+                  parkingLat = mapInfo.getPkLat();
+                  parkingLng = mapInfo.getPkLng();
+                });
+              } else if (mapInfoType == "pm") {
+                setState(() {
+                  personalMobName = mapInfo.getPmName();
+                  personalMobPrice = mapInfo.getPmPrice();
+                  personalMobTime = mapInfo.getPmTime();
+                });
+              } else {
+                setState(() {
+                  parkingName = "";
+                  parkingAddress = "";
+                  parkingPrice = "";
+                  parkingOperation = "";
+                  parkingCount = "";
+                  parkingTime = "";
+                  parkingPhoneNumber = "";
+                  personalMobName = "";
+                  personalMobPrice = "";
+                });
+              }
+              mapController.getClickedMap(true);
+              showBottomDialog();
             } else {
-              setState(() {
-                parkingName = "";
-                parkingAddress = "";
-                parkingPrice = "";
-                parkingOperation = "";
-                parkingCount = "";
-                parkingTime = "";
-                parkingPhoneNumber = "";
-                personalMobName = "";
-                personalMobPrice = "";
-              });
+              closeBottomNav();
             }
-            mapController.getClickedMap(true);
-            showBottomDialog();
           })
     };
   }

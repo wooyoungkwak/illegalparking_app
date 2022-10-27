@@ -124,6 +124,7 @@ class _LoginState extends State<Login> {
                   Container(
                     child: createTextFormField(
                       hintText: "아이디 또는 이메일을 입력해주세요.",
+                      fillColor: AppColors.textField,
                       controller: _idController,
                       validation: idValidator,
                     ),
@@ -131,6 +132,7 @@ class _LoginState extends State<Login> {
                   createTextFormField(
                     hintText: "비밀번호를 입력해주세요.",
                     obscureText: true,
+                    fillColor: AppColors.textField,
                     controller: _passController,
                     validation: passwordValidator,
                   ),
@@ -172,7 +174,9 @@ class _LoginState extends State<Login> {
                       ),
                     ],
                   ),
-
+                  const SizedBox(
+                    height: 20,
+                  ),
                   // 로그인 버튼
                   GetBuilder<LoginController>(
                     builder: (controller) => createElevatedButton(

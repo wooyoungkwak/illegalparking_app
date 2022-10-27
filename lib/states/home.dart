@@ -46,7 +46,7 @@ class _HomeState extends State<Home> {
         },
         child: Scaffold(
           extendBody: true,
-          backgroundColor: AppColors.appBackground,
+          backgroundColor: loginController.isGuestMode ? AppColors.white : AppColors.appBackground,
           body: loginController.currentPages,
           bottomNavigationBar: Container(
             height: 70,
