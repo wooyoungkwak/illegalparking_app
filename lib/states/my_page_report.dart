@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/models/result_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
@@ -18,7 +19,7 @@ class MyPageReport extends StatefulWidget {
 class _MyPageReportState extends State<MyPageReport> {
   final loginController = Get.put(LoginController());
   List<dynamic> reportHistoryList = [];
-  List testList = [
+  List textList = [
     {
       "image": "assets/noimage.jpg",
       "address": "01 가 1234 광양시 중동",
@@ -108,62 +109,84 @@ class _MyPageReportState extends State<MyPageReport> {
         return Future(() => false);
       },
       child: Scaffold(
+        backgroundColor: AppColors.appBackground,
         appBar: AppBar(
+          elevation: 0,
+          backgroundColor: AppColors.appBackground,
           centerTitle: true,
           automaticallyImplyLeading: false,
           leading: Material(
-            color: Colors.blue,
+            color: AppColors.appBackground,
             child: InkWell(
               onTap: () {
                 loginController.changeRealPage(2);
               },
               child: const Icon(
                 Icons.chevron_left,
-                color: Colors.black,
+                color: AppColors.white,
                 size: 40,
               ),
             ),
           ),
           title: createCustomText(
+            color: AppColors.white,
+            weight: AppFontWeight.bold,
+            size: 16,
             text: "신고이력",
           ),
         ),
         body: ListView(
           shrinkWrap: true,
           children: [
-            createMypageContainer(
-              widgetList: <Widget>[
-                createCustomText(
-                  weight: FontWeight.w400,
-                  text: "나의 신고 이력",
-                ),
-                const Spacer(),
-                createCustomText(
-                  padding: 0.0,
-                  size: 32.0,
-                  text: "${reportHistoryList.length}",
-                ),
-                createCustomText(
-                  padding: 0.0,
-                  weight: FontWeight.w400,
-                  text: "건",
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
+              child: createMypageContainer(
+                widgetList: <Widget>[
+                  createCustomText(
+                    weight: AppFontWeight.bold,
+                    size: 16.0,
+                    text: "나의 신고이력",
+                  ),
+                  const Spacer(),
+                  createCustomText(
+                    right: 0.0,
+                    weight: AppFontWeight.semiBold,
+                    size: 26,
+                    text: "${reportHistoryList.length}",
+                  ),
+                  createCustomText(
+                    top: 16,
+                    left: 0.0,
+                    weight: AppFontWeight.semiBold,
+                    size: 12,
+                    text: "건",
+                  ),
+                ],
+              ),
             ),
-            _createReportList(context, reportHistoryList)
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
+              child: _createReportList(context, reportHistoryList),
+            )
           ],
         ),
       ),
     );
   }
 
-  Card _createReportList(BuildContext context, List reportHistoryList) {
-    return Card(
+  Container _createReportList(BuildContext context, List reportHistoryList) {
+    return Container(
+      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(18.0),
+      ),
       child: Wrap(
         alignment: WrapAlignment.center,
         children: List.generate(
           reportHistoryList.length,
           (index) => SizedBox(
+            // padding: const EdgeInsets.only(bottom: 8.0),
             child: Wrap(
               children: [
                 Column(
@@ -192,11 +215,16 @@ class _MyPageReportState extends State<MyPageReport> {
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            color: reportColors(reportHistoryList[index].reportState),
+                          child: Container(
+                            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                            decoration: BoxDecoration(
+                              color: reportColors(reportHistoryList[index].reportState),
+                              border: Border.all(color: AppColors.grey),
+                              borderRadius: BorderRadius.circular(11.0),
+                            ),
                             child: createCustomText(
-                              weight: FontWeight.w400,
-                              color: reportColors(reportHistoryList[index].reportState) == const Color(0xffffffff) ? Colors.black : Colors.white,
+                              weight: AppFontWeight.semiBold,
+                              color: reportColors(reportHistoryList[index].reportState) == const Color(0xffffffff) ? AppColors.textGrey : AppColors.white,
                               text: reportHistoryList[index].reportState,
                             ),
                           ),
@@ -211,16 +239,34 @@ class _MyPageReportState extends State<MyPageReport> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: List.generate(
                     reportHistoryList[index].comments.length,
-                    (commentIndex) => createCustomText(
-                      left: 32.0,
-                      size: 12.0,
-                      text: "* ${reportHistoryList[index].comments[commentIndex]}",
+                    (commentIndex) => Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          child: Image.asset(height: 14, width: 12, "assets/icon_comment.png"),
+                        ),
+                        Container(
+                          constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 70),
+                          child: createCustomText(
+                            top: 0.0,
+                            bottom: 0.0,
+                            left: 4.0,
+                            right: 0.0,
+                            weight: AppFontWeight.semiBold,
+                            color: AppColors.textGrey,
+                            size: 12.0,
+                            text: "${reportHistoryList[index].comments[commentIndex]}",
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
 
                 if (reportHistoryList.length != (index + 1))
                   Container(
+                    margin: const EdgeInsets.only(top: 8.0),
                     color: Colors.grey,
                     height: 1,
                     width: MediaQuery.of(context).size.width,
@@ -240,19 +286,24 @@ class _MyPageReportState extends State<MyPageReport> {
       // Network Error가 계속 발생해서 잠시 막아둠
       children: [
         Container(
-          width: 80,
-          height: 80,
+          // color: AppColors.grey,
+          width: 66,
+          height: 66,
           padding: const EdgeInsets.all(8.0),
-          child: Image.network(
-            height: 70,
-            width: 70,
-            fit: BoxFit.cover,
-            "${Env.FILE_SERVER_URL}$fileName",
-            errorBuilder: (context, error, stackTrace) => Image.asset(
-              height: 80,
-              width: 80,
+          // child: Container(decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Image.asset("assets/noimage.jpg")),
+          child: Container(
+            decoration: BoxDecoration(border: Border.all(color: AppColors.black)),
+            child: Image.network(
+              height: 70,
+              width: 70,
               fit: BoxFit.cover,
-              "assets/noimage.jpg",
+              "${Env.FILE_SERVER_URL}$fileName",
+              errorBuilder: (context, error, stackTrace) => Image.asset(
+                height: 80,
+                width: 80,
+                fit: BoxFit.cover,
+                "assets/noimage.jpg",
+              ),
             ),
           ),
         ),
@@ -264,13 +315,16 @@ class _MyPageReportState extends State<MyPageReport> {
               constraints: addrTextWidthLimit(reportState, context),
               child: createCustomText(
                 padding: 0.0,
-                size: 16.0,
+                weight: AppFontWeight.bold,
+                size: 14.0,
                 // text: _addrTextLengthLimit(reportHistoryList[index].addr),
                 text: addr,
               ),
             ),
             createCustomText(
               padding: 0.0,
+              weight: AppFontWeight.medium,
+              color: AppColors.textGrey,
               size: 12.0,
               text: regDt,
             ),

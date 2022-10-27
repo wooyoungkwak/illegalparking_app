@@ -250,13 +250,13 @@ Color reportColors(String state) {
       color = const Color(0xffffc107);
       break;
     case "신고접수":
-      color = const Color(0xffd84315);
+      color = const Color(0xffD95321);
       break;
     case "신고제외":
-      color = const Color(0xff9e9e9e);
+      color = const Color(0xff888888);
       break;
     case "과태료 대상":
-      color = const Color(0xffbf360c);
+      color = const Color(0xffB12915);
       break;
   }
   return color;
@@ -267,9 +267,9 @@ BoxConstraints addrTextWidthLimit(String state, BuildContext context) {
   double appWidthSize = MediaQuery.of(context).size.width;
   Log.debug("appWidthSize : $appWidthSize");
   if (state.length > 5) {
-    return BoxConstraints(maxWidth: appWidthSize - 212.6); // 4글자 : 218, 5글자 : 198
+    return BoxConstraints(maxWidth: appWidthSize - 216); // 5글자 : 216, 4글자 : 196,
   }
-  return BoxConstraints(maxWidth: appWidthSize - 193);
+  return BoxConstraints(maxWidth: appWidthSize - 196);
 }
 
 // 차종별 이미지
