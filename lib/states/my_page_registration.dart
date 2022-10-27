@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/my_page_controller.dart';
 import 'package:illegalparking_app/services/server_service.dart';
@@ -49,55 +50,95 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
         return Future(() => false);
       },
       child: Scaffold(
+        backgroundColor: AppColors.appBackground,
         appBar: AppBar(
-          title: const Text("내차등록"),
-          centerTitle: false,
+          elevation: 0,
+          backgroundColor: AppColors.appBackground,
+          centerTitle: true,
           automaticallyImplyLeading: false,
           leading: Material(
-            color: Colors.blue,
+            color: AppColors.appBackground,
             child: InkWell(
               onTap: () {
                 loginController.changeRealPage(2);
               },
               child: const Icon(
                 Icons.chevron_left,
-                color: Colors.black,
+                color: AppColors.white,
                 size: 40,
               ),
             ),
           ),
+          title: createCustomText(
+            color: AppColors.white,
+            weight: AppFontWeight.bold,
+            size: 16,
+            text: "내차등록",
+          ),
         ),
-        body: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Card(
-              elevation: 5,
-              child: Wrap(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(top: 16.0, left: 10.0, right: 10.0, bottom: 8.0),
-                    child: Text("차량 번호를 입력해 주세요"),
+        body: Wrap(
+          children: [
+            Form(
+              key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  height: 228,
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(18.0),
                   ),
-                  createTextFormField(
-                    hintText: "예) 123가4567, 65호4321",
-                    controller: carNumController,
-                    validation: _carNumValidator,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        children: [
+                          createCustomText(
+                            top: 16.0,
+                            left: 16.0,
+                            right: 0,
+                            bottom: 0,
+                            color: AppColors.blue,
+                            weight: AppFontWeight.bold,
+                            size: 16.0,
+                            text: "차량 번호",
+                          ),
+                          createCustomText(
+                            top: 16.0,
+                            left: 0,
+                            right: 16.0,
+                            bottom: 0,
+                            weight: AppFontWeight.bold,
+                            size: 16.0,
+                            text: "를 입력해 주세요",
+                          ),
+                        ],
+                      ),
+                      createTextFormField(
+                        controller: carNumController,
+                        fillColor: AppColors.textField,
+                        hintText: "예) 123가4567, 65호4321",
+                        validation: _carNumValidator,
+                      ),
+                      createElevatedButton(
+                        color: AppColors.black,
+                        text: "다음",
+                        function: () {
+                          if (_formKey.currentState!.validate()) {
+                            _showRegisterDialog();
+                          } else {
+                            showErrorToast(text: "차량 번호를 확인해 주세요.");
+                          }
+                        },
+                      ),
+                    ],
                   ),
-                  createElevatedButton(
-                    text: "다음",
-                    function: () {
-                      if (_formKey.currentState!.validate()) {
-                        _showRegisterDialog();
-                      } else {
-                        showErrorToast(text: "차량 번호를 확인해 주세요.");
-                      }
-                    },
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -109,36 +150,106 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
         builder: (BuildContext context) {
           return StatefulBuilder(builder: (context, setState) {
             return Scaffold(
+              backgroundColor: AppColors.appBackground,
               appBar: AppBar(
+                elevation: 0.0,
+                backgroundColor: AppColors.appBackground,
                 automaticallyImplyLeading: false,
                 centerTitle: true,
-                title: const Text("소식"),
+                title: createCustomText(
+                  color: AppColors.white,
+                  weight: FontWeight.bold,
+                  size: 16.0,
+                  text: "내차등록",
+                ),
                 actions: [
                   IconButton(
                       onPressed: () {
                         Navigator.pop(context);
+                        carNameController.text = "";
+                        carGradeselected = "소형";
                       },
-                      icon: const Icon(Icons.cancel_outlined))
+                      icon: const Icon(
+                        Icons.close,
+                        color: AppColors.white,
+                      ))
                 ],
               ),
               body: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Card(
-                  elevation: 5,
-                  child: Wrap(
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  height: 300,
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16.0, left: 10.0, right: 10.0, bottom: 8.0),
-                        child: createCustomText(text: "차종을 입력해 주세요"),
+                      Row(
+                        children: [
+                          createCustomText(
+                            top: 16.0,
+                            left: 16.0,
+                            right: 0,
+                            bottom: 0,
+                            color: AppColors.blue,
+                            weight: AppFontWeight.bold,
+                            size: 16.0,
+                            text: "차량 모델",
+                          ),
+                          createCustomText(
+                            top: 16.0,
+                            left: 0,
+                            right: 16.0,
+                            bottom: 0,
+                            weight: AppFontWeight.bold,
+                            size: 16.0,
+                            text: "를 입력해주세요",
+                          ),
+                        ],
                       ),
-                      createTextFormField(hintText: "쏘나타", controller: carNameController, validation: _carNameValidator),
+                      createTextFormField(
+                        fillColor: AppColors.textField,
+                        controller: carNameController,
+                        hintText: "쏘나타",
+                        validation: _carNameValidator,
+                      ),
+                      Row(
+                        children: [
+                          createCustomText(
+                            top: 16.0,
+                            left: 16.0,
+                            right: 0,
+                            bottom: 0,
+                            color: AppColors.blue,
+                            weight: AppFontWeight.bold,
+                            size: 16.0,
+                            text: "차량 분류",
+                          ),
+                          createCustomText(
+                            top: 16.0,
+                            left: 0,
+                            right: 16.0,
+                            bottom: 0,
+                            weight: AppFontWeight.bold,
+                            size: 16.0,
+                            text: "를 선택해주세요.",
+                          ),
+                        ],
+                      ),
                       Container(
-                        padding: const EdgeInsets.all(8.0),
+                        margin: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(4.0),
+                        color: AppColors.textField,
                         width: double.infinity,
                         child: DropdownButton(
+                            items: dropDownItems,
                             isExpanded: true,
                             value: carGradeselected,
-                            items: dropDownItems,
+                            style: const TextStyle(fontSize: 14.0, color: AppColors.black),
                             onChanged: (value) {
                               setState(() {
                                 carGradeselected = value!;
@@ -146,6 +257,7 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
                             }),
                       ),
                       createElevatedButton(
+                          color: AppColors.black,
                           text: "완료",
                           function: () {
                             requestCarRegister(Env.USER_SEQ!, carNumController.text, carNameController.text, carGradeselected).then((defaultInfo) {
@@ -153,6 +265,9 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
                                 Get.back();
                                 loginController.changeRealPage(3);
                                 showToast(text: "차량 등록이 완료되었습니다.");
+                                carNumController.text = "";
+                                carNameController.text = "";
+                                carGradeselected = "소형";
                               } else {
                                 showErrorToast(text: "등록하신 차량 정보를 확인해주세요.");
                               }
@@ -170,7 +285,7 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
   String? _carNameValidator(String? text) {
     final validSpecial = RegExp(r'^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z|A-Z|0-9]+$'); // 한글, 영어, 숫자만
     if (text!.isEmpty) {
-      return "차종을 입력해 주세요";
+      return "차량 모델을 입력해 주세요";
     }
 
     if (!validSpecial.hasMatch(text)) {

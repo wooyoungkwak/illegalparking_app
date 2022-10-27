@@ -119,36 +119,36 @@ class _MyPageState extends State<MyPage> {
             ),
           ),
           // 등록, 신고, 포인트
-          if (carNum == "" || carNum == null)
-            createMypageContainer(
-              route: () {
-                loginController.changeRealPage(4);
-              },
-              widgetList: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    createCustomText(
-                      padding: 0.0,
-                      color: AppColors.textBlack,
-                      weight: AppFontWeight.bold,
-                      size: 16.0,
-                      text: "내 차 등록을 진행해 주세요",
-                    ),
-                    createCustomText(
-                      padding: 0.0,
-                      color: AppColors.textGrey,
-                      weight: AppFontWeight.medium,
-                      size: 10.0,
-                      text: "실시간 신고 알림을 받을 수 있습니다",
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                chevronRight(),
-              ],
-            ),
+          // if (carNum == "" || carNum == null)
+          createMypageContainer(
+            route: () {
+              loginController.changeRealPage(4);
+            },
+            widgetList: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  createCustomText(
+                    padding: 0.0,
+                    color: AppColors.textBlack,
+                    weight: AppFontWeight.bold,
+                    size: 16.0,
+                    text: "내 차 등록을 진행해 주세요",
+                  ),
+                  createCustomText(
+                    padding: 0.0,
+                    color: AppColors.textGrey,
+                    weight: AppFontWeight.medium,
+                    size: 10.0,
+                    text: "실시간 신고 알림을 받을 수 있습니다",
+                  ),
+                ],
+              ),
+              const Spacer(),
+              chevronRight(),
+            ],
+          ),
 
           // 인증 완료
           if (carNum != "" && carNum != null)

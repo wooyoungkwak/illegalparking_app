@@ -85,8 +85,8 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                     ),
                   ),
                   Positioned(
-                    bottom: 40,
-                    left: 190,
+                    bottom: 30,
+                    left: 180,
                     child: Container(
                       height: 40,
                       width: 40,
