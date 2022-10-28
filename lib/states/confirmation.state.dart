@@ -7,6 +7,8 @@ import 'package:illegalparking_app/states/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
+import 'package:illegalparking_app/states/widgets/form.dart';
+
 import 'package:illegalparking_app/utils/alarm_util.dart';
 
 class Confirmation extends StatefulWidget {
@@ -41,7 +43,7 @@ class _ConfirmationState extends State<Confirmation> {
         child: Scaffold(
           body: Column(
             children: [
-              _createContainerByTopWidget(),
+              createContainerByTopWidget(text: "신고하기", Function: _escbtn),
               Expanded(
                 flex: 20,
                 child: Container(
@@ -51,24 +53,7 @@ class _ConfirmationState extends State<Confirmation> {
                     children: [
                       SizedBox(
                         width: 250,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            CustomText(
-                              text: "신고가 기록되어 데이터 분석이 진행됩니다.",
-                              weight: FontWeight.w400,
-                              color: Colors.black,
-                              size: 14,
-                            ),
-                            SizedBox(height: 10),
-                            CustomText(
-                              text: "감사합니다.",
-                              weight: FontWeight.w600,
-                              color: Colors.black,
-                              size: 16,
-                            ),
-                          ],
-                        ),
+                        child: _initColumnBy2Text("신고가 기록되어 데이터 분석이 진행됩니다.", "감사합니다."),
                       ),
                       const SizedBox(
                         height: 20,
@@ -84,6 +69,27 @@ class _ConfirmationState extends State<Confirmation> {
             ],
           ),
         )));
+  }
+
+  Column _initColumnBy2Text(String text1, String text2) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomText(
+          text: text1,
+          weight: FontWeight.w400,
+          color: Colors.black,
+          size: 14,
+        ),
+        const SizedBox(height: 10),
+        CustomText(
+          text: text2,
+          weight: FontWeight.w600,
+          color: Colors.black,
+          size: 16,
+        ),
+      ],
+    );
   }
 
   WillPopScope _createWillPopScope(Widget widget) {
@@ -116,32 +122,32 @@ class _ConfirmationState extends State<Confirmation> {
     );
   }
 
-  Container _createContainerByTopWidget() {
-    // ignore: avoid_unnecessary_containers
-    return Container(
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Padding(
-          //좌우 대칭용
-          padding: const EdgeInsets.all(8.0),
-          child: IconButton(onPressed: () {}, icon: const Icon(Icons.close_outlined), color: Colors.white),
-        ),
-        const CustomText(text: "신고하기", weight: FontWeight.w500, color: Colors.black),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: IconButton(
-              onPressed: () {
-                controller.carreportImagewrite("");
-                controller.carnumberImagewrite("");
-                Get.off(const Home(
-                  index: 1,
-                ));
-              },
-              icon: const Icon(Icons.close_outlined),
-              color: const Color(0xff707070)),
-        ),
-      ]),
-    );
-  }
+  // Container _createContainerByTopWidget() {
+  //   // ignore: avoid_unnecessary_containers
+  //   return Container(
+  //     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+  //       Padding(
+  //         //좌우 대칭용
+  //         padding: const EdgeInsets.all(8.0),
+  //         child: IconButton(onPressed: () {}, icon: const Icon(Icons.close_outlined), color: Colors.white),
+  //       ),
+  //       const CustomText(text: "신고하기", weight: FontWeight.w500, color: Colors.black),
+  //       Padding(
+  //         padding: const EdgeInsets.all(8.0),
+  //         child: IconButton(
+  //             onPressed: () {
+  // controller.carreportImagewrite("");
+  // controller.carnumberImagewrite("");
+  // Get.off(const Home(
+  //   index: 1,
+  // ));
+  //             },
+  //             icon: const Icon(Icons.close_outlined),
+  //             color: const Color(0xff707070)),
+  //       ),
+  //     ]),
+  //   );
+  // }
 
   InkWell _initInkWellByOnTap(Widget widget, Function function) {
     return InkWell(
@@ -153,12 +159,13 @@ class _ConfirmationState extends State<Confirmation> {
   }
 
   Padding _createPaddingBybottomline() {
+    double widthsize = (Env.MEDIA_SIZE_WIDTH! / 2) - (55);
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.symmetric(horizontal: widthsize, vertical: 8),
       child: Container(
         alignment: const Alignment(0, 0),
-        height: 3.0,
-        width: 100.0,
+        height: 5.0,
+        width: Env.MEDIA_SIZE_WIDTH! / 4,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3),
           color: const Color(0xff2D2D2D),
@@ -179,5 +186,13 @@ class _ConfirmationState extends State<Confirmation> {
     // MaskForCameraCustomView.initialize().then((value) =>);
     Get.off(const Home());
     loginController.changePage(1);
+  }
+
+  void _escbtn() {
+    controller.carreportImagewrite("");
+    controller.carnumberImagewrite("");
+    Get.off(const Home(
+      index: 1,
+    ));
   }
 }

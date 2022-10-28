@@ -62,10 +62,6 @@ class MaskForCameraCustomView extends StatefulWidget {
   bool type;
   @override
   State<StatefulWidget> createState() => _MaskForCameraCustomViewState();
-
-  // static Future<void> initialize() async {
-  //   _cameras = await availableCameras();
-  // }
 }
 
 class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with WidgetsBindingObserver {
@@ -111,16 +107,12 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
 
   @override
   void dispose() {
-    // MaskForCameraCustomView.initialize();
-    // Log.debug("카메라종료###########");
-    // controller!.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // controller!.setFlashMode(FlashMode.auto);
     _screenWidth = MediaQuery.of(context).size.width;
     _screenHeight = MediaQuery.of(context).size.height;
 
@@ -132,16 +124,6 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          // Container(
-          //   child: !controller!.value.isInitialized
-          //       ? Container()
-          //       : SizedBox(
-          //           height: 600,
-          //           child: CameraPreview(
-          //             controller!,
-          //           ),
-          //         ),
-          // ),
           Positioned(
             top: 0,
             bottom: 0,
@@ -200,7 +182,6 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
                     decoration: BoxDecoration(
                       border: Border.all(
                         width: widget.borderType == MaskForCameraViewBorderType.solid ? widget.boxBorderWidth : 0.0,
-                        // color: widget.borderType == MaskForCameraViewBorderType.solid ? widget.boxBorderColor : Colors.transparent,
                         color: widget.borderType == MaskForCameraViewBorderType.solid ? widget.boxBorderColor : Colors.transparent,
                       ),
                       borderRadius: BorderRadius.circular(
@@ -230,12 +211,9 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
             ),
           ),
           Positioned(
-            // bottom: widget.boxHeight > 150 ? 80 : 145,
             top: widget.btomhighbtn,
-            // bottom: widget.boxHeight > 150 ? 80 : 145,
             left: 0,
             right: 0,
-
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
               decoration: BoxDecoration(
@@ -289,10 +267,6 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
                                   color: widget.takeButtonActionColor,
                                 ),
                               ),
-                              // child: Icon(
-                              //   Icons.camera_alt_outlined,
-                              //   color: widget.takeButtonActionColor,
-                              // ),
                               child: Container(
                                 margin: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(

@@ -1,4 +1,5 @@
 import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/states/widgets/crop.dart';
 import 'package:illegalparking_app/states/declaration_state.dart';
@@ -45,8 +46,8 @@ class _NumbercameraState extends State<Numbercamera> {
               onTake: (MaskForCameraViewResult res) {
                 Get.offAll(() => const Declaration());
               }),
-          CreateContainerByAlignment(
-              0, -0.3, DefaultTextStyle(style: Theme.of(context).textTheme.headline1!, child: const CustomText(text: "번호판을 네모영역 안에서 촬영해주세요", weight: FontWeight.w400, size: 14, color: Colors.white))),
+          CreateContainerByAlignment(0, -0.3,
+              DefaultTextStyle(style: Theme.of(context).textTheme.headline1!, child: const CustomText(text: "번호판을 네모영역 안에서 촬영해주세요", weight: AppFontWeight.regular, size: 14, color: AppColors.white))),
           CreateContainerByAlignment(
               0,
               0.6,
@@ -55,11 +56,10 @@ class _NumbercameraState extends State<Numbercamera> {
                   child: const Card(
                       shape: StadiumBorder(side: BorderSide(color: Colors.white, width: 1)),
                       color: Colors.transparent,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-                        child: CustomText(text: "촬영 예시", weight: FontWeight.w600, size: 14, color: Colors.white),
-                      )))),
-          CreateContainerByAlignment(0, 0.9, SizedBox(height: 100, width: 200, child: Image.asset("assets/car_number.jpg")))
+                      child:
+                          Padding(padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8), child: CustomText(text: "촬영 예시", weight: AppFontWeight.semiBold, size: 14, color: AppColors.white))))),
+          // CreateContainerByAlignment(0, 0.9, SizedBox(height: 100, width: 200, child: Image.asset("assets/car_number.jpg")))
+          CreateContainerByAlignment(0, 0.9, SizedBox(width: Env.MEDIA_SIZE_HEIGHT! / 4, child: Image.asset("assets/car_number.jpg")))
         ],
       )),
     );

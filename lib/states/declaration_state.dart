@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/services/such_loation_service.dart';
@@ -13,8 +14,8 @@ import 'package:illegalparking_app/services/save_image_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
+import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 class Declaration extends StatefulWidget {
@@ -29,9 +30,11 @@ class _DeclarationState extends State<Declaration> {
   final ReportController controller = Get.put(ReportController());
   final ScrollController _scrollController = ScrollController();
   late TextEditingController _numberplateContoroller;
+  late FocusNode myFocusNode;
   @override
   void initState() {
     super.initState();
+    myFocusNode = FocusNode();
     _numberplateContoroller = TextEditingController(text: "");
 
     SchedulerBinding.instance.addPostFrameCallback((data) async {
@@ -70,6 +73,7 @@ class _DeclarationState extends State<Declaration> {
   void dispose() {
     _scrollController.dispose();
     _numberplateContoroller.dispose();
+    myFocusNode.dispose();
     super.dispose();
   }
 
@@ -77,6 +81,8 @@ class _DeclarationState extends State<Declaration> {
   Widget build(BuildContext context) {
     final statusBarHeight = Env.MEDIA_SIZE_PADDINGTOP!;
     return Container(
+        child: GestureDetector(
+      onTap: () => myFocusNode.unfocus(),
       child: _createWillPopScope(
         Padding(
           padding: EdgeInsets.only(top: statusBarHeight),
@@ -89,7 +95,7 @@ class _DeclarationState extends State<Declaration> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    _createContainerByTopWidget(),
+                    createContainerByTopWidget(text: "신고하기", Function: _escbtn),
                     Column(
                       children: [
                         (Obx((() => _initInkWellByImageTap(controller.reportImage.value, Env.MEDIA_SIZE_HEIGHT! / 5)))),
@@ -104,69 +110,22 @@ class _DeclarationState extends State<Declaration> {
                     ),
                     SizedBox(
                       width: Env.MEDIA_SIZE_WIDTH! / 1.5,
-                      height: Env.MEDIA_SIZE_WIDTH! / 1.5,
+                      height: Env.MEDIA_SIZE_HEIGHT! / 2.9,
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const CustomText(
-                                text: "차량번호",
-                                weight: FontWeight.w700,
-                                size: 16,
-                                color: Colors.black,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
+                          _initRowByData("차량번호", SizedBox(width: Env.MEDIA_SIZE_WIDTH! / 2.3, height: Env.MEDIA_SIZE_HEIGHT! / 20, child: _createTextFormField(_numberplateContoroller))),
+                          const SizedBox(height: 5),
+                          _initRowByData(
+                              "접수위치",
                               SizedBox(
                                 width: Env.MEDIA_SIZE_WIDTH! / 2.3,
-                                height: Env.MEDIA_SIZE_HEIGHT! / 30,
-                                child: _createTextFormField(_numberplateContoroller),
-                              )
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const CustomText(text: "접수위치", weight: FontWeight.w700, size: 16, color: Colors.black),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Obx(() {
-                                return Flexible(
-                                  child: Text(
-                                    controller.imageGPS.value.address.length > 1 ? controller.imageGPS.value.address : "위치를 찾을 수 없습니다.",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(fontSize: 14, fontFamily: "NotoSansKR", fontWeight: FontWeight.w400),
-                                  ),
-                                );
-                              })
-                            ],
-                          ),
+                                child: Text(controller.imageGPS.value.address.length > 1 ? controller.imageGPS.value.address : "위치를 찾을 수 없습니다.",
+                                    maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontFamily: "NotoSansKR", fontWeight: FontWeight.w400)),
+                              )),
                           const SizedBox(
-                            height: 15,
+                            height: 5,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const CustomText(text: "접수시간", weight: FontWeight.w700, size: 16, color: Colors.black),
-                              const SizedBox(
-                                width: 12,
-                              ),
-                              Obx(() {
-                                return Flexible(
-                                  child: CustomText(text: controller.imageTime.value, weight: FontWeight.w400, size: 14, color: Colors.black),
-                                  // Text(
-                                  //   controller.imageTime.value,
-                                  //   style: const TextStyle(fontSize: 12),
-                                  // ),
-                                );
-                              }),
-                            ],
-                          ),
+                          _initRowByData("접수시간", CustomText(text: controller.imageTime.value, weight: FontWeight.w400, size: 16, color: Colors.black)),
                           const SizedBox(height: 30),
                           _initInkWellByOnTap(_initContainer(Colors.black, "신고하기", 13.0, 250), _reportbtn),
                           const SizedBox(height: 5),
@@ -196,13 +155,14 @@ class _DeclarationState extends State<Declaration> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   InkWell _initInkWellByImageTap(String path, double height) {
     return InkWell(
       onTap: () {
         showDialog(
+            barrierColor: AppColors.black,
             context: context,
             builder: (BuildContext context) => Dialog(
                   child: GestureDetector(
@@ -228,19 +188,13 @@ class _DeclarationState extends State<Declaration> {
         CustomText(
           text: text,
           weight: FontWeight.w700,
-          size: 12,
+          size: 16,
           color: Colors.black,
         ),
         const SizedBox(
           width: 10,
         ),
-        SizedBox(
-          width: Env.MEDIA_SIZE_WIDTH! / 2,
-          height: 40,
-          child: Card(
-              // child: _createTextFormField(_numberplateContoroller),
-              child: widget),
-        ),
+        widget,
       ],
     );
   }
@@ -263,7 +217,7 @@ class _DeclarationState extends State<Declaration> {
       child: Container(
         alignment: const Alignment(0, 0),
         height: 5.0,
-        width: Env.MEDIA_SIZE_WIDTH! / 3,
+        width: Env.MEDIA_SIZE_WIDTH! / 4,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3),
           color: const Color(0xff2D2D2D),
@@ -283,9 +237,8 @@ class _DeclarationState extends State<Declaration> {
   }
 
   //버튼디자인
-  Container _initContainer(Color color, String text, double radius, double width) {
-    // ignore: sized_box_for_whitespace
-    return Container(
+  SizedBox _initContainer(Color color, String text, double radius, double width) {
+    return SizedBox(
         width: width,
         child: Card(
           color: color,
@@ -294,7 +247,6 @@ class _DeclarationState extends State<Declaration> {
             padding: const EdgeInsets.symmetric(vertical: 11),
             child: Center(
               child: CustomText(text: text, weight: FontWeight.w400, color: Colors.white, size: 14),
-              // Text(text, style: const TextStyle(color: Colors.white, fontSize: 14))),
             ),
           ),
         ));
@@ -306,11 +258,14 @@ class _DeclarationState extends State<Declaration> {
 
   TextFormField _createTextFormField(TextEditingController controller) {
     return TextFormField(
-        textAlign: TextAlign.start,
+        // autofocus: true,
+        focusNode: myFocusNode,
+        textAlign: TextAlign.center,
         controller: controller,
-        style: const TextStyle(color: Colors.black, fontSize: 12, fontFamily: "NotoSansKR", fontWeight: FontWeight.w500),
+        style: const TextStyle(color: Colors.black, fontSize: 16, fontFamily: "NotoSansKR", fontWeight: FontWeight.w500),
         inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]'))],
         decoration: const InputDecoration(
+          contentPadding: EdgeInsets.only(left: 8.0, right: 8.0),
           border: OutlineInputBorder(borderSide: BorderSide(width: 1, color: Color(0xff9B9B9B))),
           enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 1, color: Color(0xff9B9B9B))),
           filled: false,
@@ -371,36 +326,12 @@ class _DeclarationState extends State<Declaration> {
     return true;
   }
 
-  Container _createContainerByTopWidget() {
-    // ignore: avoid_unnecessary_containers
-    return Container(
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Padding(
-          //좌우 대칭용
-          padding: const EdgeInsets.all(8.0),
-          child: IconButton(onPressed: () {}, icon: const Icon(Icons.close_outlined), color: Colors.white),
-        ),
-        const CustomText(
-          text: "신고하기",
-          size: 16,
-          weight: FontWeight.w500,
-          color: Colors.black,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: IconButton(
-              onPressed: () {
-                controller.carreportImagewrite("");
-                controller.carnumberImagewrite("");
-                Get.off(const Home(
-                  index: 1,
-                ));
-              },
-              icon: const Icon(Icons.close_outlined),
-              color: const Color(0xff707070)),
-        ),
-      ]),
-    );
+  void _escbtn() {
+    controller.carreportImagewrite("");
+    controller.carnumberImagewrite("");
+    Get.off(const Home(
+      index: 1,
+    ));
   }
 
   void back() {
@@ -424,6 +355,7 @@ class _DeclarationState extends State<Declaration> {
       try {
         String text = _numberplateContoroller.text;
         text = text.replaceAll(' ', '');
+        // Get.offAll(const Confirmation()); //테스트용
 
         sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
               if (result == false)
