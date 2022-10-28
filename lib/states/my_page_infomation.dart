@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
+import 'package:illegalparking_app/models/storage_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:illegalparking_app/config/env.dart';
@@ -22,6 +23,8 @@ class MyPageInfomation extends StatefulWidget {
 class _MyPageInfomationState extends State<MyPageInfomation> {
   final loginController = Get.put(LoginController());
 
+  late SecureStorage secureStorage;
+
   late TextEditingController _oldPasswordController = TextEditingController();
   late TextEditingController _newPasswordController = TextEditingController();
   late TextEditingController _newPasswordValidationController = TextEditingController();
@@ -33,7 +36,7 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
   @override
   void initState() {
     super.initState();
-    Log.debug("USER_PHOTO_NAME : $imagePath");
+    secureStorage = SecureStorage();
   }
 
   @override
@@ -287,6 +290,9 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                     Env.USER_NAME = null;
                     Env.USER_PHOTO_NAME = null;
                     Env.USER_PHONE_NUMBER = null;
+                    secureStorage.write(Env.LOGIN_ID, "");
+                    secureStorage.write(Env.LOGIN_PW, "");
+                    secureStorage.write(Env.KEY_AUTO_LOGIN, "");
                     loginController.changeRealPage(0);
                     loginController.changePage(0);
                     Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);

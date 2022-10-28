@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
+import 'package:illegalparking_app/models/storage_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
@@ -16,6 +17,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late SecureStorage secureStorage;
 
   late TextEditingController _idController = TextEditingController();
   late TextEditingController _passController = TextEditingController();
@@ -24,7 +26,10 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    if (Env.isDebug) {
+    secureStorage = SecureStorage();
+    _setsaveid();
+
+    if (!Env.isDebug) {
       _idController = TextEditingController(text: "hong@gmail.com");
       _passController = TextEditingController(text: "qwer1234");
     } else {
@@ -147,6 +152,7 @@ class _LoginState extends State<Login> {
                           value: controller.checkedAutoLogin,
                           onChanged: (bool? value) {
                             controller.getAutoLogin(value ?? false);
+                            secureStorage.write(Env.KEY_AUTO_LOGIN, value.toString());
                           },
                         ),
                       ),
@@ -164,6 +170,7 @@ class _LoginState extends State<Login> {
                           value: controller.idSaved,
                           onChanged: (bool? value) {
                             controller.setIdSaved(value ?? false);
+                            secureStorage.write(Env.KEY_ID_CHECK, value.toString());
                           },
                         ),
                       ),
@@ -194,6 +201,8 @@ class _LoginState extends State<Login> {
                                 Env.USER_SEQ = loginInfo.getUserSeq();
                                 Env.USER_PHOTO_NAME = loginInfo.getPhotoName();
                                 Env.USER_PHONE_NUMBER = loginInfo.getPhoneNumber();
+                                secureStorage.write(Env.LOGIN_ID, _idController.text);
+                                secureStorage.write(Env.LOGIN_PW, _passController.text);
                                 controller.offGuesMode();
                                 loginController.currentIndex(0);
                                 loginController.currentPageIdex(0);
@@ -273,5 +282,28 @@ class _LoginState extends State<Login> {
     }
 
     return null;
+  }
+
+  Future<String> _setsaveid() async {
+    late bool initcheck = true;
+
+    if (initcheck) {
+      String? chek = await secureStorage.read(Env.KEY_ID_CHECK);
+      if (chek == null) {
+        loginController.setIdSaved(false);
+      } else if (chek == "false") {
+        loginController.setIdSaved(false);
+      } else if (chek == "true") {
+        loginController.setIdSaved(true);
+        String? sevedId = await secureStorage.read(Env.LOGIN_ID);
+        if (sevedId != null) {
+          setState(() {
+            _idController = TextEditingController(text: sevedId);
+          });
+        }
+      }
+      initcheck = false;
+    }
+    return "...";
   }
 }

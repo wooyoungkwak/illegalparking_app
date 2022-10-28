@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -32,12 +31,11 @@ class WebviewPage extends StatefulWidget {
 
 class _WebviewPageState extends State<WebviewPage> {
   final showKey = GlobalKey();
-  Timer? timer;
   final Completer<WebViewController> _controller = Completer<WebViewController>();
   final mapController = Get.put(MapController());
   final loginController = Get.put(LoginController());
-
   late WebViewController _webViewController;
+  Timer? timer;
   String mapInfoType = "parking";
   String parkingName = "";
   String parkingAddress = "";
@@ -69,55 +67,31 @@ class _WebviewPageState extends State<WebviewPage> {
   void dispose() {
     super.dispose();
     timer!.cancel();
+    _webViewController.clearCache();
   }
 
   @override
   Widget build(BuildContext context) {
     final statusBarHeight = MediaQuery.of(context).padding.top;
-    return GestureDetector(
-      // onTapDown: (value) {
-      //   closeBottomNav();
-      // },
-      child: Container(
-        padding: EdgeInsets.only(top: statusBarHeight),
-        child: Column(
-          children: [
-            Expanded(
-              child: WebView(
-                initialUrl: "${Env.SERVER_ADMIN_URL}/api/area/map",
-                onWebViewCreated: (WebViewController webViewController) {
-                  _controller.complete(webViewController);
-                  _webViewController = webViewController;
-                },
-                onProgress: (int progress) {
-                  Log.debug("Webview is loading (progress : $progress%");
-                },
-                // gestureRecognizers: Set()..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()..onTapDown = (tap) {})),
-                // ..add(Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer()..onEnd = (tap) {}))
-                // ..add(Factory<HorizontalDragGestureRecognizer>(() => HorizontalDragGestureRecognizer()..onStart = (tap) {})),
-                javascriptMode: JavascriptMode.unrestricted,
-                javascriptChannels: _createJavascriptChannels(context),
-              ),
+    return Container(
+      padding: EdgeInsets.only(top: statusBarHeight),
+      child: Column(
+        children: [
+          Expanded(
+            child: WebView(
+              initialUrl: "${Env.SERVER_ADMIN_URL}/api/area/map",
+              onWebViewCreated: (WebViewController webViewController) {
+                _controller.complete(webViewController);
+                _webViewController = webViewController;
+              },
+              onProgress: (int progress) {
+                Log.debug("Webview is loading (progress : $progress%");
+              },
+              javascriptMode: JavascriptMode.unrestricted,
+              javascriptChannels: _createJavascriptChannels(context),
             ),
-            // GetBuilder<MapController>(
-            //   builder: (controller) {
-            //     return Column(
-            //       children: [
-            //         Text("위도 : ${controller.latitude.toString()}"),
-            //         Text("경도 : ${controller.longitude.toString()}"),
-            //       ],
-            //     );
-            //   },
-            // ),
-            // createElevatedButton(
-            //   text: "appToGPS",
-            //   function: () {
-            //     showBottomDialog();
-            //     _webViewController.runJavascript("appToGps(123, 456)");
-            //   },
-            // ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -196,7 +170,7 @@ class _WebviewPageState extends State<WebviewPage> {
                             ),
                           ),
                           child: Image(
-                            image: mapInfoType == "parking" ? AssetImage("assets/parking_basic.png") : AssetImage("assets/pm_basic.png"),
+                            image: mapInfoType == "parking" ? const AssetImage("assets/parking_basic.png") : const AssetImage("assets/pm_basic.png"),
                             height: 100,
                             width: 100,
                           ),
@@ -483,29 +457,6 @@ class _WebviewPageState extends State<WebviewPage> {
                 ],
               ),
             ),
-            //버튼
-            // if (mapInfoType == "parking")
-            //   Row(
-            //     children: [
-            //       Expanded(
-            //         child: _createInfoButton(text: "전화하기"),
-            //       ),
-            //       Expanded(
-            //         child: _createInfoButton(text: "길안내"),
-            //       ),
-            //     ],
-            //   ),
-            // if (mapInfoType == "pm")
-            //   Row(
-            //     children: [
-            //       Expanded(
-            //         child: _createInfoButton(color: Colors.purple, text: "벨울리기"),
-            //       ),
-            //       Expanded(
-            //         child: _createInfoButton(color: Colors.purple, text: "대여하기"),
-            //       ),
-            //     ],
-            //   ),
           ],
         ),
       ),

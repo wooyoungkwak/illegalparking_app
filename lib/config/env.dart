@@ -63,6 +63,8 @@ class Env {
   static String? USER_CAR_NUMBER;
   static bool? USER_CAR_ALARM;
   static String? USER_CAR_NAME;
+  static String? USER_ID;
+  static String? USER_PASSWORD;
 
   static const String LOGIN_STATE = "LOGIN_STATE";
   static const String KEY_USER_ID = "USER_ID"; // Login 후에 서버로부터 부여 받은 사용자 ID 값
@@ -85,6 +87,7 @@ class Env {
   static const String KEY_COMPANY_NAME = "companyName";
   static const String KEY_SHARE_UUID = "share_uuid";
   static const String KEY_BACKGROUND_PATH = 'background_path';
+  static const String KEY_AUTO_LOGIN = 'KEY_AUTO_LOGIN';
 
   static const String MSG_NOT_TOKEN = "로그인 후 사용 해주세요.";
 
