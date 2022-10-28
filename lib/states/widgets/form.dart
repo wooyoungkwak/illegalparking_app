@@ -390,3 +390,28 @@ void widgetbottomsheet(BuildContext context) {
     },
   );
 }
+
+Container createContainerByTopWidget({
+  String? text,
+  var Function,
+}) {
+  return Container(
+    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Padding(
+        //좌우 대칭용
+        padding: const EdgeInsets.all(8.0),
+        child: IconButton(onPressed: () {}, icon: const Icon(Icons.close_outlined), color: Colors.white),
+      ),
+      CustomText(text: text ?? "", weight: AppFontWeight.black, color: Colors.black),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: IconButton(
+            onPressed: () {
+              Function();
+            },
+            icon: const Icon(Icons.close_outlined),
+            color: const Color(0xff707070)),
+      ),
+    ]),
+  );
+}

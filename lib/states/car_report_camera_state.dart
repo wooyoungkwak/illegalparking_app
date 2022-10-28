@@ -1,4 +1,5 @@
 import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/states/widgets/crop.dart';
 import 'package:illegalparking_app/states/declaration_state.dart';
@@ -23,7 +24,6 @@ class _ReportcameraState extends State<Reportcamera> {
 
   @override
   Widget build(BuildContext context) {
-    final double statusBarHeight = Env.MEDIA_SIZE_PADDINGTOP!;
     return Scaffold(
       extendBody: true,
       backgroundColor: Colors.transparent,
@@ -51,7 +51,7 @@ class _ReportcameraState extends State<Reportcamera> {
                 }
               }),
           initContainerByOutlineButton(0, 0.7, "주정차관련법규보기", context),
-          Positioned(top: statusBarHeight + 10, child: initColumnByText(10))
+          Positioned(top: Env.MEDIA_SIZE_PADDINGTOP! + 10, child: initColumnByText(10, AppFontWeight.regular, AppColors.white))
         ],
       ),
     );
@@ -63,16 +63,16 @@ Container CreateContainerByAlignment(double X, double Y, Widget widget) {
 }
 
 //위쪽 설명 text
-Column initColumnByText(double size) {
+Column initColumnByText(double size, FontWeight weight, Color color) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      CustomText(text: "·사진만 찍으면 자동 정보 분석 후 신고가 진행됩니다.", weight: FontWeight.w400, size: size, color: Colors.white),
-      CustomText(text: "·불법주정차 단속구역 분석", weight: FontWeight.w400, size: size, color: Colors.white),
-      CustomText(text: "·불법주정차 단속시간 분석", weight: FontWeight.w400, size: size, color: Colors.white),
-      CustomText(text: "·차량번호판 활영은 필수입니다.", weight: FontWeight.w400, size: size, color: Colors.white),
-      CustomText(text: "·노란색 실선 지역은 1분 이상 간격으로 신고가\n  한번 더 작성되어야 합니다.", weight: FontWeight.w400, size: size, color: Colors.white),
-      CustomText(text: "·노란색 점선 지역은 5분 이상 간격으로 신고가\n  한번 더 작성되어야 합니다.", weight: FontWeight.w400, size: size, color: Colors.white),
+      CustomText(text: "·사진만 찍으면 자동 정보 분석 후 신고가 진행됩니다.", weight: weight, size: size, color: color),
+      CustomText(text: "·불법주정차 단속구역 분석", weight: weight, size: size, color: color),
+      CustomText(text: "·불법주정차 단속시간 분석", weight: weight, size: size, color: color),
+      CustomText(text: "·차량번호판 활영은 필수입니다.", weight: weight, size: size, color: color),
+      CustomText(text: "·노란색 실선 지역은 1분 이상 간격으로 신고가\n  한번 더 작성되어야 합니다.", weight: weight, size: size, color: color),
+      CustomText(text: "·노란색 점선 지역은 5분 이상 간격으로 신고가\n  한번 더 작성되어야 합니다.", weight: weight, size: size, color: color),
     ],
   );
 }
