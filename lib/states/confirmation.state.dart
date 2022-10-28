@@ -1,3 +1,5 @@
+import 'package:flutter/scheduler.dart';
+import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/main.dart';
@@ -5,6 +7,7 @@ import 'package:illegalparking_app/states/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
+import 'package:illegalparking_app/utils/alarm_util.dart';
 
 class Confirmation extends StatefulWidget {
   const Confirmation({super.key});
@@ -20,6 +23,9 @@ class _ConfirmationState extends State<Confirmation> {
   @override
   void initState() {
     super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((data) async {
+      alertDialogByonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
+    });
   }
 
   @override
@@ -47,15 +53,15 @@ class _ConfirmationState extends State<Confirmation> {
                         width: 250,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const CustomText(
+                          children: const [
+                            CustomText(
                               text: "신고가 기록되어 데이터 분석이 진행됩니다.",
                               weight: FontWeight.w400,
                               color: Colors.black,
                               size: 14,
                             ),
                             SizedBox(height: 10),
-                            const CustomText(
+                            CustomText(
                               text: "감사합니다.",
                               weight: FontWeight.w600,
                               color: Colors.black,

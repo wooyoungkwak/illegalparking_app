@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 class Declaration extends StatefulWidget {
@@ -91,25 +92,19 @@ class _DeclarationState extends State<Declaration> {
                     _createContainerByTopWidget(),
                     Column(
                       children: [
-                        Obx((() => SizedBox(
-                              // width: 200,
-                              width: Env.MEDIA_SIZE_WIDTH! / 2,
-                              child: Image.file(
-                                File(controller.reportImage.value),
-                                fit: BoxFit.contain,
-                              ),
-                            ))),
+                        (Obx((() => _initInkWellByImageTap(controller.reportImage.value, Env.MEDIA_SIZE_HEIGHT! / 5)))),
                         const SizedBox(height: 10),
-                        _initInkWellByOnTap(_initContainer(const Color(0xff9B9B9B), "재촬영", 22.0, 210), _reportcamerabtn),
+                        _initInkWellByOnTap(_initContainer(const Color(0xff9B9B9B), "재촬영", 22.0, Env.MEDIA_SIZE_WIDTH! / 1.5), _reportcamerabtn),
                         const SizedBox(height: 10),
-                        Obx((() => SizedBox(width: Env.MEDIA_SIZE_WIDTH! / 2, child: Image.file(File(controller.carnumberImage.value))))),
+                        Obx((() => _initInkWellByImageTap(controller.carnumberImage.value, Env.MEDIA_SIZE_HEIGHT! / 10))),
                         const SizedBox(height: 10),
-                        _initInkWellByOnTap(_initContainer(const Color(0xff9B9B9B), "재촬영", 22.0, 210), _numbercamerabtn),
+                        _initInkWellByOnTap(_initContainer(const Color(0xff9B9B9B), "재촬영", 22.0, Env.MEDIA_SIZE_WIDTH! / 1.5), _numbercamerabtn),
+                        const SizedBox(height: 30),
                       ],
                     ),
                     SizedBox(
                       width: Env.MEDIA_SIZE_WIDTH! / 1.5,
-                      height: 100,
+                      height: Env.MEDIA_SIZE_WIDTH! / 1.5,
                       child: Column(
                         children: [
                           Row(
@@ -118,26 +113,24 @@ class _DeclarationState extends State<Declaration> {
                               const CustomText(
                                 text: "차량번호",
                                 weight: FontWeight.w700,
-                                size: 12,
+                                size: 16,
                                 color: Colors.black,
                               ),
                               const SizedBox(
                                 width: 10,
                               ),
                               SizedBox(
-                                width: Env.MEDIA_SIZE_WIDTH! / 2,
-                                height: 40,
-                                child: Card(
-                                    // child: _createTextFormField(_numberplateContoroller),
-                                    child: _createTextFormField(_numberplateContoroller)),
-                              ),
+                                width: Env.MEDIA_SIZE_WIDTH! / 2.3,
+                                height: Env.MEDIA_SIZE_HEIGHT! / 30,
+                                child: _createTextFormField(_numberplateContoroller),
+                              )
                             ],
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const CustomText(text: "접수위치", weight: FontWeight.w700, size: 12, color: Colors.black),
+                              const CustomText(text: "접수위치", weight: FontWeight.w700, size: 16, color: Colors.black),
                               const SizedBox(
                                 width: 10,
                               ),
@@ -147,7 +140,7 @@ class _DeclarationState extends State<Declaration> {
                                     controller.imageGPS.value.address.length > 1 ? controller.imageGPS.value.address : "위치를 찾을 수 없습니다.",
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(fontSize: 10, fontFamily: "NotoSansKR", fontWeight: FontWeight.w400),
+                                    style: const TextStyle(fontSize: 14, fontFamily: "NotoSansKR", fontWeight: FontWeight.w400),
                                   ),
                                 );
                               })
@@ -159,13 +152,13 @@ class _DeclarationState extends State<Declaration> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const CustomText(text: "접수시간", weight: FontWeight.w700, size: 12, color: Colors.black),
+                              const CustomText(text: "접수시간", weight: FontWeight.w700, size: 16, color: Colors.black),
                               const SizedBox(
                                 width: 12,
                               ),
                               Obx(() {
                                 return Flexible(
-                                  child: CustomText(text: controller.imageTime.value, weight: FontWeight.w400, size: 12, color: Colors.black),
+                                  child: CustomText(text: controller.imageTime.value, weight: FontWeight.w400, size: 14, color: Colors.black),
                                   // Text(
                                   //   controller.imageTime.value,
                                   //   style: const TextStyle(fontSize: 12),
@@ -174,23 +167,23 @@ class _DeclarationState extends State<Declaration> {
                               }),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    _initInkWellByOnTap(_initContainer(Colors.black, "신고하기", 13.0, 250), _reportbtn),
-                    const SizedBox(height: 5),
-                    SizedBox(
-                      width: Env.MEDIA_SIZE_WIDTH! / 2.3,
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        alignment: WrapAlignment.center,
-                        children: const [
-                          CustomText(
-                            text: "불법주정차 단속 구간에 따라 1분, 5분 이후 해당 차량에 대해 재신고가 기록되어야 과태료 대상 신고접수가 해당기관에 접수됩니다.",
-                            weight: FontWeight.w500,
-                            size: 10,
-                            color: Color(0xffE82525),
+                          const SizedBox(height: 30),
+                          _initInkWellByOnTap(_initContainer(Colors.black, "신고하기", 13.0, 250), _reportbtn),
+                          const SizedBox(height: 5),
+                          SizedBox(
+                            width: Env.MEDIA_SIZE_WIDTH! / 1.5,
+                            child: Wrap(
+                              direction: Axis.horizontal,
+                              alignment: WrapAlignment.center,
+                              children: const [
+                                CustomText(
+                                  text: "불법주정차 단속 구간에 따라 1분, 5분 이후 해당 차량에 대해 재신고가 기록되어야 과태료 대상 신고접수가 해당기관에 접수됩니다.",
+                                  weight: FontWeight.w500,
+                                  size: 10,
+                                  color: Color(0xffE82525),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -202,6 +195,63 @@ class _DeclarationState extends State<Declaration> {
             bottomNavigationBar: SizedBox(width: Env.MEDIA_SIZE_WIDTH! / 2.5, child: _createPaddingBybottomline()),
           ),
         ),
+      ),
+    );
+  }
+
+  InkWell _initInkWellByImageTap(String path, double height) {
+    return InkWell(
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => Dialog(
+                  child: GestureDetector(
+                    onTap: () {
+                      navigator?.pop();
+                    },
+                    child: Image.file(
+                      width: Env.MEDIA_SIZE_WIDTH! - 50,
+                      File(path),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ));
+      },
+      child: _initSizedBoxByImage(path, height),
+    );
+  }
+
+  Row _initRowByData(String text, Widget widget) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        CustomText(
+          text: text,
+          weight: FontWeight.w700,
+          size: 12,
+          color: Colors.black,
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        SizedBox(
+          width: Env.MEDIA_SIZE_WIDTH! / 2,
+          height: 40,
+          child: Card(
+              // child: _createTextFormField(_numberplateContoroller),
+              child: widget),
+        ),
+      ],
+    );
+  }
+
+  SizedBox _initSizedBoxByImage(String path, double height) {
+    return SizedBox(
+      width: Env.MEDIA_SIZE_WIDTH! / 1.5,
+      height: height,
+      child: Image.file(
+        File(path),
+        fit: BoxFit.fill,
       ),
     );
   }
@@ -258,11 +308,13 @@ class _DeclarationState extends State<Declaration> {
     return TextFormField(
         textAlign: TextAlign.start,
         controller: controller,
-        style: const TextStyle(color: Colors.black, fontSize: 13, fontFamily: "NotoSansKR", fontWeight: FontWeight.w500),
+        style: const TextStyle(color: Colors.black, fontSize: 12, fontFamily: "NotoSansKR", fontWeight: FontWeight.w500),
         inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]'))],
         decoration: const InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
+          border: OutlineInputBorder(borderSide: BorderSide(width: 1, color: Color(0xff9B9B9B))),
+          enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 1, color: Color(0xff9B9B9B))),
+          filled: false,
+          fillColor: Color.fromARGB(20, 180, 169, 169),
           hintStyle: TextStyle(color: Colors.black),
         ),
         validator: (text) => passwordValidator(text));
@@ -304,7 +356,7 @@ class _DeclarationState extends State<Declaration> {
       alertDialogByonebutton("알림", "차량번호가 문자수가 초과하였습니다.");
       return false;
     } else if (controller.imageTime.value == null || controller.imageTime.value == "") {
-      alertDialogByonebutton("알림", "사진 촬영이 시간이 없습니다");
+      alertDialogByonebutton("알림", "접수시간이 없습니다");
       return false;
     } else if (controller.reportfileName.value == null || controller.reportfileName.value == "") {
       alertDialogByonebutton("알림", "사진 이름이 없습니다");
@@ -351,6 +403,10 @@ class _DeclarationState extends State<Declaration> {
     );
   }
 
+  void back() {
+    Get.back();
+  }
+
   void _reportcamerabtn() {
     Get.to(const Reportcamera());
   }
@@ -363,17 +419,17 @@ class _DeclarationState extends State<Declaration> {
   void _reportbtn() async {
     if (valuenullCheck()) {
       ProgressDialog pd = ProgressDialog(context: context);
-      pd.show(max: 100, msg: '데이터를 생성중입니다', barrierDismissible: false);
+      pd.show(max: 100, msg: '신고를 처리중입니다', barrierDismissible: false);
       await saveImageGallery();
       try {
         String text = _numberplateContoroller.text;
         text = text.replaceAll(' ', '');
-        alertDialogByonebutton("알림", "실행");
+
         sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
               if (result == false)
                 {
                   // TODO : 알림창 띄우기
-                  alertDialogByonebutton("알림", "파일 전송에 실패했습니다")
+                  Env.REPORT_RESPONSE_MSG = "파일 전송에 실패했습니다"
                 }
               else
                 {
@@ -381,9 +437,9 @@ class _DeclarationState extends State<Declaration> {
                           controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
                       .then((reportInfo) {
                     if (!reportInfo.success) {
-                      alertDialogByonebutton("알림", reportInfo.message!);
+                      Env.REPORT_RESPONSE_MSG = reportInfo.message!;
                     } else {
-                      alertDialogByonebutton("신고알림", reportInfo.data!);
+                      Env.REPORT_RESPONSE_MSG = reportInfo.data!;
                     }
                     pd.close();
                     Get.offAll(const Confirmation());
@@ -392,7 +448,7 @@ class _DeclarationState extends State<Declaration> {
             });
       } catch (e) {
         // TODO : 알림창 띄우기
-        alertDialogByonebutton("알림", "신고 중 에러 발생");
+        Env.REPORT_RESPONSE_MSG = "파일 전송에 실패했습니다";
       }
     }
   }
