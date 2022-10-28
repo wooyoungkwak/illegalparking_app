@@ -360,11 +360,16 @@ void widgetbottomsheet(BuildContext context) {
           decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
           child: Column(
             children: [
-              const SizedBox(width: 50, child: Divider(color: Colors.blueGrey, thickness: 4.0)),
+              const SizedBox(width: 50, child: Divider(color: Color(0xffCCCCCC), thickness: 4.0)),
               const SizedBox(height: 15),
               const Expanded(
                 flex: 1,
-                child: CustomText(text: "불법주정차 법규", weight: FontWeight.w300, color: Colors.black),
+                child: CustomText(
+                  text: "불법주정차 법규",
+                  weight: AppFontWeight.bold,
+                  color: Colors.black,
+                  size: 20,
+                ),
               ),
               const SizedBox(height: 5),
               Expanded(
