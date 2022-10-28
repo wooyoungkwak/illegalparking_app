@@ -106,6 +106,16 @@ class _GuestCameraState extends State<GuestCamera> {
               _createProcessItem(text: "차량번호판 촬영은 필수 입니다."),
               _createProcessItem(text: "노란색 실선 지역은 1분 이산 간격으로 신고가 한번 더 작성되어야 합니다."),
               _createProcessItem(text: "노란색 점선 지역은 5분 이상 간격으로 신고가 한번 더 작성되어야 합니다."),
+
+              createElevatedButton(
+                  padding: 16,
+                  color: AppColors.white,
+                  textColors: AppColors.black,
+                  width: 170,
+                  text: "주정차관련법규보기",
+                  function: () {
+                    widgetbottomsheet(context);
+                  })
             ],
           ),
         ),

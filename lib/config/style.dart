@@ -10,6 +10,7 @@ class AppColors {
   static const Color textField = Color(0xffEDEDED);
   static const Color appBackground = Color(0xff1A1C1E);
   static const Color bottomNavSelected = Color(0xffFFC117);
+  static const Color bottomNavBackground = Color(0xff181E25);
   static const Color textBlack = Color(0xff232329);
   static const Color textGrey = Color(0xff8E8E8E);
   static const Color passIcon = Color(0xffFFC117);

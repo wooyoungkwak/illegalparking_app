@@ -12,7 +12,7 @@ class Env {
   static const String SERVER_AI_FILE_UPLOAD_URL = '$SERVER_AI_URL/';
 
   static const String ADMIN_SERVER_TEST = "http://teraenergy.iptime.org"; // 관리자 서버
-  static const String ADMIN_SERVER_REAL = "http://"; // 관리자 서버
+  static const String ADMIN_SERVER_REAL = "http://sop.teravision.kr"; // 관리자 서버
   static const String ADMIN_SERVER = ADMIN_SERVER_TEST; // 관리자 서버
 
   static const String FILE_SERVER_URL = "http://49.50.166.205:8090/";

@@ -5,6 +5,7 @@ import 'package:illegalparking_app/states/declaration_state.dart';
 import 'package:illegalparking_app/states/car_number_camera_state.dart';
 import 'package:flutter/material.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
+import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/utils/time_util.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
@@ -90,82 +91,6 @@ Container initContainerByOutlineButton(double X, double Y, String text, BuildCon
         shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
       ),
       child: CustomText(text: text, weight: FontWeight.w600, color: Colors.white, size: 13),
-    ),
-  );
-}
-
-//바텀sheet 불법 주정차 기준 창
-void widgetbottomsheet(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    builder: (BuildContext context) {
-      return FractionallySizedBox(
-        heightFactor: 0.9,
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
-          child: Column(
-            children: [
-              const SizedBox(width: 50, child: Divider(color: Color(0xffCCCCCC), thickness: 4.0)),
-              const SizedBox(height: 15),
-              const Expanded(
-                flex: 1,
-                child: CustomText(
-                  text: "불법주정차 법규",
-                  weight: FontWeight.w700,
-                  color: Colors.black,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(height: 5),
-              Expanded(
-                  flex: 8,
-                  child: Image.asset(
-                    "assets/parking _rule.png",
-                    filterQuality: FilterQuality.high,
-                  )), //불법주정차에 대한 법규 이미지 넣을 부분
-              const SizedBox(height: 10),
-              Expanded(
-                flex: 1,
-                child: _initInkWellByOnTap(_initContainer(Colors.black, "확인", 24, 300), _okbtn),
-              ),
-              const SizedBox(height: 15),
-            ],
-          ),
-        ),
-      );
-    },
-  );
-}
-
-//탭기능
-InkWell _initInkWellByOnTap(Widget widget, Function function) {
-  return InkWell(
-    onTap: () {
-      function();
-    },
-    child: widget,
-  );
-}
-
-//버튼디자인
-Container _initContainer(Color color, String text, double radius, double width) {
-  // ignore: sized_box_for_whitespace
-  return Container(
-    width: width,
-    child: Card(
-      color: color,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 11),
-        child: Center(
-            child: CustomText(
-          text: text,
-          size: 16,
-          weight: FontWeight.w500,
-        )),
-      ),
     ),
   );
 }

@@ -1,5 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:illegalparking_app/config/style.dart';
+import 'package:illegalparking_app/states/widgets/custom_text.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 
 Padding createCustomText({
@@ -85,7 +89,7 @@ Padding createElevatedButton({
   String? text,
   double? width,
   double? padding,
-  dynamic? function,
+  dynamic function,
 }) {
   return Padding(
     padding: EdgeInsets.all(padding ?? 8.0),
@@ -99,6 +103,42 @@ Padding createElevatedButton({
         ),
         onPressed: function,
         child: createCustomText(
+          color: textColors ?? AppColors.white,
+          weight: AppFontWeight.bold,
+          text: text ?? "",
+        ),
+      ),
+    ),
+  );
+}
+
+Padding createButtonWithIcon({
+  required IconData icon,
+  Color? textColors,
+  Color? color,
+  String? text,
+  double? width,
+  double? padding,
+  dynamic function,
+}) {
+  return Padding(
+    padding: EdgeInsets.all(padding ?? 8.0),
+    child: SizedBox(
+      height: 40,
+      width: width ?? double.infinity,
+      child: ElevatedButton.icon(
+        icon: Icon(
+          icon,
+          size: 18,
+          color: textColors,
+        ),
+        style: ElevatedButton.styleFrom(
+          shape: const StadiumBorder(),
+          backgroundColor: color ?? AppColors.blue,
+        ),
+        onPressed: function,
+        label: createCustomText(
+          left: 0.0,
           color: textColors ?? AppColors.white,
           weight: AppFontWeight.bold,
           text: text ?? "",
@@ -304,5 +344,49 @@ Icon chevronLeft() {
     color: AppColors.textGrey,
     size: 32,
     Icons.chevron_left,
+  );
+}
+
+//바텀sheet 불법 주정차 기준 창
+void widgetbottomsheet(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    builder: (BuildContext context) {
+      return FractionallySizedBox(
+        heightFactor: 0.9,
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+          child: Column(
+            children: [
+              const SizedBox(width: 50, child: Divider(color: Colors.blueGrey, thickness: 4.0)),
+              const SizedBox(height: 15),
+              const Expanded(
+                flex: 1,
+                child: CustomText(text: "불법주정차 법규", weight: FontWeight.w300, color: Colors.black),
+              ),
+              const SizedBox(height: 5),
+              Expanded(
+                  flex: 8,
+                  child: Image.asset(
+                    "assets/parking _rule.png",
+                    filterQuality: FilterQuality.high,
+                  )), //불법주정차에 대한 법규 이미지 넣을 부분
+              const SizedBox(height: 10),
+              Expanded(
+                  flex: 1,
+                  child: createElevatedButton(
+                      color: AppColors.black,
+                      text: "확인",
+                      function: () {
+                        Get.back();
+                      })),
+              const SizedBox(height: 15),
+            ],
+          ),
+        ),
+      );
+    },
   );
 }
