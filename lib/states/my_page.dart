@@ -8,6 +8,7 @@ import 'package:illegalparking_app/controllers/my_page_controller.dart';
 import 'package:illegalparking_app/models/result_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/utils/alarm_util.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -26,11 +27,14 @@ class _MyPageState extends State<MyPage> {
   String? carNum;
   late String reportCount = "0";
   late String currentPoint = "0";
+  late Future<MyPageInfo> requestInfo;
 
   @override
   void initState() {
     super.initState();
-    requestMyPage(Env.USER_SEQ!).then((myPageInfo) {
+
+    requestInfo = requestMyPage(Env.USER_SEQ!);
+    requestInfo.then((myPageInfo) {
       myPagecontroller.setCarLevel(myPageInfo.carLevel);
       setState(() {
         // 차량 정보
@@ -56,10 +60,35 @@ class _MyPageState extends State<MyPage> {
   @override
   void dispose() {
     super.dispose();
+    // loadingDialog.hide();
   }
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<MyPageInfo>(
+      future: requestInfo,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return _initBodyByContainer();
+        } else if (snapshot.hasError) {
+          showErrorToast(text: "데이터를 가져오는데 실패하였습니다.");
+        }
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              createCustomText(color: AppColors.white, text: "로딩중..."),
+              const CircularProgressIndicator(
+                color: AppColors.white,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Container _initBodyByContainer() {
     return Container(
       color: AppColors.appBackground,
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),

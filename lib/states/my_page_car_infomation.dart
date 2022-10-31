@@ -22,6 +22,8 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
   final loginController = Get.put(LoginController());
   final myPageController = Get.put(MyPageController());
 
+  late Future<AlarmHistoryListInfo> requestInfo;
+
   bool checkedAlram = Env.USER_CAR_ALARM ?? false;
   List<dynamic> alarmInfoList = [];
   List testList = [
@@ -65,7 +67,8 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
   @override
   void initState() {
     super.initState();
-    requestAlarmHistory(Env.USER_SEQ!, Env.USER_CAR_NUMBER!).then((alarmHistoryListInfo) {
+    requestInfo = requestAlarmHistory(Env.USER_SEQ!, Env.USER_CAR_NUMBER!);
+    requestInfo.then((alarmHistoryListInfo) {
       setState(() {
         alarmInfoList = alarmHistoryListInfo.alarmHistoryInfos!;
       });
@@ -256,7 +259,32 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                 function: () {},
               ),
               // 신고된 내용 리스트
-              _createAlarmHistorytList(context, alarmInfoList),
+              FutureBuilder(
+                future: requestInfo,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return _createAlarmHistorytList(context, alarmInfoList);
+                  } else if (snapshot.hasError) {
+                    showErrorToast(text: "데이터를 가져오는데 실패하였습니다.");
+                  }
+                  return Container(
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        createCustomText(color: AppColors.black, text: "로딩중..."),
+                        const CircularProgressIndicator(
+                          color: AppColors.black,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -289,22 +317,22 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                           width: 66,
                           height: 66,
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Image.asset("assets/noimage.jpg")),
-                          // child: Container(
-                          //   decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-                          //   child: Image.network(
-                          //     height: 70,
-                          //     width: 70,
-                          //     fit: BoxFit.cover,
-                          //     "${Env.FILE_SERVER_URL}${alarmInfoList[index].fileName}",
-                          //     errorBuilder: (context, error, stackTrace) => Image.asset(
-                          //       height: 80,
-                          //       width: 80,
-                          //       fit: BoxFit.cover,
-                          //       "assets/noimage.jpg",
-                          //     ),
-                          //   ),
-                          // ),
+                          // child: Container(decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Image.asset("assets/noimage.jpg")),
+                          child: Container(
+                            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+                            child: Image.network(
+                              height: 70,
+                              width: 70,
+                              fit: BoxFit.cover,
+                              "${Env.FILE_SERVER_URL}${alarmInfoList[index].fileName}",
+                              errorBuilder: (context, error, stackTrace) => Image.asset(
+                                height: 80,
+                                width: 80,
+                                fit: BoxFit.cover,
+                                "assets/noimage.jpg",
+                              ),
+                            ),
+                          ),
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -398,7 +426,7 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
     String comment = "";
     switch (stateType) {
       case "신고대기":
-        comment = "불법주정차 위반 신고가되었습니다. 1분 안에 차를 이동주차해주세요.  asdasdasdsadasd ";
+        comment = "불법주정차 위반 신고가되었습니다. 1분 안에 차를 이동주차해주세요.";
         break;
       case "신고불가":
         comment = "추가 신고가 없어 신고가 종료되었습니다.";

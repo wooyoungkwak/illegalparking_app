@@ -7,6 +7,7 @@ import 'package:illegalparking_app/controllers/my_page_controller.dart';
 import 'package:illegalparking_app/models/result_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/utils/time_util.dart';
 import 'package:intl/intl.dart';
@@ -21,6 +22,8 @@ class MyPagePoint extends StatefulWidget {
 class _MyPagePointState extends State<MyPagePoint> {
   final loginController = Get.put(LoginController());
   final myPageController = Get.put(MyPageController());
+
+  late Future<PointListInfo> requestInfo;
 
   List<dynamic> pointInfoList = [];
 
@@ -82,7 +85,8 @@ class _MyPagePointState extends State<MyPagePoint> {
   @override
   void initState() {
     super.initState();
-    requestPoint(Env.USER_SEQ!).then((pointListInfo) {
+    requestInfo = requestPoint(Env.USER_SEQ!);
+    requestInfo.then((pointListInfo) {
       setState(() {
         for (int i = 0; i < pointListInfo.pointInfos.length; i++) {
           pointInfoList.add(pointListInfo.pointInfos[i]);
@@ -174,63 +178,92 @@ class _MyPagePointState extends State<MyPagePoint> {
                   chevronRight(),
                 ],
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 4.0),
-                decoration: const BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(18)),
-                ),
-                child: Wrap(
-                  children: List.generate(
-                    pointInfoList.length,
-                    (index) => SizedBox(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                createCustomText(
-                                  top: 0.0,
-                                  bottom: 2.0,
-                                  weight: AppFontWeight.semiBold,
-                                  size: 30.0,
-                                  color: _setPointColor(pointInfoList[index].pointType),
-                                  text: _setPointValue(pointInfoList[index].pointType, pointInfoList[index].value),
-                                ),
-                                createCustomText(
-                                  top: 2.0,
-                                  bottom: 2.0,
-                                  weight: AppFontWeight.regular,
-                                  size: 14.0,
-                                  text: _setPointContent(pointInfoList[index].pointType, pointInfoList[index].locationType, pointInfoList[index].productName, pointInfoList[index].value),
-                                ),
-                                createCustomText(
-                                  top: 2.0,
-                                  bottom: 8.0,
-                                  weight: AppFontWeight.regular,
-                                  color: AppColors.textGrey,
-                                  size: 12.0,
-                                  text: pointInfoList[index].regDt,
-                                ),
-                              ],
-                            ),
-                          ),
-                          if (pointInfoList.length != (index + 1))
-                            Container(
-                              color: Colors.grey,
-                              height: 1,
-                              width: MediaQuery.of(context).size.width,
-                            )
-                        ],
-                      ),
+              FutureBuilder(
+                future: requestInfo,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return _initPointListByContainer();
+                  } else if (snapshot.hasError) {
+                    showErrorToast(text: "데이터를 가져오는데 실패하였습니다.");
+                  }
+                  return Container(
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(18.0),
                     ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        createCustomText(color: AppColors.black, text: "로딩중..."),
+                        const CircularProgressIndicator(
+                          color: AppColors.black,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container _initPointListByContainer() {
+    return Container(
+      margin: const EdgeInsets.only(top: 4.0),
+      decoration: const BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.all(Radius.circular(18)),
+      ),
+      child: Wrap(
+        children: List.generate(
+          pointInfoList.length,
+          (index) => SizedBox(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      createCustomText(
+                        top: 0.0,
+                        bottom: 2.0,
+                        weight: AppFontWeight.semiBold,
+                        size: 30.0,
+                        color: _setPointColor(pointInfoList[index].pointType),
+                        text: _setPointValue(pointInfoList[index].pointType, pointInfoList[index].value),
+                      ),
+                      createCustomText(
+                        top: 2.0,
+                        bottom: 2.0,
+                        weight: AppFontWeight.regular,
+                        size: 14.0,
+                        text: _setPointContent(pointInfoList[index].pointType, pointInfoList[index].locationType, pointInfoList[index].productName, pointInfoList[index].value),
+                      ),
+                      createCustomText(
+                        top: 2.0,
+                        bottom: 8.0,
+                        weight: AppFontWeight.regular,
+                        color: AppColors.textGrey,
+                        size: 12.0,
+                        text: pointInfoList[index].regDt,
+                      ),
+                    ],
                   ),
                 ),
-              )
-            ],
+                if (pointInfoList.length != (index + 1))
+                  Container(
+                    color: Colors.grey,
+                    height: 1,
+                    width: MediaQuery.of(context).size.width,
+                  )
+              ],
+            ),
           ),
         ),
       ),

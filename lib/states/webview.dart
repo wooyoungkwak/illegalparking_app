@@ -80,6 +80,7 @@ class _WebviewPageState extends State<WebviewPage> {
           Expanded(
             child: WebView(
               initialUrl: "${Env.SERVER_ADMIN_URL}/api/area/map",
+              // initialUrl: "https://map.kakao.com/",
               onWebViewCreated: (WebViewController webViewController) {
                 _controller.complete(webViewController);
                 _webViewController = webViewController;

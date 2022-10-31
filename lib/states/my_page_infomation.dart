@@ -106,7 +106,20 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                           ),
                           borderRadius: BorderRadius.circular(30),
                           onTap: () {
-                            takePhoto(ImageSource.gallery);
+                            takePhoto(ImageSource.gallery).then((value) {
+                              String modifyImagePath = _imageFile!.path.substring(50);
+                              requestUserProfileChange(Env.USER_SEQ!, modifyImagePath).then((defaultInfo) {
+                                if (defaultInfo.success) {
+                                  Log.debug(defaultInfo.data);
+                                  setState(() {
+                                    imagePath = modifyImagePath;
+                                  });
+                                  Env.USER_PHOTO_NAME = imagePath;
+                                } else {
+                                  Log.debug(defaultInfo.message);
+                                }
+                              });
+                            });
                           },
                           child: const Icon(
                             Icons.filter,
@@ -304,7 +317,7 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
     );
   }
 
-  takePhoto(ImageSource source) async {
+  Future<void> takePhoto(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
     setState(() {
       _imageFile = pickedFile;

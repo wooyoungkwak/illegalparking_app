@@ -6,6 +6,7 @@ import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/models/result_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/utils/time_util.dart';
 
@@ -18,6 +19,8 @@ class MyPageReport extends StatefulWidget {
 
 class _MyPageReportState extends State<MyPageReport> {
   final loginController = Get.put(LoginController());
+  late Future<ReportHistoryInfo> requestInfo;
+
   List<dynamic> reportHistoryList = [];
   List textList = [
     {
@@ -88,16 +91,11 @@ class _MyPageReportState extends State<MyPageReport> {
   @override
   void initState() {
     super.initState();
-    requestReportHistory(Env.USER_SEQ!).then((reportHistoryInfo) {
+    requestInfo = requestReportHistory(Env.USER_SEQ!);
+    requestInfo.then((reportHistoryInfo) {
       setState(() {
         reportHistoryList = reportHistoryInfo.reportResultInfos;
       });
-      for (int i = 0; i < reportHistoryList.length - 1; i++) {
-        Log.debug("firstfileName $i: ${reportHistoryList[i].firstFileName}");
-        Log.debug("secondfileName $i: ${reportHistoryList[i].secondFileName}");
-        Log.debug("firstRegDt $i: ${reportHistoryList[i].firstRegDt}");
-        Log.debug("secondRegDt $i: ${reportHistoryList[i].secondRegDt}");
-      }
     });
   }
 
@@ -164,10 +162,38 @@ class _MyPageReportState extends State<MyPageReport> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
-              child: _createReportList(context, reportHistoryList),
-            )
+            FutureBuilder(
+              future: requestInfo,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
+                    child: _createReportList(context, reportHistoryList),
+                  );
+                } else if (snapshot.hasError) {
+                  showErrorToast(text: "데이터를 가져오는데 실패하였습니다.");
+                }
+                return Padding(
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 16.0, left: 8.0, right: 8.0),
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        createCustomText(color: AppColors.black, text: "로딩중..."),
+                        const CircularProgressIndicator(
+                          color: AppColors.black,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
