@@ -26,7 +26,11 @@ class _ConfirmationState extends State<Confirmation> {
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((data) async {
-      alertDialogByonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
+      if (Env.REPORT_RESPONSE_MSG! == "" || Env.REPORT_RESPONSE_MSG! == null) {
+        alertDialogByonebutton("신고알림", "신고 상태에 대한 메시지가 없습니다.");
+      } else {
+        alertDialogByonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
+      }
     });
   }
 
