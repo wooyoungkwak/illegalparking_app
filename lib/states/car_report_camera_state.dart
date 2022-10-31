@@ -51,7 +51,7 @@ class _ReportcameraState extends State<Reportcamera> {
                 }
               }),
           initContainerByOutlineButton(0, 0.7, "주정차관련법규보기", context),
-          Positioned(top: Env.MEDIA_SIZE_PADDINGTOP! + 10, child: initColumnByText(10, AppFontWeight.regular, AppColors.white))
+          Positioned(top: Env.MEDIA_SIZE_PADDINGTOP! + 10, child: initColumnByText(11, AppFontWeight.regular, AppColors.white))
         ],
       ),
     );

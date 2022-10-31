@@ -16,6 +16,8 @@ import 'package:get/get.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
+import 'package:popover/popover.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 class Declaration extends StatefulWidget {
@@ -115,13 +117,28 @@ class _DeclarationState extends State<Declaration> {
                         children: [
                           _initRowByData("차량번호", SizedBox(width: Env.MEDIA_SIZE_WIDTH! / 2.3, height: Env.MEDIA_SIZE_HEIGHT! / 20, child: _createTextFormField(_numberplateContoroller))),
                           const SizedBox(height: 5),
-                          _initRowByData(
-                              "접수위치",
-                              SizedBox(
-                                width: Env.MEDIA_SIZE_WIDTH! / 2.3,
-                                child: Text(controller.imageGPS.value.address.length > 1 ? controller.imageGPS.value.address : "위치를 찾을 수 없습니다.",
-                                    maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontFamily: "NotoSansKR", fontWeight: FontWeight.w400)),
-                              )),
+                          // _initRowByData(
+                          //     "접수위치",
+                          //     SizedBox(
+                          //       width: Env.MEDIA_SIZE_WIDTH! / 2.3,
+                          //       child: GestureDetector(
+                          //         onTap: () {
+                          //           showPopover(
+                          //             context: context,
+                          //             bodyBuilder: (context) => Text("test"),
+                          //             onPop: () => print('Popover was popped!'),
+                          //             direction: PopoverDirection.bottom,
+                          //             width: 200,
+                          //             height: 400,
+                          //             arrowHeight: 15,
+                          //             arrowWidth: 30,
+                          //           );
+                          //         },
+                          //         child: Text(controller.imageGPS.value.address.length > 1 ? controller.imageGPS.value.address : "위치를 찾을 수 없습니다.",
+                          //             maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontFamily: "NotoSansKR", fontWeight: FontWeight.w400)),
+                          //       ),
+                          //     )),
+                          poptext(),
                           const SizedBox(
                             height: 5,
                           ),
@@ -178,24 +195,6 @@ class _DeclarationState extends State<Declaration> {
                 ));
       },
       child: _initSizedBoxByImage(path, height),
-    );
-  }
-
-  Row _initRowByData(String text, Widget widget) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        CustomText(
-          text: text,
-          weight: FontWeight.w700,
-          size: 16,
-          color: Colors.black,
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        widget,
-      ],
     );
   }
 
@@ -384,4 +383,131 @@ class _DeclarationState extends State<Declaration> {
       }
     }
   }
+}
+
+class poptext extends StatelessWidget {
+  poptext({Key? key}) : super(key: key);
+  final ReportController controller = Get.put(ReportController());
+
+  @override
+  Widget build(BuildContext context) {
+    return _initRowByData(
+        "접수위치",
+        SizedBox(
+            width: Env.MEDIA_SIZE_WIDTH! / 2.3,
+            child: GestureDetector(
+              child: Text(controller.imageGPS.value.address.length > 1 ? controller.imageGPS.value.address : "위치를 찾을 수 없습니다.",
+                  maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontFamily: "NotoSansKR", fontWeight: FontWeight.w400)),
+              onTap: () {
+                showPopover(
+                  context: context,
+                  bodyBuilder: (context) => ListItems(),
+                  onPop: () => print('Popover was popped!'),
+                  direction: PopoverDirection.bottom,
+                  width: Env.MEDIA_SIZE_WIDTH! - 30,
+                  height: 75,
+                  arrowHeight: 15,
+                  arrowWidth: 30,
+                );
+              },
+            )));
+
+    return Container(
+      width: 80,
+      height: 40,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+        boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 5)],
+      ),
+      child: GestureDetector(
+        child: const Center(child: Text('Click Me')),
+        onTap: () {
+          showPopover(
+            context: context,
+            bodyBuilder: (context) => ListItems(),
+            onPop: () => print('Popover was popped!'),
+            direction: PopoverDirection.bottom,
+            width: 200,
+            height: 400,
+            arrowHeight: 15,
+            arrowWidth: 30,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ListItems extends StatelessWidget {
+  ListItems({Key? key}) : super(key: key);
+  final ReportController controller = Get.put(ReportController());
+
+  @override
+  Widget build(BuildContext context) {
+    return Scrollbar(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: ListView(
+          padding: const EdgeInsets.all(8),
+          children: [
+            InkWell(
+                onTap: () {
+                  Navigator.of(context)
+                    ..pop()
+                    ..push(
+                      MaterialPageRoute<SecondRoute>(
+                        builder: (context) => SecondRoute(),
+                      ),
+                    );
+                },
+                child: Container(
+                  height: 50,
+                  color: Colors.amber[200],
+                  child: Center(
+                      child: Text(controller.imageGPS.value.address.length > 1 ? controller.imageGPS.value.address : "위치를 찾을 수 없습니다.",
+                          overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 17, fontFamily: "NotoSansKR", fontWeight: FontWeight.w500))),
+                )),
+            const Divider(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SecondRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Second Route'),
+        automaticallyImplyLeading: false,
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Go back!'),
+        ),
+      ),
+    );
+  }
+}
+
+Row _initRowByData(String text, Widget widget) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      CustomText(
+        text: text,
+        weight: FontWeight.w700,
+        size: 16,
+        color: Colors.black,
+      ),
+      const SizedBox(
+        width: 10,
+      ),
+      widget,
+    ],
+  );
 }

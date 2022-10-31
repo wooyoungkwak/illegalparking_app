@@ -67,6 +67,8 @@ dependencies:
   image_picker: ^0.8.6
   #카카오지도,네이버지도열기
   url_launcher: ^6.1.6
+  #주소창클릭시 올라오는 창
+  popover: ^0.2.7
 
 dev_dependencies:
   flutter_test:
