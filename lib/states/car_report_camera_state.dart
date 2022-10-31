@@ -58,7 +58,7 @@ class _ReportcameraState extends State<Reportcamera> {
   }
 }
 
-Container CreateContainerByAlignment(double X, double Y, Widget widget) {
+Container createContainerByAlignment(double X, double Y, Widget widget) {
   return Container(alignment: Alignment(X, Y), child: widget);
 }
 
@@ -79,7 +79,7 @@ Column initColumnByText(double size, FontWeight weight, Color color) {
 
 //불법주정차 법규 text
 Container initContainerByOutlineButton(double X, double Y, String text, BuildContext context) {
-  return CreateContainerByAlignment(
+  return createContainerByAlignment(
     X,
     Y,
     OutlinedButton(
@@ -110,8 +110,4 @@ Padding _createPaddingBybottomline() {
       ),
     ),
   );
-}
-
-void _okbtn() {
-  Get.back();
 }

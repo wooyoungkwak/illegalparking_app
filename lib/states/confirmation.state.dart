@@ -43,7 +43,7 @@ class _ConfirmationState extends State<Confirmation> {
         child: Scaffold(
           body: Column(
             children: [
-              createContainerByTopWidget(text: "신고하기", Function: _escbtn),
+              createContainerByTopWidget(text: "신고하기", function: _escbtn),
               Expanded(
                 flex: 20,
                 child: Container(
@@ -102,8 +102,8 @@ class _ConfirmationState extends State<Confirmation> {
   }
 
   //신고이력, 홈 버튼
-  Container _initContainer(Color color, String text) {
-    return Container(
+  SizedBox _initContainer(Color color, String text) {
+    return SizedBox(
       width: 250,
       child: Card(
         color: color,

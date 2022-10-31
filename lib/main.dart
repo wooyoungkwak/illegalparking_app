@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         routes: <String, WidgetBuilder>{
-          "/Firstuse": (BuildContext context) => Firstuse(),
+          "/Firstuse": (BuildContext context) => const Firstuse(),
           "/login": (BuildContext context) => const Login(),
           "/sign_up": (BuildContext context) => const SignUp(),
           "/home": (BuildContext context) => const Home(),
@@ -93,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         });
       } else {
-        Get.off(Firstuse());
+        Get.off(const Firstuse());
       }
     });
   }

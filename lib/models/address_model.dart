@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_initializing_formals
+
 class ImageGPS {
   double latitude, longitude;
   String address;
