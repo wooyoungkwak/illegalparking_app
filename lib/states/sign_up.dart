@@ -32,8 +32,8 @@ class _SignUpState extends State<SignUp> {
   final phoneNumController = TextEditingController();
   final authKeyController = TextEditingController();
 
-  late String photoName;
   FocusNode _idfocusNode = FocusNode();
+  String photoName = "assets/profile_1.jpg";
   String? idHelperText = "사용 가능한 아이디입니다.";
   String? idErrorText = "사용 가능한 아이디입니다.";
   String authenticationSendText = "인증번호 발송";
@@ -48,7 +48,7 @@ class _SignUpState extends State<SignUp> {
   // TODO : 캐릭터 아이콘 디자인팀에 문의
   List profileCharicterList = [
     {
-      "value": false,
+      "value": true,
       "asset": "assets/profile_1.jpg",
     },
     {
@@ -222,6 +222,7 @@ class _SignUpState extends State<SignUp> {
                   fillColor: AppColors.textField,
                   hintText: "전화번호를 입력해주세요.",
                   // helperText: "'-' 없이 입력해주세요",
+                  readOnly: authVerification,
                   controller: phoneNumController,
                   validation: phoneNumValidator,
                 ),

@@ -18,6 +18,7 @@ class Env {
   static const String FILE_SERVER_URL = "http://49.50.166.205:8090/";
 
   static const String SERVER_ADMIN_URL = "$ADMIN_SERVER:18090";
+  // static const String SERVER_ADMIN_URL = ADMIN_SERVER;
   // static const String SERVER_ADMIN_URL = "http://192.168.0.175:8090";
   static const String SERVER_LOGIN_URL = '$SERVER_ADMIN_URL/api/login';
   static const String SERVER_ADMIN_REGISTER_URL = '$SERVER_ADMIN_URL/api/user/register';
@@ -92,15 +93,15 @@ class Env {
   static const String MSG_NOT_TOKEN = "로그인 후 사용 해주세요.";
 
   // Test Naver Cloud
-  static const String NAVER_SERVICE_ID = "ncp:sms:kr:294175196378:sms_auth_test";
-  static const String NAVER_ACCESS_KEY = "4VqjVzPCbUUnTO9nDy92";
-  static const String NAVER_SECRET_KEY = "6Pm4jOKBTTtAYDR3rWQhdSnwXFzk6xxuNx7JJYWJ";
-  static const String NAVER_PHONE_NUMBER = "01079297878";
+  // static const String NAVER_SERVICE_ID = "ncp:sms:kr:294175196378:sms_auth_test";
+  // static const String NAVER_ACCESS_KEY = "4VqjVzPCbUUnTO9nDy92";
+  // static const String NAVER_SECRET_KEY = "6Pm4jOKBTTtAYDR3rWQhdSnwXFzk6xxuNx7JJYWJ";
+  // static const String NAVER_PHONE_NUMBER = "01079297878";
   // // 회사 Naver Cloud
-  // static const String NAVER_SERVICE_ID = "ncp:sms:kr:283490566916:illegalparking_app";
-  // static const String NAVER_ACCESS_KEY = "Z5cIzHss1rH6qzBzZDEi";
-  // static const String NAVER_SECRET_KEY = "AB4tsaR7TtnFkgCUxC31LeTo6onaI3e0npRNSLc5";
-  // static const String NAVER_PHONE_NUMBER = "07047661008 ";
+  static const String NAVER_SERVICE_ID = "ncp:sms:kr:283490566916:illegalparking_app";
+  static const String NAVER_ACCESS_KEY = "Z5cIzHss1rH6qzBzZDEi";
+  static const String NAVER_SECRET_KEY = "AB4tsaR7TtnFkgCUxC31LeTo6onaI3e0npRNSLc5";
+  static const String NAVER_PHONE_NUMBER = "07047661008 ";
   static List<CameraDescription>? CAMERA_SETTING;
   static double? MEDIA_SIZE_HEIGHT;
   static double? MEDIA_SIZE_WIDTH;

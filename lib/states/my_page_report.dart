@@ -202,7 +202,6 @@ class _MyPageReportState extends State<MyPageReport> {
 
   Container _createReportList(BuildContext context, List reportHistoryList) {
     return Container(
-      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(18.0),
