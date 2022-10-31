@@ -101,7 +101,7 @@ class Env {
   static const String NAVER_SERVICE_ID = "ncp:sms:kr:283490566916:illegalparking_app";
   static const String NAVER_ACCESS_KEY = "Z5cIzHss1rH6qzBzZDEi";
   static const String NAVER_SECRET_KEY = "AB4tsaR7TtnFkgCUxC31LeTo6onaI3e0npRNSLc5";
-  static const String NAVER_PHONE_NUMBER = "07047661008 ";
+  static const String NAVER_PHONE_NUMBER = "07047661008";
   static List<CameraDescription>? CAMERA_SETTING;
   static double? MEDIA_SIZE_HEIGHT;
   static double? MEDIA_SIZE_WIDTH;

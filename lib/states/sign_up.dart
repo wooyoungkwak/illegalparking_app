@@ -222,7 +222,7 @@ class _SignUpState extends State<SignUp> {
                   fillColor: AppColors.textField,
                   hintText: "전화번호를 입력해주세요.",
                   // helperText: "'-' 없이 입력해주세요",
-                  readOnly: authVerification,
+                  readOnly: sendAuthentication || authVerification,
                   controller: phoneNumController,
                   validation: phoneNumValidator,
                 ),
