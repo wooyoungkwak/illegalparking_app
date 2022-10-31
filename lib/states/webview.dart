@@ -30,7 +30,6 @@ class WebviewPage extends StatefulWidget {
 }
 
 class _WebviewPageState extends State<WebviewPage> {
-  final showKey = GlobalKey();
   final Completer<WebViewController> _controller = Completer<WebViewController>();
   final mapController = Get.put(MapController());
   final loginController = Get.put(LoginController());
@@ -80,7 +79,6 @@ class _WebviewPageState extends State<WebviewPage> {
           Expanded(
             child: WebView(
               initialUrl: "${Env.SERVER_ADMIN_URL}/api/area/map",
-              // initialUrl: "https://map.kakao.com/",
               onWebViewCreated: (WebViewController webViewController) {
                 _controller.complete(webViewController);
                 _webViewController = webViewController;
@@ -107,370 +105,355 @@ class _WebviewPageState extends State<WebviewPage> {
   }
 
   Widget buildBottomSheet(BuildContext context) {
-    return GestureDetector(
-      key: showKey,
-      child: Container(
-        decoration: const BoxDecoration(
-          color: AppColors.bottomNavBackground,
-          border: Border(
-            top: BorderSide(
-              width: 1,
-            ),
-            left: BorderSide(
-              width: 1,
-            ),
-            right: BorderSide(
-              width: 1,
-            ),
-            bottom: BorderSide(
-              width: 1,
-            ),
+    return Container(
+      decoration: const BoxDecoration(
+        color: AppColors.bottomNavBackground,
+        border: Border(
+          top: BorderSide(
+            width: 1,
           ),
-
-          // Border.all(
-          //   width: 1,
-          //   color: AppColors.black,
-          // ),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
+          left: BorderSide(
+            width: 1,
+          ),
+          right: BorderSide(
+            width: 1,
+          ),
+          bottom: BorderSide(
+            width: 1,
           ),
         ),
-        width: double.infinity,
-        // height: MediaQuery.of(context).size.height * 0.3,
-        child: Wrap(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Wrap(
-                children: [
-                  // 손잡이?
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
+
+        // Border.all(
+        //   width: 1,
+        //   color: AppColors.black,
+        // ),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
+      ),
+      width: double.infinity,
+      // height: MediaQuery.of(context).size.height * 0.3,
+      child: Wrap(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Wrap(
+              children: [
+                // 손잡이?
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                    width: 60,
+                    height: 3,
+                  ),
+                ),
+                // 이미지, 위치 주소
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                        child: Image(
+                          image: mapInfoType == "parking" ? const AssetImage("assets/parking_basic.png") : const AssetImage("assets/pm_basic.png"),
+                          height: 100,
+                          width: 100,
                         ),
                       ),
-                      width: 60,
-                      height: 3,
-                    ),
-                  ),
-                  // 이미지, 위치 주소
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
+                      if (mapInfoType == "parking")
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            createCustomText(
+                              top: 0.0,
+                              bottom: 0.0,
+                              left: 16.0,
+                              right: 8.0,
+                              color: AppColors.white,
+                              weight: AppFontWeight.bold,
+                              size: 18.0,
+                              text: parkingName,
                             ),
-                          ),
-                          child: Image(
-                            image: mapInfoType == "parking" ? const AssetImage("assets/parking_basic.png") : const AssetImage("assets/pm_basic.png"),
-                            height: 100,
-                            width: 100,
-                          ),
+                            createCustomText(
+                              top: 0.0,
+                              bottom: 0.0,
+                              left: 16.0,
+                              right: 8.0,
+                              color: AppColors.grey,
+                              weight: AppFontWeight.regular,
+                              size: 12.0,
+                              text: parkingAddress,
+                            ),
+                          ],
                         ),
-                        if (mapInfoType == "parking")
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              createCustomText(
-                                top: 0.0,
-                                bottom: 0.0,
-                                left: 16.0,
-                                right: 8.0,
-                                color: AppColors.white,
-                                weight: AppFontWeight.bold,
-                                size: 18.0,
-                                text: parkingName,
-                              ),
-                              createCustomText(
-                                top: 0.0,
-                                bottom: 0.0,
-                                left: 16.0,
-                                right: 8.0,
-                                color: AppColors.grey,
-                                weight: AppFontWeight.regular,
-                                size: 12.0,
-                                text: parkingAddress,
-                              ),
-                            ],
-                          ),
-                        if (mapInfoType == "pm")
-                          Column(
-                            children: [
-                              createCustomText(
-                                top: 0.0,
-                                bottom: 0.0,
-                                left: 16.0,
-                                right: 8.0,
-                                color: AppColors.white,
-                                weight: AppFontWeight.bold,
-                                size: 18.0,
-                                text: personalMobName,
-                              ),
-                              createCustomText(
-                                top: 0.0,
-                                bottom: 0.0,
-                                left: 16.0,
-                                right: 8.0,
-                                color: AppColors.grey,
-                                weight: AppFontWeight.regular,
-                                size: 12.0,
-                                text: "0000123 자건거PRO",
-                              ),
-                            ],
-                          ),
+                      if (mapInfoType == "pm")
+                        Column(
+                          children: [
+                            createCustomText(
+                              top: 0.0,
+                              bottom: 0.0,
+                              left: 16.0,
+                              right: 8.0,
+                              color: AppColors.white,
+                              weight: AppFontWeight.bold,
+                              size: 18.0,
+                              text: personalMobName,
+                            ),
+                            createCustomText(
+                              top: 0.0,
+                              bottom: 0.0,
+                              left: 16.0,
+                              right: 8.0,
+                              color: AppColors.grey,
+                              weight: AppFontWeight.regular,
+                              size: 12.0,
+                              text: "0000123 자건거PRO",
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
+                ),
+                // 정보
+                if (mapInfoType == "parking")
+                  Container(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    decoration: const BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                createCustomText(
+                                  weight: AppFontWeight.semiBold,
+                                  color: AppColors.textGrey,
+                                  size: 15.0,
+                                  text: "주차요금",
+                                ),
+                                createCustomText(
+                                  weight: AppFontWeight.semiBold,
+                                  color: AppColors.textGrey,
+                                  size: 15.0,
+                                  text: "운영시간",
+                                ),
+                                // createCustomText(
+                                //   weight: AppFontWeight.semiBold,
+                                //   color: AppColors.textGrey,
+                                //   size: 15.0,
+                                //   text: "전화번호",
+                                // ),
+                                createCustomText(
+                                  weight: AppFontWeight.semiBold,
+                                  color: AppColors.textGrey,
+                                  size: 15.0,
+                                  text: "주차가능면",
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                createCustomText(
+                                  weight: AppFontWeight.bold,
+                                  size: 16.0,
+                                  text: parkingOperation,
+                                ),
+                                createCustomText(
+                                  weight: AppFontWeight.bold,
+                                  size: 16.0,
+                                  text: parkingTime,
+                                ),
+                                // createCustomText(
+                                //   weight: AppFontWeight.bold,
+                                //   size: 16.0,
+                                //   text: parkingPhoneNumber,
+                                // ),
+                                createCustomText(
+                                  weight: AppFontWeight.bold,
+                                  size: 16.0,
+                                  text: parkingCount,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            createButtonWithIcon(
+                              width: 170,
+                              icon: Icons.call,
+                              color: AppColors.grey,
+                              textColors: AppColors.black,
+                              text: "전화하기",
+                              function: () {
+                                makePhoneCall(parkingPhoneNumber);
+                              },
+                            ),
+                            createButtonWithIcon(
+                              width: 170,
+                              icon: Icons.shortcut,
+                              color: AppColors.blue,
+                              textColors: AppColors.white,
+                              text: "길안내",
+                              function: () async {
+                                Log.debug("네이버지도");
+                                if (Platform.isIOS) {
+                                  Log.debug("ios");
+                                  Uri navermap = Uri.parse(
+                                      "nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=${parkingName}");
+                                  try {
+                                    //nmap 은 canlaunchUrl 안되고  try ~ catch 만 된다
+                                    await launchUrl(navermap);
+                                  } catch (e) {
+                                    Log.debug("Can't launch $navermap");
+                                    Uri url = Uri.parse('https://apps.apple.com/kr/app/id311867728');
+                                    launchUrl(url);
+                                  }
+                                } else if (Platform.isAndroid) {
+                                  Log.debug("Android");
+                                  Uri navermap = Uri.parse(
+                                      "nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=${parkingName}");
+                                  try {
+                                    //nmap 은 canlaunchUrl 안되고  try ~ catch 만 된다
+                                    await launchUrl(navermap);
+                                  } catch (e) {
+                                    Log.debug("Can't launch $navermap");
+                                    Uri url = Uri.parse('market://details?id=com.nhn.android.nmap');
+                                    launchUrl(url);
+                                  }
+                                }
+                                // Log.debug("카카오지도");
+                                // if (Platform.isIOS) {
+                                //   //
+                                //   Log.debug("ios");
+                                //   Uri kakaomap = Uri.parse(
+                                //       "kakaomap://route?sp=${mapController.latitude.toString()},${mapController.longitude.toString()}&ep=${parkingLat.toString()},${parkingLng.toString()}&by=CAR");
+                                //   try {
+                                //     await launchUrl(kakaomap);
+                                //   } catch (e) {
+                                //     Log.debug("Can't launch $kakaomap");
+                                //     Uri url =
+                                //         Uri.parse('https://apps.apple.com/kr/app/id304608425');
+                                //     launchUrl(url);
+                                //   }
+                                // } else if (Platform.isAndroid) {
+                                //   Log.debug("Android");
+                                //   Uri kakaomap = Uri.parse(
+                                //       "kakaomap://route?sp=${mapController.latitude.toString()},${mapController.longitude.toString()}&ep=${parkingLat.toString()},${parkingLng.toString()}&by=CAR");
+                                //   try {
+                                //     await launchUrl(kakaomap);
+                                //   } catch (e) {
+                                //     Log.debug("Can't launch $kakaomap");
+                                //     Uri url =
+                                //         Uri.parse('market://details?id=net.daum.android.map');
+                                //     launchUrl(url);
+                                //   }
+                                // }
+                              },
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
-                  // 정보
-                  if (mapInfoType == "parking")
-                    Container(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      decoration: const BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  createCustomText(
-                                    weight: AppFontWeight.semiBold,
-                                    color: AppColors.textGrey,
-                                    size: 15.0,
-                                    text: "주차요금",
-                                  ),
-                                  createCustomText(
-                                    weight: AppFontWeight.semiBold,
-                                    color: AppColors.textGrey,
-                                    size: 15.0,
-                                    text: "운영시간",
-                                  ),
-                                  // createCustomText(
-                                  //   weight: AppFontWeight.semiBold,
-                                  //   color: AppColors.textGrey,
-                                  //   size: 15.0,
-                                  //   text: "전화번호",
-                                  // ),
-                                  createCustomText(
-                                    weight: AppFontWeight.semiBold,
-                                    color: AppColors.textGrey,
-                                    size: 15.0,
-                                    text: "주차가능면",
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  createCustomText(
-                                    weight: AppFontWeight.bold,
-                                    size: 16.0,
-                                    text: parkingOperation,
-                                  ),
-                                  createCustomText(
-                                    weight: AppFontWeight.bold,
-                                    size: 16.0,
-                                    text: parkingTime,
-                                  ),
-                                  // createCustomText(
-                                  //   weight: AppFontWeight.bold,
-                                  //   size: 16.0,
-                                  //   text: parkingPhoneNumber,
-                                  // ),
-                                  createCustomText(
-                                    weight: AppFontWeight.bold,
-                                    size: 16.0,
-                                    text: parkingCount,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              createButtonWithIcon(
-                                width: 170,
-                                icon: Icons.call,
-                                color: AppColors.grey,
-                                textColors: AppColors.black,
-                                text: "전화하기",
-                                function: () {
-                                  makePhoneCall(parkingPhoneNumber);
-                                },
-                              ),
-                              createButtonWithIcon(
-                                width: 170,
-                                icon: Icons.shortcut,
-                                color: AppColors.blue,
-                                textColors: AppColors.white,
-                                text: "길안내",
-                                function: () async {
-                                  Log.debug("네이버지도");
-                                  if (Platform.isIOS) {
-                                    Log.debug("ios");
-                                    Uri navermap = Uri.parse(
-                                        "nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=${parkingName}");
-                                    try {
-                                      //nmap 은 canlaunchUrl 안되고  try ~ catch 만 된다
-                                      await launchUrl(navermap);
-                                    } catch (e) {
-                                      Log.debug("Can't launch $navermap");
-                                      Uri url = Uri.parse('https://apps.apple.com/kr/app/id311867728');
-                                      launchUrl(url);
-                                    }
-                                  } else if (Platform.isAndroid) {
-                                    Log.debug("Android");
-                                    Uri navermap = Uri.parse(
-                                        "nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=${parkingName}");
-                                    try {
-                                      //nmap 은 canlaunchUrl 안되고  try ~ catch 만 된다
-                                      await launchUrl(navermap);
-                                    } catch (e) {
-                                      Log.debug("Can't launch $navermap");
-                                      Uri url = Uri.parse('market://details?id=com.nhn.android.nmap');
-                                      launchUrl(url);
-                                    }
-                                  }
-                                  // Log.debug("카카오지도");
-                                  // if (Platform.isIOS) {
-                                  //   //
-                                  //   Log.debug("ios");
-                                  //   Uri kakaomap = Uri.parse(
-                                  //       "kakaomap://route?sp=${mapController.latitude.toString()},${mapController.longitude.toString()}&ep=${parkingLat.toString()},${parkingLng.toString()}&by=CAR");
-                                  //   try {
-                                  //     await launchUrl(kakaomap);
-                                  //   } catch (e) {
-                                  //     Log.debug("Can't launch $kakaomap");
-                                  //     Uri url =
-                                  //         Uri.parse('https://apps.apple.com/kr/app/id304608425');
-                                  //     launchUrl(url);
-                                  //   }
-                                  // } else if (Platform.isAndroid) {
-                                  //   Log.debug("Android");
-                                  //   Uri kakaomap = Uri.parse(
-                                  //       "kakaomap://route?sp=${mapController.latitude.toString()},${mapController.longitude.toString()}&ep=${parkingLat.toString()},${parkingLng.toString()}&by=CAR");
-                                  //   try {
-                                  //     await launchUrl(kakaomap);
-                                  //   } catch (e) {
-                                  //     Log.debug("Can't launch $kakaomap");
-                                  //     Uri url =
-                                  //         Uri.parse('market://details?id=net.daum.android.map');
-                                  //     launchUrl(url);
-                                  //   }
-                                  // }
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
+                if (mapInfoType == "pm")
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
                       ),
                     ),
-                  if (mapInfoType == "pm")
-                    Container(
-                      decoration: const BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                createCustomText(
+                                  weight: AppFontWeight.semiBold,
+                                  color: AppColors.textGrey,
+                                  size: 15.0,
+                                  text: "대여료",
+                                ),
+                                createCustomText(
+                                  weight: AppFontWeight.semiBold,
+                                  color: AppColors.textGrey,
+                                  size: 15.0,
+                                  text: "운영시간",
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                createCustomText(
+                                  weight: AppFontWeight.bold,
+                                  size: 16.0,
+                                  text: personalMobPrice,
+                                ),
+                                createCustomText(
+                                  weight: AppFontWeight.bold,
+                                  size: 16.0,
+                                  text: personalMobPrice,
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  createCustomText(
-                                    weight: AppFontWeight.semiBold,
-                                    color: AppColors.textGrey,
-                                    size: 15.0,
-                                    text: "대여료",
-                                  ),
-                                  createCustomText(
-                                    weight: AppFontWeight.semiBold,
-                                    color: AppColors.textGrey,
-                                    size: 15.0,
-                                    text: "운영시간",
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  createCustomText(
-                                    weight: AppFontWeight.bold,
-                                    size: 16.0,
-                                    text: personalMobPrice,
-                                  ),
-                                  createCustomText(
-                                    weight: AppFontWeight.bold,
-                                    size: 16.0,
-                                    text: personalMobPrice,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              createButtonWithIcon(
-                                width: 170,
-                                icon: Icons.notifications_outlined,
-                                color: AppColors.grey,
-                                textColors: AppColors.black,
-                                text: "벨울리기",
-                                function: () {},
-                              ),
-                              createElevatedButton(
-                                width: 170,
-                                color: AppColors.blue,
-                                textColors: AppColors.white,
-                                text: "대여하기",
-                                function: () {},
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            createButtonWithIcon(
+                              width: 170,
+                              icon: Icons.notifications_outlined,
+                              color: AppColors.grey,
+                              textColors: AppColors.black,
+                              text: "벨울리기",
+                              function: () {},
+                            ),
+                            createElevatedButton(
+                              width: 170,
+                              color: AppColors.blue,
+                              textColors: AppColors.white,
+                              text: "대여하기",
+                              function: () {},
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                ],
-              ),
+                  ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Padding _createInfoItem({String? info, String? data}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Text(info ?? ""),
-          Text(data ?? ""),
+          ),
         ],
       ),
     );
