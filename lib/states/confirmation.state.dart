@@ -27,7 +27,7 @@ class _ConfirmationState extends State<Confirmation> {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((data) async {
       if (Env.REPORT_RESPONSE_MSG! == "" || Env.REPORT_RESPONSE_MSG! == null) {
-        alertDialogByonebutton("신고알림", "신고 상태에 대한 메시지가 없습니다.");
+        alertDialogByonebutton("신고알림", Env.MSG_REPORT_NOT_RESPONSE);
       } else {
         alertDialogByonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
       }
@@ -57,7 +57,7 @@ class _ConfirmationState extends State<Confirmation> {
                     children: [
                       SizedBox(
                         width: 250,
-                        child: _initColumnBy2Text("신고가 기록되어 데이터 분석이 진행됩니다.", "감사합니다."),
+                        child: _initColumnBy2Text(Env.TEXT_REPORT_SUCCESS_1, Env.TEXT_REPORT_SUCCESS_2),
                       ),
                       const SizedBox(
                         height: 20,

@@ -49,19 +49,19 @@ class Firstuse extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const CustomText(
-            text: "주차의정석,",
+            text: Env.TEXT_FIRSTUSE_TITLE,
             weight: FontWeight.w700,
             size: 25,
           ),
           Row(
             children: const [
               CustomText(
-                text: "SOP",
+                text: Env.TEXT_FIRSTUSE_TITLE_INITIAL,
                 weight: FontWeight.w900,
                 size: 46,
               ),
               CustomText(
-                text: "(Standard of parking)",
+                text: Env.TEXT_FIRSTUSE_TITLE_EN,
                 weight: FontWeight.w500,
                 size: 17,
                 color: Color(0xff848484),
@@ -70,7 +70,7 @@ class Firstuse extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           const CustomText(
-            text: "SOP는 새로운 이동 기준을 제시하는 모빌리티 앱 입니다.\n우리의 이동은 도로 위 스트레스 없는 세상을 만들어 갑니다.",
+            text: Env.TEXT_FIRSTUSE_CONTENTS,
             weight: FontWeight.w500,
             size: 12,
             color: Color(0xff848484),
