@@ -1,5 +1,4 @@
 import 'package:intl/intl.dart';
-import 'package:illegalparking_app/models/result_model.dart';
 
 String getDateToString(DateTime datetime, String formatStr) {
   DateFormat dateFormat = DateFormat(formatStr);

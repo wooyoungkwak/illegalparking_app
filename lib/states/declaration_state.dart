@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison, unrelated_type_equality_checks
+
 import 'dart:io';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -46,7 +48,7 @@ class _DeclarationState extends State<Declaration> {
         await getGPS();
         sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
           carNum = carNum.replaceAll('"', '');
-          // ignore: unnecessary_null_comparison
+
           if (carNum == null || carNum == "") {
             _numberplateContoroller = TextEditingController(text: "인식실패");
             controller.carNumberwrite("인식실패");
@@ -82,8 +84,7 @@ class _DeclarationState extends State<Declaration> {
   @override
   Widget build(BuildContext context) {
     final statusBarHeight = Env.MEDIA_SIZE_PADDINGTOP!;
-    return Container(
-        child: GestureDetector(
+    return GestureDetector(
       onTap: () => myFocusNode.unfocus(),
       child: _createWillPopScope(
         Padding(
@@ -97,7 +98,7 @@ class _DeclarationState extends State<Declaration> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    createContainerByTopWidget(text: "신고하기", Function: _escbtn),
+                    createContainerByTopWidget(text: "신고하기", function: _escbtn),
                     Column(
                       children: [
                         (Obx((() => _initInkWellByImageTap(controller.reportImage.value, Env.MEDIA_SIZE_HEIGHT! / 5)))),
@@ -138,7 +139,7 @@ class _DeclarationState extends State<Declaration> {
                           //             maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontFamily: "NotoSansKR", fontWeight: FontWeight.w400)),
                           //       ),
                           //     )),
-                          poptext(),
+                          Poptext(),
                           const SizedBox(
                             height: 5,
                           ),
@@ -172,7 +173,7 @@ class _DeclarationState extends State<Declaration> {
           ),
         ),
       ),
-    ));
+    );
   }
 
   InkWell _initInkWellByImageTap(String path, double height) {
@@ -293,7 +294,7 @@ class _DeclarationState extends State<Declaration> {
 
   bool valuenullCheck() {
     final validSpecial = RegExp(r'^[0-9]{2,3}[가-힣]{1}[0-9]{4}$');
-    // ignore: unrelated_type_equality_checks
+
     if (Env.USER_SEQ == null || Env.USER_SEQ == "") {
       alertDialogByonebutton("알림", "USER_SEQ null");
       return false;
@@ -358,10 +359,7 @@ class _DeclarationState extends State<Declaration> {
 
         sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
               if (result == false)
-                {
-                  // TODO : 알림창 띄우기
-                  Env.REPORT_RESPONSE_MSG = "파일 전송에 실패했습니다"
-                }
+                {Env.REPORT_RESPONSE_MSG = "파일 전송에 실패했습니다"}
               else
                 {
                   sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
@@ -378,15 +376,14 @@ class _DeclarationState extends State<Declaration> {
                 }
             });
       } catch (e) {
-        // TODO : 알림창 띄우기
         Env.REPORT_RESPONSE_MSG = "파일 전송에 실패했습니다";
       }
     }
   }
 }
 
-class poptext extends StatelessWidget {
-  poptext({Key? key}) : super(key: key);
+class Poptext extends StatelessWidget {
+  Poptext({Key? key}) : super(key: key);
   final ReportController controller = Get.put(ReportController());
 
   @override
@@ -402,7 +399,7 @@ class poptext extends StatelessWidget {
                 showPopover(
                   context: context,
                   bodyBuilder: (context) => ListItems(),
-                  onPop: () => print('Popover was popped!'),
+                  onPop: () => Log.debug('Popover was popped!'),
                   direction: PopoverDirection.bottom,
                   width: Env.MEDIA_SIZE_WIDTH! - 30,
                   height: 75,
@@ -411,31 +408,6 @@ class poptext extends StatelessWidget {
                 );
               },
             )));
-
-    return Container(
-      width: 80,
-      height: 40,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(5)),
-        boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 5)],
-      ),
-      child: GestureDetector(
-        child: const Center(child: Text('Click Me')),
-        onTap: () {
-          showPopover(
-            context: context,
-            bodyBuilder: (context) => ListItems(),
-            onPop: () => print('Popover was popped!'),
-            direction: PopoverDirection.bottom,
-            width: 200,
-            height: 400,
-            arrowHeight: 15,
-            arrowWidth: 30,
-          );
-        },
-      ),
-    );
   }
 }
 
@@ -457,7 +429,7 @@ class ListItems extends StatelessWidget {
                     ..pop()
                     ..push(
                       MaterialPageRoute<SecondRoute>(
-                        builder: (context) => SecondRoute(),
+                        builder: (context) => const SecondRoute(),
                       ),
                     );
                 },
@@ -477,6 +449,8 @@ class ListItems extends StatelessWidget {
 }
 
 class SecondRoute extends StatelessWidget {
+  const SecondRoute({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
