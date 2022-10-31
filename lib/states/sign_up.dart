@@ -40,7 +40,7 @@ class _SignUpState extends State<SignUp> {
   int limitTime = 180;
   bool serviceTerms = false;
   bool sendAuthentication = false;
-  bool authVerification = true;
+  bool authVerification = false;
   bool duplicatedId = false;
   Timer? timer;
   int? authNum;

@@ -25,8 +25,8 @@ class _GuestMyPageState extends State<GuestMyPage> {
   void initState() {
     super.initState();
     if (Env.isDebug) {
-      _idController = TextEditingController(text: "hong@gmail.com");
-      _passController = TextEditingController(text: "qwer1234");
+      _idController = TextEditingController(text: "");
+      _passController = TextEditingController(text: "");
     } else {
       _idController = TextEditingController(text: "");
       _passController = TextEditingController(text: "");
