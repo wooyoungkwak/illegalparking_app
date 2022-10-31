@@ -28,6 +28,8 @@ class _LoginState extends State<Login> {
     super.initState();
     secureStorage = SecureStorage();
     _setsaveid();
+    loginController.getAutoLogin(false);
+    secureStorage.write(Env.KEY_AUTO_LOGIN, "false");
 
     if (!Env.isDebug) {
       _idController = TextEditingController(text: "hong@gmail.com");
@@ -151,8 +153,10 @@ class _LoginState extends State<Login> {
                           shape: const CircleBorder(),
                           value: controller.checkedAutoLogin,
                           onChanged: (bool? value) {
-                            controller.getAutoLogin(value ?? false);
-                            secureStorage.write(Env.KEY_AUTO_LOGIN, value.toString());
+                            if (_idController.text != "" || _idController.text != null) {
+                              controller.getAutoLogin(value ?? false);
+                              secureStorage.write(Env.KEY_AUTO_LOGIN, value.toString());
+                            }
                           },
                         ),
                       ),

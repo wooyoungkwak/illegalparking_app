@@ -305,9 +305,10 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                     Env.USER_PHONE_NUMBER = null;
                     secureStorage.write(Env.LOGIN_ID, "");
                     secureStorage.write(Env.LOGIN_PW, "");
-                    secureStorage.write(Env.KEY_AUTO_LOGIN, "");
+                    secureStorage.write(Env.KEY_AUTO_LOGIN, "false");
                     loginController.changeRealPage(0);
                     loginController.changePage(0);
+                    loginController.getAutoLogin(false);
                     Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
                   }),
             ],

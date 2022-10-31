@@ -84,7 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 loginController.currentPageIdex(0);
                 Navigator.pushNamedAndRemoveUntil(context, "/home", (route) => false);
               } else {
-                showErrorToast(text: "자동로그인에 실패하였습니다.");
+                showErrorToast(text: "아이디 또는 비밀번호를 확인해 주세요.");
+                Navigator.pushNamedAndRemoveUntil(context, "/login", (route) => false);
               }
             });
           } else {
