@@ -53,6 +53,7 @@ class _GuestMyPageState extends State<GuestMyPage> {
               loginController.offGuesMode();
               loginController.changePage(0);
               loginController.changeRealPage(0);
+              Get.delete<LoginController>();
               Navigator.pushNamedAndRemoveUntil(context, "/login", (route) => false);
             },
             child: const Icon(

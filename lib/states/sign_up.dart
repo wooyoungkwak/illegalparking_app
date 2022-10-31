@@ -221,7 +221,7 @@ class _SignUpState extends State<SignUp> {
                 createTextFormField(
                   fillColor: AppColors.textField,
                   hintText: "전화번호를 입력해주세요.",
-                  helperText: "'-' 없이 입력해주세요",
+                  // helperText: "'-' 없이 입력해주세요",
                   controller: phoneNumController,
                   validation: phoneNumValidator,
                 ),
@@ -559,6 +559,7 @@ class _SignUpState extends State<SignUp> {
                 text: "로그인하기",
                 function: () {
                   Navigator.pop(context);
+                  Get.delete<LoginController>();
                   Navigator.pushNamedAndRemoveUntil(context, "/login", (route) => false);
                 },
               ),
