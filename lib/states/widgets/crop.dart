@@ -74,6 +74,7 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
         widget.cameraDescription == MaskForCameraViewCameraDescription.rear ? _cameras!.first : _cameras!.last,
         ResolutionPreset.high,
         enableAudio: false,
+        imageFormatGroup: ImageFormatGroup.yuv420,
       );
 
       controller!.initialize().then((_) async {

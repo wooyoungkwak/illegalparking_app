@@ -116,7 +116,7 @@ Future<dynamic> _sendFile(String url, String filePath) async {
   try {
     List<String> temps = filePath.split("/");
     String fileName = temps.last + ".jpg";
-    request.files.add(await http.MultipartFile.fromPath('file', filePath, filename: fileName));
+    request.files.add(await http.MultipartFile.fromPath('myfile', filePath, filename: fileName));
 
     return await request.send();
   } catch (e) {

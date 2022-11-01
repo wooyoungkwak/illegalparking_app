@@ -24,6 +24,12 @@
 	<!-- 카메라 -->
 	<key>NSCameraUsageDescription</key>
     <string>camera</string>
+	<!-- 갤러리 -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photo Library Access Warning</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>My description about why I need this capability</string>
+	
 	<key>NSMicrophoneUsageDescription</key>
 	<string>your usage description here</string>
 	<key>CFBundleDevelopmentRegion</key>
