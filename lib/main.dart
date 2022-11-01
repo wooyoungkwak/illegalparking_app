@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
@@ -20,6 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   callPermissions();
   cameraSetting();
   runApp(const MyApp());

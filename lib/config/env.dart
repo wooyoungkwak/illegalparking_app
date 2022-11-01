@@ -98,6 +98,8 @@ class Env {
   // static const String NAVER_SECRET_KEY = "6Pm4jOKBTTtAYDR3rWQhdSnwXFzk6xxuNx7JJYWJ";
   // static const String NAVER_PHONE_NUMBER = "01079297878";
   // // 회사 Naver Cloud
+  static const String KEY_KAAKAO_RESTAPI = "429eb33ae5e0c87a6d5a400f262ef734";
+
   static const String NAVER_SERVICE_ID = "ncp:sms:kr:283490566916:illegalparking_app";
   static const String NAVER_ACCESS_KEY = "Z5cIzHss1rH6qzBzZDEi";
   static const String NAVER_SECRET_KEY = "AB4tsaR7TtnFkgCUxC31LeTo6onaI3e0npRNSLc5";

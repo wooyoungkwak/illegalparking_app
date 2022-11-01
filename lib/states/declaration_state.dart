@@ -154,7 +154,7 @@ class _DeclarationState extends State<Declaration> {
                               alignment: WrapAlignment.center,
                               children: const [
                                 CustomText(
-                                  text: "불법주정차 단속 구간에 따라 1분, 5분 이후 해당 차량에 대해 재신고가 기록되어야 과태료 대상 신고접수가 해당기관에 접수됩니다.",
+                                  text: Env.MSG_REPORT_RULE,
                                   weight: FontWeight.w500,
                                   size: 10,
                                   color: Color(0xffE82525),
