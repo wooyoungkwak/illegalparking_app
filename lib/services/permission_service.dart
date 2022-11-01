@@ -10,9 +10,9 @@ Future<bool> callPermissions() async {
     return true;
   }
 
-  if (Platform.isAndroid) {
-    AppSettings.openAppSettings();
-  }
+  // if (Platform.isAndroid) {
+  //   AppSettings.openAppSettings();
+  // }
   return false;
 }
 
