@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -32,12 +33,12 @@ Future<void> getGPS() async {
 //카카오 경도 위도로 주소
 Future<String> regeocoder(double longitude, double latitude) async {
   // ignore: non_constant_identifier_names
-  String RESTAPIKEY = "429eb33ae5e0c87a6d5a400f262ef734"; //나중에 env에 따로 옮길것
+  // String RESTAPIKEY = "429eb33ae5e0c87a6d5a400f262ef734"; //나중에 env에 따로 옮길것
   Kakao map;
   String kakaourl = "https://dapi.kakao.com/v2/local/geo/coord2address.json?x=$longitude&y=$latitude&input_coord=WGS84";
 
   try {
-    final responseGps = await http.get(Uri.parse(kakaourl), headers: {"Authorization": "KakaoAK $RESTAPIKEY"});
+    final responseGps = await http.get(Uri.parse(kakaourl), headers: {"Authorization": "KakaoAK $Env.KEY_KAAKAO_RESTAPI"});
 
     if (responseGps.statusCode == 200) {
       map = Kakao.fromJson(json.decode(responseGps.body));
