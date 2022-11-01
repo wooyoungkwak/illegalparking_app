@@ -43,7 +43,7 @@ class _DeclarationState extends State<Declaration> {
 
     SchedulerBinding.instance.addPostFrameCallback((data) async {
       ProgressDialog pd = ProgressDialog(context: context);
-      pd.show(max: 100, msg: '데이터를 생성중입니다', barrierDismissible: false);
+      pd.show(max: 100, msg: Env.MSG_REPORT_LOADING_PROGRESSDIALOG, barrierDismissible: false);
       try {
         await getGPS();
         sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
@@ -296,31 +296,31 @@ class _DeclarationState extends State<Declaration> {
     final validSpecial = RegExp(r'^[0-9]{2,3}[가-힣]{1}[0-9]{4}$');
 
     if (Env.USER_SEQ == null || Env.USER_SEQ == "") {
-      alertDialogByonebutton("알림", "USER_SEQ null");
+      alertDialogByonebutton("알림", Env.MSG_REPORT_NOT_USER);
       return false;
     } else if (controller.imageGPS.value.address == null || controller.imageGPS.value.address == "") {
-      alertDialogByonebutton("알림", "주소가 없습니다");
+      alertDialogByonebutton("알림", Env.MSG_REPORT_NOT_ADDRESS);
       return false;
     } else if (_numberplateContoroller.text == "인식실패") {
-      alertDialogByonebutton("알림", "차량번호가 없습니다");
+      alertDialogByonebutton("알림", Env.MSG_REPORT_NOT_CARNUMBER);
       return false;
     } else if (_numberplateContoroller.text == null || _numberplateContoroller.text == "") {
-      alertDialogByonebutton("알림", "차량번호가 없습니다");
+      alertDialogByonebutton("알림", Env.MSG_REPORT_NOT_CARNUMBER);
       return false;
     } else if (_numberplateContoroller.text.length > 10) {
-      alertDialogByonebutton("알림", "차량번호가 문자수가 초과하였습니다.");
+      alertDialogByonebutton("알림", Env.MSG_REPORT_OVER_CARNUMBER);
       return false;
     } else if (controller.imageTime.value == null || controller.imageTime.value == "") {
-      alertDialogByonebutton("알림", "접수시간이 없습니다");
+      alertDialogByonebutton("알림", Env.MSG_REPORT_NOT_CARIMG);
       return false;
     } else if (controller.reportfileName.value == null || controller.reportfileName.value == "") {
-      alertDialogByonebutton("알림", "사진 이름이 없습니다");
+      alertDialogByonebutton("알림", Env.MSG_REPORT_NOT_CARIMG);
       return false;
     } else if (controller.imageGPS.value.latitude == null || controller.imageGPS.value.longitude == null || controller.imageGPS.value.latitude == "" || controller.imageGPS.value.longitude == "") {
-      alertDialogByonebutton("알림", "위도 경도가 없습니다");
+      alertDialogByonebutton("알림", Env.MSG_REPORT_NOT_GPS);
       return false;
     } else if (validSpecial.hasMatch(_numberplateContoroller.text) == false) {
-      alertDialogByonebutton("알림", "차량번호 형식에 문제가 있습니다");
+      alertDialogByonebutton("알림", Env.MSG_REPORT_CHECK_CARNUMBER);
       return false;
     }
     return true;
@@ -346,11 +346,32 @@ class _DeclarationState extends State<Declaration> {
     controller.carNumberwrite("");
     Get.to(const Numbercamera());
   }
+//   void report(){
+//     sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
+//   controller.imageGPS.value.latitude, controller.imageGPS.value.longitude).then((reportInfo){
+//     if (!reportInfo.success) {
+//                       Env.REPORT_RESPONSE_MSG = reportInfo.message!;
+//                       if (Env.REPORT_RESPONSE_MSG!.contains("초과했습니다.")) {
+//                         alertDialogByonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
+//                         showAlertDialog(context,text: "해당 차량을 재신고를 하시겠습니까?",action:
+//                         );
+//                       } else {
+//                         pd.close();
+//                         Get.offAll(const Confirmation());
+//                       }
+//                     } else {
+//                       Env.REPORT_RESPONSE_MSG = reportInfo.data!;
+//                       pd.close();
+//                       Get.offAll(const Confirmation());
+//                     }
+
+//   });
+// }
 
   void _reportbtn() async {
     if (valuenullCheck()) {
       ProgressDialog pd = ProgressDialog(context: context);
-      pd.show(max: 100, msg: '신고를 처리중입니다', barrierDismissible: false);
+      pd.show(max: 100, msg: Env.MSG_REPORT_ENDING_PROGRESSDIALOG, barrierDismissible: false);
       await saveImageGallery();
       try {
         String text = _numberplateContoroller.text;
@@ -359,7 +380,7 @@ class _DeclarationState extends State<Declaration> {
 
         sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
               if (result == false)
-                {Env.REPORT_RESPONSE_MSG = "파일 전송에 실패했습니다"}
+                {Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR}
               else
                 {
                   sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
@@ -367,16 +388,24 @@ class _DeclarationState extends State<Declaration> {
                       .then((reportInfo) {
                     if (!reportInfo.success) {
                       Env.REPORT_RESPONSE_MSG = reportInfo.message!;
+                      if (Env.REPORT_RESPONSE_MSG!.contains("초과했습니다.")) {
+                        pd.close();
+                        showAlertDialog(context, text: Env.MSG_REPORT_DIALOG_SELECT, action: _reportbtn);
+                        alertDialogByonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
+                      } else {
+                        pd.close();
+                        Get.offAll(const Confirmation());
+                      }
                     } else {
                       Env.REPORT_RESPONSE_MSG = reportInfo.data!;
+                      pd.close();
+                      Get.offAll(const Confirmation());
                     }
-                    pd.close();
-                    Get.offAll(const Confirmation());
                   })
                 }
             });
       } catch (e) {
-        Env.REPORT_RESPONSE_MSG = "파일 전송에 실패했습니다";
+        Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR;
       }
     }
   }
@@ -435,10 +464,10 @@ class ListItems extends StatelessWidget {
                 },
                 child: Container(
                   height: 50,
-                  color: Colors.amber[200],
+                  color: Colors.transparent,
                   child: Center(
                       child: Text(controller.imageGPS.value.address.length > 1 ? controller.imageGPS.value.address : "위치를 찾을 수 없습니다.",
-                          overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 17, fontFamily: "NotoSansKR", fontWeight: FontWeight.w500))),
+                          overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 17, fontFamily: "NotoSansKR", fontWeight: FontWeight.w600))),
                 )),
             const Divider(),
           ],

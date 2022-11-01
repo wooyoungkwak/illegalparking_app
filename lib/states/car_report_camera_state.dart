@@ -67,12 +67,12 @@ Column initColumnByText(double size, FontWeight weight, Color color) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      CustomText(text: "·사진만 찍으면 자동 정보 분석 후 신고가 진행됩니다.", weight: weight, size: size, color: color),
-      CustomText(text: "·불법주정차 단속구역 분석", weight: weight, size: size, color: color),
-      CustomText(text: "·불법주정차 단속시간 분석", weight: weight, size: size, color: color),
-      CustomText(text: "·차량번호판 활영은 필수입니다.", weight: weight, size: size, color: color),
-      CustomText(text: "·노란색 실선 지역은 1분 이상 간격으로 신고가\n  한번 더 작성되어야 합니다.", weight: weight, size: size, color: color),
-      CustomText(text: "·노란색 점선 지역은 5분 이상 간격으로 신고가\n  한번 더 작성되어야 합니다.", weight: weight, size: size, color: color),
+      CustomText(text: Env.TEXT_REPORT_RULE_1, weight: weight, size: size, color: color),
+      CustomText(text: Env.TEXT_REPORT_RULE_2, weight: weight, size: size, color: color),
+      CustomText(text: Env.TEXT_REPORT_RULE_3, weight: weight, size: size, color: color),
+      CustomText(text: Env.TEXT_REPORT_RULE_4, weight: weight, size: size, color: color),
+      CustomText(text: Env.TEXT_REPORT_RULE_5, weight: weight, size: size, color: color),
+      CustomText(text: Env.TEXT_REPORT_RULE_6, weight: weight, size: size, color: color),
     ],
   );
 }
