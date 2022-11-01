@@ -36,7 +36,7 @@ Future<String> regeocoder(double longitude, double latitude) async {
   String kakaourl = "https://dapi.kakao.com/v2/local/geo/coord2address.json?x=$longitude&y=$latitude&input_coord=WGS84";
 
   try {
-    final responseGps = await http.get(Uri.parse(kakaourl), headers: {"Authorization": "KakaoAK $Env.KEY_KAAKAO_RESTAPI"});
+    final responseGps = await http.get(Uri.parse(kakaourl), headers: {"Authorization": "KakaoAK ${Env.KEY_KAAKAO_RESTAPI}"});
 
     if (responseGps.statusCode == 200) {
       map = Kakao.fromJson(json.decode(responseGps.body));
