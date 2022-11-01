@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:app_settings/app_settings.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 // import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:geolocator/geolocator.dart';
 
 Future<bool> callPermissions() async {
   if (await getState()) {
@@ -17,12 +19,18 @@ Future<bool> callPermissions() async {
 List<Permission> _getPermissions() {
   List<Permission> permissions = [Permission.location];
   permissions.add(Permission.camera);
+  permissions.add(Permission.locationAlways);
   permissions.add(Permission.locationWhenInUse);
 
   return permissions;
 }
 
 Future<bool> getState() async {
+  var locationPermssion = await checkDeviceLocationIsOn();
+  if (!locationPermssion) {
+    Geolocator.requestPermission();
+    // AppSettings.openLocationSettings();
+  }
   List<Permission> permissions = _getPermissions();
   Map<Permission, PermissionStatus> statuses = await permissions.request();
   if (statuses.values.every((element) => element.isGranted)) {
@@ -36,6 +44,23 @@ Future<bool> checkDeviceLocationIsOn() async {
   if (Platform.isAndroid) {
     return await Permission.location.serviceStatus.isDisabled;
   }
+
+  if (Platform.isIOS) {
+    if (await Permission.location.serviceStatus.isEnabled) {
+      Log.debug("isEnabled");
+      var status = await Permission.location.status;
+      if (status.isGranted) {
+        Log.debug("is Granted");
+      } else {
+        Log.debug("is not Granted");
+        return false;
+      }
+    } else {
+      Log.debug("is not Enabled");
+      return false;
+    }
+  }
+
   return false;
 }
 
