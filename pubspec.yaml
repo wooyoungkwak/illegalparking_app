@@ -69,6 +69,8 @@ dependencies:
   url_launcher: ^6.1.6
   #주소창클릭시 올라오는 창
   popover: ^0.2.7
+  #앱아이콘
+  flutter_launcher_icons: ^0.10.0
 
 dev_dependencies:
   flutter_test:
@@ -98,11 +100,11 @@ flutter:
         - asset: assets/fonts/NotoSansKR-Black.otf
           weight: 900
         # - asset: assets/fonts/NotoSansKR-Extra-bold.otf
-          # weight: 800
+        # weight: 800
         - asset: assets/fonts/NotoSansKR-Bold.otf
           weight: 700
         # - asset: assets/fonts/NotoSansKR-Semi-bold.otf
-          # weight: 600
+        # weight: 600
         - asset: assets/fonts/NotoSansKR-Medium.otf
           weight: 500
         - asset: assets/fonts/NotoSansKR-Regular.otf
@@ -110,9 +112,14 @@ flutter:
         - asset: assets/fonts/NotoSansKR-Light.otf
           weight: 300
         # - asset: assets/fonts/NotoSansKR-Extra-light.otf
-          # weight: 200 
+        # weight: 200
         - asset: assets/fonts/NotoSansKR-Thin.otf
           weight: 100
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/app_icon.png"
 
   # To add assets to your application, add an assets section, like this:
   # assets:
