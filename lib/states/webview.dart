@@ -322,14 +322,21 @@ class _WebviewPageState extends State<WebviewPage> {
                                   Log.debug("ios");
                                   Uri navermap = Uri.parse(
                                       "nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=${parkingName}");
-                                  try {
-                                    //nmap 은 canlaunchUrl 안되고  try ~ catch 만 된다
+                                  if (await canLaunchUrl(navermap)) {
                                     await launchUrl(navermap);
-                                  } catch (e) {
+                                  } else {
                                     Log.debug("Can't launch $navermap");
                                     Uri url = Uri.parse('https://apps.apple.com/kr/app/id311867728');
                                     launchUrl(url);
                                   }
+                                  // try {
+                                  //   //nmap 은 canlaunchUrl 안되고  try ~ catch 만 된다
+                                  //   await launchUrl(navermap);
+                                  // } catch (e) {
+                                  //   Log.debug("Can't launch $navermap");
+                                  //   Uri url = Uri.parse('https://apps.apple.com/kr/app/id311867728');
+                                  //   launchUrl(url);
+                                  // }
                                 } else if (Platform.isAndroid) {
                                   Log.debug("Android");
                                   Uri navermap = Uri.parse(

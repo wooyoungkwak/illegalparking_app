@@ -29,6 +29,12 @@
 	<string>Photo Library Access Warning</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>My description about why I need this capability</string>
+	<!-- URL 정보 확인 -->
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>nmap</string>
+		<string>kakaomap</string>
+	</array>
 	
 	<key>NSMicrophoneUsageDescription</key>
 	<string>your usage description here</string>
