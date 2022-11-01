@@ -28,3 +28,8 @@ class AppFontWeight {
   static const FontWeight extraLight = FontWeight.w200;
   static const FontWeight ting = FontWeight.w100;
 }
+
+class AppSize {
+  static double? maxHeight;
+  static double? minWidth;
+}

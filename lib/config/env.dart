@@ -109,6 +109,9 @@ class Env {
   static double? MEDIA_SIZE_WIDTH;
   static double? MEDIA_SIZE_DEVICEPIXELRATIO;
   static double? MEDIA_SIZE_PADDINGTOP;
+  static double? APP_BAR_HEIGHT;
+  static double? LAYOUT_MAX_HEIGHT = MEDIA_SIZE_HEIGHT! - MEDIA_SIZE_PADDINGTOP! - APP_BAR_HEIGHT!;
+  static double? LAYOUT_MAX_WIDTH = MEDIA_SIZE_WIDTH;
 
   static const String KEY_FIRSTUSE = "FirstUse";
   static bool? BOOL_FIRSTUSE;

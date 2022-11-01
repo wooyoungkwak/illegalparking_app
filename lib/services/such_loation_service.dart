@@ -14,6 +14,10 @@ Future<Position> searchAddress() async {
   return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
 }
 
+Future<double> setBearing(double startLatitude, double startLongitude, double endLatitude, double endLongitude) async {
+  return Geolocator.bearingBetween(startLatitude, startLongitude, endLatitude, endLongitude);
+}
+
 Future<void> getGPS() async {
   Position position = await searchAddress();
   double longitude;
