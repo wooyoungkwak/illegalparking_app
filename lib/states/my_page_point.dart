@@ -9,7 +9,6 @@ import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
-import 'package:illegalparking_app/utils/time_util.dart';
 import 'package:intl/intl.dart';
 
 class MyPagePoint extends StatefulWidget {
@@ -49,7 +48,7 @@ class _MyPagePointState extends State<MyPagePoint> {
   String _setPointContent(String pointType, String locationType, String productName, int point) {
     String pointWithComma = numberWithComma(point);
     if (pointType == "PLUS") {
-      return "$locationType로 부터 포상금 ${pointWithComma.toString()}포인트 제공되었습니다.";
+      return "$locationType으로 부터 포상금 ${pointWithComma.toString()}포인트 제공되었습니다.";
     } else {
       return "-$productName으로 ${pointWithComma.toString()}를 사용하셨습니다.";
     }
@@ -238,12 +237,18 @@ class _MyPagePointState extends State<MyPagePoint> {
                         color: _setPointColor(pointInfoList[index].pointType),
                         text: _setPointValue(pointInfoList[index].pointType, pointInfoList[index].value),
                       ),
-                      createCustomText(
-                        top: 2.0,
-                        bottom: 2.0,
-                        weight: AppFontWeight.regular,
-                        size: 14.0,
-                        text: _setPointContent(pointInfoList[index].pointType, pointInfoList[index].locationType, pointInfoList[index].productName, pointInfoList[index].value),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: createCustomText(
+                              top: 2.0,
+                              bottom: 2.0,
+                              weight: AppFontWeight.regular,
+                              size: 14.0,
+                              text: _setPointContent(pointInfoList[index].pointType, pointInfoList[index].locationType, pointInfoList[index].productName, pointInfoList[index].value),
+                            ),
+                          ),
+                        ],
                       ),
                       createCustomText(
                         top: 2.0,

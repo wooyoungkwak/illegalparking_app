@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';
 import 'package:network_info_plus/network_info_plus.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/config/env.dart';
 

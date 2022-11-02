@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/style.dart';
@@ -201,86 +199,6 @@ showCustomDialog({required BuildContext context, String? title, Widget? widget})
   );
 }
 
-// showNoticeDialog({required BuildContext context, required int index, Widget? widget}) {
-//   showDialog(
-//       context: context,
-//       builder: (context) {
-//         int noticeIndex = index;
-//         return StatefulBuilder(builder: (context, setState) {
-//           return Scaffold(
-//               appBar: AppBar(
-//                 automaticallyImplyLeading: false,
-//                 centerTitle: true,
-//                 title: const Text("소식"),
-//                 actions: [
-//                   IconButton(
-//                       onPressed: () {
-//                         Navigator.pop(context);
-//                       },
-//                       icon: const Icon(Icons.cancel_outlined))
-//                 ],
-//               ),
-//               body: Padding(
-//               padding: const EdgeInsets.all(16.0),
-//               child: ListView(
-//                 children: [
-//                   Row(
-//                     children: [
-//                       IconButton(
-//                           onPressed: () {
-//                             noticeIndex--;
-//                           },
-//                           icon: const Icon(Icons.chevron_left)),
-//                       const Spacer(),
-//                       IconButton(
-//                           onPressed: () {
-//                             noticeIndex++;
-//                           },
-//                           icon: const Icon(Icons.chevron_right)),
-//                     ],
-//                   ),
-//                   // 공지/소식
-//                   Row(
-//                     children: [
-//                       createCustomText(
-//                         text: noticeList[index].noticeType,
-//                       ),
-//                       createCustomText(
-//                         text: noticeList[index].subject,
-//                       ),
-//                     ],
-//                   ),
-
-//                   createCustomText(
-//                     weight: FontWeight.w400,
-//                     text: noticeList[index].regDt,
-//                   ),
-//                   // // 빈공간
-//                   // Expanded(
-//                   //   flex: 5,
-//                   //   child: ConstrainedBox(
-//                   //     constraints: const BoxConstraints(),
-//                   //   ),
-//                   // ),
-//                   createCustomText(
-//                     weight: FontWeight.w400,
-//                     text: noticeList[index].content!,
-//                   ),
-//                   // 빈공간
-//                   // Expanded(
-//                   //   flex: 5,
-//                   //   child: ConstrainedBox(
-//                   //     constraints: const BoxConstraints(),
-//                   //   ),
-//                   // ),
-//                 ],
-//               ),
-//             ),
-//           );
-//         });
-//       });
-// }
-
 // 신고이력, 내차정보 관련
 Color reportColors(String state) {
   Color color = const Color(0xffffffff);
@@ -309,9 +227,9 @@ BoxConstraints addrTextWidthLimit(String state, BuildContext context) {
   double appWidthSize = MediaQuery.of(context).size.width;
   Log.debug("appWidthSize : $appWidthSize");
   if (state.length > 5) {
-    return BoxConstraints(maxWidth: appWidthSize - 216); // 5글자 : 216, 4글자 : 196,
+    return BoxConstraints(maxWidth: appWidthSize - 220); // 5글자 : 216, 4글자 : 196,
   }
-  return BoxConstraints(maxWidth: appWidthSize - 196);
+  return BoxConstraints(maxWidth: appWidthSize - 200);
 }
 
 // 차종별 이미지

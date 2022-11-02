@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/states/my_page_car_infomation.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
 
 import 'package:illegalparking_app/states/car_report_camera_state.dart';
 import 'package:illegalparking_app/states/guest_camera.dart';
@@ -80,9 +79,9 @@ class LoginController extends GetxController {
     update();
   }
 
-  void changePage(int _index) {
-    currentIndex.value = _index;
-    currentPageIdex.value = _index;
+  void changePage(int index) {
+    currentIndex.value = index;
+    currentPageIdex.value = index;
     if (_isBottomOpen) {
       Get.back();
       offBottomNav();

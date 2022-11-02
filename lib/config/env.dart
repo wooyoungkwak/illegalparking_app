@@ -1,7 +1,4 @@
 // ignore_for_file: constant_identifier_names, non_constant_identifier_names
-
-import 'dart:async';
-
 import 'package:camera/camera.dart';
 
 class Env {

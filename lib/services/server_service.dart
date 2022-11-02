@@ -1,12 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ffi';
 // import 'dart:html';
 // import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
-import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/models/result_model.dart';
@@ -112,10 +108,10 @@ Future<ReportHistoryInfo> requestReportHistory(int userSeq) async {
 
 // 서버 이미지 저장
 Future<dynamic> _sendFile(String url, String filePath) async {
-  var request = new http.MultipartRequest("POST", Uri.parse(url));
+  var request = http.MultipartRequest("POST", Uri.parse(url));
   try {
     List<String> temps = filePath.split("/");
-    String fileName = temps.last + ".jpg";
+    String fileName = "${temps.last}.jpg";
     request.files.add(await http.MultipartFile.fromPath('myfile', filePath, filename: fileName));
 
     return await request.send();

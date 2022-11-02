@@ -9,7 +9,6 @@ import 'package:illegalparking_app/services/server_service.dart';
 
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
 
 class MyPageRegistration extends StatefulWidget {
   const MyPageRegistration({super.key});
@@ -39,7 +38,6 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
     return menuItems;
   }
 
-  bool _formChanged = false;
   String carName = "";
 
   @override

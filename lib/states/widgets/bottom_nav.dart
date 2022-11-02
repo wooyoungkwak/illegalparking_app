@@ -13,7 +13,7 @@ class CustomBottomNavBar extends StatefulWidget {
   final double containerHeight;
   final Curve curve;
 
-  CustomBottomNavBar({
+  const CustomBottomNavBar({
     Key? key,
     this.selectedIndex = 0,
     this.showElevation = true,
@@ -41,7 +41,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     return Container(
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(50),
           topRight: Radius.circular(50),
         ),
@@ -118,10 +118,10 @@ class _ItemWidget extends StatelessWidget {
         ),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           child: Container(
             width: isSelected ? 130 : 50,
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -130,18 +130,14 @@ class _ItemWidget extends StatelessWidget {
                 IconTheme(
                   data: IconThemeData(
                     size: iconSize,
-                    color: isSelected
-                        ? item.activeColor.withOpacity(1)
-                        : item.inactiveColor == null
-                            ? item.activeColor
-                            : item.inactiveColor,
+                    color: isSelected ? item.activeColor.withOpacity(1) : item.inactiveColor ?? item.activeColor,
                   ),
                   child: item.icon,
                 ),
                 if (isSelected)
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: DefaultTextStyle.merge(
                         style: TextStyle(
                           color: item.activeColor,

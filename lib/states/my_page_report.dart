@@ -7,7 +7,6 @@ import 'package:illegalparking_app/models/result_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/utils/time_util.dart';
 
 class MyPageReport extends StatefulWidget {
@@ -270,13 +269,12 @@ class _MyPageReportState extends State<MyPageReport> {
                           padding: const EdgeInsets.only(left: 20.0),
                           child: Image.asset(height: 14, width: 12, "assets/icon_comment.png"),
                         ),
-                        Container(
-                          constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 70),
+                        Expanded(
                           child: createCustomText(
                             top: 0.0,
                             bottom: 0.0,
                             left: 4.0,
-                            right: 0.0,
+                            right: 4.0,
                             weight: AppFontWeight.semiBold,
                             color: AppColors.textGrey,
                             size: 12.0,

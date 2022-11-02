@@ -23,11 +23,11 @@ class MyPageInfomation extends StatefulWidget {
 class _MyPageInfomationState extends State<MyPageInfomation> {
   final loginController = Get.put(LoginController());
 
-  late SecureStorage secureStorage;
+  final TextEditingController _oldPasswordController = TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _newPasswordValidationController = TextEditingController();
 
-  late TextEditingController _oldPasswordController = TextEditingController();
-  late TextEditingController _newPasswordController = TextEditingController();
-  late TextEditingController _newPasswordValidationController = TextEditingController();
+  late SecureStorage secureStorage;
   // late PickedFile _imageFile;
   XFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
@@ -72,246 +72,245 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
             text: "내정보",
           ),
         ),
-        body: Center(
-          child: Column(
-            children: [
-              Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(32.0),
-                    child: CircleAvatar(
+        body: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Stack(
+                  children: [
+                    CircleAvatar(
                       radius: 100.0,
                       // 현재 기본 이미지들 적용 안됨
                       // backgroundImage: AssetImage("assets/noimage.jpg"),
                       // backgroundImage: AssetImage("assets/${Env.USER_PHOTO_NAME}.jpg"),
                       backgroundImage: _checkFileImage(imagePath),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 30,
-                    left: 180,
-                    child: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.textGrey),
-                        borderRadius: BorderRadius.circular(30),
-                        color: AppColors.white,
-                      ),
-                      child: Material(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                        child: InkWell(
-                          customBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
+                    Positioned(
+                      bottom: 5,
+                      left: 150,
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.textGrey),
                           borderRadius: BorderRadius.circular(30),
-                          onTap: () {
-                            takePhoto(ImageSource.gallery).then((value) {
-                              String modifyImagePath = _imageFile!.path.substring(50);
-                              requestUserProfileChange(Env.USER_SEQ!, modifyImagePath).then((defaultInfo) {
-                                if (defaultInfo.success) {
-                                  Log.debug(defaultInfo.data);
-                                  setState(() {
-                                    imagePath = modifyImagePath;
-                                  });
-                                  Env.USER_PHOTO_NAME = imagePath;
-                                } else {
-                                  Log.debug(defaultInfo.message);
-                                }
+                          color: AppColors.white,
+                        ),
+                        child: Material(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                          child: InkWell(
+                            customBorder: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            borderRadius: BorderRadius.circular(30),
+                            onTap: () {
+                              takePhoto(ImageSource.gallery).then((value) {
+                                String modifyImagePath = _imageFile!.path.substring(50);
+                                requestUserProfileChange(Env.USER_SEQ!, modifyImagePath).then((defaultInfo) {
+                                  if (defaultInfo.success) {
+                                    Log.debug(defaultInfo.data);
+                                    setState(() {
+                                      imagePath = modifyImagePath;
+                                    });
+                                    Env.USER_PHOTO_NAME = imagePath;
+                                  } else {
+                                    Log.debug(defaultInfo.message);
+                                  }
+                                });
                               });
-                            });
-                          },
-                          child: const Icon(
-                            Icons.filter,
-                            size: 30,
+                            },
+                            child: const Icon(
+                              Icons.filter,
+                              size: 30,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              // createElevatedButton(
-              //     text: "프로필 변경",
-              //     function: () {
-              //       String modifyImagePath = _imageFile!.path.substring(50);
-              //       requestUserProfileChange(Env.USER_SEQ!, modifyImagePath).then((defaultInfo) {
-              //         if (defaultInfo.success) {
-              //           Log.debug(defaultInfo.data);
-              //           setState(() {
-              //             imagePath = modifyImagePath;
-              //           });
-              //           Env.USER_PHOTO_NAME = imagePath;
-              //         } else {
-              //           Log.debug(defaultInfo.message);
-              //         }
-              //       });
-              //     }),
-              createCustomText(
-                bottom: 0.0,
-                weight: AppFontWeight.bold,
-                size: 24,
-                text: Env.USER_NAME,
-              ),
-              createCustomText(
-                top: 0.0,
-                weight: AppFontWeight.medium,
-                color: const Color(0xff5A5A5A),
-                size: 18,
-                text: Env.USER_PHONE_NUMBER,
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-              createElevatedButton(
-                padding: 16.0,
-                width: 215.0,
-                color: AppColors.black,
-                text: "비밀번호 변경",
-                function: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        bool _oldPasswordValidation = false;
-                        return StatefulBuilder(builder: (context, setState) {
-                          return Scaffold(
-                            backgroundColor: AppColors.white,
-                            appBar: AppBar(
-                              elevation: 0,
+                  ],
+                ),
+                // createElevatedButton(
+                //     text: "프로필 변경",
+                //     function: () {
+                //       String modifyImagePath = _imageFile!.path.substring(50);
+                //       requestUserProfileChange(Env.USER_SEQ!, modifyImagePath).then((defaultInfo) {
+                //         if (defaultInfo.success) {
+                //           Log.debug(defaultInfo.data);
+                //           setState(() {
+                //             imagePath = modifyImagePath;
+                //           });
+                //           Env.USER_PHOTO_NAME = imagePath;
+                //         } else {
+                //           Log.debug(defaultInfo.message);
+                //         }
+                //       });
+                //     }),
+                Column(
+                  children: [
+                    createCustomText(
+                      bottom: 0.0,
+                      weight: AppFontWeight.bold,
+                      size: 24,
+                      text: Env.USER_NAME,
+                    ),
+                    createCustomText(
+                      top: 0.0,
+                      weight: AppFontWeight.medium,
+                      color: const Color(0xff5A5A5A),
+                      size: 18,
+                      text: Env.USER_PHONE_NUMBER,
+                    ),
+                  ],
+                ),
+                createElevatedButton(
+                  width: 215.0,
+                  color: AppColors.black,
+                  text: "비밀번호 변경",
+                  function: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          bool oldPasswordValidation = false;
+                          return StatefulBuilder(builder: (context, setState) {
+                            return Scaffold(
                               backgroundColor: AppColors.white,
-                              automaticallyImplyLeading: false,
-                              centerTitle: true,
-                              title: createCustomText(
-                                color: AppColors.black,
-                                weight: FontWeight.bold,
-                                size: 16.0,
-                                text: "비밀번호 변경",
+                              appBar: AppBar(
+                                elevation: 0,
+                                backgroundColor: AppColors.white,
+                                automaticallyImplyLeading: false,
+                                centerTitle: true,
+                                title: createCustomText(
+                                  color: AppColors.black,
+                                  weight: FontWeight.bold,
+                                  size: 16.0,
+                                  text: "비밀번호 변경",
+                                ),
+                                actions: [
+                                  IconButton(
+                                    onPressed: () {
+                                      _oldPasswordController.text = "";
+                                      _newPasswordController.text = "";
+                                      _newPasswordController.text = "";
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(
+                                      Icons.close,
+                                      color: AppColors.black,
+                                    ),
+                                  )
+                                ],
                               ),
-                              actions: [
-                                IconButton(
-                                  onPressed: () {
-                                    _oldPasswordController.text = "";
-                                    _newPasswordController.text = "";
-                                    _newPasswordController.text = "";
-                                    Navigator.pop(context);
-                                  },
-                                  icon: const Icon(
-                                    Icons.close,
-                                    color: AppColors.black,
-                                  ),
-                                )
-                              ],
-                            ),
-                            body: Padding(
-                              padding: const EdgeInsets.all(32.0),
-                              child: ListView(
-                                children: [
-                                  createCustomText(
-                                    top: 0.0,
-                                    bottom: 0.0,
-                                    left: 8.0,
-                                    weight: AppFontWeight.bold,
-                                    size: 14.0,
-                                    text: "기존 비밀번호",
-                                  ),
-                                  createTextFormField(
-                                    obscureText: true,
-                                    fillColor: AppColors.textField,
-                                    hintText: "기존 비밀번호를 입력해주세요.",
-                                    controller: _oldPasswordController,
-                                    validation: passwordValidator,
-                                  ),
-                                  createElevatedButton(
-                                      padding: 24.0,
-                                      color: _oldPasswordValidation ? AppColors.blue : AppColors.black,
-                                      text: _oldPasswordValidation ? "비밀번호 확인됨" : "비밀번호 확인",
-                                      function: () {
-                                        requestUserPasswordCheck(Env.USER_SEQ!, _oldPasswordController.text).then((defaultInfo) {
-                                          if (defaultInfo.success) {
-                                            setState(() {
-                                              _oldPasswordValidation = true;
-                                            });
-                                          } else {
-                                            showErrorSnackBar(context, defaultInfo.message!);
-                                          }
-                                        });
-                                      }),
-                                  if (_oldPasswordValidation)
+                              body: Padding(
+                                padding: const EdgeInsets.all(32.0),
+                                child: ListView(
+                                  children: [
                                     createCustomText(
                                       top: 0.0,
                                       bottom: 0.0,
                                       left: 8.0,
                                       weight: AppFontWeight.bold,
                                       size: 14.0,
-                                      text: "변경할 비밀번호",
+                                      text: "기존 비밀번호",
                                     ),
-                                  if (_oldPasswordValidation)
                                     createTextFormField(
                                       obscureText: true,
                                       fillColor: AppColors.textField,
-                                      hintText: "변경할 비밀번호를 입력해주세요.",
-                                      controller: _newPasswordController,
+                                      hintText: "기존 비밀번호를 입력해주세요.",
+                                      controller: _oldPasswordController,
                                       validation: passwordValidator,
                                     ),
-                                  if (_oldPasswordValidation)
-                                    createTextFormField(
-                                      obscureText: true,
-                                      fillColor: AppColors.textField,
-                                      hintText: "비밀번호 확인해주세요.",
-                                      helperText: "보안이 안전된 암호입니다.",
-                                      controller: _newPasswordValidationController,
-                                      validation: passwordConfirmValidator,
-                                    ),
-                                  if (_oldPasswordValidation)
                                     createElevatedButton(
-                                      padding: 24.0,
-                                      color: AppColors.black,
-                                      text: "변경하기",
-                                      function: () {
-                                        requestUserPasswordChange(Env.USER_SEQ!, _newPasswordController.text).then((defaultInfo) {
-                                          if (defaultInfo.success) {
-                                            Log.debug(defaultInfo.message);
-                                            showToast(text: "비밀번호가 변경되었습니다.");
-                                            Navigator.pop(context);
-                                            Get.back();
-                                            loginController.changeRealPage(3);
-                                            _oldPasswordController.text = "";
-                                            _newPasswordController.text = "";
-                                            _newPasswordController.text = "";
-                                          } else {
-                                            Log.debug(defaultInfo.message);
-                                            showErrorToast(text: "비밀번호 변경에 실패하였습니다.");
-                                          }
-                                        });
-                                      },
-                                    ),
-                                ],
+                                        padding: 24.0,
+                                        color: oldPasswordValidation ? AppColors.blue : AppColors.black,
+                                        text: oldPasswordValidation ? "비밀번호 확인됨" : "비밀번호 확인",
+                                        function: () {
+                                          requestUserPasswordCheck(Env.USER_SEQ!, _oldPasswordController.text).then((defaultInfo) {
+                                            if (defaultInfo.success) {
+                                              setState(() {
+                                                oldPasswordValidation = true;
+                                              });
+                                            } else {
+                                              showErrorSnackBar(context, defaultInfo.message!);
+                                            }
+                                          });
+                                        }),
+                                    if (oldPasswordValidation)
+                                      createCustomText(
+                                        top: 0.0,
+                                        bottom: 0.0,
+                                        left: 8.0,
+                                        weight: AppFontWeight.bold,
+                                        size: 14.0,
+                                        text: "변경할 비밀번호",
+                                      ),
+                                    if (oldPasswordValidation)
+                                      createTextFormField(
+                                        obscureText: true,
+                                        fillColor: AppColors.textField,
+                                        hintText: "변경할 비밀번호를 입력해주세요.",
+                                        controller: _newPasswordController,
+                                        validation: passwordValidator,
+                                      ),
+                                    if (oldPasswordValidation)
+                                      createTextFormField(
+                                        obscureText: true,
+                                        fillColor: AppColors.textField,
+                                        hintText: "비밀번호 확인해주세요.",
+                                        helperText: "보안이 안전된 암호입니다.",
+                                        controller: _newPasswordValidationController,
+                                        validation: passwordConfirmValidator,
+                                      ),
+                                    if (oldPasswordValidation)
+                                      createElevatedButton(
+                                        padding: 24.0,
+                                        color: AppColors.black,
+                                        text: "변경하기",
+                                        function: () {
+                                          requestUserPasswordChange(Env.USER_SEQ!, _newPasswordController.text).then((defaultInfo) {
+                                            if (defaultInfo.success) {
+                                              Log.debug(defaultInfo.message);
+                                              showToast(text: "비밀번호가 변경되었습니다.");
+                                              Navigator.pop(context);
+                                              Get.back();
+                                              loginController.changeRealPage(3);
+                                              _oldPasswordController.text = "";
+                                              _newPasswordController.text = "";
+                                              _newPasswordController.text = "";
+                                            } else {
+                                              Log.debug(defaultInfo.message);
+                                              showErrorToast(text: "비밀번호 변경에 실패하였습니다.");
+                                            }
+                                          });
+                                        },
+                                      ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          });
                         });
-                      });
-                },
-              ),
-              createElevatedButton(
-                  width: 215,
-                  color: AppColors.grey,
-                  padding: 16.0,
-                  text: "로그아웃",
-                  function: () {
-                    Env.USER_SEQ = null;
-                    Env.USER_NAME = null;
-                    Env.USER_PHOTO_NAME = null;
-                    Env.USER_PHONE_NUMBER = null;
-                    secureStorage.write(Env.LOGIN_ID, "");
-                    secureStorage.write(Env.LOGIN_PW, "");
-                    secureStorage.write(Env.KEY_AUTO_LOGIN, "false");
-                    loginController.changeRealPage(0);
-                    loginController.changePage(0);
-                    loginController.getAutoLogin(false);
-                    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
-                  }),
-            ],
+                  },
+                ),
+                createElevatedButton(
+                    width: 215,
+                    color: AppColors.grey,
+                    text: "로그아웃",
+                    function: () {
+                      Env.USER_SEQ = null;
+                      Env.USER_NAME = null;
+                      Env.USER_PHOTO_NAME = null;
+                      Env.USER_PHONE_NUMBER = null;
+                      secureStorage.write(Env.LOGIN_ID, "");
+                      secureStorage.write(Env.LOGIN_PW, "");
+                      secureStorage.write(Env.KEY_AUTO_LOGIN, "false");
+                      loginController.changeRealPage(0);
+                      loginController.changePage(0);
+                      loginController.getAutoLogin(false);
+                      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                    }),
+              ],
+            ),
           ),
         ),
       ),

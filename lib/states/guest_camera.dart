@@ -50,66 +50,68 @@ class _GuestCameraState extends State<GuestCamera> {
             text: "돌아가기",
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  createCustomText(
-                    padding: 0.0,
-                    weight: AppFontWeight.bold,
-                    size: 20.0,
-                    text: " 불법주정차 신고",
-                  ),
-                  createCustomText(
-                    padding: 0.0,
-                    weight: AppFontWeight.medium,
-                    size: 20.0,
-                    text: "를 위해서",
-                  ),
-                ],
-              ),
-              createCustomText(
-                padding: 0.0,
-                weight: AppFontWeight.medium,
-                size: 20.0,
-                text: "로그인이 필요합니다.",
-              ),
-              createElevatedButton(
-                color: AppColors.black,
-                textColors: AppColors.white,
-                text: "바로가기",
-                function: () {
-                  loginController.changePage(2);
-                },
-              ),
-              // 불법주정차 신고 프로세스
-              createCustomText(
-                color: AppColors.textGrey,
-                weight: AppFontWeight.bold,
-                size: 18.0,
-                text: "불법주정차 신고 프로세스",
-              ),
-              _createProcessItem(text: "사진만 찍으면 자동 정보 분석후 신고가 진행됩니다."),
-              _createProcessItem(text: "불법주정차 단속구역 분석"),
-              _createProcessItem(text: "불법주정차 단속시간 분석"),
-              _createProcessItem(text: "차량번호판 촬영은 필수 입니다."),
-              _createProcessItem(text: "노란색 실선 지역은 1분 이산 간격으로 신고가 한번 더 작성되어야 합니다."),
-              _createProcessItem(text: "노란색 점선 지역은 5분 이상 간격으로 신고가 한번 더 작성되어야 합니다."),
-
-              createElevatedButton(
-                  padding: 16,
-                  color: AppColors.white,
-                  textColors: AppColors.black,
-                  width: 170,
-                  text: "주정차관련법규보기",
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    createCustomText(
+                      padding: 0.0,
+                      weight: AppFontWeight.bold,
+                      size: 20.0,
+                      text: " 불법주정차 신고",
+                    ),
+                    createCustomText(
+                      padding: 0.0,
+                      weight: AppFontWeight.medium,
+                      size: 20.0,
+                      text: "를 위해서",
+                    ),
+                  ],
+                ),
+                createCustomText(
+                  padding: 0.0,
+                  weight: AppFontWeight.medium,
+                  size: 20.0,
+                  text: "로그인이 필요합니다.",
+                ),
+                createElevatedButton(
+                  color: AppColors.black,
+                  textColors: AppColors.white,
+                  text: "바로가기",
                   function: () {
-                    widgetbottomsheet(context);
-                  })
-            ],
+                    loginController.changePage(2);
+                  },
+                ),
+                // 불법주정차 신고 프로세스
+                createCustomText(
+                  color: AppColors.textGrey,
+                  weight: AppFontWeight.bold,
+                  size: 18.0,
+                  text: "불법주정차 신고 프로세스",
+                ),
+                _createProcessItem(text: "사진만 찍으면 자동 정보 분석후 신고가 진행됩니다."),
+                _createProcessItem(text: "불법주정차 단속구역 분석"),
+                _createProcessItem(text: "불법주정차 단속시간 분석"),
+                _createProcessItem(text: "차량번호판 촬영은 필수 입니다."),
+                _createProcessItem(text: "노란색 실선 지역은 1분 이산 간격으로 신고가 한번 더 작성되어야 합니다."),
+                _createProcessItem(text: "노란색 점선 지역은 5분 이상 간격으로 신고가 한번 더 작성되어야 합니다."),
+
+                createElevatedButton(
+                    padding: 16,
+                    color: AppColors.white,
+                    textColors: AppColors.black,
+                    width: 170,
+                    text: "주정차관련법규보기",
+                    function: () {
+                      widgetbottomsheet(context);
+                    })
+              ],
+            ),
           ),
         ),
       ),

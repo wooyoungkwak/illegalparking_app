@@ -25,6 +25,7 @@ class _SignUpState extends State<SignUp> {
 
   final ScrollController _termsSummaryController = ScrollController();
   final ScrollController _termsController = ScrollController();
+  final FocusNode _idfocusNode = FocusNode();
 
   final idController = TextEditingController();
   final passController = TextEditingController();
@@ -32,7 +33,6 @@ class _SignUpState extends State<SignUp> {
   final phoneNumController = TextEditingController();
   final authKeyController = TextEditingController();
 
-  FocusNode _idfocusNode = FocusNode();
   String photoName = "assets/profile_1.jpg";
   String? idHelperText = "사용 가능한 아이디입니다.";
   String? idErrorText = "사용 가능한 아이디입니다.";
@@ -45,7 +45,6 @@ class _SignUpState extends State<SignUp> {
   Timer? timer;
   int? authNum;
 
-  // TODO : 캐릭터 아이콘 디자인팀에 문의
   List profileCharicterList = [
     {
       "value": true,
@@ -262,7 +261,7 @@ class _SignUpState extends State<SignUp> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           shape: const StadiumBorder(),
-                          primary: Colors.black,
+                          backgroundColor: Colors.black,
                           disabledBackgroundColor: AppColors.blue,
                           disabledForegroundColor: AppColors.white,
                         ),

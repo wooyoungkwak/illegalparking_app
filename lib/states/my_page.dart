@@ -608,7 +608,7 @@ class _MyPageState extends State<MyPage> {
                               });
                             }
                           },
-                          child: Container(
+                          child: SizedBox(
                             height: MediaQuery.of(context).size.height - 170,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -675,20 +675,12 @@ class _MyPageState extends State<MyPage> {
     return Future.value(false);
   }
 
-  bool _textLengthValidation(String text) {
-    if (text.length > 20) {
-      return false;
-    }
-    return true;
-  }
-
   String _textSlice(String text) {
     List textList = text.split('\n');
     String sliceText = "";
     // 한 줄이 너무 길 경우
     int maxLineLength = 27;
     if (textList[0].length > 2 * maxLineLength) {
-      // TODO : 자를 텍스트 길이는 화면 비율 확인후 결정
       sliceText += textList[0].substring(0, 2 * (maxLineLength - 1));
       sliceText += "...";
     } else {

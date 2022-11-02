@@ -301,7 +301,7 @@ class _WebviewPageState extends State<WebviewPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             createButtonWithIcon(
-                              width: 170,
+                              width: Env.LAYOUT_MAX_WIDTH! * 0.4,
                               icon: Icons.call,
                               color: AppColors.grey,
                               textColors: AppColors.black,
@@ -311,7 +311,7 @@ class _WebviewPageState extends State<WebviewPage> {
                               },
                             ),
                             createButtonWithIcon(
-                              width: 170,
+                              width: Env.LAYOUT_MAX_WIDTH! * 0.4,
                               icon: Icons.shortcut,
                               color: AppColors.blue,
                               textColors: AppColors.white,
@@ -321,7 +321,7 @@ class _WebviewPageState extends State<WebviewPage> {
                                 if (Platform.isIOS) {
                                   Log.debug("ios");
                                   Uri navermap = Uri.parse(
-                                      "nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=${parkingName}");
+                                      "nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=$parkingName");
                                   if (await canLaunchUrl(navermap)) {
                                     await launchUrl(navermap);
                                   } else {
@@ -340,7 +340,7 @@ class _WebviewPageState extends State<WebviewPage> {
                                 } else if (Platform.isAndroid) {
                                   Log.debug("Android");
                                   Uri navermap = Uri.parse(
-                                      "nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=${parkingName}");
+                                      "nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=$parkingName");
                                   try {
                                     //nmap 은 canlaunchUrl 안되고  try ~ catch 만 된다
                                     await launchUrl(navermap);
@@ -437,7 +437,7 @@ class _WebviewPageState extends State<WebviewPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             createButtonWithIcon(
-                              width: 170,
+                              width: Env.LAYOUT_MAX_WIDTH! * 0.4,
                               icon: Icons.notifications_outlined,
                               color: AppColors.grey,
                               textColors: AppColors.black,
@@ -445,7 +445,7 @@ class _WebviewPageState extends State<WebviewPage> {
                               function: () {},
                             ),
                             createElevatedButton(
-                              width: 170,
+                              width: Env.LAYOUT_MAX_WIDTH! * 0.4,
                               color: AppColors.blue,
                               textColors: AppColors.white,
                               text: "대여하기",

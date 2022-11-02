@@ -391,13 +391,12 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                         Icons.arrow_right,
                       ),
                     ),
-                    Container(
-                      constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 70),
+                    Expanded(
                       child: createCustomText(
                         top: 2.0,
                         bottom: 0.0,
                         left: 0.0,
-                        right: 0.0,
+                        right: 4.0,
                         weight: AppFontWeight.semiBold,
                         color: _setCommentColor(alarmInfoList[index].stateType),
                         size: 12.0,

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:app_settings/app_settings.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 // import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
