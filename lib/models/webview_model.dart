@@ -49,6 +49,10 @@ class MapInfo {
     return data!["pmOper"];
   }
 
+  String getPmModel() {
+    return data!["pmModel"];
+  }
+
   double getPkLat() {
     return data!["pkLat"];
   }

@@ -105,17 +105,17 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                             ),
                             borderRadius: BorderRadius.circular(30),
                             onTap: () {
-                              takePhoto(ImageSource.gallery).then((value) {
-                                String modifyImagePath = _imageFile!.path.substring(50);
-                                requestUserProfileChange(Env.USER_SEQ!, modifyImagePath).then((defaultInfo) {
+                              takePhoto(ImageSource.gallery).then((imagePath) {
+                                Log.debug("_image file : $imagePath");
+                                requestUserProfileChange(Env.USER_SEQ!, imagePath).then((defaultInfo) {
                                   if (defaultInfo.success) {
                                     Log.debug(defaultInfo.data);
                                     setState(() {
-                                      imagePath = modifyImagePath;
+                                      imagePath = imagePath;
                                     });
                                     Env.USER_PHOTO_NAME = imagePath;
                                   } else {
-                                    Log.debug(defaultInfo.message);
+                                    Log.debug("Profile Error message : ${defaultInfo.message}");
                                   }
                                 });
                               });
@@ -133,12 +133,12 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                 // createElevatedButton(
                 //     text: "프로필 변경",
                 //     function: () {
-                //       String modifyImagePath = _imageFile!.path.substring(50);
-                //       requestUserProfileChange(Env.USER_SEQ!, modifyImagePath).then((defaultInfo) {
+                //       String imagePath = _imageFile!.path.substring(50);
+                //       requestUserProfileChange(Env.USER_SEQ!, imagePath).then((defaultInfo) {
                 //         if (defaultInfo.success) {
                 //           Log.debug(defaultInfo.data);
                 //           setState(() {
-                //             imagePath = modifyImagePath;
+                //             imagePath = imagePath;
                 //           });
                 //           Env.USER_PHOTO_NAME = imagePath;
                 //         } else {
@@ -319,30 +319,40 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
     );
   }
 
-  Future<void> takePhoto(ImageSource source) async {
+  Future<String> takePhoto(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
     setState(() {
       _imageFile = pickedFile;
-      imagePath = _imageFile!.path.substring(50);
+      if (Platform.isAndroid) {
+        imagePath = _imageFile!.path.substring(50);
+      } else {
+        imagePath = _imageFile!.path.substring(48);
+      }
     });
+    return imagePath;
   }
 
   ImageProvider<Object> _checkFileImage(String photoName) {
-    // 갤러리에서 저장된 이미지, 프로필 아이콘 구분
-    bool isFilePath;
-    if (photoName.length > 12 && "image_picker" == photoName.substring(0, 12)) {
-      isFilePath = "image_picker" == photoName.substring(0, 12);
-    } else {
-      isFilePath = false;
+    // 1 프로필 이미지
+    // 2 사용자 지정 이미지
+    // 3 Platform 확인
+    String initPhotoName = "assets/profile_";
+    String androidPhotoName = "/data/user/0/com.example.illegalparking_app/cache/";
+    String iOSPhotoName = "/private/var/mobile/Containers/Data/Application/";
+    String filePath;
+
+    if (initPhotoName == photoName.substring(0, 15)) {
+      return AssetImage(photoName);
     }
 
-    // 갤러리에서 저장된 이미지, 프로필 아이콘 구분에 따른 화면 출력 이미지
-    String filePath = "/data/user/0/com.example.illegalparking_app/cache/$photoName";
-    bool isExist = File(filePath).existsSync();
-    if (isFilePath && isExist) {
+    if (Platform.isAndroid) {
+      filePath = androidPhotoName + photoName;
+    } else {
+      filePath = iOSPhotoName + photoName;
+    }
+
+    if (File(filePath).existsSync()) {
       return FileImage(File(filePath));
-    } else if (photoName.substring(0, 6) == "assets") {
-      return AssetImage(photoName);
     } else {
       return const AssetImage("assets/noimage.jpg");
     }

@@ -44,6 +44,7 @@ class _WebviewPageState extends State<WebviewPage> {
   String personalMobName = "";
   String personalMobPrice = "";
   String personalMobOper = "";
+  String personalMobModel = "";
   double parkingLat = 0.0;
   double parkingLng = 0.0;
 
@@ -217,7 +218,7 @@ class _WebviewPageState extends State<WebviewPage> {
                               color: AppColors.grey,
                               weight: AppFontWeight.regular,
                               size: 12.0,
-                              text: "0000123 자건거PRO",
+                              text: personalMobModel,
                             ),
                           ],
                         ),
@@ -500,6 +501,7 @@ class _WebviewPageState extends State<WebviewPage> {
                   personalMobName = mapInfo.getPmName();
                   personalMobPrice = mapInfo.getPmPrice();
                   personalMobOper = mapInfo.getPmOper();
+                  personalMobModel = mapInfo.getPmModel();
                 });
               } else {
                 setState(() {

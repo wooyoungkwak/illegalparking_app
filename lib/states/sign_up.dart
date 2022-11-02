@@ -40,7 +40,7 @@ class _SignUpState extends State<SignUp> {
   int limitTime = 180;
   bool serviceTerms = false;
   bool sendAuthentication = false;
-  bool authVerification = false;
+  bool authVerification = true;
   bool duplicatedId = false;
   Timer? timer;
   int? authNum;
@@ -353,6 +353,7 @@ class _SignUpState extends State<SignUp> {
                         weight: FontWeight.w400,
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(
                           profileCharicterList.length,
                           (index) => _createProfileCircleAvatar(
@@ -580,6 +581,7 @@ class _SignUpState extends State<SignUp> {
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () {
+          Log.debug("size : ${Env.MEDIA_SIZE_WIDTH! / 8}");
           setState(() {
             _initListReset();
             photoName = list[index]["asset"];
@@ -587,8 +589,8 @@ class _SignUpState extends State<SignUp> {
           });
         },
         child: Container(
-          width: 55.0,
-          height: 55.0,
+          width: Env.MEDIA_SIZE_WIDTH! / 8,
+          height: Env.MEDIA_SIZE_WIDTH! / 8,
           decoration: BoxDecoration(
             color: const Color(0xff7c94b6),
             image: DecorationImage(
