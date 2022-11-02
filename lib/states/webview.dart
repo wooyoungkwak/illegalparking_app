@@ -72,7 +72,7 @@ class _WebviewPageState extends State<WebviewPage> {
   Widget build(BuildContext context) {
     final statusBarHeight = MediaQuery.of(context).padding.top;
     return Container(
-      padding: EdgeInsets.only(top: statusBarHeight),
+      padding: Platform.isAndroid ? EdgeInsets.only(top: statusBarHeight) : EdgeInsets.only(top: statusBarHeight, bottom: 20),
       child: Column(
         children: [
           Expanded(
@@ -136,7 +136,7 @@ class _WebviewPageState extends State<WebviewPage> {
       child: Wrap(
         children: [
           Padding(
-            padding: Platform.isAndroid ? const EdgeInsets.only(top: 8.0) : const EdgeInsets.only(top: 8.0, bottom: 20),
+            padding: const EdgeInsets.only(top: 8.0),
             child: Wrap(
               children: [
                 // 손잡이?
