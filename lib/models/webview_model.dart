@@ -45,8 +45,8 @@ class MapInfo {
     return data!["pmPrice"];
   }
 
-  String getPmTime() {
-    return data!["pmTimer"];
+  String getPmOper() {
+    return data!["pmOper"];
   }
 
   double getPkLat() {

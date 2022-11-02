@@ -43,7 +43,7 @@ class _WebviewPageState extends State<WebviewPage> {
   String parkingPhoneNumber = "";
   String personalMobName = "";
   String personalMobPrice = "";
-  String personalMobTime = "";
+  String personalMobOper = "";
   double parkingLat = 0.0;
   double parkingLng = 0.0;
 
@@ -427,7 +427,7 @@ class _WebviewPageState extends State<WebviewPage> {
                                 createCustomText(
                                   weight: AppFontWeight.bold,
                                   size: 16.0,
-                                  text: personalMobPrice,
+                                  text: personalMobOper,
                                 ),
                               ],
                             ),
@@ -476,11 +476,13 @@ class _WebviewPageState extends State<WebviewPage> {
               setState(() {
                 mapInfoType = mapInfo.type;
               });
+              Log.debug("map info type : $mapInfoType");
 
               Log.debug("type : ${mapInfo.type}");
               Log.debug("type : ${mapInfo.data.toString()}");
 
               if (mapInfoType == "parking") {
+                Log.debug("parking");
                 setState(() {
                   parkingName = mapInfo.getPkName();
                   parkingAddress = mapInfo.getPkAddr();
@@ -493,10 +495,11 @@ class _WebviewPageState extends State<WebviewPage> {
                   parkingLng = mapInfo.getPkLng();
                 });
               } else if (mapInfoType == "pm") {
+                Log.debug("pmpmpmpmpmppm");
                 setState(() {
                   personalMobName = mapInfo.getPmName();
                   personalMobPrice = mapInfo.getPmPrice();
-                  personalMobTime = mapInfo.getPmTime();
+                  personalMobOper = mapInfo.getPmOper();
                 });
               } else {
                 setState(() {
