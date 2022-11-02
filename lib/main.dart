@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -18,6 +20,7 @@ import 'package:illegalparking_app/states/sign_up.dart';
 import 'package:illegalparking_app/states/first_use_state.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:device_info/device_info.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,8 +64,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late SecureStorage secureStorage;
   final loginController = Get.put(LoginController());
+  late SecureStorage secureStorage;
 
   String result = "";
 
@@ -124,5 +127,36 @@ class _MyHomePageState extends State<MyHomePage> {
     Env.USER_ID = await secureStorage.read(Env.LOGIN_ID);
     Env.USER_PASSWORD = await secureStorage.read(Env.LOGIN_PW);
     return await secureStorage.read(Env.KEY_AUTO_LOGIN);
+  }
+
+  Future<void> getMobileInfo() async {
+    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    Map<String, dynamic> deviceData = <String, dynamic>{};
+
+    try {
+      if (Platform.isIOS) {
+        deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
+        print(deviceData["utsname.machine"].toString());
+      }
+    } catch (e) {
+      throw Exception("Failed to get device info");
+    }
+  }
+
+  Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
+    return <String, dynamic>{
+      'name': data.name,
+      'systemName': data.systemName,
+      'systemVersion': data.systemVersion,
+      'model': data.model,
+      'localizedModel': data.localizedModel,
+      'identifierForVendor': data.identifierForVendor,
+      'isPhysicalDevice': data.isPhysicalDevice,
+      'utsname.sysname': data.utsname.sysname,
+      'utsname.nodename': data.utsname.nodename,
+      'utsname.release': data.utsname.release,
+      'utsname.version': data.utsname.version,
+      'utsname.machine': data.utsname.machine,
+    };
   }
 }

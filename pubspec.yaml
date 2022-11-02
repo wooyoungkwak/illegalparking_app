@@ -71,6 +71,7 @@ dependencies:
   popover: ^0.2.7
   #앱아이콘
   flutter_launcher_icons: ^0.10.0
+  device_info: ^2.0.3
 
 dev_dependencies:
   flutter_test:
