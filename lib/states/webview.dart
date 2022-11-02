@@ -136,7 +136,7 @@ class _WebviewPageState extends State<WebviewPage> {
       child: Wrap(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: Platform.isAndroid ? const EdgeInsets.only(top: 8.0) : const EdgeInsets.only(top: 8.0, bottom: 20),
             child: Wrap(
               children: [
                 // 손잡이?

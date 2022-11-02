@@ -77,7 +77,7 @@ class _HomeState extends State<Home> {
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.camera_alt_outlined),
-                    label: "카메라",
+                    label: "신고",
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.people),
