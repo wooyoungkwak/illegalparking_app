@@ -301,7 +301,9 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                       Env.USER_NAME = null;
                       Env.USER_PHOTO_NAME = null;
                       Env.USER_PHONE_NUMBER = null;
-                      secureStorage.write(Env.LOGIN_ID, "");
+                      if (!loginController.idSaved) {
+                        secureStorage.write(Env.LOGIN_ID, "");
+                      }
                       secureStorage.write(Env.LOGIN_PW, "");
                       secureStorage.write(Env.KEY_AUTO_LOGIN, "false");
                       loginController.changeRealPage(0);
