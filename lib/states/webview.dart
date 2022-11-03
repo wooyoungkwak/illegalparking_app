@@ -51,17 +51,15 @@ class _WebviewPageState extends State<WebviewPage> {
   double parkingLat = 0.0;
   double parkingLng = 0.0;
 
-  void timerGPS() {
-    _sendGPS();
-    timer = Timer.periodic(const Duration(seconds: 7), (timer) {
-      _sendGPS();
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    timerGPS();
+    // 처음 한번
+    Timer(const Duration(seconds: 1), () => _sendGPS());
+    // 7초 간격 위치 전송
+    timer = Timer.periodic(const Duration(seconds: 7), (timer) {
+      _sendGPS();
+    });
   }
 
   @override

@@ -2,8 +2,6 @@ import 'package:get/get.dart';
 
 class MyPageController extends GetxController {
   static MyPageController get to => Get.find();
-  // bool _validCarNum = false;
-  // bool get validCarNum => _validCarNum;
 
   RxBool validCarNum = false.obs;
 
@@ -15,11 +13,6 @@ class MyPageController extends GetxController {
 
   RxInt currentPoint = 0.obs;
   RxInt noticeIndex = 0.obs;
-
-  // void setValidCarNum(bool value) {
-  //   _validCarNum = value;
-  //   update();
-  // }
 
   void setsetValidCarNum(bool value) {
     validCarNum(value);
