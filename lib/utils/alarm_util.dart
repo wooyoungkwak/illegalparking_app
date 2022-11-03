@@ -1,11 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:illegalparking_app/config/env.dart';
-import 'package:illegalparking_app/models/storage_model.dart';
 
 void showToast({String? text}) {
   Fluttertoast.showToast(
@@ -24,21 +19,6 @@ void showErrorToast({String? text}) {
     backgroundColor: Colors.red,
     toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.BOTTOM,
-  );
-}
-
-void alertDialogByonebutton(String title, String text) {
-  Get.dialog(
-    AlertDialog(
-      title: Text(title),
-      content: Text(text),
-      actions: [
-        TextButton(
-          child: const Text("확인"),
-          onPressed: () => Get.back(),
-        ),
-      ],
-    ),
   );
 }
 
@@ -83,6 +63,41 @@ void showAlertDialog(BuildContext context, {String? text, VoidCallback? action})
         TextButton(
           onPressed: () => Navigator.pop(context, 'Cancel'),
           child: const Text('취소'),
+        ),
+      ],
+    ),
+  );
+}
+
+showCustomDialog({required BuildContext context, String? title, Widget? widget}) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) => Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: Text(title ?? ""),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(Icons.cancel_outlined))
+          ],
+        ),
+        body: widget),
+  );
+}
+
+void alertDialogByonebutton(String title, String text) {
+  Get.dialog(
+    AlertDialog(
+      title: Text(title),
+      content: Text(text),
+      actions: [
+        TextButton(
+          child: const Text("확인"),
+          onPressed: () => Get.back(),
         ),
       ],
     ),
@@ -152,55 +167,55 @@ void showAlertDialog(BuildContext context, {String? text, VoidCallback? action})
 // }
 
 //로그아웃 다이얼로그
-void showLogoutDialog(BuildContext context) {
-  showDialog<String>(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
-      title: const Text('알림'),
-      content: const Text('로그인 페이지로 이동하시겠습니까?'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context, 'Cancel'),
-          child: const Text('취소'),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context, 'OK');
-            SecureStorage? secureStorage;
-            secureStorage = SecureStorage();
+// void showLogoutDialog(BuildContext context) {
+//   showDialog<String>(
+//     context: context,
+//     builder: (BuildContext context) => AlertDialog(
+//       title: const Text('알림'),
+//       content: const Text('로그인 페이지로 이동하시겠습니까?'),
+//       actions: <Widget>[
+//         TextButton(
+//           onPressed: () => Navigator.pop(context, 'Cancel'),
+//           child: const Text('취소'),
+//         ),
+//         TextButton(
+//           onPressed: () {
+//             Navigator.pop(context, 'OK');
+//             SecureStorage? secureStorage;
+//             secureStorage = SecureStorage();
 
-            secureStorage.read(Env.KEY_ID_CHECK).then((value) {
-              if (value == null && value == "false") {
-                secureStorage!.write(Env.LOGIN_ID, "");
-              }
-            });
-            secureStorage.write(Env.LOGIN_PW, "");
-            secureStorage.write(Env.LOGIN_STATE, "false");
-            secureStorage.write(Env.KEY_ACCESS_TOKEN, "");
-            secureStorage.write(Env.KEY_REFRESH_TOKEN, "");
-            Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
-          },
-          child: const Text('확인'),
-        ),
-      ],
-    ),
-  );
-}
+//             secureStorage.read(Env.KEY_ID_CHECK).then((value) {
+//               if (value == null && value == "false") {
+//                 secureStorage!.write(Env.LOGIN_ID, "");
+//               }
+//             });
+//             secureStorage.write(Env.LOGIN_PW, "");
+//             secureStorage.write(Env.LOGIN_STATE, "false");
+//             secureStorage.write(Env.KEY_ACCESS_TOKEN, "");
+//             secureStorage.write(Env.KEY_REFRESH_TOKEN, "");
+//             Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+//           },
+//           child: const Text('확인'),
+//         ),
+//       ],
+//     ),
+//   );
+// }
 
 // 동기화 다이얼로그
-void showSyncDialog(BuildContext context, {required Widget widget}) {
-  Timer? timer;
+// void showSyncDialog(BuildContext context, {required Widget widget}) {
+//   Timer? timer;
 
-  showDialog<String>(
-      context: context,
-      builder: (BuildContext context) {
-        timer = Timer(const Duration(seconds: 2), () {
-          Navigator.of(context).pop();
-        });
-        return widget;
-      }).then((value) {
-    if (timer != null && timer!.isActive) {
-      timer!.cancel();
-    }
-  });
-}
+//   showDialog<String>(
+//       context: context,
+//       builder: (BuildContext context) {
+//         timer = Timer(const Duration(seconds: 2), () {
+//           Navigator.of(context).pop();
+//         });
+//         return widget;
+//       }).then((value) {
+//     if (timer != null && timer!.isActive) {
+//       timer!.cancel();
+//     }
+//   });
+// }

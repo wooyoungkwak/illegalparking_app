@@ -7,6 +7,7 @@ import 'package:illegalparking_app/controllers/my_page_controller.dart';
 import 'package:illegalparking_app/models/result_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/states/widgets/styleWidget.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:intl/intl.dart';
@@ -25,61 +26,7 @@ class _MyPagePointState extends State<MyPagePoint> {
   late Future<PointListInfo> requestInfo;
 
   List<dynamic> pointInfoList = [];
-
   List<dynamic> productList = [];
-
-  Color _setPointColor(String pointType) {
-    if (pointType == "PLUS") {
-      return AppColors.blue;
-    } else {
-      return AppColors.red;
-    }
-  }
-
-  String _setPointValue(String pointType, int value) {
-    String pointWithComma = numberWithComma(value);
-    if (pointType == "PLUS") {
-      return "+${pointWithComma.toString()}";
-    } else {
-      return "-${pointWithComma.toString()}";
-    }
-  }
-
-  String _setPointContent(String pointType, String locationType, String productName, int point) {
-    String pointWithComma = numberWithComma(point);
-    if (pointType == "PLUS") {
-      return "$locationType으로 부터 포상금 ${pointWithComma.toString()}포인트 제공되었습니다.";
-    } else {
-      return "-$productName으로 ${pointWithComma.toString()}를 사용하셨습니다.";
-    }
-  }
-
-  String numberWithComma(int number) {
-    return NumberFormat("###,###,###").format(number);
-  }
-
-  Padding _createPointPadding({String? text, int? point}) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
-      child: Row(
-        children: [
-          createCustomText(
-            padding: 0.0,
-            weight: AppFontWeight.semiBold,
-            size: 16.0,
-            text: text ?? "",
-          ),
-          const Spacer(),
-          createCustomText(
-            padding: 0.0,
-            weight: AppFontWeight.semiBold,
-            size: 16.0,
-            text: numberWithComma(point ?? 0),
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   void initState() {
@@ -210,6 +157,59 @@ class _MyPagePointState extends State<MyPagePoint> {
     );
   }
 
+  Color _setPointColor(String pointType) {
+    if (pointType == "PLUS") {
+      return AppColors.blue;
+    } else {
+      return AppColors.red;
+    }
+  }
+
+  String _setPointValue(String pointType, int value) {
+    String pointWithComma = numberWithComma(value);
+    if (pointType == "PLUS") {
+      return "+${pointWithComma.toString()}";
+    } else {
+      return "-${pointWithComma.toString()}";
+    }
+  }
+
+  String _setPointContent(String pointType, String locationType, String productName, int point) {
+    String pointWithComma = numberWithComma(point);
+    if (pointType == "PLUS") {
+      return "$locationType으로 부터 포상금 ${pointWithComma.toString()}포인트 제공되었습니다.";
+    } else {
+      return "-$productName으로 ${pointWithComma.toString()}를 사용하셨습니다.";
+    }
+  }
+
+  String numberWithComma(int number) {
+    return NumberFormat("###,###,###").format(number);
+  }
+
+  Padding _createPointPadding({String? text, int? point}) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
+      child: Row(
+        children: [
+          createCustomText(
+            padding: 0.0,
+            weight: AppFontWeight.semiBold,
+            size: 16.0,
+            text: text ?? "",
+          ),
+          const Spacer(),
+          createCustomText(
+            padding: 0.0,
+            weight: AppFontWeight.semiBold,
+            size: 16.0,
+            text: numberWithComma(point ?? 0),
+          ),
+        ],
+      ),
+    );
+  }
+
   Container _initPointListByContainer() {
     return Container(
       margin: const EdgeInsets.only(top: 4.0),
@@ -235,7 +235,10 @@ class _MyPagePointState extends State<MyPagePoint> {
                         weight: AppFontWeight.semiBold,
                         size: 30.0,
                         color: _setPointColor(pointInfoList[index].pointType),
-                        text: _setPointValue(pointInfoList[index].pointType, pointInfoList[index].value),
+                        text: _setPointValue(
+                          pointInfoList[index].pointType,
+                          pointInfoList[index].value,
+                        ),
                       ),
                       Row(
                         children: [
@@ -245,7 +248,12 @@ class _MyPagePointState extends State<MyPagePoint> {
                               bottom: 2.0,
                               weight: AppFontWeight.regular,
                               size: 14.0,
-                              text: _setPointContent(pointInfoList[index].pointType, pointInfoList[index].locationType, pointInfoList[index].productName, pointInfoList[index].value),
+                              text: _setPointContent(
+                                pointInfoList[index].pointType,
+                                pointInfoList[index].locationType,
+                                pointInfoList[index].productName,
+                                pointInfoList[index].value,
+                              ),
                             ),
                           ),
                         ],
@@ -327,11 +335,7 @@ class _MyPagePointState extends State<MyPagePoint> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Image(
-                                height: 80,
-                                width: 80,
-                                // image: AssetImage("assets/noimage.jpg"),
-                                image: NetworkImage("${Env.FILE_SERVER_URL}${productList[index].thumbnail}")),
+                            Image(height: 80, width: 80, image: NetworkImage("${Env.FILE_SERVER_URL}${productList[index].thumbnail}")),
                             const Spacer(),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
@@ -421,7 +425,6 @@ class _MyPagePointState extends State<MyPagePoint> {
             children: [
               Container(
                 constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.height),
-                // height: MediaQuery.of(context).size.height,
                 decoration: const BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.all(Radius.circular(18)),
@@ -431,11 +434,11 @@ class _MyPagePointState extends State<MyPagePoint> {
                   child: Column(
                     children: [
                       Image(
-                          width: 300,
-                          height: 300,
-                          fit: BoxFit.cover,
-                          // image: AssetImage(productInfo["image"]),),
-                          image: NetworkImage("${Env.FILE_SERVER_URL}${productInfo.thumbnail}")),
+                        width: 300,
+                        height: 300,
+                        fit: BoxFit.cover,
+                        image: NetworkImage("${Env.FILE_SERVER_URL}${productInfo.thumbnail}"),
+                      ),
                       // 상품권 정보
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -560,9 +563,8 @@ class _MyPagePointState extends State<MyPagePoint> {
                                       // 등록 알림 메시지
                                       Log.debug(productBuyInfo.data);
                                       myPageController.setCurrentPotin(balancePointValue);
-                                      // Navigator.pop(context);
                                     } else {
-                                      // 실패 알림 메시지....
+                                      // 실패 알림 메시지
                                       Log.debug(productBuyInfo.message);
                                     }
                                   },

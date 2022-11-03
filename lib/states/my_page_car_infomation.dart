@@ -7,9 +7,9 @@ import 'package:illegalparking_app/controllers/my_page_controller.dart';
 import 'package:illegalparking_app/models/result_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/states/widgets/styleWidget.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
-import 'package:illegalparking_app/utils/time_util.dart';
 
 class MyPageCarInfomatino extends StatefulWidget {
   const MyPageCarInfomatino({super.key});
@@ -26,43 +26,6 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
 
   bool checkedAlram = Env.USER_CAR_ALARM ?? false;
   List<dynamic> alarmInfoList = [];
-  List testList = [
-    {
-      "image": "assets/noimage.jpg",
-      "address": "01 가 1234 광양시 중동",
-      "time": getDateToStringForAll(getNow()),
-      "state": "신고발생",
-      "message": "불법주정차 위반 신고되었습니다. 1분 안에 차를 이동주차해주세요.",
-    },
-    {
-      "image": "assets/noimage.jpg",
-      "address": "01 가 1234 광양시 중동",
-      "time": getDateToStringForAll(getNow()),
-      "state": "신고누락",
-      "message": "추가 신고가 없어 신고가 종료되었습니다.",
-    },
-    {
-      "image": "assets/noimage.jpg",
-      "address": "01 가 1234 광양시 중동",
-      "time": getDateToStringForAll(getNow()),
-      "state": "신고접수",
-      "message": "불법주정차 과태료 대상 접수되어 해당부서에서 검토중 입니다.",
-    },
-    {
-      "image": "assets/noimage.jpg",
-      "address": "01 가 1234 광양시 중동",
-      "time": getDateToStringForAll(getNow()),
-      "state": "신고제외",
-      "message": "불법주정차 과태료 대상 접수되었지만 최종 신고에서 제외되었습니다.",
-    },
-    {
-      "image": "assets/noimage.jpg",
-      "address": "01 가 1234 광양시 중동",
-      "time": getDateToStringForAll(getNow()),
-      "state": "과태료대상",
-      "message": "${getDateToStringForAll(getNow())}에 과태료가 부가 되었습니다.",
-    },
-  ];
 
   @override
   void initState() {
@@ -242,10 +205,7 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                     const Positioned(
                       top: 4,
                       left: 32,
-                      child: Icon(
-                        Icons.gpp_good,
-                        color: AppColors.passIcon,
-                      ),
+                      child: Icon(Icons.gpp_good, color: AppColors.passIcon),
                     )
                   ],
                 ),
@@ -277,9 +237,7 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         createCustomText(color: AppColors.black, text: "로딩중..."),
-                        const CircularProgressIndicator(
-                          color: AppColors.black,
-                        ),
+                        const CircularProgressIndicator(color: AppColors.black),
                       ],
                     ),
                   );
@@ -313,7 +271,6 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                       children: [
                         // 이미지
                         Container(
-                          // color: AppColors.grey,
                           width: 66,
                           height: 66,
                           padding: const EdgeInsets.all(8.0),
@@ -343,7 +300,6 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                               child: createCustomText(
                                 padding: 0.0,
                                 weight: AppFontWeight.bold,
-                                // text: _addrTextLengthLimit(reportHistoryList[index].addr),
                                 text: alarmInfoList[index].addr,
                               ),
                             ),
@@ -369,9 +325,8 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                               borderRadius: BorderRadius.circular(11.0),
                             ),
                             child: createCustomText(
-                              weight: FontWeight.w400,
+                              weight: AppFontWeight.regular,
                               color: reportColors(alarmInfoList[index].stateType) == const Color(0xffffffff) ? AppColors.textGrey : Colors.white,
-                              // text: alarmInfoList[index].stateType,
                               text: _setAlarmStateText(alarmInfoList[index].stateType),
                             ),
                           ),

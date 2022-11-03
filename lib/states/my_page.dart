@@ -8,6 +8,7 @@ import 'package:illegalparking_app/controllers/my_page_controller.dart';
 import 'package:illegalparking_app/models/result_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/states/widgets/styleWidget.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
 
 class MyPage extends StatefulWidget {
@@ -60,7 +61,6 @@ class _MyPageState extends State<MyPage> {
   @override
   void dispose() {
     super.dispose();
-    // loadingDialog.hide();
   }
 
   @override
@@ -399,13 +399,9 @@ class _MyPageState extends State<MyPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // 제목(subject)
+                            // 제목
                             Row(
                               children: [
-                                // createCustomText(
-                                //   color: Colors.blue,
-                                //   text: noticeList[index].noticeType,
-                                // ),
                                 createCustomText(
                                   top: 16.0,
                                   left: 24.0,
@@ -424,7 +420,6 @@ class _MyPageState extends State<MyPage> {
                               left: 24.0,
                               right: 24.0,
                               bottom: 0.0,
-                              // text: _textLengthValidation(noticeList[index].content!) ? noticeList[index].content! : _textSlice(noticeList[index].content!),
                               text: _textSlice(noticeList[index].content!),
                             ),
 
@@ -615,10 +610,6 @@ class _MyPageState extends State<MyPage> {
                               children: [
                                 Row(
                                   children: [
-                                    // createCustomText(
-                                    //   color: Colors.blue,
-                                    //   text: noticeList[noticeIndex].noticeType,
-                                    // ),
                                     createCustomText(
                                       bottom: 0.0,
                                       weight: AppFontWeight.semiBold,
@@ -627,7 +618,6 @@ class _MyPageState extends State<MyPage> {
                                     ),
                                   ],
                                 ),
-
                                 createCustomText(
                                   top: 0.0,
                                   left: 16.0,
@@ -635,26 +625,10 @@ class _MyPageState extends State<MyPage> {
                                   color: AppColors.textGrey,
                                   text: noticeList[noticeIndex].regDt,
                                 ),
-                                // // 빈공간
-                                // Expanded(
-                                //   flex: 5,
-                                //   child: ConstrainedBox(
-                                //     constraints: const BoxConstraints(),
-                                //   ),
-                                // ),
-
                                 createCustomText(
                                   weight: AppFontWeight.medium,
                                   text: noticeList[noticeIndex].content!,
                                 ),
-
-                                // // 빈공간
-                                // Expanded(
-                                //   flex: 5,
-                                //   child: ConstrainedBox(
-                                //     constraints: const BoxConstraints(),
-                                //   ),
-                                // ),
                               ],
                             ),
                           ),
@@ -669,10 +643,6 @@ class _MyPageState extends State<MyPage> {
         );
       },
     );
-  }
-
-  Future<bool?> setTrue() {
-    return Future.value(false);
   }
 
   String _textSlice(String text) {
@@ -698,20 +668,3 @@ class _MyPageState extends State<MyPage> {
     return sliceText;
   }
 }
-
-// class _RoundedContainer extends StatelessWidget {
-//   final Widget child;
-//   const _RoundedContainer({required this.child});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       decoration: const BoxDecoration(
-//         borderRadius: BorderRadius.all(
-//           Radius.circular(18),
-//         ),
-//       ),
-//       child: child,
-//     );
-//   }
-// }

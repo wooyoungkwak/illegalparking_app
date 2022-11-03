@@ -18,14 +18,17 @@ class MyPageRegistration extends StatefulWidget {
 }
 
 class _MyPageRegistrationState extends State<MyPageRegistration> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final myPageController = Get.put(MyPageController());
   final loginController = Get.put(LoginController());
+
   final carNumController = TextEditingController();
   final carNameController = TextEditingController();
   final carGradeController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String carGradeselected = "소형";
+  String carName = "";
 
   List<DropdownMenuItem<String>> get dropDownItems {
     List<DropdownMenuItem<String>> menuItems = [
@@ -37,8 +40,6 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
     ];
     return menuItems;
   }
-
-  String carName = "";
 
   @override
   Widget build(BuildContext context) {

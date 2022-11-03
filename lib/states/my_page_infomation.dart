@@ -28,11 +28,12 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
   final TextEditingController _newPasswordValidationController = TextEditingController();
 
   late SecureStorage secureStorage;
-  // late PickedFile _imageFile;
-  XFile? _imageFile;
+
   final ImagePicker _picker = ImagePicker();
   late String imagePath = Env.USER_PHOTO_NAME!;
   late bool isExistImgae;
+  XFile? _imageFile;
+
   @override
   void initState() {
     super.initState();
@@ -81,9 +82,6 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                   children: [
                     CircleAvatar(
                       radius: 100.0,
-                      // 현재 기본 이미지들 적용 안됨
-                      // backgroundImage: AssetImage("assets/noimage.jpg"),
-                      // backgroundImage: AssetImage("assets/${Env.USER_PHOTO_NAME}.jpg"),
                       backgroundImage: _checkFileImage(imagePath),
                     ),
                     Positioned(
@@ -104,6 +102,7 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             borderRadius: BorderRadius.circular(30),
+                            child: const Icon(Icons.filter, size: 30),
                             onTap: () {
                               takePhoto(ImageSource.gallery).then((imagePath) {
                                 Log.debug("_image file : $imagePath");
@@ -120,32 +119,12 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                                 });
                               });
                             },
-                            child: const Icon(
-                              Icons.filter,
-                              size: 30,
-                            ),
                           ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                // createElevatedButton(
-                //     text: "프로필 변경",
-                //     function: () {
-                //       String imagePath = _imageFile!.path.substring(50);
-                //       requestUserProfileChange(Env.USER_SEQ!, imagePath).then((defaultInfo) {
-                //         if (defaultInfo.success) {
-                //           Log.debug(defaultInfo.data);
-                //           setState(() {
-                //             imagePath = imagePath;
-                //           });
-                //           Env.USER_PHOTO_NAME = imagePath;
-                //         } else {
-                //           Log.debug(defaultInfo.message);
-                //         }
-                //       });
-                //     }),
                 Column(
                   children: [
                     createCustomText(
@@ -333,9 +312,6 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
   }
 
   ImageProvider<Object> _checkFileImage(String photoName) {
-    // 1 프로필 이미지
-    // 2 사용자 지정 이미지
-    // 3 Platform 확인
     String initPhotoName = "assets/profile_";
     String androidPhotoName = "/data/user/0/com.example.illegalparking_app/cache/";
     String iOSPhotoName = "/private/var/mobile/Containers/Data/Application/";

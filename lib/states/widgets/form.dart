@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
 
 Padding createCustomText({
   String? text,
@@ -50,7 +49,6 @@ Padding createTextFormField({
   Function? onChanged,
   Function? onSaved,
 }) {
-  // final text = controller!.value.text;
   return Padding(
     padding: EdgeInsets.all(padding ?? 8.0),
     child: TextFormField(
@@ -127,22 +125,15 @@ Padding createButtonWithIcon({
       height: 40,
       width: width ?? double.infinity,
       child: ElevatedButton.icon(
-        icon: Icon(
-          icon,
-          size: 18,
-          color: textColors,
-        ),
-        style: ElevatedButton.styleFrom(
-          shape: const StadiumBorder(),
-          backgroundColor: color ?? AppColors.blue,
-        ),
-        onPressed: function,
+        icon: Icon(icon, size: 18, color: textColors),
+        style: ElevatedButton.styleFrom(shape: const StadiumBorder(), backgroundColor: color ?? AppColors.blue),
         label: createCustomText(
           left: 0.0,
           color: textColors ?? AppColors.white,
           weight: AppFontWeight.bold,
           text: text ?? "",
         ),
+        onPressed: function,
       ),
     ),
   );
@@ -176,94 +167,6 @@ Container createMypageContainer({List<Widget>? widgetList, dynamic route}) {
         ),
       ),
     ),
-  );
-}
-
-showCustomDialog({required BuildContext context, String? title, Widget? widget}) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) => Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          title: Text(title ?? ""),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.cancel_outlined))
-          ],
-        ),
-        body: widget),
-  );
-}
-
-// 신고이력, 내차정보 관련
-Color reportColors(String state) {
-  Color color = const Color(0xffffffff);
-  switch (state) {
-    case "신고발생":
-      color = const Color(0xffffc107);
-      break;
-    case "신고대기":
-      color = const Color(0xffffc107);
-      break;
-    case "신고접수":
-      color = const Color(0xffD95321);
-      break;
-    case "신고제외":
-      color = const Color(0xff888888);
-      break;
-    case "과태료 대상":
-      color = const Color(0xffB12915);
-      break;
-  }
-  return color;
-}
-
-// 신고이력, 내차정보 관련
-BoxConstraints addrTextWidthLimit(String state, BuildContext context) {
-  double appWidthSize = MediaQuery.of(context).size.width;
-  Log.debug("appWidthSize : $appWidthSize");
-  if (state.length > 5) {
-    return BoxConstraints(maxWidth: appWidthSize - 220); // 5글자 : 216, 4글자 : 196,
-  }
-  return BoxConstraints(maxWidth: appWidthSize - 200);
-}
-
-// 차종별 이미지
-ImageProvider<Object> carGradeImage(String? carGrade) {
-  String imagePath = "assets/";
-  switch (carGrade) {
-    case "소형":
-      return AssetImage("${imagePath}segment_subcompact.png");
-    case "중형":
-      return AssetImage("${imagePath}segment_mid.png");
-    case "SUV":
-      return AssetImage("${imagePath}segment_suv.png");
-    case "트럭":
-      return AssetImage("${imagePath}segment_truck.png");
-    case "중장비":
-      return AssetImage("${imagePath}segment_equipment.png");
-  }
-
-  return const AssetImage("assets/testVehicle.jpg");
-}
-
-Icon chevronRight() {
-  return const Icon(
-    color: AppColors.textGrey,
-    size: 32,
-    Icons.chevron_right,
-  );
-}
-
-Icon chevronLeft() {
-  return const Icon(
-    color: AppColors.textGrey,
-    size: 32,
-    Icons.chevron_left,
   );
 }
 
