@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:illegalparking_app/states/login.dart';
 import 'package:illegalparking_app/states/my_page_car_infomation.dart';
 
 import 'package:illegalparking_app/states/car_report_camera_state.dart';
 import 'package:illegalparking_app/states/guest_camera.dart';
-import 'package:illegalparking_app/states/guest_my_page.dart';
 import 'package:illegalparking_app/states/my_page.dart';
 import 'package:illegalparking_app/states/my_page_infomation.dart';
 import 'package:illegalparking_app/states/my_page_point.dart';
@@ -44,7 +44,7 @@ class LoginController extends GetxController {
   static const List<Widget> _guestModeWidgetOption = <Widget>[
     WebviewPage(),
     GuestCamera(),
-    GuestMyPage(),
+    Login(),
   ];
 
   Widget get currentPages => _isGuestMode ? _guestModeWidgetOption[currentIndex.value] : _widgetOption[currentPageIdex.value];

@@ -121,18 +121,12 @@ class _WebviewPageState extends State<WebviewPage> {
             width: 1,
           ),
         ),
-
-        // Border.all(
-        //   width: 1,
-        //   color: AppColors.black,
-        // ),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(10),
           topRight: Radius.circular(10),
         ),
       ),
       width: double.infinity,
-      // height: MediaQuery.of(context).size.height * 0.3,
       child: Wrap(
         children: [
           Padding(
@@ -257,12 +251,6 @@ class _WebviewPageState extends State<WebviewPage> {
                                   size: 15.0,
                                   text: "운영시간",
                                 ),
-                                // createCustomText(
-                                //   weight: AppFontWeight.semiBold,
-                                //   color: AppColors.textGrey,
-                                //   size: 15.0,
-                                //   text: "전화번호",
-                                // ),
                                 createCustomText(
                                   weight: AppFontWeight.semiBold,
                                   color: AppColors.textGrey,
@@ -284,11 +272,6 @@ class _WebviewPageState extends State<WebviewPage> {
                                   size: 16.0,
                                   text: parkingTime,
                                 ),
-                                // createCustomText(
-                                //   weight: AppFontWeight.bold,
-                                //   size: 16.0,
-                                //   text: parkingPhoneNumber,
-                                // ),
                                 createCustomText(
                                   weight: AppFontWeight.bold,
                                   size: 16.0,

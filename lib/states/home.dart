@@ -32,6 +32,7 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     super.dispose();
+    // home에서 나가면 게스트 모드 해제(무조건)
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loginController.offGuesMode();
     });

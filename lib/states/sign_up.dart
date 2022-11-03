@@ -25,6 +25,7 @@ class _SignUpState extends State<SignUp> {
 
   final ScrollController _termsSummaryController = ScrollController();
   final ScrollController _termsController = ScrollController();
+
   final FocusNode _idfocusNode = FocusNode();
 
   final idController = TextEditingController();
@@ -40,7 +41,7 @@ class _SignUpState extends State<SignUp> {
   int limitTime = 180;
   bool serviceTerms = false;
   bool sendAuthentication = false;
-  bool authVerification = true;
+  bool authVerification = false;
   bool duplicatedId = false;
   Timer? timer;
   int? authNum;
@@ -122,269 +123,274 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: true,
-        automaticallyImplyLeading: false,
+    return WillPopScope(
+      onWillPop: () {
+        return Future(() => false);
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-        elevation: 0,
-        leading: Material(
-          color: Colors.white,
-          child: InkWell(
-            onTap: () {
-              Get.back();
-            },
-            child: const Icon(
-              Icons.chevron_left,
-              color: Colors.black,
-              size: 40,
+        appBar: AppBar(
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: Material(
+            color: Colors.white,
+            child: InkWell(
+              onTap: () {
+                Get.back();
+              },
+              child: const Icon(
+                Icons.chevron_left,
+                color: Colors.black,
+                size: 40,
+              ),
             ),
           ),
+          title: createCustomText(text: "회원가입"),
         ),
-        title: createCustomText(text: "회원가입"),
-      ),
-      body: Container(
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                // 아이디
-                createCustomText(
-                  top: 0.0,
-                  bottom: 0.0,
-                  left: 8.0,
-                  size: 12.0,
-                  text: "아이디(이메일)",
-                ),
-                createTextFormField(
-                  focusNode: _idfocusNode,
-                  fillColor: AppColors.textField,
-                  hintText: "아이디 또는 이메일을 입력해주세요.",
-                  helperText: duplicatedId ? idHelperText : null,
-                  errorText: duplicatedId ? idErrorText : null,
-                  controller: idController,
-                  validation: idValidator,
-                  onChanged: idChanged,
-                ),
-                // 비밀번호
-                createCustomText(
-                  top: 0.0,
-                  bottom: 0.0,
-                  left: 8.0,
-                  size: 12.0,
-                  text: "비밀번호",
-                ),
-                createTextFormField(
-                  controller: passController,
-                  obscureText: true,
-                  fillColor: AppColors.textField,
-                  hintText: "비밀번호를 입력해주세요.",
-                  helperText: "보안에 안전한 암호 입니다.",
-                  validation: passwordValidator,
-                ),
-                createTextFormField(
-                  fillColor: AppColors.textField,
-                  obscureText: true,
-                  hintText: "비밀번호를 한번 더 입력해주세요.",
-                  validation: passwordConfirmValidator,
-                ),
-                // 이름
-                createCustomText(
-                  top: 0.0,
-                  bottom: 0.0,
-                  left: 8.0,
-                  size: 12.0,
-                  text: "이름",
-                ),
-                createTextFormField(
-                  fillColor: AppColors.textField,
-                  controller: nameCotroller,
-                  hintText: "이름을 입력해주세요.",
-                  validation: nameValidator,
-                ),
-
-                //전화번호
-                createCustomText(
-                  top: 0.0,
-                  bottom: 0.0,
-                  left: 8.0,
-                  size: 12.0,
-                  text: "전화번호",
-                ),
-                createTextFormField(
-                  fillColor: AppColors.textField,
-                  hintText: "전화번호를 입력해주세요.",
-                  // helperText: "'-' 없이 입력해주세요",
-                  readOnly: sendAuthentication || authVerification,
-                  controller: phoneNumController,
-                  validation: phoneNumValidator,
-                ),
-
-                // 인증 관련
-                if (!authVerification)
-                  createElevatedButton(
-                      color: Colors.black,
-                      text: authenticationSendText,
-                      function: sendAuthentication
-                          ? null
-                          : () {
-                              if (_formKey.currentState!.validate()) {
-                                sendSMS(phoneNumController.text).then((authKey) {
-                                  setState(() {
-                                    sendAuthentication = true;
-                                    authNum = authKey;
-                                  });
-                                  getSetTime();
-                                });
-                              } else {
-                                showErrorToast(text: "입력사항을 확인해 주세요.");
-                              }
-                            }),
-                if (sendAuthentication)
+        body: Container(
+          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  // 아이디
+                  createCustomText(
+                    top: 0.0,
+                    bottom: 0.0,
+                    left: 8.0,
+                    size: 12.0,
+                    text: "아이디(이메일)",
+                  ),
+                  createTextFormField(
+                    focusNode: _idfocusNode,
+                    fillColor: AppColors.textField,
+                    hintText: "아이디 또는 이메일을 입력해주세요.",
+                    helperText: duplicatedId ? idHelperText : null,
+                    errorText: duplicatedId ? idErrorText : null,
+                    controller: idController,
+                    validation: idValidator,
+                    onChanged: idChanged,
+                  ),
+                  // 비밀번호
+                  createCustomText(
+                    top: 0.0,
+                    bottom: 0.0,
+                    left: 8.0,
+                    size: 12.0,
+                    text: "비밀번호",
+                  ),
+                  createTextFormField(
+                    controller: passController,
+                    obscureText: true,
+                    fillColor: AppColors.textField,
+                    hintText: "비밀번호를 입력해주세요.",
+                    helperText: "보안에 안전한 암호 입니다.",
+                    validation: passwordValidator,
+                  ),
                   createTextFormField(
                     fillColor: AppColors.textField,
-                    controller: authKeyController,
-                    hintText: "인증번호를 입력해주세요.",
+                    obscureText: true,
+                    hintText: "비밀번호를 한번 더 입력해주세요.",
+                    validation: passwordConfirmValidator,
                   ),
-                if (sendAuthentication || authVerification)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      height: 40,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: const StadiumBorder(),
-                          backgroundColor: Colors.black,
-                          disabledBackgroundColor: AppColors.blue,
-                          disabledForegroundColor: AppColors.white,
-                        ),
-                        onPressed: authVerification
+                  // 이름
+                  createCustomText(
+                    top: 0.0,
+                    bottom: 0.0,
+                    left: 8.0,
+                    size: 12.0,
+                    text: "이름",
+                  ),
+                  createTextFormField(
+                    fillColor: AppColors.textField,
+                    controller: nameCotroller,
+                    hintText: "이름을 입력해주세요.",
+                    validation: nameValidator,
+                  ),
+
+                  //전화번호
+                  createCustomText(
+                    top: 0.0,
+                    bottom: 0.0,
+                    left: 8.0,
+                    size: 12.0,
+                    text: "전화번호",
+                  ),
+                  createTextFormField(
+                    fillColor: AppColors.textField,
+                    hintText: "전화번호를 입력해주세요.",
+                    // helperText: "'-' 없이 입력해주세요",
+                    readOnly: sendAuthentication || authVerification,
+                    controller: phoneNumController,
+                    validation: phoneNumValidator,
+                  ),
+
+                  // 인증 관련
+                  if (!authVerification)
+                    createElevatedButton(
+                        color: Colors.black,
+                        text: authenticationSendText,
+                        function: sendAuthentication
                             ? null
                             : () {
-                                try {
-                                  if (int.parse(authKeyController.text) == authNum && authNum != null) {
-                                    timer!.cancel();
-                                    setState(() {
-                                      authVerification = true;
-                                      sendAuthentication = false;
-                                    });
-                                  } else {
-                                    showErrorToast(text: "인증번호를 확인해 주세요.");
-                                  }
-                                } catch (e) {
-                                  showErrorToast(text: "인증번호를 확인해 주세요.");
-                                }
-                              },
-                        child: createCustomText(color: Colors.white, text: authVerification ? "인증번호 확인됨" : "인증번호 확인"),
-                      ),
-                    ),
-                  ),
-                if (authVerification)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // 약관
-                      SizedBox(
-                        height: 200,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Scrollbar(
-                            thumbVisibility: true,
-                            controller: _termsSummaryController,
-                            child: ListView.builder(
-                              itemCount: 1,
-                              controller: _termsSummaryController,
-                              itemBuilder: (BuildContext context, int index) {
-                                return const Text(Env.USER_TERMS);
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                      // 약관동의
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              fillColor: MaterialStateProperty.resolveWith((states) => AppColors.blue),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                              value: serviceTerms,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  serviceTerms = value!;
-                                  _formKey.currentState!.save();
-                                });
-                              },
-                            ),
-                            createCustomText(
-                              padding: 0.0,
-                              text: "약관 동의",
-                            ),
-                            const Spacer(),
-                            TextButton(
-                              onPressed: () {
-                                showServiceTermsDialog();
-                              },
-                              child: Row(children: [
-                                createCustomText(
-                                  padding: 0.0,
-                                  text: "더보기",
-                                ),
-                                const Icon(
-                                  Icons.chevron_right,
-                                  color: Colors.black,
-                                ),
-                              ]),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // 프로필 캐릭터 선택
-                      createCustomText(
-                        text: "프로필 캐릭터 선택",
-                        weight: FontWeight.w400,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(
-                          profileCharicterList.length,
-                          (index) => _createProfileCircleAvatar(
-                            list: profileCharicterList,
-                            index: index,
-                          ),
-                        ),
-                      ),
-                      // 회원생성
-                      createElevatedButton(
-                        color: Colors.black,
-                        text: "회원생성",
-                        function: serviceTerms
-                            ? () {
                                 if (_formKey.currentState!.validate()) {
-                                  register(idController.text, passController.text, nameCotroller.text, phoneNumController.text, photoName).then((registerInfo) {
-                                    if (registerInfo.success) {
-                                      showSignUpSuccessDialog();
-                                    } else {
-                                      showErrorSnackBar(context, registerInfo.message!);
-                                    }
+                                  sendSMS(phoneNumController.text).then((authKey) {
+                                    setState(() {
+                                      sendAuthentication = true;
+                                      authNum = authKey;
+                                    });
+                                    getSetTime();
                                   });
                                 } else {
-                                  showErrorToast(text: "입력 사항을 확인해주세요");
+                                  showErrorToast(text: "입력사항을 확인해 주세요.");
                                 }
-                              }
-                            : null,
+                              }),
+                  if (sendAuthentication)
+                    createTextFormField(
+                      fillColor: AppColors.textField,
+                      controller: authKeyController,
+                      hintText: "인증번호를 입력해주세요.",
+                    ),
+                  if (sendAuthentication || authVerification)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        height: 40,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: const StadiumBorder(),
+                            backgroundColor: Colors.black,
+                            disabledBackgroundColor: AppColors.blue,
+                            disabledForegroundColor: AppColors.white,
+                          ),
+                          onPressed: authVerification
+                              ? null
+                              : () {
+                                  try {
+                                    if (int.parse(authKeyController.text) == authNum && authNum != null) {
+                                      timer!.cancel();
+                                      setState(() {
+                                        authVerification = true;
+                                        sendAuthentication = false;
+                                      });
+                                    } else {
+                                      showErrorToast(text: "인증번호를 확인해 주세요.");
+                                    }
+                                  } catch (e) {
+                                    showErrorToast(text: "인증번호를 확인해 주세요.");
+                                  }
+                                },
+                          child: createCustomText(color: Colors.white, text: authVerification ? "인증번호 확인됨" : "인증번호 확인"),
+                        ),
                       ),
-                    ],
-                  ),
-              ],
+                    ),
+                  if (authVerification)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 약관
+                        SizedBox(
+                          height: 200,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Scrollbar(
+                              thumbVisibility: true,
+                              controller: _termsSummaryController,
+                              child: ListView.builder(
+                                itemCount: 1,
+                                controller: _termsSummaryController,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return const Text(Env.USER_TERMS);
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        // 약관동의
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Checkbox(
+                                fillColor: MaterialStateProperty.resolveWith((states) => AppColors.blue),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                value: serviceTerms,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    serviceTerms = value!;
+                                    _formKey.currentState!.save();
+                                  });
+                                },
+                              ),
+                              createCustomText(
+                                padding: 0.0,
+                                text: "약관 동의",
+                              ),
+                              const Spacer(),
+                              TextButton(
+                                onPressed: () {
+                                  showServiceTermsDialog();
+                                },
+                                child: Row(children: [
+                                  createCustomText(
+                                    padding: 0.0,
+                                    text: "더보기",
+                                  ),
+                                  const Icon(
+                                    Icons.chevron_right,
+                                    color: Colors.black,
+                                  ),
+                                ]),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // 프로필 캐릭터 선택
+                        createCustomText(
+                          text: "프로필 캐릭터 선택",
+                          weight: FontWeight.w400,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(
+                            profileCharicterList.length,
+                            (index) => _createProfileCircleAvatar(
+                              list: profileCharicterList,
+                              index: index,
+                            ),
+                          ),
+                        ),
+                        // 회원생성
+                        createElevatedButton(
+                          color: Colors.black,
+                          text: "회원생성",
+                          function: serviceTerms
+                              ? () {
+                                  if (_formKey.currentState!.validate()) {
+                                    register(idController.text, passController.text, nameCotroller.text, phoneNumController.text, photoName).then((registerInfo) {
+                                      if (registerInfo.success) {
+                                        showSignUpSuccessDialog();
+                                      } else {
+                                        showErrorSnackBar(context, registerInfo.message!);
+                                      }
+                                    });
+                                  } else {
+                                    showErrorToast(text: "입력 사항을 확인해주세요");
+                                  }
+                                }
+                              : null,
+                        ),
+                      ],
+                    ),
+                ],
+              ),
             ),
           ),
         ),

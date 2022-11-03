@@ -28,7 +28,6 @@ class _LoginState extends State<Login> {
     super.initState();
     secureStorage = SecureStorage();
     _setsaveid();
-    loginController.getAutoLogin(false);
     secureStorage.write(Env.KEY_AUTO_LOGIN, "false");
 
     if (!Env.isDebug) {
@@ -48,7 +47,8 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.appBackground,
+      backgroundColor: loginController.isGuestMode ? AppColors.white : AppColors.appBackground,
+      appBar: loginController.isGuestMode ? _appbarIsGuest() : null,
       body: Form(
         key: _formKey,
         child: Padding(
@@ -56,11 +56,9 @@ class _LoginState extends State<Login> {
           child: Center(
             child: ListView(
               shrinkWrap: true,
-              // mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // 로그인 Title
-                if (loginController.isGuestMode == false)
+                if (!loginController.isGuestMode)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -97,27 +95,27 @@ class _LoginState extends State<Login> {
                     ],
                   ),
                 // Geust Mode Title
-                if (loginController.isGuestMode == true)
+                if (loginController.isGuestMode)
                   Row(
                     children: [
                       createCustomText(
                         bottom: 0.0,
                         right: 0.0,
                         left: 8.0,
-                        size: 24.0,
-                        color: Colors.blue,
+                        size: 21.0,
+                        weight: AppFontWeight.bold,
                         text: " 로그인",
                       ),
                       createCustomText(
                         top: 12.0,
                         bottom: 0.0,
                         left: 0.0,
-                        size: 16.0,
+                        size: 21.0,
                         text: "이 필요한",
                       ),
                     ],
                   ),
-                if (loginController.isGuestMode == true)
+                if (loginController.isGuestMode)
                   createCustomText(
                     top: 0.0,
                     left: 8.0,
@@ -129,17 +127,17 @@ class _LoginState extends State<Login> {
                   children: [
                     Container(
                       child: createTextFormField(
-                        hintText: "아이디 또는 이메일을 입력해주세요.",
                         fillColor: AppColors.textField,
                         controller: _idController,
+                        hintText: "아이디 또는 이메일을 입력해주세요.",
                         validation: idValidator,
                       ),
                     ),
                     createTextFormField(
-                      hintText: "비밀번호를 입력해주세요.",
                       obscureText: true,
                       fillColor: AppColors.textField,
                       controller: _passController,
+                      hintText: "비밀번호를 입력해주세요.",
                       validation: passwordValidator,
                     ),
                     Row(
@@ -148,7 +146,9 @@ class _LoginState extends State<Login> {
                         GetBuilder<LoginController>(
                           builder: (controller) => Checkbox(
                             checkColor: Colors.white,
-                            fillColor: MaterialStateProperty.resolveWith((states) => const Color(0xff9B9B9B)),
+                            fillColor: loginController.isGuestMode
+                                ? MaterialStateProperty.resolveWith((states) => const Color(0xffC6C6C6))
+                                : MaterialStateProperty.resolveWith((states) => const Color(0xff9B9B9B)),
                             shape: const CircleBorder(),
                             value: controller.checkedAutoLogin,
                             onChanged: (bool? value) {
@@ -161,14 +161,16 @@ class _LoginState extends State<Login> {
                         ),
                         createCustomText(
                           left: 0.0,
-                          color: Colors.white,
+                          color: loginController.isGuestMode ? AppColors.black : AppColors.white,
                           text: "자동 로그인",
                         ),
                         // 아이디 저장
                         GetBuilder<LoginController>(
                           builder: (controller) => Checkbox(
                             checkColor: Colors.white,
-                            fillColor: MaterialStateProperty.resolveWith((states) => const Color(0xff9B9B9B)),
+                            fillColor: loginController.isGuestMode
+                                ? MaterialStateProperty.resolveWith((states) => const Color(0xffC6C6C6))
+                                : MaterialStateProperty.resolveWith((states) => const Color(0xff9B9B9B)),
                             shape: const CircleBorder(),
                             value: controller.idSaved,
                             onChanged: (bool? value) {
@@ -179,7 +181,7 @@ class _LoginState extends State<Login> {
                         ),
                         createCustomText(
                           left: 0.0,
-                          color: Colors.white,
+                          color: loginController.isGuestMode ? AppColors.black : AppColors.white,
                           text: "아이디 저장",
                         ),
                       ],
@@ -188,6 +190,7 @@ class _LoginState extends State<Login> {
                     // 로그인 버튼
                     GetBuilder<LoginController>(
                       builder: (controller) => createElevatedButton(
+                        color: loginController.isGuestMode ? AppColors.black : AppColors.blue,
                         text: "로그인",
                         function: () {
                           // Navigator.pushNamed(context, "/home");
@@ -306,5 +309,36 @@ class _LoginState extends State<Login> {
       initcheck = false;
     }
     return "...";
+  }
+
+  AppBar _appbarIsGuest() {
+    return AppBar(
+      elevation: 0,
+      backgroundColor: AppColors.white,
+      automaticallyImplyLeading: false,
+      leading: Material(
+        color: AppColors.white,
+        child: InkWell(
+          onTap: () {
+            loginController.offGuesMode();
+            loginController.changePage(0);
+            loginController.changeRealPage(0);
+            Get.delete<LoginController>();
+            Navigator.pushNamedAndRemoveUntil(context, "/login", (route) => false);
+          },
+          child: const Icon(
+            Icons.chevron_left,
+            color: AppColors.black,
+            size: 40,
+          ),
+        ),
+      ),
+      title: createCustomText(
+        weight: AppFontWeight.bold,
+        color: AppColors.black,
+        size: 16.0,
+        text: "돌아가기",
+      ),
+    );
   }
 }
