@@ -1,3 +1,4 @@
+import 'package:flutter/scheduler.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
@@ -5,6 +6,7 @@ import 'package:illegalparking_app/states/widgets/crop.dart';
 import 'package:illegalparking_app/states/declaration_state.dart';
 import 'package:flutter/material.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
 import 'package:get/get.dart';
 
@@ -20,6 +22,44 @@ class _NumbercameraState extends State<Numbercamera> {
   @override
   void initState() {
     super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((data) async {
+      // 테스트용으로 막아둠
+      _fetchData(context);
+    });
+  }
+
+  void _fetchData(BuildContext context) async {
+    // show the loading dialog
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          return Dialog(
+            backgroundColor: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator(
+                    color: AppColors.black,
+                  ),
+                  SizedBox(width: 15),
+                  CustomText(
+                    weight: AppFontWeight.bold,
+                    text: "로딩중",
+                    color: Colors.black,
+                    size: 20,
+                  ),
+                  // SizedBox(width: 50, height: 100, child: Lottie.asset('assets/loading_black.json', fit: BoxFit.fill)),
+                ],
+              ),
+            ),
+          );
+        });
+    await Future.delayed(const Duration(seconds: 1));
+    Get.back();
   }
 
   @override
@@ -44,6 +84,7 @@ class _NumbercameraState extends State<Numbercamera> {
               btomhighbtn: Env.MEDIA_SIZE_HEIGHT! / 1.65,
               backColor: Colors.black,
               onTake: (MaskForCameraViewResult res) {
+                controller.carNumberwrite("");
                 Get.offAll(() => const Declaration());
               }),
           CreateContainerByAlignment(0, -0.3,
@@ -75,6 +116,7 @@ class _NumbercameraState extends State<Numbercamera> {
         onWillPop: () {
           if (controller.carnumberImageMemory.length > 1) {
             Get.back();
+            Env.CARNUMBER_CAMERA_RESHOOT_CHECK = false;
           }
           return Future(() => false);
         },

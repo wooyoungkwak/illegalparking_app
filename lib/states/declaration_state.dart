@@ -20,7 +20,7 @@ import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:popover/popover.dart';
-import 'package:sn_progress_dialog/sn_progress_dialog.dart';
+import 'package:lottie/lottie.dart';
 
 class Declaration extends StatefulWidget {
   const Declaration({super.key});
@@ -39,38 +39,114 @@ class _DeclarationState extends State<Declaration> {
   void initState() {
     super.initState();
     myFocusNode = FocusNode();
-    _numberplateContoroller = TextEditingController(text: "");
+    _numberplateContoroller = TextEditingController(text: controller.carNumber.isNotEmpty ? controller.carNumber.value : "");
 
     SchedulerBinding.instance.addPostFrameCallback((data) async {
-      ProgressDialog pd = ProgressDialog(context: context);
-      pd.show(max: 100, msg: Env.MSG_REPORT_LOADING_PROGRESSDIALOG, barrierDismissible: false);
-      try {
-        await getGPS();
-        sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
-          carNum = carNum.replaceAll('"', '');
-
-          if (carNum == null || carNum == "") {
-            _numberplateContoroller = TextEditingController(text: "인식실패");
-            controller.carNumberwrite("인식실패");
-          } else {
-            _numberplateContoroller = TextEditingController(text: carNum);
-            controller.carNumberwrite(carNum);
-          }
-
-          if (carNum.length > 10) {
-            carNum = "";
-          }
-
-          setState(() {});
-          Future.delayed(const Duration(milliseconds: 1000), () {
-            pd.close();
-          });
-        });
-      } catch (e) {
-        showSnackBar(context, "서버 에러");
-        pd.close();
-      }
+      // 테스트용으로 막아둠
+      _fetchData(context);
     });
+  }
+
+  void _fetchData(BuildContext context) async {
+    // show the loading dialog
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          return Dialog(
+            backgroundColor: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CustomText(
+                    weight: AppFontWeight.bold,
+                    text: Env.MSG_REPORT_LOADING_PROGRESSDIALOG,
+                    color: Colors.black,
+                    size: 20,
+                  ),
+                  // CircularProgressIndicator(),
+                  SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: Lottie.asset('assets/loading.json',
+                          fit: BoxFit.fill,
+                          delegates: LottieDelegates(
+                            text: (initialText) => '**$initialText**',
+                            values: [
+                              ValueDelegate.color(
+                                const ['Shape Layer 1', 'Rectangle', 'Fill 1'],
+                                value: Colors.red,
+                              ),
+                              ValueDelegate.opacity(
+                                const ['Shape Layer 1', 'Rectangle'],
+                                callback: (frameInfo) => (frameInfo.overallProgress * 100).round(),
+                              ),
+                              ValueDelegate.position(
+                                const ['Shape Layer 1', 'Rectangle', '**'],
+                                relative: const Offset(100, 200),
+                              ),
+                            ],
+                          ))),
+                  // SizedBox(width: 75, height: 75, child: Lottie.network('https://assets9.lottiefiles.com/packages/lf20_HmCBZ0IIXU.json', fit: BoxFit.fill)),
+                  // Some text
+                ],
+              ),
+            ),
+          );
+        });
+
+    try {
+      // 테스트용 주석처리 ai 업로드 막기
+      // if (Env.CARNUMBER_CAMERA_RESHOOT_CHECK == false && Env.CAR_CAMERA_RESHOOT_CHECK == false) {
+      //   await getGPS();
+      //   await sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
+      //     carNum = carNum.replaceAll('"', '');
+
+      //     if (carNum == null || carNum == "") {
+      //       _numberplateContoroller = TextEditingController(text: "인식실패");
+      //       controller.carNumberwrite("인식실패");
+      //     } else {
+      //       _numberplateContoroller = TextEditingController(text: carNum);
+      //       controller.carNumberwrite(carNum);
+      //     }
+
+      //     if (carNum.length > 10) {
+      //       carNum = "";
+      //     }
+      //   });
+      // } else if (Env.CARNUMBER_CAMERA_RESHOOT_CHECK == true && Env.CAR_CAMERA_RESHOOT_CHECK == false) {
+      //   await sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
+      //     carNum = carNum.replaceAll('"', '');
+
+      //     if (carNum == null || carNum == "") {
+      //       _numberplateContoroller = TextEditingController(text: "인식실패");
+      //       controller.carNumberwrite("인식실패");
+      //     } else {
+      //       _numberplateContoroller = TextEditingController(text: carNum);
+      //       controller.carNumberwrite(carNum);
+      //     }
+
+      //     if (carNum.length > 10) {
+      //       carNum = "";
+      //     }
+      //   });
+      // } else if (Env.CARNUMBER_CAMERA_RESHOOT_CHECK == false && Env.CAR_CAMERA_RESHOOT_CHECK == true) {
+      //   await getGPS();
+      // } else {
+      //   showSnackBar(context, "재촬영 체크 에러");
+      // }
+      Env.CAR_CAMERA_RESHOOT_CHECK = false;
+      Env.CARNUMBER_CAMERA_RESHOOT_CHECK = false;
+      setState(() {});
+      Future.delayed(const Duration(milliseconds: 1000), () {});
+    } catch (e) {
+      showSnackBar(context, "서버 에러");
+    }
+    await Future.delayed(const Duration(seconds: 1));
+    Get.back();
   }
 
   @override
@@ -118,27 +194,6 @@ class _DeclarationState extends State<Declaration> {
                         children: [
                           _initRowByData("차량번호", SizedBox(width: Env.MEDIA_SIZE_WIDTH! / 2.3, height: Env.MEDIA_SIZE_HEIGHT! / 20, child: _createTextFormField(_numberplateContoroller))),
                           const SizedBox(height: 5),
-                          // _initRowByData(
-                          //     "접수위치",
-                          //     SizedBox(
-                          //       width: Env.MEDIA_SIZE_WIDTH! / 2.3,
-                          //       child: GestureDetector(
-                          //         onTap: () {
-                          //           showPopover(
-                          //             context: context,
-                          //             bodyBuilder: (context) => Text("test"),
-                          //             onPop: () => print('Popover was popped!'),
-                          //             direction: PopoverDirection.bottom,
-                          //             width: 200,
-                          //             height: 400,
-                          //             arrowHeight: 15,
-                          //             arrowWidth: 30,
-                          //           );
-                          //         },
-                          //         child: Text(controller.imageGPS.value.address.length > 1 ? controller.imageGPS.value.address : "위치를 찾을 수 없습니다.",
-                          //             maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontFamily: "NotoSansKR", fontWeight: FontWeight.w400)),
-                          //       ),
-                          //     )),
                           Poptext(),
                           const SizedBox(
                             height: 5,
@@ -340,74 +395,76 @@ class _DeclarationState extends State<Declaration> {
 
   void _reportcamerabtn() {
     Get.to(const Reportcamera());
+    Env.CAR_CAMERA_RESHOOT_CHECK = true;
   }
 
   void _numbercamerabtn() {
-    controller.carNumberwrite("");
     Get.to(const Numbercamera());
+    Env.CARNUMBER_CAMERA_RESHOOT_CHECK = true;
   }
-//   void report(){
-//     sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
-//   controller.imageGPS.value.latitude, controller.imageGPS.value.longitude).then((reportInfo){
-//     if (!reportInfo.success) {
-//                       Env.REPORT_RESPONSE_MSG = reportInfo.message!;
-//                       if (Env.REPORT_RESPONSE_MSG!.contains("초과했습니다.")) {
-//                         alertDialogByonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
-//                         showAlertDialog(context,text: "해당 차량을 재신고를 하시겠습니까?",action:
-//                         );
-//                       } else {
-//                         pd.close();
-//                         Get.offAll(const Confirmation());
-//                       }
-//                     } else {
-//                       Env.REPORT_RESPONSE_MSG = reportInfo.data!;
-//                       pd.close();
-//                       Get.offAll(const Confirmation());
-//                     }
-
-//   });
-// }
 
   void _reportbtn() async {
     if (valuenullCheck()) {
-      ProgressDialog pd = ProgressDialog(context: context);
-      pd.show(max: 100, msg: Env.MSG_REPORT_ENDING_PROGRESSDIALOG, barrierDismissible: false);
+      _endData(context);
       await saveImageGallery();
-      try {
-        String text = _numberplateContoroller.text;
-        text = text.replaceAll(' ', '');
-        // Get.offAll(const Confirmation()); //테스트용
-
-        sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
-              if (result == false)
-                {Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR}
-              else
-                {
-                  sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
-                          controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
-                      .then((reportInfo) {
-                    if (!reportInfo.success) {
-                      Env.REPORT_RESPONSE_MSG = reportInfo.message!;
-                      if (Env.REPORT_RESPONSE_MSG!.contains("초과했습니다.")) {
-                        pd.close();
-                        showAlertDialog(context, text: Env.MSG_REPORT_DIALOG_SELECT, action: _reportbtn);
-                        alertDialogByonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
-                      } else {
-                        pd.close();
-                        Get.offAll(const Confirmation());
-                      }
-                    } else {
-                      Env.REPORT_RESPONSE_MSG = reportInfo.data!;
-                      pd.close();
-                      Get.offAll(const Confirmation());
-                    }
-                  })
-                }
-            });
-      } catch (e) {
-        Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR;
-      }
     }
+  }
+
+  void _endData(BuildContext context) async {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          return Dialog(
+            backgroundColor: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [CircularProgressIndicator()],
+              ),
+            ),
+          );
+        });
+
+    try {
+      String text = _numberplateContoroller.text;
+      text = text.replaceAll(' ', '');
+
+      // 신고하기 테스트용으로 막아뒀음...  나중에 주석해제
+      // sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
+      //       if (result == false)
+      //         {Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR}
+      //       else
+      //         {
+      //           sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
+      //                   controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
+      //               .then((reportInfo) {
+      //             if (!reportInfo.success) {
+      //               Env.REPORT_RESPONSE_MSG = reportInfo.message!;
+      //               if (Env.REPORT_RESPONSE_MSG!.contains("초과했습니다.")) {
+      //                 // pd.close();
+      //                 showAlertDialog(context, text: Env.MSG_REPORT_DIALOG_SELECT, action: _reportbtn);
+      //                 alertDialogByonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
+      //               } else {
+      //                 // pd.close();
+      //                 Get.offAll(const Confirmation());
+      //               }
+      //             } else {
+      //               Env.REPORT_RESPONSE_MSG = reportInfo.data!;
+      //               // pd.close();
+      //               Get.offAll(const Confirmation());
+      //             }
+      //           })
+      //         }
+      //     });
+    } catch (e) {
+      Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR;
+    }
+    await Future.delayed(const Duration(seconds: 1));
+
+    Get.back();
   }
 }
 
@@ -423,7 +480,9 @@ class Poptext extends StatelessWidget {
             width: Env.MEDIA_SIZE_WIDTH! / 2.3,
             child: GestureDetector(
               child: Text(controller.imageGPS.value.address.length > 1 ? controller.imageGPS.value.address : "위치를 찾을 수 없습니다.",
-                  maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontFamily: "NotoSansKR", fontWeight: FontWeight.w400)),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 15, fontFamily: "NotoSansKR", fontWeight: FontWeight.w400, decoration: TextDecoration.underline, color: AppColors.blue)),
               onTap: () {
                 showPopover(
                   context: context,

@@ -116,7 +116,7 @@ class Env {
 
   static const String MSG_REPORT_FILE_ERROR = "파일 전송에 실패했습니다.";
   static const String MSG_REPORT_DIALOG_SELECT = "신규로 신고를 진행 하시겠습니까?";
-  static const String MSG_REPORT_LOADING_PROGRESSDIALOG = "데이터를 생성중입니다.";
+  static const String MSG_REPORT_LOADING_PROGRESSDIALOG = "정보 수집중";
   static const String MSG_REPORT_ENDING_PROGRESSDIALOG = "신고를 처리중입니다.";
   static const String MSG_REPORT_RULE = "불법주정차 단속 구간에 따라 1분, 5분 이후 해당 차량에 대해 재신고가 기록되어야 과태료 대상 신고접수가 해당기관에 접수됩니다.";
   static const String MSG_REPORT_NOT_LOCATION = "위치를 찾을 수 없습니다.";
@@ -141,6 +141,8 @@ class Env {
   static const String TEXT_REPORT_RULE_4 = "·차량번호판 활영은 필수입니다.";
   static const String TEXT_REPORT_RULE_5 = "·노란색 실선 지역은 1분 이상 간격으로 신고가\n  한번 더 작성되어야 합니다.";
   static const String TEXT_REPORT_RULE_6 = "·노란색 점선 지역은 5분 이상 간격으로 신고가\n  한번 더 작성되어야 합니다.";
+  static bool CAR_CAMERA_RESHOOT_CHECK = false;
+  static bool CARNUMBER_CAMERA_RESHOOT_CHECK = false;
 
   static String? USER_PHONE_MODEL;
 

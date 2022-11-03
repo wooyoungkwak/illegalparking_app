@@ -57,8 +57,6 @@ dependencies:
   geolocator: ^9.0.2
   #GSP revers geocoding (위도 경도 > 주소)
   kakao_flutter_sdk: ^1.2.2 # 카카오전체 추가
-  #
-  sn_progress_dialog: ^1.0.8
   # 문자 인증 관련
   crypto: ^3.0.2
   # toast
@@ -72,6 +70,7 @@ dependencies:
   #앱아이콘
   flutter_launcher_icons: ^0.10.0
   device_info: ^2.0.3
+  lottie: ^1.4.3
 
 dev_dependencies:
   flutter_test:

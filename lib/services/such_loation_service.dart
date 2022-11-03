@@ -25,8 +25,8 @@ Future<void> getGPS() async {
   if (position.longitude > 1 || position.latitude > 1) {
     longitude = position.longitude;
     latitude = position.latitude;
-    controller.addresswrite(latitude: latitude, longitude: longitude, address: "TEST");
-    regeocoder(longitude, latitude).then((value) => controller.addresswrite(latitude: latitude, longitude: longitude, address: value));
+    // controller.addresswrite(latitude: latitude, longitude: longitude, address: "");
+    await regeocoder(longitude, latitude).then((value) => controller.addresswrite(latitude: latitude, longitude: longitude, address: value));
   } else {
     alertDialogByonebutton("알림", "GPS 위도경도 실패!");
     longitude = 0.0;
