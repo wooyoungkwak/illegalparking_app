@@ -101,7 +101,10 @@ class _WebviewPageState extends State<WebviewPage> {
       backgroundColor: Colors.transparent,
       context: context,
       builder: buildBottomSheet,
-    );
+    ).closed.whenComplete(() {
+      loginController.offBottomNav();
+      _webViewController.runJavascript("appToEvent('bottomSheet', 1234)");
+    });
   }
 
   Widget buildBottomSheet(BuildContext context) {
