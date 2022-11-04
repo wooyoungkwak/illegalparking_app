@@ -23,14 +23,15 @@ class _MyPagePointState extends State<MyPagePoint> {
   final loginController = Get.put(LoginController());
   final myPageController = Get.put(MyPageController());
 
+  final refreshKey = GlobalKey<RefreshIndicatorState>();
+
   late Future<PointListInfo> requestInfo;
 
   List<dynamic> pointInfoList = [];
   List<dynamic> productList = [];
 
-  @override
-  void initState() {
-    super.initState();
+  void _initInfo() {
+    pointInfoList = [];
     requestInfo = requestPoint(Env.USER_SEQ!);
     requestInfo.then((pointListInfo) {
       setState(() {
@@ -39,6 +40,12 @@ class _MyPagePointState extends State<MyPagePoint> {
         }
       });
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initInfo();
   }
 
   @override
@@ -75,82 +82,109 @@ class _MyPagePointState extends State<MyPagePoint> {
             text: "내포인트",
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              // 현재 포인트
-              createMypageContainer(
-                widgetList: <Widget>[
-                  createCustomText(
-                    weight: AppFontWeight.bold,
-                    size: 16.0,
-                    text: "현재 나의 포인트",
-                  ),
-                  const Spacer(),
-                  Obx(
-                    () => createCustomText(
-                      right: 0.0,
+        body: RefreshIndicator(
+          key: refreshKey,
+          onRefresh: () async {
+            Log.debug("Refresh");
+            _initInfo();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                // 현재 포인트
+                createMypageContainer(
+                  widgetList: <Widget>[
+                    createCustomText(
+                      weight: AppFontWeight.bold,
+                      size: 16.0,
+                      text: "현재 나의 포인트",
+                    ),
+                    const Spacer(),
+                    Obx(
+                      () => createCustomText(
+                        right: 0.0,
+                        weight: AppFontWeight.semiBold,
+                        size: 26,
+                        text: myPageController.currentPoint.value.toString(),
+                      ),
+                    ),
+                    createCustomText(
+                      top: 16,
+                      bottom: 4.0,
+                      left: 0.0,
                       weight: AppFontWeight.semiBold,
-                      size: 26,
-                      text: myPageController.currentPoint.value.toString(),
+                      size: 12,
+                      text: "P",
                     ),
-                  ),
-                  createCustomText(
-                    top: 16,
-                    bottom: 4.0,
-                    left: 0.0,
-                    weight: AppFontWeight.semiBold,
-                    size: 12,
-                    text: "P",
-                  ),
-                ],
-              ),
-              createMypageContainer(
-                route: () {
-                  requestProductList(Env.USER_SEQ!).then((productListInfo) {
-                    _showPointDialog(productListInfo);
-                    Log.debug("${productListInfo.productInfos[0].toJson()}");
-                  });
-                },
-                widgetList: <Widget>[
-                  createCustomText(
-                    weight: AppFontWeight.bold,
-                    size: 16.0,
-                    text: "포인트 사용하기",
-                  ),
-                  const Spacer(),
-                  chevronRight(),
-                ],
-              ),
-              FutureBuilder(
-                future: requestInfo,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return _initPointListByContainer();
-                  } else if (snapshot.hasError) {
-                    showErrorToast(text: "데이터를 가져오는데 실패하였습니다.");
-                  }
-                  return Container(
-                    padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(18.0),
+                  ],
+                ),
+                createMypageContainer(
+                  route: () {
+                    requestProductList(Env.USER_SEQ!).then((productListInfo) {
+                      _showPointDialog(productListInfo);
+                      Log.debug("${productListInfo.productInfos[0].toJson()}");
+                    });
+                  },
+                  widgetList: <Widget>[
+                    createCustomText(
+                      weight: AppFontWeight.bold,
+                      size: 16.0,
+                      text: "포인트 사용하기",
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        createCustomText(color: AppColors.black, text: "로딩중..."),
-                        const CircularProgressIndicator(
-                          color: AppColors.black,
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
+                    const Spacer(),
+                    chevronRight(),
+                  ],
+                ),
+                FutureBuilder(
+                  future: requestInfo,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return pointInfoList.isNotEmpty
+                          ? _initPointListByContainer()
+                          : Container(
+                              height: MediaQuery.of(context).size.height - 404,
+                              margin: const EdgeInsets.only(top: 4.0),
+                              decoration: const BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: BorderRadius.all(Radius.circular(18)),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  createCustomText(
+                                    color: AppColors.textGrey,
+                                    size: 16.0,
+                                    text: "포인트 이력이 없습니다.",
+                                  ),
+                                ],
+                              ),
+                            );
+                    } else if (snapshot.hasError) {
+                      showErrorToast(text: "데이터를 가져오는데 실패하였습니다.");
+                    }
+                    return Container(
+                      height: MediaQuery.of(context).size.height - 404,
+                      margin: const EdgeInsets.only(top: 4.0),
+                      decoration: const BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(18)),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          createCustomText(color: AppColors.black, text: "로딩중..."),
+                          const CircularProgressIndicator(
+                            color: AppColors.black,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -561,11 +595,12 @@ class _MyPagePointState extends State<MyPagePoint> {
                                   (productBuyInfo) {
                                     if (productBuyInfo.success) {
                                       // 등록 알림 메시지
-                                      Log.debug(productBuyInfo.data);
                                       myPageController.setCurrentPotin(balancePointValue);
+                                      Get.back();
+                                      showImageDialog(context: context, title: "${productInfo.brandType} ${productInfo.productName}", thumbnail: productInfo.thumbnail);
                                     } else {
                                       // 실패 알림 메시지
-                                      Log.debug(productBuyInfo.message);
+                                      showErrorToast(text: productBuyInfo.message);
                                     }
                                   },
                                 );
@@ -577,6 +612,66 @@ class _MyPagePointState extends State<MyPagePoint> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  showImageDialog({required BuildContext context, String? title, String? thumbnail}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        child: Stack(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(left: 20.0, top: 30.0 + 30.0, right: 20.0, bottom: 20.0),
+              margin: const EdgeInsets.only(top: 20.0),
+              width: MediaQuery.of(context).size.width - 100,
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8.0),
+                boxShadow: const [
+                  BoxShadow(color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  createCustomText(
+                    size: 22.0,
+                    weight: AppFontWeight.semiBold,
+                    text: title!,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  createCustomText(
+                    color: AppColors.textGrey,
+                    text: "상품 신청이 완료되었습니다.",
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              left: 20.0,
+              right: 20.0,
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 45,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(45)),
+                  child: Image.network("${Env.FILE_SERVER_URL}$thumbnail"),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

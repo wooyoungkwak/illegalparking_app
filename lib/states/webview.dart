@@ -68,7 +68,7 @@ class _WebviewPageState extends State<WebviewPage> {
   void dispose() {
     super.dispose();
     timer!.cancel();
-    _webViewController.clearCache();
+    // _webViewController.clearCache();
   }
 
   @override
@@ -236,10 +236,9 @@ class _WebviewPageState extends State<WebviewPage> {
       JavascriptChannel(
           name: 'webToApp',
           onMessageReceived: (message) {
-
             Log.debug(">>>>>>>>>>>>>>>>>>  ${message.message} ");
 
-            if ( message.message == '"click"' ) {
+            if (message.message == '"click"') {
               clicked = message.message.replaceAll('"', '');
             } else {
               clicked = null;
@@ -399,7 +398,8 @@ class _WebviewPageState extends State<WebviewPage> {
     Log.debug("네이버지도");
     if (Platform.isIOS) {
       Log.debug("ios");
-      Uri navermap = Uri.parse("nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=$parkingName");
+      Uri navermap = Uri.parse(
+          "nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=$parkingName");
       if (await canLaunchUrl(navermap)) {
         await launchUrl(navermap);
       } else {
@@ -417,7 +417,8 @@ class _WebviewPageState extends State<WebviewPage> {
       // }
     } else if (Platform.isAndroid) {
       Log.debug("Android");
-      Uri navermap = Uri.parse("nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=$parkingName");
+      Uri navermap = Uri.parse(
+          "nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=$parkingName");
       try {
         //nmap 은 canlaunchUrl 안되고  try ~ catch 만 된다
         await launchUrl(navermap);

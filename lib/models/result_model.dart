@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 
 LoginInfo resultInfoFromJson(String str) => LoginInfo.fromJson(json.decode(str));
 
@@ -279,6 +280,7 @@ class ProductInfo {
   String thumbnail;
 
   static ProductInfo fromJson(Map<String, dynamic> json) {
+    Log.debug("thumbnail : ${json['thumbnail']}");
     return ProductInfo(json["productSeq"], json["brandType"], json["productName"], json["pointValue"], json["thumbnail"]);
   }
 

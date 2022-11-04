@@ -18,19 +18,25 @@ class MyPageReport extends StatefulWidget {
 
 class _MyPageReportState extends State<MyPageReport> {
   final loginController = Get.put(LoginController());
+  final refreshKey = GlobalKey<RefreshIndicatorState>();
+
   late Future<ReportHistoryInfo> requestInfo;
 
   List<dynamic> reportHistoryList = [];
 
-  @override
-  void initState() {
-    super.initState();
+  void _initInfo() {
     requestInfo = requestReportHistory(Env.USER_SEQ!);
     requestInfo.then((reportHistoryInfo) {
       setState(() {
         reportHistoryList = reportHistoryInfo.reportResultInfos;
       });
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initInfo();
   }
 
   @override
@@ -67,68 +73,97 @@ class _MyPageReportState extends State<MyPageReport> {
             text: "신고이력",
           ),
         ),
-        body: ListView(
-          shrinkWrap: true,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
-              child: createMypageContainer(
-                widgetList: <Widget>[
-                  createCustomText(
-                    weight: AppFontWeight.bold,
-                    size: 16.0,
-                    text: "나의 신고이력",
-                  ),
-                  const Spacer(),
-                  createCustomText(
-                    right: 0.0,
-                    weight: AppFontWeight.semiBold,
-                    size: 26,
-                    text: "${reportHistoryList.length}",
-                  ),
-                  createCustomText(
-                    top: 16,
-                    left: 0.0,
-                    weight: AppFontWeight.semiBold,
-                    size: 12,
-                    text: "건",
-                  ),
-                ],
+        body: RefreshIndicator(
+          key: refreshKey,
+          onRefresh: () async {
+            _initInfo();
+          },
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 4.0, left: 16.0, right: 16.0),
+                child: createMypageContainer(
+                  widgetList: <Widget>[
+                    createCustomText(
+                      weight: AppFontWeight.bold,
+                      size: 16.0,
+                      text: "나의 신고이력",
+                    ),
+                    const Spacer(),
+                    createCustomText(
+                      right: 0.0,
+                      weight: AppFontWeight.semiBold,
+                      size: 26,
+                      text: "${reportHistoryList.length}",
+                    ),
+                    createCustomText(
+                      top: 16,
+                      left: 0.0,
+                      weight: AppFontWeight.semiBold,
+                      size: 12,
+                      text: "건",
+                    ),
+                  ],
+                ),
               ),
-            ),
-            FutureBuilder(
-              future: requestInfo,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
+              FutureBuilder(
+                future: requestInfo,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return reportHistoryList.isNotEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0, left: 16.0, right: 16.0),
+                            child: _createReportList(context, reportHistoryList),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0, left: 16.0, right: 16.0),
+                            child: Container(
+                              height: MediaQuery.of(context).size.height - 290,
+                              padding: const EdgeInsets.only(top: 8.0, bottom: 16.0, left: 8.0, right: 8.0),
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: BorderRadius.circular(18.0),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  createCustomText(
+                                    color: AppColors.textGrey,
+                                    size: 16.0,
+                                    text: "신고 이력이 없습니다.",
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                  } else if (snapshot.hasError) {
+                    showErrorToast(text: "데이터를 가져오는데 실패하였습니다.");
+                  }
                   return Padding(
-                    padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
-                    child: _createReportList(context, reportHistoryList),
+                    padding: const EdgeInsets.only(bottom: 8.0, left: 16.0, right: 16.0),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height - 290,
+                      padding: const EdgeInsets.only(top: 8.0, bottom: 16.0, left: 8.0, right: 8.0),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          createCustomText(color: AppColors.black, text: "로딩중..."),
+                          const CircularProgressIndicator(
+                            color: AppColors.black,
+                          ),
+                        ],
+                      ),
+                    ),
                   );
-                } else if (snapshot.hasError) {
-                  showErrorToast(text: "데이터를 가져오는데 실패하였습니다.");
-                }
-                return Padding(
-                  padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 8.0, bottom: 16.0, left: 8.0, right: 8.0),
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        createCustomText(color: AppColors.black, text: "로딩중..."),
-                        const CircularProgressIndicator(
-                          color: AppColors.black,
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

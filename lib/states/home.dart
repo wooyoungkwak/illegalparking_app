@@ -20,7 +20,7 @@ class _HomeState extends State<Home> {
     if (Env.USER_PHONE_MODEL == "iPhone XR") {
       return 94.0;
     } else {
-      return 70.0;
+      return 105.0;
     }
   }
 

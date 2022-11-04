@@ -45,9 +45,9 @@ Icon chevronLeft() {
 BoxConstraints addrTextWidthLimit(String state, BuildContext context) {
   double appWidthSize = MediaQuery.of(context).size.width;
   if (state.length > 5) {
-    return BoxConstraints(maxWidth: appWidthSize - 220); // 5글자 : 216, 4글자 : 196,
+    return BoxConstraints(maxWidth: appWidthSize - 225); // 5글자 : 216, 4글자 : 196,
   }
-  return BoxConstraints(maxWidth: appWidthSize - 200);
+  return BoxConstraints(maxWidth: appWidthSize - 205);
 }
 
 // 차종별 이미지

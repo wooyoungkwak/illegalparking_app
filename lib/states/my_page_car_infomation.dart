@@ -22,20 +22,26 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
   final loginController = Get.put(LoginController());
   final myPageController = Get.put(MyPageController());
 
+  final refreshKey = GlobalKey<RefreshIndicatorState>();
+
   late Future<AlarmHistoryListInfo> requestInfo;
 
   bool checkedAlram = Env.USER_CAR_ALARM ?? false;
   List<dynamic> alarmInfoList = [];
 
-  @override
-  void initState() {
-    super.initState();
+  void _initInfo() {
     requestInfo = requestAlarmHistory(Env.USER_SEQ!, Env.USER_CAR_NUMBER!);
     requestInfo.then((alarmHistoryListInfo) {
       setState(() {
         alarmInfoList = alarmHistoryListInfo.alarmHistoryInfos!;
       });
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initInfo();
   }
 
   @override
@@ -72,178 +78,204 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
             text: "내차정보",
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ListView(
-            children: [
-              // 차량정보
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Stack(
-                  children: [
-                    Container(
-                      height: 230,
-                      decoration: BoxDecoration(
-                        color: AppColors.carRegistBackground,
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                    ),
-                    Positioned(
-                      top: 85,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width - 32,
-                        height: 145,
+        body: RefreshIndicator(
+          key: refreshKey,
+          onRefresh: () async {
+            _initInfo();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ListView(
+              children: [
+                // 차량정보
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 230,
                         decoration: BoxDecoration(
-                          color: AppColors.white,
+                          color: AppColors.carRegistBackground,
                           borderRadius: BorderRadius.circular(18.0),
                         ),
                       ),
-                    ),
-                    Material(
-                      type: MaterialType.transparency,
-                      borderRadius: BorderRadius.circular(18.0),
-                      child: Ink(
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(18.0),
-                          onTap: () {
-                            loginController.changeRealPage(5);
-                          },
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(minHeight: 230),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                              child: Row(
-                                children: [
-                                  const Spacer(),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Image(
-                                          image: carGradeImage(myPageController.carLevel),
-                                          height: 80,
-                                          width: 160,
-                                        ),
-                                        createCustomText(
-                                          padding: 0.0,
-                                          weight: AppFontWeight.semiBold,
-                                          size: 12,
-                                          text: Env.USER_CAR_NAME,
-                                        ),
-                                        createCustomText(
-                                          padding: 0.0,
-                                          weight: AppFontWeight.bold,
-                                          size: 24,
-                                          text: Env.USER_CAR_NUMBER,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            createCustomText(
-                                              right: 0.0,
-                                              text: "내차번호 신고발생 시 바로 알림",
-                                            ),
-                                            Switch(
-                                              activeColor: AppColors.blue,
-                                              value: checkedAlram,
-                                              onChanged: (value) {
-                                                requestMyCarAlarm(Env.USER_SEQ!, Env.USER_CAR_NUMBER!, value).then(
-                                                  (defaultInfo) {
-                                                    if (defaultInfo.success) {
-                                                      setState(() {
-                                                        checkedAlram = value;
-                                                      });
-                                                      showToast(text: "알람 설정이 설정되었습니다.");
-                                                    } else {
-                                                      Log.debug("${defaultInfo.message}");
-                                                      showErrorToast(text: "알람 설정에 실패하였습니다.");
-                                                    }
-                                                  },
-                                                );
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                      Positioned(
+                        top: 85,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width - 32,
+                          height: 145,
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                        ),
+                      ),
+                      Material(
+                        type: MaterialType.transparency,
+                        borderRadius: BorderRadius.circular(18.0),
+                        child: Ink(
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(18.0),
+                            onTap: () {
+                              loginController.changeRealPage(5);
+                            },
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(minHeight: 230),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                                child: Row(
+                                  children: [
+                                    const Spacer(),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: [
+                                          Image(
+                                            image: carGradeImage(myPageController.carLevel),
+                                            height: 80,
+                                            width: 160,
+                                          ),
+                                          createCustomText(
+                                            padding: 0.0,
+                                            weight: AppFontWeight.semiBold,
+                                            size: 12,
+                                            text: Env.USER_CAR_NAME,
+                                          ),
+                                          createCustomText(
+                                            padding: 0.0,
+                                            weight: AppFontWeight.bold,
+                                            size: 24,
+                                            text: Env.USER_CAR_NUMBER,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              createCustomText(
+                                                right: 0.0,
+                                                text: "내차번호 신고발생 시 바로 알림",
+                                              ),
+                                              Switch(
+                                                activeColor: AppColors.blue,
+                                                value: checkedAlram,
+                                                onChanged: (value) {
+                                                  requestMyCarAlarm(Env.USER_SEQ!, Env.USER_CAR_NUMBER!, value).then(
+                                                    (defaultInfo) {
+                                                      if (defaultInfo.success) {
+                                                        setState(() {
+                                                          checkedAlram = value;
+                                                        });
+                                                        showToast(text: "알람 설정이 설정되었습니다.");
+                                                      } else {
+                                                        Log.debug("${defaultInfo.message}");
+                                                        showErrorToast(text: "알람 설정에 실패하였습니다.");
+                                                      }
+                                                    },
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  const Spacer(),
-                                ],
+                                    const Spacer(),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
 
-                    // 인증 마크
-                    Positioned(
-                      left: 20,
-                      child: Container(
-                        height: 80,
-                        width: 48,
-                        decoration: const BoxDecoration(
-                          color: AppColors.blue,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
+                      // 인증 마크
+                      Positioned(
+                        left: 20,
+                        child: Container(
+                          height: 80,
+                          width: 48,
+                          decoration: const BoxDecoration(
+                            color: AppColors.blue,
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              createCustomText(
+                                weight: AppFontWeight.semiBold,
+                                text: "인증\n완료",
+                                color: AppColors.white,
+                              ),
+                            ],
                           ),
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            createCustomText(
-                              weight: AppFontWeight.semiBold,
-                              text: "인증\n완료",
-                              color: AppColors.white,
-                            ),
-                          ],
-                        ),
                       ),
-                    ),
-                    const Positioned(
-                      top: 4,
-                      left: 32,
-                      child: Icon(Icons.gpp_good, color: AppColors.passIcon),
-                    )
-                  ],
+                      const Positioned(
+                        top: 4,
+                        left: 32,
+                        child: Icon(Icons.gpp_good, color: AppColors.passIcon),
+                      )
+                    ],
+                  ),
                 ),
-              ),
 
-              // 차량추가 버튼
-              createElevatedButton(
-                color: AppColors.white,
-                textColors: AppColors.black,
-                text: "차량 추가",
-                function: () {},
-              ),
-              // 신고된 내용 리스트
-              FutureBuilder(
-                future: requestInfo,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return _createAlarmHistorytList(context, alarmInfoList);
-                  } else if (snapshot.hasError) {
-                    showErrorToast(text: "데이터를 가져오는데 실패하였습니다.");
-                  }
-                  return Container(
-                    padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        createCustomText(color: AppColors.black, text: "로딩중..."),
-                        const CircularProgressIndicator(color: AppColors.black),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
+                // 차량추가 버튼
+                createElevatedButton(
+                  color: AppColors.white,
+                  textColors: AppColors.black,
+                  text: "차량 추가",
+                  function: () {},
+                ),
+                // 신고된 내용 리스트
+                FutureBuilder(
+                  future: requestInfo,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return alarmInfoList.isNotEmpty
+                          ? _createAlarmHistorytList(context, alarmInfoList)
+                          : Container(
+                              height: MediaQuery.of(context).size.height - 474,
+                              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: BorderRadius.circular(18.0),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  createCustomText(
+                                    color: AppColors.textGrey,
+                                    size: 16.0,
+                                    text: "신고 이력이 없습니다.",
+                                  ),
+                                ],
+                              ),
+                            );
+                    } else if (snapshot.hasError) {
+                      showErrorToast(text: "데이터를 가져오는데 실패하였습니다.");
+                    }
+                    return Container(
+                      height: MediaQuery.of(context).size.height - 474,
+                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          createCustomText(color: AppColors.black, text: "로딩중..."),
+                          const CircularProgressIndicator(color: AppColors.black),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -22,6 +22,8 @@ class _MyPageState extends State<MyPage> {
   final myPagecontroller = Get.put(MyPageController());
   final loginController = Get.put(LoginController());
 
+  final refreshKey = GlobalKey<RefreshIndicatorState>();
+
   late List<NoticeInfo> noticeList = [];
   late String carName;
   late String carLevel = myPagecontroller.carLevel;
@@ -30,10 +32,7 @@ class _MyPageState extends State<MyPage> {
   late String currentPoint = "0";
   late Future<MyPageInfo> requestInfo;
 
-  @override
-  void initState() {
-    super.initState();
-
+  void _initInfo() {
     requestInfo = requestMyPage(Env.USER_SEQ!);
     requestInfo.then((myPageInfo) {
       myPagecontroller.setCarLevel(myPageInfo.carLevel);
@@ -59,32 +58,44 @@ class _MyPageState extends State<MyPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _initInfo();
+  }
+
+  @override
   void dispose() {
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<MyPageInfo>(
-      future: requestInfo,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return _initBodyByContainer();
-        } else if (snapshot.hasError) {
-          showErrorToast(text: "데이터를 가져오는데 실패하였습니다.");
-        }
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              createCustomText(color: AppColors.white, text: "로딩중..."),
-              const CircularProgressIndicator(
-                color: AppColors.white,
-              ),
-            ],
-          ),
-        );
+    return RefreshIndicator(
+      key: refreshKey,
+      onRefresh: () async {
+        _initInfo();
       },
+      child: FutureBuilder<MyPageInfo>(
+        future: requestInfo,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return _initBodyByContainer();
+          } else if (snapshot.hasError) {
+            showErrorToast(text: "데이터를 가져오는데 실패하였습니다.");
+          }
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                createCustomText(color: AppColors.white, text: "로딩중..."),
+                const CircularProgressIndicator(
+                  color: AppColors.white,
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -405,6 +416,16 @@ class _MyPageState extends State<MyPage> {
                                 createCustomText(
                                   top: 16.0,
                                   left: 24.0,
+                                  right: noticeList[index].noticeType == "공지" ? 4.0 : 0.0,
+                                  bottom: 4.0,
+                                  weight: AppFontWeight.semiBold,
+                                  color: AppColors.blue,
+                                  size: 16.0,
+                                  text: noticeList[index].noticeType == "공지" ? noticeList[index].noticeType : null,
+                                ),
+                                createCustomText(
+                                  top: 16.0,
+                                  left: 0.0,
                                   right: 24.0,
                                   bottom: 4.0,
                                   weight: AppFontWeight.semiBold,
@@ -611,16 +632,29 @@ class _MyPageState extends State<MyPage> {
                                 Row(
                                   children: [
                                     createCustomText(
-                                      bottom: 0.0,
+                                      top: 16.0,
+                                      left: 8.0,
+                                      right: noticeList[index].noticeType == "공지" ? 4.0 : 0.0,
+                                      bottom: 4.0,
                                       weight: AppFontWeight.semiBold,
-                                      size: 16,
-                                      text: noticeList[noticeIndex].subject,
+                                      color: AppColors.blue,
+                                      size: 16.0,
+                                      text: noticeList[index].noticeType == "공지" ? noticeList[index].noticeType : null,
+                                    ),
+                                    createCustomText(
+                                      top: 16.0,
+                                      left: 0.0,
+                                      right: 24.0,
+                                      bottom: 4.0,
+                                      weight: AppFontWeight.semiBold,
+                                      size: 16.0,
+                                      text: noticeList[index].subject,
                                     ),
                                   ],
                                 ),
                                 createCustomText(
                                   top: 0.0,
-                                  left: 16.0,
+                                  left: 8.0,
                                   weight: AppFontWeight.regular,
                                   color: AppColors.textGrey,
                                   text: noticeList[noticeIndex].regDt,
