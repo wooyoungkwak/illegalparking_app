@@ -117,7 +117,7 @@ class Env {
   static const String MSG_REPORT_FILE_ERROR = "파일 전송에 실패했습니다.";
   static const String MSG_REPORT_DIALOG_SELECT = "신규로 신고를 진행 하시겠습니까?";
   static const String MSG_REPORT_LOADING_PROGRESSDIALOG = "정보 수집중";
-  static const String MSG_REPORT_ENDING_PROGRESSDIALOG = "신고를 처리중입니다.";
+  static const String MSG_REPORT_ENDING_PROGRESSDIALOG = "신고를 처리중";
   static const String MSG_REPORT_RULE = "불법주정차 단속 구간에 따라 1분, 5분 이후 해당 차량에 대해 재신고가 기록되어야 과태료 대상 신고접수가 해당기관에 접수됩니다.";
   static const String MSG_REPORT_NOT_LOCATION = "위치를 찾을 수 없습니다.";
   static const String MSG_REPORT_NOT_USER = "사용자 정보를 찾을 수 없습니다.";

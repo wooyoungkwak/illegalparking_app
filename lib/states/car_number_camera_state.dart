@@ -1,11 +1,15 @@
 import 'package:flutter/scheduler.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/config/style.dart';
+import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
+import 'package:illegalparking_app/states/home.dart';
 import 'package:illegalparking_app/states/widgets/crop.dart';
 import 'package:illegalparking_app/states/declaration_state.dart';
 import 'package:flutter/material.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
+import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
 import 'package:get/get.dart';
@@ -19,6 +23,7 @@ class Numbercamera extends StatefulWidget {
 
 class _NumbercameraState extends State<Numbercamera> {
   final ReportController controller = Get.put(ReportController());
+  final loginController = Get.put(LoginController());
   @override
   void initState() {
     super.initState();
@@ -35,28 +40,38 @@ class _NumbercameraState extends State<Numbercamera> {
         context: context,
         builder: (_) {
           return Dialog(
-            backgroundColor: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+              backgroundColor: Colors.transparent,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CircularProgressIndicator(
-                    color: AppColors.black,
+                children: [
+                  createCustomText(color: AppColors.white, text: "로딩중..."),
+                  const CircularProgressIndicator(
+                    color: AppColors.white,
                   ),
-                  SizedBox(width: 15),
-                  CustomText(
-                    weight: AppFontWeight.bold,
-                    text: "로딩중",
-                    color: Colors.black,
-                    size: 20,
-                  ),
-                  // SizedBox(width: 50, height: 100, child: Lottie.asset('assets/loading_black.json', fit: BoxFit.fill)),
                 ],
-              ),
-            ),
-          );
+              )
+              // child: Padding(
+              //     padding: const EdgeInsets.symmetric(vertical: 20),
+
+              //     child: Row(
+              //       mainAxisSize: MainAxisSize.min,
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: const [
+              //         CircularProgressIndicator(
+              //           color: AppColors.black,
+              //         ),
+              //         SizedBox(width: 15),
+              //         CustomText(
+              //           weight: AppFontWeight.bold,
+              //           text: "로딩중",
+              //           color: Colors.black,
+              //           size: 20,
+              //         ),
+              //         // SizedBox(width: 50, height: 100, child: Lottie.asset('assets/loading_black.json', fit: BoxFit.fill)),
+              //       ],
+              //     ),
+              //     ),
+              );
         });
     await Future.delayed(const Duration(seconds: 1));
     Get.back();
@@ -87,6 +102,7 @@ class _NumbercameraState extends State<Numbercamera> {
                 controller.carNumberwrite("");
                 Get.offAll(() => const Declaration());
               }),
+          CreateContainerByAlignment(-0.8, -0.9, createContainerByTopWidget(color: AppColors.white, function: backbtn)),
           CreateContainerByAlignment(0, -0.3,
               DefaultTextStyle(style: Theme.of(context).textTheme.headline1!, child: const CustomText(text: "번호판을 네모영역 안에서 촬영해주세요", weight: AppFontWeight.regular, size: 14, color: AppColors.white))),
           CreateContainerByAlignment(
@@ -138,5 +154,15 @@ class _NumbercameraState extends State<Numbercamera> {
             )),
       ),
     );
+  }
+
+  void backbtn() {
+    alertDialogByGetxtobutton("신고를 취소하시겠습니까?", gotohome);
+  }
+
+  gotohome() {
+    controller.initialize();
+    Get.offAll(const Home());
+    loginController.changePage(0);
   }
 }

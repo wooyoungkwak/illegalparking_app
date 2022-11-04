@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:illegalparking_app/config/style.dart';
+import 'package:illegalparking_app/states/widgets/custom_text.dart';
 
 void showToast({String? text}) {
   Fluttertoast.showToast(
@@ -89,19 +91,59 @@ showCustomDialog({required BuildContext context, String? title, Widget? widget})
   );
 }
 
-void alertDialogByonebutton(String title, String text) {
+void alertDialogByGetxonebutton(String title, String text) {
   Get.dialog(
     AlertDialog(
-      title: Text(title),
-      content: Text(text),
+      title: CustomText(
+        text: title,
+        color: AppColors.black,
+      ),
+      content: CustomText(text: text, color: AppColors.black),
       actions: [
         TextButton(
-          child: const Text("확인"),
+          child: const CustomText(text: "확인", color: AppColors.black),
           onPressed: () => Get.back(),
         ),
       ],
     ),
   );
+}
+
+void alertDialogByGetxtobutton(String text, dynamic function) {
+  Get.dialog(AlertDialog(
+    title: CustomText(
+      text: "알림",
+      color: AppColors.black,
+    ),
+    content: CustomText(
+      weight: AppFontWeight.regular,
+      text: text,
+      color: AppColors.black,
+    ),
+    actions: [
+      TextButton(
+        child: CustomText(
+          weight: AppFontWeight.semiBold,
+          color: AppColors.blue,
+          text: "확인",
+        ),
+        onPressed: function,
+        // () {
+        //   controller.initialize();
+        //   Get.offAll(const Home());
+        //   loginController.changePage(2);
+        // },
+      ),
+      TextButton(
+        child: CustomText(
+          weight: AppFontWeight.semiBold,
+          color: AppColors.blue,
+          text: "취소",
+        ),
+        onPressed: () => Get.back(),
+      ),
+    ],
+  ));
 }
 
 // //노티알람 종류 선택, iOS같은 경우에는 사운드랑 진동이 하나로 묶여있다...
