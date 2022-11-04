@@ -56,7 +56,8 @@ class _HomeState extends State<Home> {
           backgroundColor: loginController.isGuestMode ? AppColors.white : AppColors.appBackground,
           body: loginController.currentPages,
           bottomNavigationBar: Container(
-            height: _initBottomHeight(),
+            // height: _initBottomHeight(),
+            height: 105.0,
             decoration: BoxDecoration(
                 color: Colors.grey,
                 border: Border.all(color: Colors.grey, width: 1),
