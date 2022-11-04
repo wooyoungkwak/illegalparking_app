@@ -36,6 +36,7 @@ class _WebviewPageState extends State<WebviewPage> {
 
   Timer? timer;
 
+  String oldDataType = "";
   String mapInfoType = "parking";
   String parkingName = "";
   String parkingAddress = "";
@@ -103,7 +104,14 @@ class _WebviewPageState extends State<WebviewPage> {
       builder: buildBottomSheet,
     ).closed.whenComplete(() {
       loginController.offBottomNav();
-      _webViewController.runJavascript("appToEvent('bottomSheet', 1234)");
+      // _webViewController.runJavascript("appToEvent('bottomSheet', 1234)");
+      if (oldDataType != mapController.resivedDatatype) {
+        _webViewController.runJavascript("appToEvent('bottomSheet', 1234)").then((value) {
+          setState(() {
+            oldDataType = mapController.resivedDatatype;
+          });
+        });
+      }
     });
   }
 
@@ -223,7 +231,10 @@ class _WebviewPageState extends State<WebviewPage> {
       JavascriptChannel(
           name: 'webToApp',
           onMessageReceived: (message) {
-            if (jsonDecode(message.message).runtimeType.toString() != "String") {
+            String resivedDataType = jsonDecode(message.message).runtimeType.toString();
+            mapController.setDataType(resivedDataType);
+
+            if (resivedDataType != "String") {
               Map<String, dynamic> resultMap = jsonDecode(message.message);
               MapInfo mapInfo = MapInfo.fromJson(resultMap);
 
@@ -250,7 +261,7 @@ class _WebviewPageState extends State<WebviewPage> {
                 setState(() {
                   personalMobName = mapInfo.getPmName();
                   personalMobModel = mapInfo.getPmModel();
-                  personalMobPrice = mapInfo.getPmPrice();
+                  personalMobPrice = mapInfo.getPmPrice().toString();
                   personalMobOper = mapInfo.getPmOper();
                 });
               } else {
@@ -269,7 +280,6 @@ class _WebviewPageState extends State<WebviewPage> {
                 });
               }
 
-              mapController.getClickedMap(true);
               showBottomDialog();
             } else {
               closeBottomNav();

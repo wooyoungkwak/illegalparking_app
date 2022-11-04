@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 
 class MapController extends GetxController {
-  String _testText = "Web View Test"; // 이 아이는 무조건 상태관리자로 관리해야된다.;;
-  String get testText => _testText;
+  String _resivedDatatype = "Web View Test"; // 이 아이는 무조건 상태관리자로 관리해야된다.;;
+  String get resivedDatatype => _resivedDatatype;
   double _latitude = 0.0;
   double get latitude => _latitude;
   double _longitude = 0.0;
@@ -11,8 +11,8 @@ class MapController extends GetxController {
   bool _clickedMap = true;
   bool get clickedMap => _clickedMap;
 
-  void getTestText(String? value) {
-    _testText = value ?? "";
+  void setDataType(String? value) {
+    _resivedDatatype = value ?? "";
     update();
   }
 

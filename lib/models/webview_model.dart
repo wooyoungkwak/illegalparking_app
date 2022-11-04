@@ -41,7 +41,7 @@ class MapInfo {
     return data!["pmName"];
   }
 
-  String getPmPrice() {
+  int getPmPrice() {
     return data!["pmPrice"];
   }
 

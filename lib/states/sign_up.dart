@@ -147,7 +147,11 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
           ),
-          title: createCustomText(text: "회원가입"),
+          title: createCustomText(
+            weight: AppFontWeight.bold,
+            size: 16,
+            text: "회원가입",
+          ),
         ),
         body: Container(
           padding: const EdgeInsets.only(left: 16.0, right: 16.0),

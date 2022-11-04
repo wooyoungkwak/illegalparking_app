@@ -31,12 +31,15 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
+    final theme = ThemeData(
+      fontFamily: "NotoSansKR",
+      primarySwatch: Colors.blue,
+    );
+
     return GetMaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+        theme: theme,
         routes: <String, WidgetBuilder>{
           "/Firstuse": (BuildContext context) => const Firstuse(),
           "/login": (BuildContext context) => const Login(),
