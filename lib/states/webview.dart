@@ -51,6 +51,7 @@ class _WebviewPageState extends State<WebviewPage> {
   String personalMobModel = "";
   double parkingLat = 0.0;
   double parkingLng = 0.0;
+  String? clicked;
 
   @override
   void initState() {
@@ -104,14 +105,18 @@ class _WebviewPageState extends State<WebviewPage> {
       builder: buildBottomSheet,
     ).closed.whenComplete(() {
       loginController.offBottomNav();
-      // _webViewController.runJavascript("appToEvent('bottomSheet', 1234)");
-      if (oldDataType != mapController.resivedDatatype) {
-        _webViewController.runJavascript("appToEvent('bottomSheet', 1234)").then((value) {
-          setState(() {
-            oldDataType = mapController.resivedDatatype;
-          });
-        });
+      if (clicked == null) {
+        _webViewController.runJavascript("appToEvent('bottomSheet', 1234)");
+      } else {
+        _webViewController.runJavascript("appToEvent('bottomSheet', 'clicked')");
       }
+      // if (oldDataType != mapController.resivedDatatype) {
+      //   _webViewController.runJavascript("appToEvent('bottomSheet', 1234)").then((value) {
+      //     setState(() {
+      //       oldDataType = mapController.resivedDatatype;
+      //     });
+      //   });
+      // }
     });
   }
 
@@ -231,6 +236,15 @@ class _WebviewPageState extends State<WebviewPage> {
       JavascriptChannel(
           name: 'webToApp',
           onMessageReceived: (message) {
+
+            Log.debug(">>>>>>>>>>>>>>>>>>  ${message.message} ");
+
+            if ( message.message == '"click"' ) {
+              clicked = message.message.replaceAll('"', '');
+            } else {
+              clicked = null;
+            }
+
             String resivedDataType = jsonDecode(message.message).runtimeType.toString();
             mapController.setDataType(resivedDataType);
 
@@ -385,8 +399,7 @@ class _WebviewPageState extends State<WebviewPage> {
     Log.debug("네이버지도");
     if (Platform.isIOS) {
       Log.debug("ios");
-      Uri navermap = Uri.parse(
-          "nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=$parkingName");
+      Uri navermap = Uri.parse("nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=$parkingName");
       if (await canLaunchUrl(navermap)) {
         await launchUrl(navermap);
       } else {
@@ -404,8 +417,7 @@ class _WebviewPageState extends State<WebviewPage> {
       // }
     } else if (Platform.isAndroid) {
       Log.debug("Android");
-      Uri navermap = Uri.parse(
-          "nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=$parkingName");
+      Uri navermap = Uri.parse("nmap://route/car?slat=${mapController.latitude.toString()}&slng=${mapController.longitude.toString()}&sname=내위치&dlat=${parkingLat.toString()}&dlng=${parkingLng.toString()}&dname=$parkingName");
       try {
         //nmap 은 canlaunchUrl 안되고  try ~ catch 만 된다
         await launchUrl(navermap);
