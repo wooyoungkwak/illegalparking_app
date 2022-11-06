@@ -40,28 +40,38 @@ class _ReportcameraState extends State<Reportcamera> {
         context: context,
         builder: (_) {
           return Dialog(
-            backgroundColor: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+              backgroundColor: Colors.transparent,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CircularProgressIndicator(
-                    color: AppColors.black,
+                children: [
+                  createCustomText(color: AppColors.white, text: "로딩중..."),
+                  const CircularProgressIndicator(
+                    color: AppColors.white,
                   ),
-                  SizedBox(width: 15),
-                  CustomText(
-                    weight: AppFontWeight.bold,
-                    text: "로딩중",
-                    color: Colors.black,
-                    size: 20,
-                  ),
-                  // SizedBox(width: 50, height: 100, child: Lottie.asset('assets/loading_black.json', fit: BoxFit.fill)),
                 ],
-              ),
-            ),
-          );
+              )
+              // child: Padding(
+              //     padding: const EdgeInsets.symmetric(vertical: 20),
+
+              //     child: Row(
+              //       mainAxisSize: MainAxisSize.min,
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: const [
+              //         CircularProgressIndicator(
+              //           color: AppColors.black,
+              //         ),
+              //         SizedBox(width: 15),
+              //         CustomText(
+              //           weight: AppFontWeight.bold,
+              //           text: "로딩중",
+              //           color: Colors.black,
+              //           size: 20,
+              //         ),
+              //         // SizedBox(width: 50, height: 100, child: Lottie.asset('assets/loading_black.json', fit: BoxFit.fill)),
+              //       ],
+              //     ),
+              //     ),
+              );
         });
     await Future.delayed(const Duration(seconds: 1));
     Get.back();
@@ -93,7 +103,7 @@ class _ReportcameraState extends State<Reportcamera> {
                   if (c.carnumberImage.value.isNotEmpty) {
                     Get.offAll(const Declaration());
                   } else {
-                    Get.off(const Numbercamera());
+                    Get.to(const Numbercamera());
                   }
                 }),
             initContainerByOutlineButton(0, 0.7, "주정차관련법규보기", context),

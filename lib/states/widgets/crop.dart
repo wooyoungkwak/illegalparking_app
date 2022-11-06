@@ -320,7 +320,7 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
         setState(() {});
       }
       if (cameraController.value.hasError) {
-        alertDialogByonebutton("카메라에러", "'Camera error ${cameraController.value.errorDescription}'");
+        alertDialogByGetxonebutton("카메라에러", "'Camera error ${cameraController.value.errorDescription}'");
       }
     });
     try {
@@ -328,32 +328,32 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
     } on CameraException catch (e) {
       switch (e.code) {
         case 'CameraAccessDenied':
-          alertDialogByonebutton("카메라에러", "You have denied camera access.");
+          alertDialogByGetxonebutton("카메라에러", "You have denied camera access.");
 
           break;
         case 'CameraAccessDeniedWithoutPrompt':
           // iOS only
-          alertDialogByonebutton("카메라에러", "Please go to Settings app to enable camera access.");
+          alertDialogByGetxonebutton("카메라에러", "Please go to Settings app to enable camera access.");
 
           break;
         case 'CameraAccessRestricted':
           // iOS only
-          alertDialogByonebutton("카메라에러", "Camera access is restricted.");
+          alertDialogByGetxonebutton("카메라에러", "Camera access is restricted.");
           break;
         case 'AudioAccessDenied':
-          alertDialogByonebutton("카메라에러", "You have denied audio access.");
+          alertDialogByGetxonebutton("카메라에러", "You have denied audio access.");
           ('You have denied audio access.');
           break;
         case 'AudioAccessDeniedWithoutPrompt':
           // iOS only
-          alertDialogByonebutton("카메라에러", "Please go to Settings app to enable audio access.");
+          alertDialogByGetxonebutton("카메라에러", "Please go to Settings app to enable audio access.");
           break;
         case 'AudioAccessRestricted':
           // iOS only
-          alertDialogByonebutton("카메라에러", "Audio access is restricted.");
+          alertDialogByGetxonebutton("카메라에러", "Audio access is restricted.");
           break;
         default:
-          alertDialogByonebutton("카메라에러", "Camera error $e");
+          alertDialogByGetxonebutton("카메라에러", "Camera error $e");
 
           break;
       }

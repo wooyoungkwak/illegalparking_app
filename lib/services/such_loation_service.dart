@@ -28,7 +28,7 @@ Future<void> getGPS() async {
     // controller.addresswrite(latitude: latitude, longitude: longitude, address: "");
     await regeocoder(longitude, latitude).then((value) => controller.addresswrite(latitude: latitude, longitude: longitude, address: value));
   } else {
-    alertDialogByonebutton("알림", "GPS 위도경도 실패!");
+    alertDialogByGetxonebutton("알림", "GPS 위도경도 실패!");
     longitude = 0.0;
     latitude = 0.0;
   }
@@ -54,7 +54,7 @@ Future<String> regeocoder(double longitude, double latitude) async {
       throw Exception("주소검색 실패!");
     }
   } catch (e) {
-    alertDialogByonebutton("알림", "카카오맵 실패!");
+    alertDialogByGetxonebutton("알림", "카카오맵 실패!");
     Log.debug(e.toString());
 
     throw Exception("주소검색 실패!");

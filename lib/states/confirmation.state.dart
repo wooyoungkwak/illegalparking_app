@@ -27,9 +27,9 @@ class _ConfirmationState extends State<Confirmation> {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((data) async {
       if (Env.REPORT_RESPONSE_MSG! == "" || Env.REPORT_RESPONSE_MSG! == null) {
-        alertDialogByonebutton("신고알림", Env.MSG_REPORT_NOT_RESPONSE);
+        alertDialogByGetxonebutton("신고알림", Env.MSG_REPORT_NOT_RESPONSE);
       } else {
-        alertDialogByonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
+        alertDialogByGetxonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
       }
     });
   }
@@ -47,7 +47,7 @@ class _ConfirmationState extends State<Confirmation> {
         child: Scaffold(
           body: Column(
             children: [
-              createContainerByTopWidget(text: "신고하기", function: _escbtn),
+              createContainerByTopWidget(text: "신고하기", function: backbtn),
               Expanded(
                 flex: 20,
                 child: Container(
@@ -193,10 +193,19 @@ class _ConfirmationState extends State<Confirmation> {
   }
 
   void _escbtn() {
-    controller.carreportImagewrite("");
-    controller.carnumberImagewrite("");
+    controller.initialize();
     Get.off(const Home(
       index: 1,
     ));
+  }
+
+  void backbtn() {
+    alertDialogByGetxtobutton("신고를 취소하시겠습니까?", gotohome);
+  }
+
+  gotohome() {
+    controller.initialize();
+    Get.offAll(const Home());
+    loginController.changePage(0);
   }
 }

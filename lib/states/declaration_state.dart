@@ -5,6 +5,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/config/style.dart';
+import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/services/such_loation_service.dart';
@@ -33,7 +34,9 @@ class _DeclarationState extends State<Declaration> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ReportController controller = Get.put(ReportController());
   final ScrollController _scrollController = ScrollController();
+  final loginController = Get.put(LoginController());
   late TextEditingController _numberplateContoroller;
+
   late FocusNode myFocusNode;
   @override
   void initState() {
@@ -56,7 +59,7 @@ class _DeclarationState extends State<Declaration> {
           return Dialog(
             backgroundColor: Colors.white,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -65,31 +68,33 @@ class _DeclarationState extends State<Declaration> {
                     weight: AppFontWeight.bold,
                     text: Env.MSG_REPORT_LOADING_PROGRESSDIALOG,
                     color: Colors.black,
-                    size: 20,
+                    size: 22,
                   ),
                   // CircularProgressIndicator(),
                   SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: Lottie.asset('assets/loading.json',
-                          fit: BoxFit.fill,
-                          delegates: LottieDelegates(
-                            text: (initialText) => '**$initialText**',
-                            values: [
-                              ValueDelegate.color(
-                                const ['Shape Layer 1', 'Rectangle', 'Fill 1'],
-                                value: Colors.red,
-                              ),
-                              ValueDelegate.opacity(
-                                const ['Shape Layer 1', 'Rectangle'],
-                                callback: (frameInfo) => (frameInfo.overallProgress * 100).round(),
-                              ),
-                              ValueDelegate.position(
-                                const ['Shape Layer 1', 'Rectangle', '**'],
-                                relative: const Offset(100, 200),
-                              ),
-                            ],
-                          ))),
+                    height: 50,
+                    child: Lottie.asset(
+                      'assets/loading.json',
+                      fit: BoxFit.fill,
+                      // delegates: LottieDelegates(
+                      //   text: (initialText) => '**$initialText**',
+                      //   values: [
+                      //     ValueDelegate.color(
+                      //       const ['Shape Layer 1', 'Rectangle', 'Fill 1'],
+                      //       value: Colors.red,
+                      //     ),
+                      //     ValueDelegate.opacity(
+                      //       const ['Shape Layer 1', 'Rectangle'],
+                      //       callback: (frameInfo) => (frameInfo.overallProgress * 100).round(),
+                      //     ),
+                      //     ValueDelegate.position(
+                      //       const ['Shape Layer 1', 'Rectangle', '**'],
+                      //       relative: const Offset(100, 200),
+                      //     ),
+                      //   ],
+                      // ),
+                    ),
+                  ),
                   // SizedBox(width: 75, height: 75, child: Lottie.network('https://assets9.lottiefiles.com/packages/lf20_HmCBZ0IIXU.json', fit: BoxFit.fill)),
                   // Some text
                 ],
@@ -100,44 +105,44 @@ class _DeclarationState extends State<Declaration> {
 
     try {
       // 테스트용 주석처리 ai 업로드 막기
-      // if (Env.CARNUMBER_CAMERA_RESHOOT_CHECK == false && Env.CAR_CAMERA_RESHOOT_CHECK == false) {
-      //   await getGPS();
-      //   await sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
-      //     carNum = carNum.replaceAll('"', '');
+      if (Env.CARNUMBER_CAMERA_RESHOOT_CHECK == false && Env.CAR_CAMERA_RESHOOT_CHECK == false) {
+        await getGPS();
+        await sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
+          carNum = carNum.replaceAll('"', '');
 
-      //     if (carNum == null || carNum == "") {
-      //       _numberplateContoroller = TextEditingController(text: "인식실패");
-      //       controller.carNumberwrite("인식실패");
-      //     } else {
-      //       _numberplateContoroller = TextEditingController(text: carNum);
-      //       controller.carNumberwrite(carNum);
-      //     }
+          if (carNum == null || carNum == "") {
+            _numberplateContoroller = TextEditingController(text: "인식실패");
+            controller.carNumberwrite("인식실패");
+          } else {
+            _numberplateContoroller = TextEditingController(text: carNum);
+            controller.carNumberwrite(carNum);
+          }
 
-      //     if (carNum.length > 10) {
-      //       carNum = "";
-      //     }
-      //   });
-      // } else if (Env.CARNUMBER_CAMERA_RESHOOT_CHECK == true && Env.CAR_CAMERA_RESHOOT_CHECK == false) {
-      //   await sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
-      //     carNum = carNum.replaceAll('"', '');
+          if (carNum.length > 10) {
+            carNum = "";
+          }
+        });
+      } else if (Env.CARNUMBER_CAMERA_RESHOOT_CHECK == true && Env.CAR_CAMERA_RESHOOT_CHECK == false) {
+        await sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
+          carNum = carNum.replaceAll('"', '');
 
-      //     if (carNum == null || carNum == "") {
-      //       _numberplateContoroller = TextEditingController(text: "인식실패");
-      //       controller.carNumberwrite("인식실패");
-      //     } else {
-      //       _numberplateContoroller = TextEditingController(text: carNum);
-      //       controller.carNumberwrite(carNum);
-      //     }
+          if (carNum == null || carNum == "") {
+            _numberplateContoroller = TextEditingController(text: "인식실패");
+            controller.carNumberwrite("인식실패");
+          } else {
+            _numberplateContoroller = TextEditingController(text: carNum);
+            controller.carNumberwrite(carNum);
+          }
 
-      //     if (carNum.length > 10) {
-      //       carNum = "";
-      //     }
-      //   });
-      // } else if (Env.CARNUMBER_CAMERA_RESHOOT_CHECK == false && Env.CAR_CAMERA_RESHOOT_CHECK == true) {
-      //   await getGPS();
-      // } else {
-      //   showSnackBar(context, "재촬영 체크 에러");
-      // }
+          if (carNum.length > 10) {
+            carNum = "";
+          }
+        });
+      } else if (Env.CARNUMBER_CAMERA_RESHOOT_CHECK == false && Env.CAR_CAMERA_RESHOOT_CHECK == true) {
+        await getGPS();
+      } else {
+        showSnackBar(context, "재촬영 체크 에러");
+      }
       Env.CAR_CAMERA_RESHOOT_CHECK = false;
       Env.CARNUMBER_CAMERA_RESHOOT_CHECK = false;
       setState(() {});
@@ -174,7 +179,7 @@ class _DeclarationState extends State<Declaration> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    createContainerByTopWidget(text: "신고하기", function: _escbtn),
+                    createContainerByTopWidget(text: "신고하기", function: backbtn),
                     Column(
                       children: [
                         (Obx((() => _initInkWellByImageTap(controller.reportImage.value, Env.MEDIA_SIZE_HEIGHT! / 5)))),
@@ -229,6 +234,16 @@ class _DeclarationState extends State<Declaration> {
         ),
       ),
     );
+  }
+
+  void backbtn() {
+    alertDialogByGetxtobutton("신고를 취소하시겠습니까?", gotohome);
+  }
+
+  gotohome() {
+    controller.initialize();
+    Get.offAll(const Home());
+    loginController.changePage(0);
   }
 
   InkWell _initInkWellByImageTap(String path, double height) {
@@ -351,31 +366,31 @@ class _DeclarationState extends State<Declaration> {
     final validSpecial = RegExp(r'^[0-9]{2,3}[가-힣]{1}[0-9]{4}$');
 
     if (Env.USER_SEQ == null || Env.USER_SEQ == "") {
-      alertDialogByonebutton("알림", Env.MSG_REPORT_NOT_USER);
+      alertDialogByGetxonebutton("알림", Env.MSG_REPORT_NOT_USER);
       return false;
     } else if (controller.imageGPS.value.address == null || controller.imageGPS.value.address == "") {
-      alertDialogByonebutton("알림", Env.MSG_REPORT_NOT_ADDRESS);
+      alertDialogByGetxonebutton("알림", Env.MSG_REPORT_NOT_ADDRESS);
       return false;
     } else if (_numberplateContoroller.text == "인식실패") {
-      alertDialogByonebutton("알림", Env.MSG_REPORT_NOT_CARNUMBER);
+      alertDialogByGetxonebutton("알림", Env.MSG_REPORT_NOT_CARNUMBER);
       return false;
     } else if (_numberplateContoroller.text == null || _numberplateContoroller.text == "") {
-      alertDialogByonebutton("알림", Env.MSG_REPORT_NOT_CARNUMBER);
+      alertDialogByGetxonebutton("알림", Env.MSG_REPORT_NOT_CARNUMBER);
       return false;
     } else if (_numberplateContoroller.text.length > 10) {
-      alertDialogByonebutton("알림", Env.MSG_REPORT_OVER_CARNUMBER);
+      alertDialogByGetxonebutton("알림", Env.MSG_REPORT_OVER_CARNUMBER);
       return false;
     } else if (controller.imageTime.value == null || controller.imageTime.value == "") {
-      alertDialogByonebutton("알림", Env.MSG_REPORT_NOT_CARIMG);
+      alertDialogByGetxonebutton("알림", Env.MSG_REPORT_NOT_CARIMG);
       return false;
     } else if (controller.reportfileName.value == null || controller.reportfileName.value == "") {
-      alertDialogByonebutton("알림", Env.MSG_REPORT_NOT_CARIMG);
+      alertDialogByGetxonebutton("알림", Env.MSG_REPORT_NOT_CARIMG);
       return false;
     } else if (controller.imageGPS.value.latitude == null || controller.imageGPS.value.longitude == null || controller.imageGPS.value.latitude == "" || controller.imageGPS.value.longitude == "") {
-      alertDialogByonebutton("알림", Env.MSG_REPORT_NOT_GPS);
+      alertDialogByGetxonebutton("알림", Env.MSG_REPORT_NOT_GPS);
       return false;
     } else if (validSpecial.hasMatch(_numberplateContoroller.text) == false) {
-      alertDialogByonebutton("알림", Env.MSG_REPORT_CHECK_CARNUMBER);
+      alertDialogByGetxonebutton("알림", Env.MSG_REPORT_CHECK_CARNUMBER);
       return false;
     }
     return true;
@@ -418,11 +433,45 @@ class _DeclarationState extends State<Declaration> {
           return Dialog(
             backgroundColor: Colors.white,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [CircularProgressIndicator()],
+                children: [
+                  const CustomText(
+                    weight: AppFontWeight.bold,
+                    text: Env.MSG_REPORT_ENDING_PROGRESSDIALOG,
+                    color: Colors.black,
+                    size: 22,
+                  ),
+                  // CircularProgressIndicator(),
+                  SizedBox(
+                    height: 50,
+                    child: Lottie.asset(
+                      'assets/loading.json',
+                      fit: BoxFit.fill,
+                      // delegates: LottieDelegates(
+                      //   text: (initialText) => '**$initialText**',
+                      //   values: [
+                      //     ValueDelegate.color(
+                      //       const ['Shape Layer 1', 'Rectangle', 'Fill 1'],
+                      //       value: Colors.red,
+                      //     ),
+                      //     ValueDelegate.opacity(
+                      //       const ['Shape Layer 1', 'Rectangle'],
+                      //       callback: (frameInfo) => (frameInfo.overallProgress * 100).round(),
+                      //     ),
+                      //     ValueDelegate.position(
+                      //       const ['Shape Layer 1', 'Rectangle', '**'],
+                      //       relative: const Offset(100, 200),
+                      //     ),
+                      //   ],
+                      // ),
+                    ),
+                  ),
+                  // SizedBox(width: 75, height: 75, child: Lottie.network('https://assets9.lottiefiles.com/packages/lf20_HmCBZ0IIXU.json', fit: BoxFit.fill)),
+                  // Some text
+                ],
               ),
             ),
           );
@@ -433,38 +482,37 @@ class _DeclarationState extends State<Declaration> {
       text = text.replaceAll(' ', '');
 
       // 신고하기 테스트용으로 막아뒀음...  나중에 주석해제
-      // sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
-      //       if (result == false)
-      //         {Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR}
-      //       else
-      //         {
-      //           sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
-      //                   controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
-      //               .then((reportInfo) {
-      //             if (!reportInfo.success) {
-      //               Env.REPORT_RESPONSE_MSG = reportInfo.message!;
-      //               if (Env.REPORT_RESPONSE_MSG!.contains("초과했습니다.")) {
-      //                 // pd.close();
-      //                 showAlertDialog(context, text: Env.MSG_REPORT_DIALOG_SELECT, action: _reportbtn);
-      //                 alertDialogByonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
-      //               } else {
-      //                 // pd.close();
-      //                 Get.offAll(const Confirmation());
-      //               }
-      //             } else {
-      //               Env.REPORT_RESPONSE_MSG = reportInfo.data!;
-      //               // pd.close();
-      //               Get.offAll(const Confirmation());
-      //             }
-      //           })
-      //         }
-      //     });
+      sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
+            if (result == false)
+              {Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR}
+            else
+              {
+                sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
+                        controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
+                    .then((reportInfo) {
+                  if (!reportInfo.success) {
+                    Env.REPORT_RESPONSE_MSG = reportInfo.message!;
+                    if (Env.REPORT_RESPONSE_MSG!.contains("초과했습니다.")) {
+                      // pd.close();
+                      showAlertDialog(context, text: Env.MSG_REPORT_DIALOG_SELECT, action: _reportbtn);
+                      alertDialogByGetxonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
+                    } else {
+                      // pd.close();
+                      Get.offAll(const Confirmation());
+                    }
+                  } else {
+                    Env.REPORT_RESPONSE_MSG = reportInfo.data!;
+                    // pd.close();
+                    Get.offAll(const Confirmation());
+                  }
+                })
+              }
+          });
     } catch (e) {
       Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR;
     }
-    await Future.delayed(const Duration(seconds: 1));
-
-    Get.back();
+    // await Future.delayed(const Duration(seconds: 1));
+    Get.back(); //이거 위치 잘 생각해봐
   }
 }
 
