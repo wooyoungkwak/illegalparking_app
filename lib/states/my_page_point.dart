@@ -629,7 +629,7 @@ class _MyPagePointState extends State<MyPagePoint> {
             Container(
               padding: const EdgeInsets.only(left: 20.0, top: 30.0 + 30.0, right: 20.0, bottom: 20.0),
               margin: const EdgeInsets.only(top: 20.0),
-              width: MediaQuery.of(context).size.width - 100,
+              width: MediaQuery.of(context).size.width - 90,
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 color: Colors.white,
