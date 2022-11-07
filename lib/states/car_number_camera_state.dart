@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/scheduler.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/config/style.dart';
@@ -136,7 +138,7 @@ class _NumbercameraState extends State<Numbercamera> {
           }
           return Future(() => false);
         },
-        child: widget);
+        child: Platform.isIOS ? _createDismissibleBySwipe(widget) : widget);
   }
 
   // ignore: unused_element
@@ -164,5 +166,22 @@ class _NumbercameraState extends State<Numbercamera> {
     controller.initialize();
     Get.offAll(const Home());
     loginController.changePage(0);
+  }
+
+  Dismissible _createDismissibleBySwipe(Widget widget) {
+    return Dismissible(
+      key: ValueKey<int>(1),
+      resizeDuration: null,
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) {
+        if (controller.carNumber.isNotEmpty) {
+          Get.back();
+        } else {
+          Get.to(Home());
+          loginController.changePage(1);
+        }
+      },
+      child: widget,
+    );
   }
 }

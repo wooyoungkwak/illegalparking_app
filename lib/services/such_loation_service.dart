@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
@@ -40,7 +41,7 @@ Future<String> regeocoder(double longitude, double latitude) async {
   String kakaourl = "https://dapi.kakao.com/v2/local/geo/coord2address.json?x=$longitude&y=$latitude&input_coord=WGS84";
 
   try {
-    final responseGps = await http.get(Uri.parse(kakaourl), headers: {"Authorization": "KakaoAK ${Env.KEY_KAAKAO_RESTAPI}"});
+    final responseGps = await http.get(Uri.parse(kakaourl), headers: {"Authorization": "KakaoAK ${Env.KEY_KAAKAO_RESTAPI}"}).timeout(const Duration(seconds: 2));
 
     if (responseGps.statusCode == 200) {
       map = Kakao.fromJson(json.decode(responseGps.body));
@@ -53,6 +54,8 @@ Future<String> regeocoder(double longitude, double latitude) async {
     } else {
       throw Exception("주소검색 실패!");
     }
+  } on TimeoutException catch (_) {
+    throw Exception("타임 아웃 오류입니다.");
   } catch (e) {
     alertDialogByGetxonebutton("알림", "카카오맵 실패!");
     Log.debug(e.toString());

@@ -200,7 +200,7 @@ class _ConfirmationState extends State<Confirmation> {
   }
 
   void backbtn() {
-    alertDialogByGetxtobutton("신고를 취소하시겠습니까?", gotohome);
+    alertDialogByGetxtobutton("홈으로 이동하시겠습니까?", gotohome);
   }
 
   gotohome() {

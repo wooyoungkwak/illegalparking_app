@@ -95,13 +95,23 @@ void alertDialogByGetxonebutton(String title, String text) {
   Get.dialog(
     AlertDialog(
       title: CustomText(
+        size: 17,
         text: title,
         color: AppColors.black,
       ),
-      content: CustomText(text: text, color: AppColors.black),
+      content: CustomText(
+        text: text,
+        color: AppColors.black,
+        weight: AppFontWeight.regular,
+        size: 15,
+      ),
       actions: [
         TextButton(
-          child: const CustomText(text: "확인", color: AppColors.black),
+          child: const CustomText(
+            text: "확인",
+            color: AppColors.black,
+            size: 17,
+          ),
           onPressed: () => Get.back(),
         ),
       ],
@@ -118,6 +128,7 @@ void alertDialogByGetxtobutton(String text, dynamic function) {
     content: CustomText(
       weight: AppFontWeight.regular,
       text: text,
+      size: 15,
       color: AppColors.black,
     ),
     actions: [
@@ -125,6 +136,16 @@ void alertDialogByGetxtobutton(String text, dynamic function) {
         child: CustomText(
           weight: AppFontWeight.semiBold,
           color: AppColors.blue,
+          size: 17,
+          text: "취소",
+        ),
+        onPressed: () => Get.back(),
+      ),
+      TextButton(
+        child: CustomText(
+          weight: AppFontWeight.semiBold,
+          color: AppColors.blue,
+          size: 17,
           text: "확인",
         ),
         onPressed: function,
@@ -133,14 +154,6 @@ void alertDialogByGetxtobutton(String text, dynamic function) {
         //   Get.offAll(const Home());
         //   loginController.changePage(2);
         // },
-      ),
-      TextButton(
-        child: CustomText(
-          weight: AppFontWeight.semiBold,
-          color: AppColors.blue,
-          text: "취소",
-        ),
-        onPressed: () => Get.back(),
       ),
     ],
   ));

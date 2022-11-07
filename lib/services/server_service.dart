@@ -125,12 +125,14 @@ Future<dynamic> _sendFile(String url, String filePath) async {
 // AI 서버 이미지 전송
 Future<String> sendFileByAI(String url, String filePath) async {
   try {
-    var response = await _sendFile(url, filePath);
+    var response = await _sendFile(url, filePath).timeout(const Duration(seconds: 2));
     if (response.statusCode == 200) {
       return await response.stream.bytesToString(); //번호판 결과값 반환
     } else {
       return "";
     }
+  } on TimeoutException catch (_) {
+    throw Exception('타임 아웃 오류입니다.');
   } catch (e) {
     throw Exception('파일 전송 오류입니다.');
   }

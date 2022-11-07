@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/scheduler.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
+import 'package:illegalparking_app/states/home.dart';
 import 'package:illegalparking_app/states/widgets/crop.dart';
 import 'package:illegalparking_app/states/declaration_state.dart';
 import 'package:illegalparking_app/states/car_number_camera_state.dart';
@@ -99,9 +102,13 @@ class _ReportcameraState extends State<Reportcamera> {
                 btomhighbtn: !c.carnumberImage.value.isNotEmpty ? Env.MEDIA_SIZE_HEIGHT! / 1.45 : Env.MEDIA_SIZE_HEIGHT! / 1.5, // 버튼위치 조정
                 onTake: (MaskForCameraViewResult res) {
                   c.imageTimewrite(getDateToStringForYYMMDDHHMM(getNow()));
-                  Log.debug(getDateToStringForYYMMDDHHMM(getNow()));
+                  // Log.debug(getDateToStringForYYMMDDHHMM(getNow()));
                   if (c.carnumberImage.value.isNotEmpty) {
-                    Get.offAll(const Declaration());
+                    // Get.off(const Declaration());
+                    if (controller != null) {
+                      cameradispose();
+                    }
+                    Get.offAll(() => const Declaration());
                   } else {
                     Get.to(const Numbercamera());
                   }
@@ -123,7 +130,7 @@ class _ReportcameraState extends State<Reportcamera> {
           }
           return Future(() => false);
         },
-        child: widget);
+        child: Platform.isIOS ? (c.carnumberImage.value.isNotEmpty ? _createDismissibleBySwipe(widget) : widget) : widget);
   }
 
   Container createContainerByAlignment(double X, double Y, Widget widget) {
@@ -177,6 +184,20 @@ class _ReportcameraState extends State<Reportcamera> {
           color: const Color(0xff2D2D2D),
         ),
       ),
+    );
+  }
+
+  Dismissible _createDismissibleBySwipe(Widget widget) {
+    return Dismissible(
+      key: ValueKey<int>(1),
+      resizeDuration: null,
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) {
+        if (c.carnumberImage.value.isNotEmpty) {
+          Get.back();
+        }
+      },
+      child: widget,
     );
   }
 }

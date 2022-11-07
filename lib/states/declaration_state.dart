@@ -102,7 +102,6 @@ class _DeclarationState extends State<Declaration> {
             ),
           );
         });
-
     try {
       // 테스트용 주석처리 ai 업로드 막기
       if (Env.CARNUMBER_CAMERA_RESHOOT_CHECK == false && Env.CAR_CAMERA_RESHOOT_CHECK == false) {
@@ -143,15 +142,18 @@ class _DeclarationState extends State<Declaration> {
       } else {
         showSnackBar(context, "재촬영 체크 에러");
       }
+      Get.back();
       Env.CAR_CAMERA_RESHOOT_CHECK = false;
       Env.CARNUMBER_CAMERA_RESHOOT_CHECK = false;
-      setState(() {});
       Future.delayed(const Duration(milliseconds: 1000), () {});
     } catch (e) {
-      showSnackBar(context, "서버 에러");
+      Get.back();
+      alertDialogByGetxonebutton("알림", "번호판 인식 실패\n재촬영 또는 직접 입력해주세요");
+
+      // showSnackBar(context, "서버 에러 or 타임아웃");
+
     }
-    await Future.delayed(const Duration(seconds: 1));
-    Get.back();
+    setState(() {});
   }
 
   @override
