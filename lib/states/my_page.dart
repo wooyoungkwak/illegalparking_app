@@ -634,12 +634,12 @@ class _MyPageState extends State<MyPage> {
                                     createCustomText(
                                       top: 16.0,
                                       left: 8.0,
-                                      right: noticeList[index].noticeType == "공지" ? 4.0 : 0.0,
+                                      right: noticeList[noticeIndex].noticeType == "공지" ? 4.0 : 0.0,
                                       bottom: 4.0,
                                       weight: AppFontWeight.semiBold,
                                       color: AppColors.blue,
                                       size: 16.0,
-                                      text: noticeList[index].noticeType == "공지" ? noticeList[index].noticeType : null,
+                                      text: noticeList[noticeIndex].noticeType == "공지" ? noticeList[index].noticeType : null,
                                     ),
                                     createCustomText(
                                       top: 16.0,
@@ -648,7 +648,7 @@ class _MyPageState extends State<MyPage> {
                                       bottom: 4.0,
                                       weight: AppFontWeight.semiBold,
                                       size: 16.0,
-                                      text: noticeList[index].subject,
+                                      text: noticeList[noticeIndex].subject,
                                     ),
                                   ],
                                 ),

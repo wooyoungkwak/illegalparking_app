@@ -131,8 +131,8 @@ class _WebviewPageState extends State<WebviewPage> {
           bottom: BorderSide(width: 1),
         ),
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10),
+          topLeft: Radius.circular(29),
+          topRight: Radius.circular(29),
         ),
       ),
       width: double.infinity,
@@ -311,7 +311,7 @@ class _WebviewPageState extends State<WebviewPage> {
   }
 
   void closeBottomNav() {
-    if (loginController.isBottomOpen) {
+    if (loginController.isBottomOpen.value) {
       loginController.offBottomNav();
       Get.back();
     }
@@ -351,8 +351,8 @@ class _WebviewPageState extends State<WebviewPage> {
       decoration: const BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10),
+          topLeft: Radius.circular(29),
+          topRight: Radius.circular(29),
         ),
       ),
       child: Column(
