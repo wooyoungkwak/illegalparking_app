@@ -44,7 +44,7 @@ class _HomeState extends State<Home> {
     return Obx(
       () => WillPopScope(
         onWillPop: () {
-          if (loginController.isBottomOpen) {
+          if (loginController.isBottomOpen.value) {
             loginController.offBottomNav();
             Get.back();
           }
@@ -60,15 +60,15 @@ class _HomeState extends State<Home> {
             height: 105.0,
             decoration: BoxDecoration(
                 color: Colors.grey,
-                border: Border.all(color: Colors.grey, width: 1),
+                border: loginController.isBottomOpen.value ? null : Border.all(color: Colors.grey, width: 1),
                 borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(29),
                   topLeft: Radius.circular(29),
                 )),
             child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(29),
-                topLeft: Radius.circular(29),
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(loginController.isBottomOpen.value ? 0 : 29),
+                topLeft: Radius.circular(loginController.isBottomOpen.value ? 0 : 29),
               ),
               child: BottomNavigationBar(
                 backgroundColor: AppColors.appBackground,

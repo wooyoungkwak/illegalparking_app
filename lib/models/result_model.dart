@@ -219,7 +219,6 @@ class PointListInfo {
     for (int i = 0; i < pointList.length; i++) {
       pointInfos.add(PointInfo.fromJson(pointList[i]));
     }
-
     return PointListInfo(json["success"], json["msg"], pointInfos);
   }
 
@@ -239,8 +238,6 @@ class PointInfo {
   static PointInfo fromJson(Map<String, dynamic> json) {
     // 정보가 제대로면 이건 필요 없음...
     if (json["locationType"] == null) {
-      return PointInfo(json["value"], "", "", json["pointType"], json["regDt"]);
-    } else if (json["locationType"] == null) {
       return PointInfo(json["value"], "", json["productName"], json["pointType"], json["regDt"]);
     } else if (json["productName"] == null) {
       return PointInfo(json["value"], json["locationType"], "", json["pointType"], json["regDt"]);
