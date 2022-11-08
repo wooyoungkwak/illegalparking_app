@@ -9,7 +9,6 @@ import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/states/widgets/styleWidget.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:intl/intl.dart';
 
 class MyPagePoint extends StatefulWidget {
@@ -85,7 +84,6 @@ class _MyPagePointState extends State<MyPagePoint> {
         body: RefreshIndicator(
           key: refreshKey,
           onRefresh: () async {
-            Log.debug("Refresh");
             _initInfo();
           },
           child: Padding(
@@ -124,7 +122,6 @@ class _MyPagePointState extends State<MyPagePoint> {
                   route: () {
                     requestProductList(Env.USER_SEQ!).then((productListInfo) {
                       _showPointDialog(productListInfo);
-                      Log.debug("${productListInfo.productInfos[0].toJson()}");
                     });
                   },
                   widgetList: <Widget>[
@@ -213,7 +210,6 @@ class _MyPagePointState extends State<MyPagePoint> {
     if (pointType == "PLUS") {
       return "$locationType(으)로 부터 포상금 ${pointWithComma.toString()}포인트 제공되었습니다.";
     } else {
-      Log.debug(productName);
       return "$productName(으)로 ${pointWithComma.toString()}를 사용하셨습니다.";
     }
   }

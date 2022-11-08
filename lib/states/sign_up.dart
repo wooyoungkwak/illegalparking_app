@@ -591,7 +591,6 @@ class _SignUpState extends State<SignUp> {
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () {
-          Log.debug("size : ${Env.MEDIA_SIZE_WIDTH! / 8}");
           setState(() {
             _initListReset();
             photoName = list[index]["asset"];
@@ -704,10 +703,7 @@ class _SignUpState extends State<SignUp> {
 
   void _onFocusChange() {
     if (!_idfocusNode.hasFocus) {
-      Log.debug("중복확인");
       duplicate(idController.text).then((value) {
-        Log.debug("duplicate : ${value.toString()}");
-
         if (value["data"]["isExist"]) {
           setState(() {
             duplicatedId = true;

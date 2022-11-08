@@ -69,7 +69,6 @@ String getSignature(String serviceId, String timeStamp, String accessKey, String
   buffer.write(timeStamp);
   buffer.write(newLine);
   buffer.write(accessKey);
-  Log.debug("StringBuffer : ${buffer.toString()}");
 
   /// signing key
   var key = utf8.encode(secretKey);
@@ -78,14 +77,12 @@ String getSignature(String serviceId, String timeStamp, String accessKey, String
   var bytes = utf8.encode(buffer.toString());
   var digest = signingKey.convert(bytes);
   String signatureKey = base64.encode(digest.bytes);
-  Log.debug(signatureKey);
   return signatureKey;
 }
 
 Future<int> sendSMS(String phoneNumber) async {
   var verifyNum = Random().nextInt(1000000);
   var timestamp = (DateTime.now().millisecondsSinceEpoch).toString();
-  Log.debug("send SMS phone number : $phoneNumber");
 
   Map data = {
     "type": "SMS",
@@ -99,8 +96,6 @@ Future<int> sendSMS(String phoneNumber) async {
   };
 
   var url = Uri.https("sens.apigw.ntruss.com", '/sms/v2/services/${Env.NAVER_SERVICE_ID}/messages');
-  Log.debug("url : $url");
-  Log.debug("response : ${data.toString()}");
 
   var result = await http
       .post(url,

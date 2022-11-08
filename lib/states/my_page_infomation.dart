@@ -105,10 +105,8 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                             child: const Icon(Icons.filter, size: 30),
                             onTap: () {
                               takePhoto(ImageSource.gallery).then((imagePath) {
-                                Log.debug("_image file : $imagePath");
                                 requestUserProfileChange(Env.USER_SEQ!, imagePath).then((defaultInfo) {
                                   if (defaultInfo.success) {
-                                    Log.debug(defaultInfo.data);
                                     setState(() {
                                       imagePath = imagePath;
                                     });
@@ -248,7 +246,6 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                                         function: () {
                                           requestUserPasswordChange(Env.USER_SEQ!, _newPasswordController.text).then((defaultInfo) {
                                             if (defaultInfo.success) {
-                                              Log.debug(defaultInfo.message);
                                               showToast(text: "비밀번호가 변경되었습니다.");
                                               Navigator.pop(context);
                                               Get.back();
@@ -257,7 +254,6 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                                               _newPasswordController.text = "";
                                               _newPasswordController.text = "";
                                             } else {
-                                              Log.debug(defaultInfo.message);
                                               showErrorToast(text: "비밀번호 변경에 실패하였습니다.");
                                             }
                                           });
