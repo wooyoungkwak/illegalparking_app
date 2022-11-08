@@ -106,17 +106,10 @@ class _WebviewPageState extends State<WebviewPage> {
     ).closed.whenComplete(() {
       loginController.offBottomNav();
       if (clicked == null) {
-        _webViewController.runJavascript("appToEvent('bottomSheet', 1234)");
+        _webViewController.runJavascriptReturningResult("appToEvent('bottomSheet', 1234)");
       } else {
-        _webViewController.runJavascript("appToEvent('bottomSheet', 'clicked')");
+        _webViewController.runJavascriptReturningResult("appToEvent('bottomSheet', 'clicked')");
       }
-      // if (oldDataType != mapController.resivedDatatype) {
-      //   _webViewController.runJavascript("appToEvent('bottomSheet', 1234)").then((value) {
-      //     setState(() {
-      //       oldDataType = mapController.resivedDatatype;
-      //     });
-      //   });
-      // }
     });
   }
 
@@ -172,8 +165,8 @@ class _WebviewPageState extends State<WebviewPage> {
                           image: mapInfoType == "parking" ? const AssetImage("assets/parking_basic.png") : const AssetImage("assets/pm_basic.png"),
                         ),
                       ),
-                      if (mapInfoType == "parking") _createInfoHeader(title: parkingName, subtitle: parkingAddress),
-                      if (mapInfoType == "pm") _createInfoHeader(title: personalMobName, subtitle: personalMobModel),
+                      if (mapInfoType == "parking") Expanded(child: _createInfoHeader(title: parkingName, subtitle: parkingAddress)),
+                      if (mapInfoType == "pm") Expanded(child: _createInfoHeader(title: personalMobName, subtitle: personalMobModel)),
                     ],
                   ),
                 ),
@@ -306,7 +299,7 @@ class _WebviewPageState extends State<WebviewPage> {
       Log.debug("currentPosition X : ${position.latitude}\ncurrentPosition Y :${position.longitude}");
       mapController.setLatitude(position.latitude);
       mapController.setLongitude(position.longitude);
-      _webViewController.runJavascript("appToGps(${position.latitude}, ${position.longitude})");
+      _webViewController.runJavascriptReturningResult("appToGps(${position.latitude}, ${position.longitude})");
     });
   }
 
