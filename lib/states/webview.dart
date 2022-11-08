@@ -106,9 +106,9 @@ class _WebviewPageState extends State<WebviewPage> {
     ).closed.whenComplete(() {
       loginController.offBottomNav();
       if (clicked == null) {
-        _webViewController.runJavascriptReturningResult("appToEvent('bottomSheet', 1234)");
+        _webViewController.runJavascript("appToEvent('bottomSheet', 1234)");
       } else {
-        _webViewController.runJavascriptReturningResult("appToEvent('bottomSheet', 'clicked')");
+        _webViewController.runJavascript("appToEvent('bottomSheet', 'clicked')");
       }
     });
   }
@@ -299,7 +299,7 @@ class _WebviewPageState extends State<WebviewPage> {
       Log.debug("currentPosition X : ${position.latitude}\ncurrentPosition Y :${position.longitude}");
       mapController.setLatitude(position.latitude);
       mapController.setLongitude(position.longitude);
-      _webViewController.runJavascriptReturningResult("appToGps(${position.latitude}, ${position.longitude})");
+      _webViewController.runJavascript("appToGps(${position.latitude}, ${position.longitude})");
     });
   }
 
