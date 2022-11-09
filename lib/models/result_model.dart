@@ -277,7 +277,6 @@ class ProductInfo {
   String thumbnail;
 
   static ProductInfo fromJson(Map<String, dynamic> json) {
-    Log.debug("thumbnail : ${json['thumbnail']}");
     return ProductInfo(json["productSeq"], json["brandType"], json["productName"], json["pointValue"], json["thumbnail"]);
   }
 

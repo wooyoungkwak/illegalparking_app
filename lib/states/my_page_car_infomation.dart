@@ -166,7 +166,6 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                                                         });
                                                         showToast(text: "알람 설정이 설정되었습니다.");
                                                       } else {
-                                                        Log.debug("${defaultInfo.message}");
                                                         showErrorToast(text: "알람 설정에 실패하였습니다.");
                                                       }
                                                     },

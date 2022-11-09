@@ -229,8 +229,6 @@ class _WebviewPageState extends State<WebviewPage> {
       JavascriptChannel(
           name: 'webToApp',
           onMessageReceived: (message) {
-            Log.debug(">>>>>>>>>>>>>>>>>>  ${message.message} ");
-
             if (message.message == '"click"') {
               clicked = message.message.replaceAll('"', '');
             } else {
@@ -247,9 +245,6 @@ class _WebviewPageState extends State<WebviewPage> {
               setState(() {
                 mapInfoType = mapInfo.type;
               });
-
-              Log.debug("type : ${mapInfo.type}");
-              Log.debug("type : ${mapInfo.data.toString()}");
 
               if (mapInfoType == "parking") {
                 setState(() {

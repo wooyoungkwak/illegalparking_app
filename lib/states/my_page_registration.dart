@@ -34,7 +34,7 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
     List<DropdownMenuItem<String>> menuItems = [
       const DropdownMenuItem(value: "소형", child: Text("소형")),
       const DropdownMenuItem(value: "중형", child: Text("중형")),
-      const DropdownMenuItem(value: "SuV", child: Text("SUV")),
+      const DropdownMenuItem(value: "SUV", child: Text("SUV")),
       const DropdownMenuItem(value: "트럭", child: Text("트럭")),
       const DropdownMenuItem(value: "중장비", child: Text("중장비")),
     ];
