@@ -262,7 +262,7 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
                             requestCarRegister(Env.USER_SEQ!, carNumController.text, carNameController.text, carGradeselected).then((defaultInfo) {
                               if (defaultInfo.success) {
                                 Get.back();
-                                loginController.changeRealPage(3);
+                                loginController.changeRealPage(2);
                                 showToast(text: "차량 등록이 완료되었습니다.");
                                 carNumController.text = "";
                                 carNameController.text = "";

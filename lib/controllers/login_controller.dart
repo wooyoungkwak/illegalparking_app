@@ -11,6 +11,7 @@ import 'package:illegalparking_app/states/my_page_point.dart';
 import 'package:illegalparking_app/states/my_page_registration.dart';
 import 'package:illegalparking_app/states/my_page_report.dart';
 import 'package:illegalparking_app/states/webview.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 
 class LoginController extends GetxController {
   static LoginController get to => Get.find();

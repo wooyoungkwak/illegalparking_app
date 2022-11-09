@@ -7,6 +7,7 @@ import 'package:illegalparking_app/models/storage_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -27,7 +28,8 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     secureStorage = SecureStorage();
-    _setsaveid();
+
+    _setSaveId();
     secureStorage.write(Env.KEY_AUTO_LOGIN, "false");
 
     if (!Env.isDebug) {
@@ -153,7 +155,9 @@ class _LoginState extends State<Login> {
                             value: controller.checkedAutoLogin,
                             onChanged: (bool? value) {
                               if (_idController.text != "" || _idController.text != null) {
+                                Log.debug("auto login : ${controller.checkedAutoLogin}");
                                 controller.getAutoLogin(value ?? false);
+                                Log.debug("auto login : ${controller.checkedAutoLogin}");
                                 secureStorage.write(Env.KEY_AUTO_LOGIN, value.toString());
                               }
                             },
@@ -288,7 +292,7 @@ class _LoginState extends State<Login> {
     return null;
   }
 
-  Future<String> _setsaveid() async {
+  Future<String> _setSaveId() async {
     late bool initcheck = true;
 
     if (initcheck) {

@@ -66,5 +66,5 @@ ImageProvider<Object> carGradeImage(String? carGrade) {
       return AssetImage("${imagePath}segment_equipment.png");
   }
 
-  return const AssetImage("assets/testVehicle.jpg");
+  return const AssetImage("assets/segment_default.jpg");
 }

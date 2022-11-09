@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
+import 'package:illegalparking_app/models/storage_model.dart';
 import 'package:illegalparking_app/services/network_service.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 
@@ -22,6 +23,8 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  late SecureStorage secureStorage;
 
   final ScrollController _termsSummaryController = ScrollController();
   final ScrollController _termsController = ScrollController();
@@ -103,6 +106,7 @@ class _SignUpState extends State<SignUp> {
   @override
   void initState() {
     super.initState();
+    secureStorage = SecureStorage();
     _idfocusNode.addListener(_onFocusChange);
   }
 
@@ -549,14 +553,17 @@ class _SignUpState extends State<SignUp> {
                   // 자동 로그인
                   GetBuilder<LoginController>(
                     builder: (controller) => Checkbox(
-                      checkColor: Colors.white,
-                      fillColor: MaterialStateProperty.resolveWith((states) => const Color(0xff9B9B9B)),
-                      shape: const CircleBorder(),
-                      value: controller.checkedAutoLogin,
-                      onChanged: (bool? value) {
-                        controller.getAutoLogin(value ?? false);
-                      },
-                    ),
+                        checkColor: Colors.white,
+                        fillColor:
+                            controller.isGuestMode ? MaterialStateProperty.resolveWith((states) => const Color(0xffC6C6C6)) : MaterialStateProperty.resolveWith((states) => const Color(0xff9B9B9B)),
+                        shape: const CircleBorder(),
+                        value: controller.checkedAutoLogin,
+                        onChanged: (bool? value) {
+                          Log.debug("auto login : ${controller.checkedAutoLogin}");
+                          controller.getAutoLogin(value ?? false);
+                          Log.debug("auto login : ${controller.checkedAutoLogin}");
+                          secureStorage.write(Env.KEY_AUTO_LOGIN, value.toString());
+                        }),
                   ),
                   createCustomText(
                     left: 0.0,
@@ -570,7 +577,6 @@ class _SignUpState extends State<SignUp> {
                 text: "로그인하기",
                 function: () {
                   Navigator.pop(context);
-                  Get.delete<LoginController>();
                   Navigator.pushNamedAndRemoveUntil(context, "/login", (route) => false);
                 },
               ),
