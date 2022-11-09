@@ -33,6 +33,7 @@ class _ConfirmationState extends State<Confirmation> {
         alertDialogByGetxonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
       }
       saveImageGallery();
+      controller.initialize();
     });
   }
 

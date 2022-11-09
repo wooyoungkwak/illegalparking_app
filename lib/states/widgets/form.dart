@@ -220,15 +220,17 @@ void widgetbottomsheet(BuildContext context) {
 }
 
 Row createContainerByTopWidget({String? text, dynamic function, Color color = const Color(0xff707070)}) {
+  double widval = 8.0;
+  double highval = 40.0;
   return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
     Padding(
       //좌우 대칭용
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.symmetric(horizontal: widval, vertical: highval),
       child: IconButton(onPressed: () {}, icon: const Icon(Icons.close_outlined), color: Colors.transparent),
     ),
     CustomText(text: text ?? "", weight: AppFontWeight.black, color: Colors.black),
     Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.symmetric(horizontal: widval, vertical: highval),
       child: IconButton(onPressed: function, icon: const Icon(Icons.close_outlined), color: color),
     ),
   ]);

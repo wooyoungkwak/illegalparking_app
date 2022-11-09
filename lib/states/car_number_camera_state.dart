@@ -139,6 +139,7 @@ class _NumbercameraState extends State<Numbercamera> {
           return Future(() => false);
         },
         child: Platform.isIOS ? _createDismissibleBySwipe(widget) : widget);
+    // child: _createDismissibleBySwipe(widget));
   }
 
   // ignore: unused_element
@@ -179,6 +180,7 @@ class _NumbercameraState extends State<Numbercamera> {
         } else {
           Get.to(Home());
           loginController.changePage(1);
+          controller.initialize();
         }
       },
       child: widget,
