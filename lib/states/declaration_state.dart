@@ -56,34 +56,44 @@ class _DeclarationState extends State<Declaration> {
         context: context,
         builder: (_) {
           return Dialog(
-            backgroundColor: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+              backgroundColor: Colors.transparent,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const CustomText(
-                    weight: AppFontWeight.bold,
-                    text: Env.MSG_REPORT_LOADING_PROGRESSDIALOG,
-                    color: Colors.black,
-                    size: 22,
+                  createCustomText(color: AppColors.white, text: "로딩중..."),
+                  const CircularProgressIndicator(
+                    color: AppColors.white,
                   ),
-                  // LinearProgressIndicator(),
-                  // CircularProgressIndicator(),
-                  SizedBox(
-                    height: 50,
-                    child: Lottie.asset(
-                      'assets/image-scan.json',
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  // SizedBox(width: 75, height: 75, child: Lottie.network('https://assets9.lottiefiles.com/packages/lf20_HmCBZ0IIXU.json', fit: BoxFit.fill)),
-                  // Some text
                 ],
-              ),
-            ),
-          );
+              )
+              // backgroundColor: Colors.white,
+              // child: Padding(
+              //   padding: const EdgeInsets.symmetric(vertical: 10),
+              //   child: Row(
+              //     mainAxisSize: MainAxisSize.min,
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       const CustomText(
+              //         weight: AppFontWeight.bold,
+              //         text: Env.MSG_REPORT_LOADING_PROGRESSDIALOG,
+              //         color: Colors.black,
+              //         size: 15,
+              //       ),
+              //       // LinearProgressIndicator(),
+              //       CircularProgressIndicator(color: AppColors.black),
+              //       // SizedBox(
+              //       //   height: 50,
+              //       //   child: Lottie.asset(
+              //       //     'assets/image-scan.json',
+              //       //     fit: BoxFit.fill,
+              //       //   ),
+              //       // ),
+              //       // SizedBox(width: 75, height: 75, child: Lottie.network('https://assets9.lottiefiles.com/packages/lf20_HmCBZ0IIXU.json', fit: BoxFit.fill)),
+              //       // Some text
+              //     ],
+              //   ),
+              // ),
+              );
         });
     try {
       // 테스트용 주석처리 ai 업로드 막기
