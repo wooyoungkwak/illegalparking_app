@@ -51,7 +51,6 @@ class _DeclarationState extends State<Declaration> {
   }
 
   void _fetchData(BuildContext context) async {
-    // show the loading dialog
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -70,29 +69,13 @@ class _DeclarationState extends State<Declaration> {
                     color: Colors.black,
                     size: 22,
                   ),
+                  // LinearProgressIndicator(),
                   // CircularProgressIndicator(),
                   SizedBox(
                     height: 50,
                     child: Lottie.asset(
-                      'assets/loading.json',
+                      'assets/image-scan.json',
                       fit: BoxFit.fill,
-                      // delegates: LottieDelegates(
-                      //   text: (initialText) => '**$initialText**',
-                      //   values: [
-                      //     ValueDelegate.color(
-                      //       const ['Shape Layer 1', 'Rectangle', 'Fill 1'],
-                      //       value: Colors.red,
-                      //     ),
-                      //     ValueDelegate.opacity(
-                      //       const ['Shape Layer 1', 'Rectangle'],
-                      //       callback: (frameInfo) => (frameInfo.overallProgress * 100).round(),
-                      //     ),
-                      //     ValueDelegate.position(
-                      //       const ['Shape Layer 1', 'Rectangle', '**'],
-                      //       relative: const Offset(100, 200),
-                      //     ),
-                      //   ],
-                      // ),
                     ),
                   ),
                   // SizedBox(width: 75, height: 75, child: Lottie.network('https://assets9.lottiefiles.com/packages/lf20_HmCBZ0IIXU.json', fit: BoxFit.fill)),
@@ -148,7 +131,7 @@ class _DeclarationState extends State<Declaration> {
       Future.delayed(const Duration(milliseconds: 1000), () {});
     } catch (e) {
       Get.back();
-      alertDialogByGetxonebutton("알림", "번호판 인식 실패\n재촬영 또는 직접 입력해주세요");
+      _numberplateContoroller = TextEditingController(text: "인식실패");
 
       // showSnackBar(context, "서버 에러 or 타임아웃");
 
@@ -171,7 +154,7 @@ class _DeclarationState extends State<Declaration> {
       onTap: () => myFocusNode.unfocus(),
       child: _createWillPopScope(
         Padding(
-          padding: EdgeInsets.only(top: statusBarHeight),
+          padding: EdgeInsets.only(top: statusBarHeight + 10),
           child: Scaffold(
             resizeToAvoidBottomInset: true,
             body: Form(
@@ -423,7 +406,7 @@ class _DeclarationState extends State<Declaration> {
   void _reportbtn() async {
     if (valuenullCheck()) {
       _endData(context);
-      await saveImageGallery();
+      // await saveImageGallery();
     }
   }
 
@@ -446,31 +429,14 @@ class _DeclarationState extends State<Declaration> {
                     color: Colors.black,
                     size: 22,
                   ),
-                  // CircularProgressIndicator(),
-                  SizedBox(
-                    height: 50,
-                    child: Lottie.asset(
-                      'assets/loading.json',
-                      fit: BoxFit.fill,
-                      // delegates: LottieDelegates(
-                      //   text: (initialText) => '**$initialText**',
-                      //   values: [
-                      //     ValueDelegate.color(
-                      //       const ['Shape Layer 1', 'Rectangle', 'Fill 1'],
-                      //       value: Colors.red,
-                      //     ),
-                      //     ValueDelegate.opacity(
-                      //       const ['Shape Layer 1', 'Rectangle'],
-                      //       callback: (frameInfo) => (frameInfo.overallProgress * 100).round(),
-                      //     ),
-                      //     ValueDelegate.position(
-                      //       const ['Shape Layer 1', 'Rectangle', '**'],
-                      //       relative: const Offset(100, 200),
-                      //     ),
-                      //   ],
-                      // ),
-                    ),
-                  ),
+                  CircularProgressIndicator(),
+                  // SizedBox(
+                  //   height: 50,
+                  //   child: Lottie.asset(
+                  //     'assets/loading.json',
+                  //     fit: BoxFit.fill,
+                  //   ),
+                  // ),
                   // SizedBox(width: 75, height: 75, child: Lottie.network('https://assets9.lottiefiles.com/packages/lf20_HmCBZ0IIXU.json', fit: BoxFit.fill)),
                   // Some text
                 ],

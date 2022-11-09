@@ -3,6 +3,7 @@ import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/main.dart';
+import 'package:illegalparking_app/services/save_image_service.dart';
 import 'package:illegalparking_app/states/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,6 +32,7 @@ class _ConfirmationState extends State<Confirmation> {
       } else {
         alertDialogByGetxonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
       }
+      saveImageGallery();
     });
   }
 
