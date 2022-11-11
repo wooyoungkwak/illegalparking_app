@@ -164,7 +164,7 @@ class _DeclarationState extends State<Declaration> {
       onTap: () => myFocusNode.unfocus(),
       child: _createWillPopScope(
         Padding(
-          padding: EdgeInsets.only(top: statusBarHeight + 10),
+          padding: EdgeInsets.only(top: statusBarHeight),
           child: Scaffold(
             resizeToAvoidBottomInset: true,
             body: Form(
