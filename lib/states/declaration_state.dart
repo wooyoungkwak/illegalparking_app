@@ -378,7 +378,7 @@ class _DeclarationState extends State<Declaration> {
     } else if (controller.imageTime.value == null || controller.imageTime.value == "") {
       alertDialogByGetxonebutton("알림", Env.MSG_REPORT_NOT_CARIMG);
       return false;
-    } else if (controller.reportfileName.value == null || controller.reportfileName.value == "") {
+    } else if (controller.reportfileName.value == null || controller.reportfileName.value == "" || File(controller.reportfileName.value).existsSync()) {
       alertDialogByGetxonebutton("알림", Env.MSG_REPORT_NOT_CARIMG);
       return false;
     } else if (controller.imageGPS.value.latitude == null || controller.imageGPS.value.longitude == null || controller.imageGPS.value.latitude == "" || controller.imageGPS.value.longitude == "") {
@@ -489,8 +489,8 @@ class _DeclarationState extends State<Declaration> {
     } catch (e) {
       Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR;
     }
-    // await Future.delayed(const Duration(seconds: 1));
-    Get.back(); //이거 위치 잘 생각해봐
+
+    Get.back();
   }
 }
 
