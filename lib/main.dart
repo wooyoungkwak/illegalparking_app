@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/models/storage_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
@@ -21,7 +22,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: AppColors.black, statusBarBrightness: Brightness.light));
   callPermissions();
   cameraSetting();
   runApp(const MyApp());
@@ -29,11 +31,19 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     final theme = ThemeData(
       fontFamily: "NotoSansKR",
       primarySwatch: Colors.blue,
+      appBarTheme: const AppBarTheme(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.black,
+          statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.dark,
+        ),
+      ),
     );
 
     return GetMaterialApp(
@@ -109,7 +119,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
       body: null, // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

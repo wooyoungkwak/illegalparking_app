@@ -22,6 +22,7 @@ import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:popover/popover.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter/services.dart';
 
 class Declaration extends StatefulWidget {
   const Declaration({super.key});
@@ -41,6 +42,7 @@ class _DeclarationState extends State<Declaration> {
   @override
   void initState() {
     super.initState();
+
     myFocusNode = FocusNode();
     _numberplateContoroller = TextEditingController(text: controller.carNumber.isNotEmpty ? controller.carNumber.value : "");
 
