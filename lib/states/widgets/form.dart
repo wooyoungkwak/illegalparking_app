@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/style.dart';
@@ -221,7 +223,8 @@ void widgetbottomsheet(BuildContext context) {
 
 Row createContainerByTopWidget({String? text, dynamic function, Color color = const Color(0xff707070)}) {
   double widval = 8.0;
-  double highval = 40.0;
+  double highval = Platform.isIOS ? 40.0 : 8.0;
+
   return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
     Padding(
       //좌우 대칭용

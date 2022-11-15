@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
@@ -82,12 +83,18 @@ class _NumbercameraState extends State<Numbercamera> {
   @override
   void dispose() {
     super.dispose();
-    cameradispose();
+    // cameradispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.light)); // IOS = Brightness.light의 경우 글자 검정, 배경 흰색
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark, statusBarColor: AppColors.white)); // android = Brightness.light 글자 흰색, 배경색은 컬러에 영향을 받음
+    }
     return Scaffold(
+      backgroundColor: AppColors.appBackground,
       body: _createWillPopScope(Stack(
         children: [
           MaskForCameraCustomView(
@@ -104,7 +111,7 @@ class _NumbercameraState extends State<Numbercamera> {
                 controller.carNumberwrite("");
                 Get.offAll(() => const Declaration());
               }),
-          CreateContainerByAlignment(-0.8, -0.9, createContainerByTopWidget(color: AppColors.white, function: backbtn)),
+          CreateContainerByAlignment(-0.70, Platform.isIOS ? -0.9 : -0.925, createContainerByTopWidget(color: AppColors.white, function: backbtn)),
           CreateContainerByAlignment(0, -0.3,
               DefaultTextStyle(style: Theme.of(context).textTheme.headline1!, child: const CustomText(text: "번호판을 네모영역 안에서 촬영해주세요", weight: AppFontWeight.regular, size: 14, color: AppColors.white))),
           CreateContainerByAlignment(
@@ -132,9 +139,11 @@ class _NumbercameraState extends State<Numbercamera> {
   WillPopScope _createWillPopScope(Widget widget) {
     return WillPopScope(
         onWillPop: () {
-          if (controller.carnumberImageMemory.length > 1) {
+          if (controller.carnumberImage.value.length > 1) {
             Get.back();
             Env.CARNUMBER_CAMERA_RESHOOT_CHECK = false;
+          } else {
+            backbtn();
           }
           return Future(() => false);
         },
@@ -164,9 +173,10 @@ class _NumbercameraState extends State<Numbercamera> {
   }
 
   gotohome() {
+    // cameradispose();
     controller.initialize();
     Get.offAll(const Home());
-    loginController.changePage(0);
+    loginController.changePage(1);
   }
 
   Dismissible _createDismissibleBySwipe(Widget widget) {

@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/config/style.dart';
+import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/states/home.dart';
 import 'package:illegalparking_app/states/widgets/crop.dart';
@@ -12,21 +13,23 @@ import 'package:illegalparking_app/states/car_number_camera_state.dart';
 import 'package:flutter/material.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
+import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/utils/time_util.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
 import 'package:get/get.dart';
 
-class Reportcamera extends StatefulWidget {
-  const Reportcamera({Key? key}) : super(key: key);
+class Reportcamerareshoot extends StatefulWidget {
+  const Reportcamerareshoot({Key? key}) : super(key: key);
 
   @override
-  State<Reportcamera> createState() => _ReportcameraState();
+  State<Reportcamerareshoot> createState() => _ReportcamerareshootState();
 }
 
-class _ReportcameraState extends State<Reportcamera> {
+class _ReportcamerareshootState extends State<Reportcamerareshoot> {
   final ReportController c = Get.put(ReportController());
+  final loginController = Get.put(LoginController());
 
   @override
   void initState() {
@@ -120,11 +123,23 @@ class _ReportcameraState extends State<Reportcamera> {
                   }
                 }),
             initContainerByOutlineButton(0, 0.7, "주정차관련법규보기", context),
-            Positioned(top: Env.MEDIA_SIZE_PADDINGTOP! + 10, child: initColumnByText(11, AppFontWeight.regular, AppColors.white))
+            createContainerByAlignment(-0.75, Platform.isIOS ? -0.9 : -0.925, createContainerByTopWidget(color: AppColors.white, function: backbtn)),
+            Positioned(top: Env.MEDIA_SIZE_PADDINGTOP! + 40, child: initColumnByText(11, AppFontWeight.regular, AppColors.white))
           ],
         ),
       ),
     );
+  }
+
+  void backbtn() {
+    alertDialogByGetxtobutton("신고를 취소하시겠습니까?", gotohome);
+  }
+
+  gotohome() {
+    // cameradispose();
+    c.initialize();
+    Get.offAll(const Home());
+    loginController.changePage(1);
   }
 
   WillPopScope _createWillPopScope(Widget widget) {

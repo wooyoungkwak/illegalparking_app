@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/style.dart';
@@ -70,31 +73,39 @@ class _MyPageState extends State<MyPage> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      key: refreshKey,
-      onRefresh: () async {
-        _initInfo();
-      },
-      child: FutureBuilder<MyPageInfo>(
-        future: requestInfo,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return _initBodyByContainer();
-          } else if (snapshot.hasError) {
-            showErrorToast(text: "데이터를 가져오는데 실패하였습니다.");
-          }
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                createCustomText(color: AppColors.white, text: "로딩중..."),
-                const CircularProgressIndicator(
-                  color: AppColors.white,
-                ),
-              ],
-            ),
-          );
+    if (Platform.isIOS) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.light)); // IOS = Brightness.light의 경우 글자 검정, 배경 흰색
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark, statusBarColor: AppColors.white)); // android = Brightness.light 글자 흰색, 배경색은 컬러에 영향을 받음
+    }
+    return Scaffold(
+      backgroundColor: AppColors.black,
+      body: RefreshIndicator(
+        key: refreshKey,
+        onRefresh: () async {
+          _initInfo();
         },
+        child: FutureBuilder<MyPageInfo>(
+          future: requestInfo,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return _initBodyByContainer();
+            } else if (snapshot.hasError) {
+              showErrorToast(text: "데이터를 가져오는데 실패하였습니다.");
+            }
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  createCustomText(color: AppColors.white, text: "로딩중..."),
+                  const CircularProgressIndicator(
+                    color: AppColors.white,
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

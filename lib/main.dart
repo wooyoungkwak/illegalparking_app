@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_launcher_icons/main.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/config/style.dart';
@@ -34,16 +37,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.light)); // IOS = Brightness.light의 경우 글자 검정, 배경 흰색
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark, statusBarColor: AppColors.white)); // android = Brightness.light 글자 흰색, 배경색은 컬러에 영향을 받음
+    }
     final theme = ThemeData(
       fontFamily: "NotoSansKR",
-      primarySwatch: Colors.blue,
-      appBarTheme: const AppBarTheme(
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.black,
-          statusBarIconBrightness: Brightness.light,
-          statusBarBrightness: Brightness.dark,
-        ),
-      ),
+      // appBarTheme: const AppBarTheme(
+      //   systemOverlayStyle: SystemUiOverlayStyle(
+      //     statusBarColor: Colors.black,
+      //     statusBarIconBrightness: Brightness.dark,
+      //     statusBarBrightness: Brightness.dark,
+      //   ),
+      // ),
     );
 
     return GetMaterialApp(
@@ -121,6 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
       ),
       body: null, // This trailing comma makes auto-formatting nicer for build methods.

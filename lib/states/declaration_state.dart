@@ -9,6 +9,7 @@ import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/services/such_loation_service.dart';
+import 'package:illegalparking_app/states/car_report_camera_state_reshoot.dart';
 import 'package:illegalparking_app/states/home.dart';
 import 'package:illegalparking_app/states/confirmation.state.dart';
 import 'package:illegalparking_app/states/car_number_camera_state.dart';
@@ -161,6 +162,12 @@ class _DeclarationState extends State<Declaration> {
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.light)); // IOS = Brightness.light의 경우 글자 검정, 배경 흰색
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark, statusBarColor: AppColors.white)); // android = Brightness.light 글자 흰색, 배경색은 컬러에 영향을 받음
+    }
+
     final statusBarHeight = Env.MEDIA_SIZE_PADDINGTOP!;
     return GestureDetector(
       onTap: () => myFocusNode.unfocus(),
@@ -168,6 +175,7 @@ class _DeclarationState extends State<Declaration> {
         Padding(
           padding: EdgeInsets.only(top: statusBarHeight),
           child: Scaffold(
+            backgroundColor: AppColors.white,
             resizeToAvoidBottomInset: true,
             body: Form(
               key: _formKey,
@@ -240,7 +248,7 @@ class _DeclarationState extends State<Declaration> {
   gotohome() {
     controller.initialize();
     Get.offAll(const Home());
-    loginController.changePage(0);
+    loginController.changePage(1);
   }
 
   InkWell _initInkWellByImageTap(String path, double height) {
@@ -354,6 +362,7 @@ class _DeclarationState extends State<Declaration> {
     return WillPopScope(
         onWillPop: () {
           // Get.offAll(() => main());
+          backbtn();
           return Future(() => false);
         },
         child: widget);
@@ -406,7 +415,7 @@ class _DeclarationState extends State<Declaration> {
   }
 
   void _reportcamerabtn() {
-    Get.to(const Reportcamera());
+    Get.to(const Reportcamerareshoot());
     Env.CAR_CAMERA_RESHOOT_CHECK = true;
   }
 
@@ -416,9 +425,10 @@ class _DeclarationState extends State<Declaration> {
   }
 
   void _reportbtn() async {
+    // saveImageGallery();
+    // Get.to(Confirmation());
     if (valuenullCheck()) {
       _endData(context);
-      // await saveImageGallery();
     }
   }
 
