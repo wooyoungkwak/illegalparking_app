@@ -136,7 +136,7 @@ class _ReportcamerareshootState extends State<Reportcamerareshoot> {
   }
 
   gotohome() {
-    // cameradispose();
+    cameradispose();
     c.initialize();
     Get.offAll(const Home());
     loginController.changePage(1);

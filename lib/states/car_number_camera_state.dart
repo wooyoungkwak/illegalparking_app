@@ -83,7 +83,7 @@ class _NumbercameraState extends State<Numbercamera> {
   @override
   void dispose() {
     super.dispose();
-    cameradispose();
+    // cameradispose();
   }
 
   @override
@@ -173,7 +173,7 @@ class _NumbercameraState extends State<Numbercamera> {
   }
 
   gotohome() {
-    cameradispose();
+    // cameradispose();
     controller.initialize();
     Get.offAll(const Home());
     loginController.changePage(1);
