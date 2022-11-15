@@ -54,13 +54,14 @@ class _LoginState extends State<Login> {
     if (Platform.isIOS) {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarBrightness: loginController.isGuestMode ? Brightness.light : Brightness.dark));
       // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark)); // IOS = Brightness.light의 경우 글자 검정, 배경 흰색
+      //이것도 백그라운드 색에 영향을 받음..
       // statusBarColor는 IOS에서 동작안함
     } else {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
           statusBarBrightness: loginController.isGuestMode ? Brightness.light : Brightness.dark,
           statusBarColor: loginController.isGuestMode ? AppColors.white : AppColors.white)); // android = Brightness.light 글자 흰색, 배경색은 컬러에 영향을 받음
       //appbar가 있으면 적용이 안되지만 appbar 안에서 코드를 작성하면 적용 가능,ios는 app바 영향을 안 받음
-      //컬러가 적용 안될 경우가 있는데 appbar의 bacgroundcolor이 우선 순위에 있음...
+      //컬러가 적용 안될 경우가 있는데 bacgroundcolor이 우선 순위에 있음...
     }
     return Scaffold(
       backgroundColor: loginController.isGuestMode ? AppColors.white : AppColors.appBackground,

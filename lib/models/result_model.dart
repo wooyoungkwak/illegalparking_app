@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:illegalparking_app/config/env.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
 
 LoginInfo resultInfoFromJson(String str) => LoginInfo.fromJson(json.decode(str));
 
