@@ -32,7 +32,7 @@ class _GuestCameraState extends State<GuestCamera> {
         backgroundColor: AppColors.white,
         appBar: AppBar(
           systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
           ),
           elevation: 0,
           backgroundColor: AppColors.white,
