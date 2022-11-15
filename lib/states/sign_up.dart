@@ -142,7 +142,7 @@ class _SignUpState extends State<SignUp> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
           ),
           centerTitle: true,
           automaticallyImplyLeading: false,
