@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
-
 import 'package:illegalparking_app/utils/time_util.dart';
 
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
@@ -35,7 +34,6 @@ class _ReportcamerareshootState extends State<Reportcamerareshoot> {
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((data) async {
-      // 테스트용으로 막아둠
       _fetchData(context);
     });
   }
@@ -48,7 +46,6 @@ class _ReportcamerareshootState extends State<Reportcamerareshoot> {
   }
 
   void _fetchData(BuildContext context) async {
-    // show the loading dialog
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -63,29 +60,7 @@ class _ReportcamerareshootState extends State<Reportcamerareshoot> {
                     color: AppColors.white,
                   ),
                 ],
-              )
-              // child: Padding(
-              //     padding: const EdgeInsets.symmetric(vertical: 20),
-
-              //     child: Row(
-              //       mainAxisSize: MainAxisSize.min,
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: const [
-              //         CircularProgressIndicator(
-              //           color: AppColors.black,
-              //         ),
-              //         SizedBox(width: 15),
-              //         CustomText(
-              //           weight: AppFontWeight.bold,
-              //           text: "로딩중",
-              //           color: Colors.black,
-              //           size: 20,
-              //         ),
-              //         // SizedBox(width: 50, height: 100, child: Lottie.asset('assets/loading_black.json', fit: BoxFit.fill)),
-              //       ],
-              //     ),
-              //     ),
-              );
+              ));
         });
     await Future.delayed(const Duration(seconds: 1));
     Get.back();
@@ -107,22 +82,17 @@ class _ReportcamerareshootState extends State<Reportcamerareshoot> {
           children: [
             MaskForCameraCustomView(
                 type: false,
-                // boxWidth: Env.MEDIA_SIZE_WIDTH! / 1.5,
                 boxWidth: Env.MEDIA_SIZE_WIDTH! - 50,
                 boxHeight: c.carnumberImage.value.isNotEmpty ? Env.MEDIA_SIZE_HEIGHT! / 2.2 : Env.MEDIA_SIZE_HEIGHT! / 2,
                 appBarColor: Colors.transparent,
                 takeButtonActionColor: Colors.white,
                 takeButtonColor: Colors.black,
-                // btomhighbtn: 630,
-                // btomhighbtn: 140, // 버튼위치 조정
                 btomhighbtn: !c.carnumberImage.value.isNotEmpty ? Env.MEDIA_SIZE_HEIGHT! / 1.45 : Env.MEDIA_SIZE_HEIGHT! / 1.5, // 버튼위치 조정
                 onTake: (MaskForCameraViewResult res) {
                   c.imageTimewrite(getDateToStringForYYMMDDHHMM(getNow()));
-                  // Log.debug(getDateToStringForYYMMDDHHMM(getNow()));
                   if (controller != null) {
                     cameradispose();
                   }
-                  // Get.off(const Declaration());
                   Get.offAll(() => const Declaration());
                 }),
             initContainerByOutlineButton(0, 0.7, "주정차관련법규보기", context),
@@ -139,7 +109,6 @@ class _ReportcamerareshootState extends State<Reportcamerareshoot> {
   }
 
   gotohome() {
-    // cameradispose();
     c.initialize();
     Get.offAll(const Home());
     loginController.changePage(1);
