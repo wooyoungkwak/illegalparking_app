@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/utils/time_util.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';

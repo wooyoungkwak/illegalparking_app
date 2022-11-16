@@ -41,7 +41,6 @@ dependencies:
   http: ^0.13.5
   network_info_plus: ^2.2.0
   connectivity_plus: ^2.3.7
-  app_settings: ^4.1.8
   permission_handler: ^10.0.2
   flutter_secure_storage: ^6.0.0
   shared_preferences: ^2.0.15
@@ -70,7 +69,6 @@ dependencies:
   #앱아이콘
   flutter_launcher_icons: ^0.10.0
   device_info: ^2.0.3
-  lottie: ^1.4.3
 
 dev_dependencies:
   flutter_test:

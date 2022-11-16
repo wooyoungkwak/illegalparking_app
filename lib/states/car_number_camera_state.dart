@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:illegalparking_app/config/env.dart';
@@ -25,7 +26,7 @@ class Numbercamera extends StatefulWidget {
 }
 
 class _NumbercameraState extends State<Numbercamera> {
-  final ReportController controller = Get.put(ReportController());
+  final ReportController c = Get.put(ReportController());
   final loginController = Get.put(LoginController());
   @override
   void initState() {
@@ -84,6 +85,7 @@ class _NumbercameraState extends State<Numbercamera> {
   void dispose() {
     super.dispose();
     // cameradispose();
+    // controller!.setFlashMode(FlashMode.off);
   }
 
   @override
@@ -108,8 +110,12 @@ class _NumbercameraState extends State<Numbercamera> {
               btomhighbtn: Env.MEDIA_SIZE_HEIGHT! / 1.65,
               backColor: Colors.black,
               onTake: (MaskForCameraViewResult res) {
-                controller.carNumberwrite("");
+                c.carNumberwrite("");
+                if (controller != null) {
+                  cameradispose();
+                }
                 Get.offAll(() => const Declaration());
+                // cameradispose();
               }),
           CreateContainerByAlignment(-0.70, Platform.isIOS ? -0.9 : -0.925, createContainerByTopWidget(color: AppColors.white, function: backbtn)),
           CreateContainerByAlignment(0, -0.3,
@@ -139,7 +145,7 @@ class _NumbercameraState extends State<Numbercamera> {
   WillPopScope _createWillPopScope(Widget widget) {
     return WillPopScope(
         onWillPop: () {
-          if (controller.carnumberImage.value.length > 1) {
+          if (c.carnumberImage.value.length > 1) {
             Get.back();
             Env.CARNUMBER_CAMERA_RESHOOT_CHECK = false;
           } else {
@@ -174,7 +180,7 @@ class _NumbercameraState extends State<Numbercamera> {
 
   gotohome() {
     // cameradispose();
-    controller.initialize();
+    c.initialize();
     Get.offAll(const Home());
     loginController.changePage(1);
   }
@@ -185,12 +191,12 @@ class _NumbercameraState extends State<Numbercamera> {
       resizeDuration: null,
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
-        if (controller.carNumber.isNotEmpty) {
+        if (c.carNumber.isNotEmpty) {
           Get.back();
         } else {
           Get.to(const Home());
           loginController.changePage(1);
-          controller.initialize();
+          c.initialize();
         }
       },
       child: widget,

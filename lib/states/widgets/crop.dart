@@ -108,6 +108,7 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    // cameradispose();
     super.dispose();
   }
 

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:illegalparking_app/config/env.dart';
@@ -42,7 +43,8 @@ class _ReportcamerareshootState extends State<Reportcamerareshoot> {
   @override
   void dispose() {
     super.dispose();
-    cameradispose();
+    // cameradispose();
+    // controller!.setFlashMode(FlashMode.off);
   }
 
   void _fetchData(BuildContext context) async {
@@ -117,7 +119,9 @@ class _ReportcamerareshootState extends State<Reportcamerareshoot> {
                 onTake: (MaskForCameraViewResult res) {
                   c.imageTimewrite(getDateToStringForYYMMDDHHMM(getNow()));
                   // Log.debug(getDateToStringForYYMMDDHHMM(getNow()));
-
+                  if (controller != null) {
+                    cameradispose();
+                  }
                   // Get.off(const Declaration());
                   Get.offAll(() => const Declaration());
                 }),
@@ -135,7 +139,7 @@ class _ReportcamerareshootState extends State<Reportcamerareshoot> {
   }
 
   gotohome() {
-    cameradispose();
+    // cameradispose();
     c.initialize();
     Get.offAll(const Home());
     loginController.changePage(1);

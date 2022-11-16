@@ -121,10 +121,10 @@ class Env {
   static const String MSG_REPORT_RULE = "불법주정차 단속 구간에 따라 1분, 5분 이후 해당 차량에 대해 재신고가 기록되어야 과태료 대상 신고접수가 해당기관에 접수됩니다.";
   static const String MSG_REPORT_NOT_LOCATION = "위치를 찾을 수 없습니다.";
   static const String MSG_REPORT_NOT_USER = "사용자 정보를 찾을 수 없습니다.";
-  static const String MSG_REPORT_NOT_ADDRESS = "주소가 없습니다.위 차량사진을 재촬영 해주세요.";
-  static const String MSG_REPORT_NOT_CARNUMBER = "차량번호가 없습니다.";
-  static const String MSG_REPORT_OVER_CARNUMBER = "차량번호의 문자수가 초과하였습니다.";
-  static const String MSG_REPORT_CHECK_CARNUMBER = "차량번호 형식이 잘못되었습니다.";
+  static const String MSG_REPORT_NOT_ADDRESS = "주소가 없습니다.\n차량 사진을 재촬영 해주세요.";
+  static const String MSG_REPORT_NOT_CARNUMBER = "차량번호가 없습니다.\n번호판 재촬영 또는 TEXT를 직접 수정해주세요";
+  static const String MSG_REPORT_OVER_CARNUMBER = "차량번호의 문자수가 초과하였습니다.\n번호판 재촬영 또는 TEXT를 직접 수정해주세요";
+  static const String MSG_REPORT_CHECK_CARNUMBER = "차량번호 형식이 잘못되었습니다.\n번호판 재촬영 또는 TEXT를 직접 수정해주세요";
   static const String MSG_REPORT_NOT_CARIMG = "사진이 없습니다.";
   static const String MSG_REPORT_NOT_TIME = "접수시간이 없습니다.";
   static const String MSG_REPORT_NOT_GPS = "위도, 경도가 없습니다.";

@@ -115,7 +115,7 @@ class _ReportcameraState extends State<Reportcamera> {
                     }
                     Get.offAll(() => const Declaration());
                   } else {
-                    Get.to(const Numbercamera());
+                    Get.offAll(const Numbercamera());
                   }
                 }),
             initContainerByOutlineButton(0, 0.7, "주정차관련법규보기", context),
