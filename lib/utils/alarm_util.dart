@@ -121,7 +121,7 @@ void alertDialogByGetxonebutton(String title, String text) {
 
 void alertDialogByGetxtobutton(String text, dynamic function) {
   Get.dialog(AlertDialog(
-    title: CustomText(
+    title: const CustomText(
       text: "알림",
       color: AppColors.black,
     ),
@@ -133,7 +133,7 @@ void alertDialogByGetxtobutton(String text, dynamic function) {
     ),
     actions: [
       TextButton(
-        child: CustomText(
+        child: const CustomText(
           weight: AppFontWeight.semiBold,
           color: AppColors.blue,
           size: 17,
@@ -142,13 +142,13 @@ void alertDialogByGetxtobutton(String text, dynamic function) {
         onPressed: () => Get.back(),
       ),
       TextButton(
-        child: CustomText(
+        onPressed: function,
+        child: const CustomText(
           weight: AppFontWeight.semiBold,
           color: AppColors.blue,
           size: 17,
           text: "확인",
         ),
-        onPressed: function,
         // () {
         //   controller.initialize();
         //   Get.offAll(const Home());

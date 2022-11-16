@@ -12,7 +12,6 @@ import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/states/widgets/styleWidget.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
 
 class MyPageCarInfomatino extends StatefulWidget {
   const MyPageCarInfomatino({super.key});

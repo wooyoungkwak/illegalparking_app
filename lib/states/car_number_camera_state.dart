@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
-import 'package:lottie/lottie.dart';
+// import 'package:lottie/lottie.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
 import 'package:get/get.dart';
 
@@ -181,14 +181,14 @@ class _NumbercameraState extends State<Numbercamera> {
 
   Dismissible _createDismissibleBySwipe(Widget widget) {
     return Dismissible(
-      key: ValueKey<int>(1),
+      key: const ValueKey<int>(1),
       resizeDuration: null,
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
         if (controller.carNumber.isNotEmpty) {
           Get.back();
         } else {
-          Get.to(Home());
+          Get.to(const Home());
           loginController.changePage(1);
           controller.initialize();
         }

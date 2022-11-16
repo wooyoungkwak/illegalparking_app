@@ -13,8 +13,6 @@ import 'package:illegalparking_app/states/car_report_camera_state_reshoot.dart';
 import 'package:illegalparking_app/states/home.dart';
 import 'package:illegalparking_app/states/confirmation.state.dart';
 import 'package:illegalparking_app/states/car_number_camera_state.dart';
-import 'package:illegalparking_app/states/car_report_camera_state.dart';
-import 'package:illegalparking_app/services/save_image_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
@@ -22,8 +20,6 @@ import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:popover/popover.dart';
-import 'package:lottie/lottie.dart';
-import 'package:flutter/services.dart';
 
 class Declaration extends StatefulWidget {
   const Declaration({super.key});
@@ -402,13 +398,13 @@ class _DeclarationState extends State<Declaration> {
     return true;
   }
 
-  void _escbtn() {
-    controller.carreportImagewrite("");
-    controller.carnumberImagewrite("");
-    Get.off(const Home(
-      index: 1,
-    ));
-  }
+  // void _escbtn() {
+  //   controller.carreportImagewrite("");
+  //   controller.carnumberImagewrite("");
+  //   Get.off(const Home(
+  //     index: 1,
+  //   ));
+  // }
 
   void back() {
     Get.back();
@@ -444,8 +440,8 @@ class _DeclarationState extends State<Declaration> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const CustomText(
+                children: const [
+                  CustomText(
                     weight: AppFontWeight.bold,
                     text: Env.MSG_REPORT_ENDING_PROGRESSDIALOG,
                     color: Colors.black,

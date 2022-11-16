@@ -9,14 +9,13 @@ import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/states/home.dart';
 import 'package:illegalparking_app/states/widgets/crop.dart';
 import 'package:illegalparking_app/states/declaration_state.dart';
-import 'package:illegalparking_app/states/car_number_camera_state.dart';
 import 'package:flutter/material.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
+
 import 'package:illegalparking_app/utils/time_util.dart';
-import 'package:lottie/lottie.dart';
+
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
 import 'package:get/get.dart';
 
@@ -38,6 +37,12 @@ class _ReportcamerareshootState extends State<Reportcamerareshoot> {
       // 테스트용으로 막아둠
       _fetchData(context);
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    cameradispose();
   }
 
   void _fetchData(BuildContext context) async {
@@ -112,15 +117,9 @@ class _ReportcamerareshootState extends State<Reportcamerareshoot> {
                 onTake: (MaskForCameraViewResult res) {
                   c.imageTimewrite(getDateToStringForYYMMDDHHMM(getNow()));
                   // Log.debug(getDateToStringForYYMMDDHHMM(getNow()));
-                  if (c.carnumberImage.value.isNotEmpty) {
-                    // Get.off(const Declaration());
-                    if (controller != null) {
-                      cameradispose();
-                    }
-                    Get.offAll(() => const Declaration());
-                  } else {
-                    Get.to(const Numbercamera());
-                  }
+
+                  // Get.off(const Declaration());
+                  Get.offAll(() => const Declaration());
                 }),
             initContainerByOutlineButton(0, 0.7, "주정차관련법규보기", context),
             createContainerByAlignment(-0.75, Platform.isIOS ? -0.9 : -0.925, createContainerByTopWidget(color: AppColors.white, function: backbtn)),
@@ -210,7 +209,7 @@ class _ReportcamerareshootState extends State<Reportcamerareshoot> {
 
   Dismissible _createDismissibleBySwipe(Widget widget) {
     return Dismissible(
-      key: ValueKey<int>(1),
+      key: const ValueKey<int>(1),
       resizeDuration: null,
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {

@@ -6,7 +6,6 @@ import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
-import 'package:illegalparking_app/main.dart';
 import 'package:illegalparking_app/services/save_image_service.dart';
 import 'package:illegalparking_app/states/home.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +30,7 @@ class _ConfirmationState extends State<Confirmation> {
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((data) async {
+      // ignore: unnecessary_null_comparison
       if (Env.REPORT_RESPONSE_MSG! == "" || Env.REPORT_RESPONSE_MSG! == null) {
         alertDialogByGetxonebutton("신고알림", Env.MSG_REPORT_NOT_RESPONSE);
       } else {
@@ -205,12 +205,12 @@ class _ConfirmationState extends State<Confirmation> {
     loginController.changePage(1);
   }
 
-  void _escbtn() {
-    controller.initialize();
-    Get.off(const Home(
-      index: 1,
-    ));
-  }
+  // void _escbtn() {
+  //   controller.initialize();
+  //   Get.off(const Home(
+  //     index: 1,
+  //   ));
+  // }
 
   void backbtn() {
     alertDialogByGetxtobutton("홈으로 이동하시겠습니까?", gotohome);

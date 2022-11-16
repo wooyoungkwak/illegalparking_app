@@ -5,16 +5,15 @@ import 'package:flutter/services.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
-import 'package:illegalparking_app/states/home.dart';
+
 import 'package:illegalparking_app/states/widgets/crop.dart';
 import 'package:illegalparking_app/states/declaration_state.dart';
 import 'package:illegalparking_app/states/car_number_camera_state.dart';
 import 'package:flutter/material.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/utils/time_util.dart';
-import 'package:lottie/lottie.dart';
+// import 'package:lottie/lottie.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
 import 'package:get/get.dart';
 
@@ -195,7 +194,7 @@ class _ReportcameraState extends State<Reportcamera> {
 
   Dismissible _createDismissibleBySwipe(Widget widget) {
     return Dismissible(
-      key: ValueKey<int>(1),
+      key: const ValueKey<int>(1),
       resizeDuration: null,
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {

@@ -28,13 +28,13 @@ Future<void> saveImageDirectory(MaskForCameraViewResult res, bool part) async {
     c.carnumberImageMemorywrit(res.croppedImage!);
     carnumberImagename = nametime;
     controller.carnumfileNamewrite("$carnumberImagename.jpg");
-    Log.debug("$carnumberImagename.jpg");
+    // Log.debug("$carnumberImagename.jpg");
   } else {
     c.carreportImagewrite(myImagePath);
     c.reportImageMemorywrit(res.croppedImage!);
     carreportnumberImage = nametime;
     controller.reportfileNamewrite("$carreportnumberImage.jpg");
-    Log.debug("$carreportnumberImage.jpg");
+    // Log.debug("$carreportnumberImage.jpg");
   }
   //myImagePath
   //20221004152932789426 저장된 파일이름
