@@ -76,7 +76,6 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
         enableAudio: false,
         imageFormatGroup: ImageFormatGroup.yuv420,
       );
-
       controller!.initialize().then((_) async {
         if (!mounted) {
           return;
@@ -109,6 +108,7 @@ class _MaskForCameraCustomViewState extends State<MaskForCameraCustomView> with 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    // cameradispose();
     super.dispose();
   }
 

@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/services/setting_service.dart';
 import 'package:illegalparking_app/states/login.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
@@ -14,9 +18,14 @@ class Firstuse extends StatelessWidget {
     mediasizeSetting(context);
     double devicHeight = Env.MEDIA_SIZE_HEIGHT!;
     double devicWidth = Env.MEDIA_SIZE_WIDTH!;
-
+    if (Platform.isIOS) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark)); // IOS = Brightness.light의 경우 글자 검정, 배경 흰색
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark, statusBarColor: AppColors.white)); // android = Brightness.light 글자 흰색, 배경색은 컬러에 영향을 받음
+    }
     return MaterialApp(
         home: Scaffold(
+      backgroundColor: AppColors.appBackground,
       body: Column(
         children: [
           SizedBox(

@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/models/storage_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
@@ -21,7 +25,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: AppColors.black, statusBarBrightness: Brightness.light));
   callPermissions();
   cameraSetting();
   runApp(const MyApp());
@@ -29,11 +34,23 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.light)); // IOS = Brightness.light의 경우 글자 검정, 배경 흰색
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark, statusBarColor: AppColors.white)); // android = Brightness.light 글자 흰색, 배경색은 컬러에 영향을 받음
+    }
     final theme = ThemeData(
       fontFamily: "NotoSansKR",
-      primarySwatch: Colors.blue,
+      // appBarTheme: const AppBarTheme(
+      //   systemOverlayStyle: SystemUiOverlayStyle(
+      //     statusBarColor: Colors.black,
+      //     statusBarIconBrightness: Brightness.dark,
+      //     statusBarBrightness: Brightness.dark,
+      //   ),
+      // ),
     );
 
     return GetMaterialApp(
@@ -109,7 +126,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
+      appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        backgroundColor: Colors.transparent,
+      ),
       body: null, // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

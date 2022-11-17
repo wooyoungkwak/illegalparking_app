@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
-import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/utils/time_util.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
@@ -28,13 +27,13 @@ Future<void> saveImageDirectory(MaskForCameraViewResult res, bool part) async {
     c.carnumberImageMemorywrit(res.croppedImage!);
     carnumberImagename = nametime;
     controller.carnumfileNamewrite("$carnumberImagename.jpg");
-    Log.debug("$carnumberImagename.jpg");
+    // Log.debug("$carnumberImagename.jpg");
   } else {
     c.carreportImagewrite(myImagePath);
     c.reportImageMemorywrit(res.croppedImage!);
     carreportnumberImage = nametime;
     controller.reportfileNamewrite("$carreportnumberImage.jpg");
-    Log.debug("$carreportnumberImage.jpg");
+    // Log.debug("$carreportnumberImage.jpg");
   }
   //myImagePath
   //20221004152932789426 저장된 파일이름

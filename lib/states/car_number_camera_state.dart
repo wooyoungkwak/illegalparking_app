@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
@@ -12,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
-import 'package:lottie/lottie.dart';
+// import 'package:lottie/lottie.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
 import 'package:get/get.dart';
 
@@ -24,7 +25,7 @@ class Numbercamera extends StatefulWidget {
 }
 
 class _NumbercameraState extends State<Numbercamera> {
-  final ReportController controller = Get.put(ReportController());
+  final ReportController c = Get.put(ReportController());
   final loginController = Get.put(LoginController());
   @override
   void initState() {
@@ -82,12 +83,19 @@ class _NumbercameraState extends State<Numbercamera> {
   @override
   void dispose() {
     super.dispose();
-    cameradispose();
+    // cameradispose();
+    // controller!.setFlashMode(FlashMode.off);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark)); // IOS = Brightness.light의 경우 글자 검정, 배경 흰색
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark, statusBarColor: AppColors.white)); // android = Brightness.light 글자 흰색, 배경색은 컬러에 영향을 받음
+    }
     return Scaffold(
+      backgroundColor: AppColors.appBackground,
       body: _createWillPopScope(Stack(
         children: [
           MaskForCameraCustomView(
@@ -101,10 +109,10 @@ class _NumbercameraState extends State<Numbercamera> {
               btomhighbtn: Env.MEDIA_SIZE_HEIGHT! / 1.65,
               backColor: Colors.black,
               onTake: (MaskForCameraViewResult res) {
-                controller.carNumberwrite("");
+                c.carNumberwrite("");
                 Get.offAll(() => const Declaration());
               }),
-          CreateContainerByAlignment(-0.8, -0.9, createContainerByTopWidget(color: AppColors.white, function: backbtn)),
+          CreateContainerByAlignment(-0.70, Platform.isIOS ? -0.9 : -0.925, createContainerByTopWidget(color: AppColors.white, function: backbtn)),
           CreateContainerByAlignment(0, -0.3,
               DefaultTextStyle(style: Theme.of(context).textTheme.headline1!, child: const CustomText(text: "번호판을 네모영역 안에서 촬영해주세요", weight: AppFontWeight.regular, size: 14, color: AppColors.white))),
           CreateContainerByAlignment(
@@ -132,13 +140,16 @@ class _NumbercameraState extends State<Numbercamera> {
   WillPopScope _createWillPopScope(Widget widget) {
     return WillPopScope(
         onWillPop: () {
-          if (controller.carnumberImageMemory.length > 1) {
+          if (c.carnumberImage.value.length > 1) {
             Get.back();
             Env.CARNUMBER_CAMERA_RESHOOT_CHECK = false;
+          } else {
+            backbtn();
           }
           return Future(() => false);
         },
         child: Platform.isIOS ? _createDismissibleBySwipe(widget) : widget);
+    // child: _createDismissibleBySwipe(widget));
   }
 
   // ignore: unused_element
@@ -163,22 +174,24 @@ class _NumbercameraState extends State<Numbercamera> {
   }
 
   gotohome() {
-    controller.initialize();
+    // cameradispose();
+    c.initialize();
     Get.offAll(const Home());
-    loginController.changePage(0);
+    loginController.changePage(1);
   }
 
   Dismissible _createDismissibleBySwipe(Widget widget) {
     return Dismissible(
-      key: ValueKey<int>(1),
+      key: const ValueKey<int>(1),
       resizeDuration: null,
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
-        if (controller.carNumber.isNotEmpty) {
+        if (c.carNumber.isNotEmpty) {
           Get.back();
         } else {
-          Get.to(Home());
+          Get.to(const Home());
           loginController.changePage(1);
+          c.initialize();
         }
       },
       child: widget,

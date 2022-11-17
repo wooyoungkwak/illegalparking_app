@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:illegalparking_app/config/env.dart';
+import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
-import 'package:illegalparking_app/main.dart';
 import 'package:illegalparking_app/services/save_image_service.dart';
 import 'package:illegalparking_app/states/home.dart';
 import 'package:flutter/material.dart';
@@ -27,12 +30,14 @@ class _ConfirmationState extends State<Confirmation> {
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((data) async {
+      // ignore: unnecessary_null_comparison
       if (Env.REPORT_RESPONSE_MSG! == "" || Env.REPORT_RESPONSE_MSG! == null) {
         alertDialogByGetxonebutton("신고알림", Env.MSG_REPORT_NOT_RESPONSE);
       } else {
         alertDialogByGetxonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
       }
       saveImageGallery();
+      controller.initialize();
     });
   }
 
@@ -43,10 +48,16 @@ class _ConfirmationState extends State<Confirmation> {
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark)); // IOS = Brightness.light의 경우 글자 검정, 배경 흰색
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark, statusBarColor: AppColors.white)); // android = Brightness.light 글자 흰색, 배경색은 컬러에 영향을 받음
+    }
     final statusBarHeight = MediaQuery.of(context).padding.top;
     return _createWillPopScope(Padding(
         padding: EdgeInsets.only(top: statusBarHeight),
         child: Scaffold(
+          backgroundColor: AppColors.white,
           body: Column(
             children: [
               createContainerByTopWidget(text: "신고하기", function: backbtn),
@@ -101,7 +112,7 @@ class _ConfirmationState extends State<Confirmation> {
   WillPopScope _createWillPopScope(Widget widget) {
     return WillPopScope(
         onWillPop: () {
-          Get.offAll(() => main());
+          backbtn();
           return Future(() => false);
         },
         child: widget);
@@ -194,12 +205,12 @@ class _ConfirmationState extends State<Confirmation> {
     loginController.changePage(1);
   }
 
-  void _escbtn() {
-    controller.initialize();
-    Get.off(const Home(
-      index: 1,
-    ));
-  }
+  // void _escbtn() {
+  //   controller.initialize();
+  //   Get.off(const Home(
+  //     index: 1,
+  //   ));
+  // }
 
   void backbtn() {
     alertDialogByGetxtobutton("홈으로 이동하시겠습니까?", gotohome);

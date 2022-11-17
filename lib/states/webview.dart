@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
@@ -73,26 +74,34 @@ class _WebviewPageState extends State<WebviewPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.light)); // IOS = Brightness.light의 경우 글자 검정, 배경 흰색
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark, statusBarColor: AppColors.white)); // android = Brightness.light 글자 흰색, 배경색은 컬러에 영향을 받음
+    }
     final statusBarHeight = MediaQuery.of(context).padding.top;
-    return Container(
-      padding: Platform.isAndroid ? EdgeInsets.only(top: statusBarHeight) : EdgeInsets.only(top: statusBarHeight, bottom: 20),
-      child: Column(
-        children: [
-          Expanded(
-            child: WebView(
-              initialUrl: "${Env.SERVER_ADMIN_URL}/api/area/map",
-              onWebViewCreated: (WebViewController webViewController) {
-                _controller.complete(webViewController);
-                _webViewController = webViewController;
-              },
-              onProgress: (int progress) {
-                Log.debug("Webview is loading (progress : $progress%");
-              },
-              javascriptMode: JavascriptMode.unrestricted,
-              javascriptChannels: _createJavascriptChannels(context),
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      body: Container(
+        padding: Platform.isAndroid ? EdgeInsets.only(top: statusBarHeight) : EdgeInsets.only(top: statusBarHeight, bottom: 20),
+        child: Column(
+          children: [
+            Expanded(
+              child: WebView(
+                initialUrl: "${Env.SERVER_ADMIN_URL}/api/area/map",
+                onWebViewCreated: (WebViewController webViewController) {
+                  _controller.complete(webViewController);
+                  _webViewController = webViewController;
+                },
+                onProgress: (int progress) {
+                  Log.debug("Webview is loading (progress : $progress%");
+                },
+                javascriptMode: JavascriptMode.unrestricted,
+                javascriptChannels: _createJavascriptChannels(context),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/config/style.dart';
@@ -49,6 +52,11 @@ class _MyPagePointState extends State<MyPagePoint> {
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.light)); // IOS = Brightness.light의 경우 글자 검정, 배경 흰색
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark, statusBarColor: AppColors.white)); // android = Brightness.light 글자 흰색, 배경색은 컬러에 영향을 받음
+    }
     return WillPopScope(
       onWillPop: () {
         loginController.changeRealPage(2);
@@ -57,6 +65,9 @@ class _MyPagePointState extends State<MyPagePoint> {
       child: Scaffold(
         backgroundColor: AppColors.appBackground,
         appBar: AppBar(
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.dark,
+          ),
           elevation: 0,
           backgroundColor: AppColors.appBackground,
           centerTitle: true,

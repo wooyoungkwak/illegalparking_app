@@ -9,19 +9,18 @@ import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/services/such_loation_service.dart';
+import 'package:illegalparking_app/states/car_report_camera_state_reshoot.dart';
 import 'package:illegalparking_app/states/home.dart';
 import 'package:illegalparking_app/states/confirmation.state.dart';
 import 'package:illegalparking_app/states/car_number_camera_state.dart';
-import 'package:illegalparking_app/states/car_report_camera_state.dart';
-import 'package:illegalparking_app/services/save_image_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:illegalparking_app/states/widgets/crop.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:popover/popover.dart';
-import 'package:lottie/lottie.dart';
 
 class Declaration extends StatefulWidget {
   const Declaration({super.key});
@@ -41,6 +40,7 @@ class _DeclarationState extends State<Declaration> {
   @override
   void initState() {
     super.initState();
+
     myFocusNode = FocusNode();
     _numberplateContoroller = TextEditingController(text: controller.carNumber.isNotEmpty ? controller.carNumber.value : "");
 
@@ -51,39 +51,50 @@ class _DeclarationState extends State<Declaration> {
   }
 
   void _fetchData(BuildContext context) async {
+    cameradispose();
     showDialog(
         barrierDismissible: false,
         context: context,
         builder: (_) {
           return Dialog(
-            backgroundColor: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+              backgroundColor: Colors.transparent,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const CustomText(
-                    weight: AppFontWeight.bold,
-                    text: Env.MSG_REPORT_LOADING_PROGRESSDIALOG,
-                    color: Colors.black,
-                    size: 22,
+                  createCustomText(color: AppColors.white, text: "로딩중..."),
+                  const CircularProgressIndicator(
+                    color: AppColors.white,
                   ),
-                  // LinearProgressIndicator(),
-                  // CircularProgressIndicator(),
-                  SizedBox(
-                    height: 50,
-                    child: Lottie.asset(
-                      'assets/image-scan.json',
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  // SizedBox(width: 75, height: 75, child: Lottie.network('https://assets9.lottiefiles.com/packages/lf20_HmCBZ0IIXU.json', fit: BoxFit.fill)),
-                  // Some text
                 ],
-              ),
-            ),
-          );
+              )
+              // backgroundColor: Colors.white,
+              // child: Padding(
+              //   padding: const EdgeInsets.symmetric(vertical: 10),
+              //   child: Row(
+              //     mainAxisSize: MainAxisSize.min,
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       const CustomText(
+              //         weight: AppFontWeight.bold,
+              //         text: Env.MSG_REPORT_LOADING_PROGRESSDIALOG,
+              //         color: Colors.black,
+              //         size: 15,
+              //       ),
+              //       // LinearProgressIndicator(),
+              //       CircularProgressIndicator(color: AppColors.black),
+              //       // SizedBox(
+              //       //   height: 50,
+              //       //   child: Lottie.asset(
+              //       //     'assets/image-scan.json',
+              //       //     fit: BoxFit.fill,
+              //       //   ),
+              //       // ),
+              //       // SizedBox(width: 75, height: 75, child: Lottie.network('https://assets9.lottiefiles.com/packages/lf20_HmCBZ0IIXU.json', fit: BoxFit.fill)),
+              //       // Some text
+              //     ],
+              //   ),
+              // ),
+              );
         });
     try {
       // 테스트용 주석처리 ai 업로드 막기
@@ -136,6 +147,7 @@ class _DeclarationState extends State<Declaration> {
       // showSnackBar(context, "서버 에러 or 타임아웃");
 
     }
+
     setState(() {});
   }
 
@@ -149,13 +161,20 @@ class _DeclarationState extends State<Declaration> {
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark)); // IOS = Brightness.light의 경우 글자 검정, 배경 흰색
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark, statusBarColor: AppColors.white)); // android = Brightness.light 글자 흰색, 배경색은 컬러에 영향을 받음
+    }
+
     final statusBarHeight = Env.MEDIA_SIZE_PADDINGTOP!;
     return GestureDetector(
       onTap: () => myFocusNode.unfocus(),
       child: _createWillPopScope(
         Padding(
-          padding: EdgeInsets.only(top: statusBarHeight + 10),
+          padding: EdgeInsets.only(top: statusBarHeight),
           child: Scaffold(
+            backgroundColor: AppColors.white,
             resizeToAvoidBottomInset: true,
             body: Form(
               key: _formKey,
@@ -228,7 +247,7 @@ class _DeclarationState extends State<Declaration> {
   gotohome() {
     controller.initialize();
     Get.offAll(const Home());
-    loginController.changePage(0);
+    loginController.changePage(1);
   }
 
   InkWell _initInkWellByImageTap(String path, double height) {
@@ -342,6 +361,7 @@ class _DeclarationState extends State<Declaration> {
     return WillPopScope(
         onWillPop: () {
           // Get.offAll(() => main());
+          backbtn();
           return Future(() => false);
         },
         child: widget);
@@ -368,7 +388,7 @@ class _DeclarationState extends State<Declaration> {
     } else if (controller.imageTime.value == null || controller.imageTime.value == "") {
       alertDialogByGetxonebutton("알림", Env.MSG_REPORT_NOT_CARIMG);
       return false;
-    } else if (controller.reportfileName.value == null || controller.reportfileName.value == "") {
+    } else if (controller.reportfileName.value == null || controller.reportfileName.value == "" || File(controller.reportfileName.value).existsSync()) {
       alertDialogByGetxonebutton("알림", Env.MSG_REPORT_NOT_CARIMG);
       return false;
     } else if (controller.imageGPS.value.latitude == null || controller.imageGPS.value.longitude == null || controller.imageGPS.value.latitude == "" || controller.imageGPS.value.longitude == "") {
@@ -381,20 +401,20 @@ class _DeclarationState extends State<Declaration> {
     return true;
   }
 
-  void _escbtn() {
-    controller.carreportImagewrite("");
-    controller.carnumberImagewrite("");
-    Get.off(const Home(
-      index: 1,
-    ));
-  }
+  // void _escbtn() {
+  //   controller.carreportImagewrite("");
+  //   controller.carnumberImagewrite("");
+  //   Get.off(const Home(
+  //     index: 1,
+  //   ));
+  // }
 
   void back() {
     Get.back();
   }
 
   void _reportcamerabtn() {
-    Get.to(const Reportcamera());
+    Get.to(const Reportcamerareshoot());
     Env.CAR_CAMERA_RESHOOT_CHECK = true;
   }
 
@@ -404,9 +424,10 @@ class _DeclarationState extends State<Declaration> {
   }
 
   void _reportbtn() async {
+    // saveImageGallery();
+    // Get.to(Confirmation());
     if (valuenullCheck()) {
       _endData(context);
-      // await saveImageGallery();
     }
   }
 
@@ -422,8 +443,8 @@ class _DeclarationState extends State<Declaration> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const CustomText(
+                children: const [
+                  CustomText(
                     weight: AppFontWeight.bold,
                     text: Env.MSG_REPORT_ENDING_PROGRESSDIALOG,
                     color: Colors.black,
@@ -479,8 +500,8 @@ class _DeclarationState extends State<Declaration> {
     } catch (e) {
       Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR;
     }
-    // await Future.delayed(const Duration(seconds: 1));
-    Get.back(); //이거 위치 잘 생각해봐
+
+    Get.back();
   }
 }
 
