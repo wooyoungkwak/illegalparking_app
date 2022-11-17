@@ -35,6 +35,7 @@ class _DeclarationState extends State<Declaration> {
   final ScrollController _scrollController = ScrollController();
   final loginController = Get.put(LoginController());
   late TextEditingController _numberplateContoroller;
+  bool duplicateClick = false;
 
   late FocusNode myFocusNode;
   @override
@@ -45,7 +46,6 @@ class _DeclarationState extends State<Declaration> {
     _numberplateContoroller = TextEditingController(text: controller.carNumber.isNotEmpty ? controller.carNumber.value : "");
 
     SchedulerBinding.instance.addPostFrameCallback((data) async {
-      // 테스트용으로 막아둠
       _fetchData(context);
     });
   }
@@ -66,38 +66,9 @@ class _DeclarationState extends State<Declaration> {
                     color: AppColors.white,
                   ),
                 ],
-              )
-              // backgroundColor: Colors.white,
-              // child: Padding(
-              //   padding: const EdgeInsets.symmetric(vertical: 10),
-              //   child: Row(
-              //     mainAxisSize: MainAxisSize.min,
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       const CustomText(
-              //         weight: AppFontWeight.bold,
-              //         text: Env.MSG_REPORT_LOADING_PROGRESSDIALOG,
-              //         color: Colors.black,
-              //         size: 15,
-              //       ),
-              //       // LinearProgressIndicator(),
-              //       CircularProgressIndicator(color: AppColors.black),
-              //       // SizedBox(
-              //       //   height: 50,
-              //       //   child: Lottie.asset(
-              //       //     'assets/image-scan.json',
-              //       //     fit: BoxFit.fill,
-              //       //   ),
-              //       // ),
-              //       // SizedBox(width: 75, height: 75, child: Lottie.network('https://assets9.lottiefiles.com/packages/lf20_HmCBZ0IIXU.json', fit: BoxFit.fill)),
-              //       // Some text
-              //     ],
-              //   ),
-              // ),
-              );
+              ));
         });
     try {
-      // 테스트용 주석처리 ai 업로드 막기
       if (Env.CARNUMBER_CAMERA_RESHOOT_CHECK == false && Env.CAR_CAMERA_RESHOOT_CHECK == false) {
         await getGPS();
         await sendFileByAI(Env.SERVER_AI_FILE_UPLOAD_URL, controller.carnumberImage.value).then((carNum) {
@@ -143,9 +114,7 @@ class _DeclarationState extends State<Declaration> {
     } catch (e) {
       Get.back();
       _numberplateContoroller = TextEditingController(text: "인식실패");
-
       // showSnackBar(context, "서버 에러 or 타임아웃");
-
     }
 
     setState(() {});
@@ -360,7 +329,6 @@ class _DeclarationState extends State<Declaration> {
   WillPopScope _createWillPopScope(Widget widget) {
     return WillPopScope(
         onWillPop: () {
-          // Get.offAll(() => main());
           backbtn();
           return Future(() => false);
         },
@@ -401,14 +369,6 @@ class _DeclarationState extends State<Declaration> {
     return true;
   }
 
-  // void _escbtn() {
-  //   controller.carreportImagewrite("");
-  //   controller.carnumberImagewrite("");
-  //   Get.off(const Home(
-  //     index: 1,
-  //   ));
-  // }
-
   void back() {
     Get.back();
   }
@@ -424,10 +384,11 @@ class _DeclarationState extends State<Declaration> {
   }
 
   void _reportbtn() async {
-    // saveImageGallery();
-    // Get.to(Confirmation());
     if (valuenullCheck()) {
-      _endData(context);
+      if (duplicateClick == false) {
+        duplicateClick = true;
+        _endData(context);
+      }
     }
   }
 
@@ -469,7 +430,6 @@ class _DeclarationState extends State<Declaration> {
     try {
       String text = _numberplateContoroller.text;
       text = text.replaceAll(' ', '');
-
       // 신고하기 테스트용으로 막아뒀음...  나중에 주석해제
       sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
             if (result == false)
@@ -500,7 +460,7 @@ class _DeclarationState extends State<Declaration> {
     } catch (e) {
       Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR;
     }
-
+    duplicateClick = false;
     Get.back();
   }
 }
