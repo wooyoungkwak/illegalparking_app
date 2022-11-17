@@ -1,4 +1,3 @@
-import 'package:camera_platform_interface/src/types/flash_mode.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/models/address_model.dart';
 import 'dart:typed_data';
@@ -73,6 +72,4 @@ class ReportController extends GetxController {
     carnumfileName = "".obs;
     imageTime = "".obs;
   }
-
-  void setFlashMode(FlashMode off) {}
 }

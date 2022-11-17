@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:camera/camera.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:illegalparking_app/config/env.dart';
@@ -111,11 +110,7 @@ class _NumbercameraState extends State<Numbercamera> {
               backColor: Colors.black,
               onTake: (MaskForCameraViewResult res) {
                 c.carNumberwrite("");
-                if (controller != null) {
-                  cameradispose();
-                }
                 Get.offAll(() => const Declaration());
-                // cameradispose();
               }),
           CreateContainerByAlignment(-0.70, Platform.isIOS ? -0.9 : -0.925, createContainerByTopWidget(color: AppColors.white, function: backbtn)),
           CreateContainerByAlignment(0, -0.3,

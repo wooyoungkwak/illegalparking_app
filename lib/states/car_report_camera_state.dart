@@ -111,9 +111,8 @@ class _ReportcameraState extends State<Reportcamera> {
                   if (c.carnumberImage.value.isNotEmpty) {
                     // Get.off(const Declaration());
                     if (controller != null) {
-                      cameradispose();
+                      Get.offAll(() => const Declaration());
                     }
-                    Get.offAll(() => const Declaration());
                   } else {
                     Get.offAll(const Numbercamera());
                   }

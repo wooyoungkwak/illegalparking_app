@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:camera/camera.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:illegalparking_app/config/env.dart';
@@ -90,9 +89,6 @@ class _ReportcamerareshootState extends State<Reportcamerareshoot> {
                 btomhighbtn: !c.carnumberImage.value.isNotEmpty ? Env.MEDIA_SIZE_HEIGHT! / 1.45 : Env.MEDIA_SIZE_HEIGHT! / 1.5, // 버튼위치 조정
                 onTake: (MaskForCameraViewResult res) {
                   c.imageTimewrite(getDateToStringForYYMMDDHHMM(getNow()));
-                  if (controller != null) {
-                    cameradispose();
-                  }
                   Get.offAll(() => const Declaration());
                 }),
             initContainerByOutlineButton(0, 0.7, "주정차관련법규보기", context),

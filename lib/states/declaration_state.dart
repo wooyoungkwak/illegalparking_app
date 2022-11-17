@@ -15,6 +15,7 @@ import 'package:illegalparking_app/states/confirmation.state.dart';
 import 'package:illegalparking_app/states/car_number_camera_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:illegalparking_app/states/widgets/crop.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
@@ -50,6 +51,7 @@ class _DeclarationState extends State<Declaration> {
   }
 
   void _fetchData(BuildContext context) async {
+    cameradispose();
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -145,6 +147,7 @@ class _DeclarationState extends State<Declaration> {
       // showSnackBar(context, "서버 에러 or 타임아웃");
 
     }
+
     setState(() {});
   }
 
