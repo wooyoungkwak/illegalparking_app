@@ -21,6 +21,7 @@ import 'package:illegalparking_app/states/my_page_report.dart';
 import 'package:illegalparking_app/states/sign_up.dart';
 import 'package:illegalparking_app/states/first_use_state.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -92,7 +93,9 @@ class _MyHomePageState extends State<MyHomePage> {
     secureStorage = SecureStorage();
     _checkInstall().then((value) {
       if (Env.BOOL_FIRSTUSE == true) {
+        Log.debug("Env.BOOL_FIRSTUSE : ${Env.BOOL_FIRSTUSE}");
         _checkAutoLogin().then((loginState) {
+          Log.debug("loginState : $loginState");
           if (loginState != null && loginState == "true") {
             login(Env.USER_ID!, Env.USER_PASSWORD!).then((loginInfo) {
               if (loginInfo.success) {
@@ -108,6 +111,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 showErrorToast(text: "아이디 또는 비밀번호를 확인해 주세요.");
                 Navigator.pushNamedAndRemoveUntil(context, "/login", (route) => false);
               }
+            }, onError: (e) {
+              String errorMessage = e.toString().substring(11);
+              showAlertDialog(context, text: errorMessage, action: () {
+                SystemNavigator.pop();
+              });
             });
           } else {
             Get.off(const Login());
@@ -127,11 +135,20 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.white,
+        elevation: 0,
       ),
-      body: null, // This trailing comma makes auto-formatting nicer for build methods.
+      body: Container(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.top),
+        child: const Center(
+          child: CircularProgressIndicator(
+            color: AppColors.black,
+          ),
+        ),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 

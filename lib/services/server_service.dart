@@ -16,16 +16,21 @@ Map<String, String> headers = {};
 Future<LoginInfo> login(String id, String pw) async {
   var data = {"userName": id, "password": pw};
   var body = json.encode(data);
+  http.Response response;
 
-  var response = await http.post(Uri.parse(Env.SERVER_LOGIN_URL), headers: {"Content-Type": "application/json"}, body: body);
-  if (response.statusCode == 200) {
-    String result = utf8.decode(response.bodyBytes);
-    Map<String, dynamic> resultMap = jsonDecode(result);
+  try {
+    response = await http.post(Uri.parse(Env.SERVER_LOGIN_URL), headers: {"Content-Type": "application/json"}, body: body);
+    if (response.statusCode == 200) {
+      String result = utf8.decode(response.bodyBytes);
+      Map<String, dynamic> resultMap = jsonDecode(result);
 
-    Log.debug("Login Info : ${resultMap["data"].toString()}");
-    //로그인 성공 실패 체크해서 Model 다르게 설정
-    return LoginInfo.fromJson(resultMap);
-  } else {
+      Log.debug("Login Info : ${resultMap["data"].toString()}");
+      //로그인 성공 실패 체크해서 Model 다르게 설정
+      return LoginInfo.fromJson(resultMap);
+    } else {
+      throw Exception('로그인 서버 오류');
+    }
+  } catch (e) {
     throw Exception('로그인 서버 오류');
   }
 }
