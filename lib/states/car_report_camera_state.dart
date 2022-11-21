@@ -106,7 +106,7 @@ class _ReportcameraState extends State<Reportcamera> {
                 // btomhighbtn: 140, // 버튼위치 조정
                 btomhighbtn: !c.carnumberImage.value.isNotEmpty ? Env.MEDIA_SIZE_HEIGHT! / 1.45 : Env.MEDIA_SIZE_HEIGHT! / 1.5, // 버튼위치 조정
                 onTake: (MaskForCameraViewResult res) {
-                  c.imageTimewrite(getDateToStringForYYMMDDHHMM(getNow()));
+                  c.imageTimewrite(getDateToStringForAll(getNow()));
                   // Log.debug(getDateToStringForYYMMDDHHMM(getNow()));
                   if (c.carnumberImage.value.isNotEmpty) {
                     // Get.off(const Declaration());

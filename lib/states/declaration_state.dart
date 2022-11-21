@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
@@ -35,7 +36,8 @@ class _DeclarationState extends State<Declaration> {
   final ScrollController _scrollController = ScrollController();
   final loginController = Get.put(LoginController());
   late TextEditingController _numberplateContoroller;
-  bool duplicateClick = false;
+  int clickCount = 0; // 중복클릭 방지
+  int testCount = 0; // Log용 카운트
 
   late FocusNode myFocusNode;
   @override
@@ -273,6 +275,7 @@ class _DeclarationState extends State<Declaration> {
   InkWell _initInkWellByOnTap(Widget widget, Function function) {
     return InkWell(
       onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
         function();
       },
       child: widget,
@@ -385,11 +388,38 @@ class _DeclarationState extends State<Declaration> {
 
   void _reportbtn() async {
     if (valuenullCheck()) {
-      if (duplicateClick == false) {
-        duplicateClick = true;
+      if (clickCount == 0) {
+        clickCount++;
         _endData(context);
       }
     }
+  }
+
+  void showRetryDialog(BuildContext context, {String? text}) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('알림'),
+        content: Text(text ?? ""),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, 'OK');
+              _endData(context);
+            },
+            child: const Text('확인'),
+          ),
+          TextButton(
+            onPressed: () {
+              clickCount--;
+              Navigator.pop(context, 'Cancel');
+            },
+            child: const Text('취소'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _endData(BuildContext context) async {
@@ -431,36 +461,44 @@ class _DeclarationState extends State<Declaration> {
       String text = _numberplateContoroller.text;
       text = text.replaceAll(' ', '');
       // 신고하기 테스트용으로 막아뒀음...  나중에 주석해제
-      sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) => {
-            if (result == false)
-              {Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR}
-            else
-              {
-                sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value,
-                        controller.imageGPS.value.latitude, controller.imageGPS.value.longitude)
-                    .then((reportInfo) {
-                  if (!reportInfo.success) {
-                    Env.REPORT_RESPONSE_MSG = reportInfo.message!;
-                    if (Env.REPORT_RESPONSE_MSG!.contains("초과했습니다.")) {
-                      // pd.close();
-                      showAlertDialog(context, text: Env.MSG_REPORT_DIALOG_SELECT, action: _reportbtn);
-                      alertDialogByGetxonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
-                    } else {
-                      // pd.close();
-                      Get.offAll(const Confirmation());
-                    }
-                  } else {
-                    Env.REPORT_RESPONSE_MSG = reportInfo.data!;
-                    // pd.close();
-                    Get.offAll(const Confirmation());
-                  }
-                })
+      sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) {
+        if (result == false) {
+          // Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR;
+          alertDialogByGetxonebutton("신고알림", Env.MSG_REPORT_FILE_ERROR);
+          clickCount--;
+        } else {
+          sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value, controller.imageGPS.value.latitude,
+                  controller.imageGPS.value.longitude)
+              .then((reportInfo) {
+            //보내는 위도 경도 확인용
+            Log.debug("longitude :${controller.imageGPS.value.longitude}");
+            Log.debug("latitude : ${controller.imageGPS.value.latitude}");
+            //중복 횟수 확인용
+            testCount++;
+            Log.debug("upload {$testCount}");
+            if (!reportInfo.success) {
+              Env.REPORT_RESPONSE_MSG = reportInfo.message!;
+              if (Env.REPORT_RESPONSE_MSG!.contains("초과했습니다.")) {
+                // pd.close();
+                showRetryDialog(context, text: Env.MSG_REPORT_DIALOG_SELECT);
+                alertDialogByGetxonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
+              } else {
+                // pd.close();
+                Get.offAll(const Confirmation());
               }
+            } else {
+              Env.REPORT_RESPONSE_MSG = reportInfo.data!;
+              // pd.close();
+              Get.offAll(const Confirmation());
+            }
           });
+        }
+      });
     } catch (e) {
-      Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR;
+      // Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR;
+      alertDialogByGetxonebutton("신고알림", "서버 오류입니다.");
+      clickCount--;
     }
-    duplicateClick = false;
     Get.back();
   }
 }

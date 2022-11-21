@@ -14,6 +14,7 @@ import 'package:illegalparking_app/states/widgets/custom_text.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 
 import 'package:illegalparking_app/utils/alarm_util.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 
 class Confirmation extends StatefulWidget {
   const Confirmation({super.key});
@@ -25,6 +26,7 @@ class Confirmation extends StatefulWidget {
 class _ConfirmationState extends State<Confirmation> {
   final ReportController controller = Get.put(ReportController());
   final loginController = Get.put(LoginController());
+  int testcount = 0;
 
   @override
   void initState() {
@@ -36,7 +38,9 @@ class _ConfirmationState extends State<Confirmation> {
       } else {
         alertDialogByGetxonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
       }
-      saveImageGallery();
+      testcount++;
+      Log.debug("state {$testcount}");
+      // saveImageGallery();
       controller.initialize();
     });
   }
@@ -219,6 +223,6 @@ class _ConfirmationState extends State<Confirmation> {
   gotohome() {
     controller.initialize();
     Get.offAll(const Home());
-    loginController.changePage(0);
+    loginController.changePage(1);
   }
 }

@@ -93,6 +93,7 @@ showCustomDialog({required BuildContext context, String? title, Widget? widget})
 
 void alertDialogByGetxonebutton(String title, String text) {
   Get.dialog(
+    barrierDismissible: false,
     AlertDialog(
       title: CustomText(
         size: 17,
