@@ -480,8 +480,9 @@ class _DeclarationState extends State<Declaration> {
               Env.REPORT_RESPONSE_MSG = reportInfo.message!;
               if (Env.REPORT_RESPONSE_MSG!.contains("초과했습니다.")) {
                 // pd.close();
-                showRetryDialog(context, text: Env.MSG_REPORT_DIALOG_SELECT);
-                alertDialogByGetxonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
+                // showRetryDialog(context, text: Env.MSG_REPORT_DIALOG_SELECT);
+                // alertDialogByGetxonebutton("신고알림", Env.REPORT_RESPONSE_MSG!);
+                Get.offAll(const Confirmation());
               } else {
                 // pd.close();
                 Get.offAll(const Confirmation());
