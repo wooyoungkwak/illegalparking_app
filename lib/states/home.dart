@@ -7,6 +7,8 @@ import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/services/setting_service.dart';
+import 'package:illegalparking_app/utils/alarm_util.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 
 class Home extends StatefulWidget {
   final int? index;
@@ -57,6 +59,7 @@ class _HomeState extends State<Home> {
             Get.back();
           }
           loginController.changeRealPage(loginController.currentIndex.value);
+          alertDialogByGetxtobutton("앱을 종료하시겠습니까?", appExit);
           return Future(() => false);
         },
         child: Scaffold(
@@ -106,4 +109,20 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+  void appExit() {
+    SystemNavigator.pop();
+  }
+
+  // onWillPop() {
+  //   DateTime? currentBackPressTime;
+  //   DateTime now = DateTime.now();
+  //   if (currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+  //     currentBackPressTime = now;
+  //     showToast(text: "'뒤로' 버튼을 한번 더 누르시면 종료됩니다.");
+  //     // Fluttertoast.showToast(msg: "'뒤로' 버튼을 한번 더 누르시면 종료됩니다.", gravity: ToastGravity.BOTTOM, backgroundColor: const Color(0xff6E6E6E), fontSize: 20, toastLength: Toast.LENGTH_SHORT);
+  //     return false;
+  //   }
+  //   return true;
+  // }
 }

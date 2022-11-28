@@ -10,7 +10,7 @@ import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/report_controller.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/services/such_loation_service.dart';
-import 'package:illegalparking_app/states/car_report_camera_state_reshoot.dart';
+import 'package:illegalparking_app/states/car_report_camera_state.dart';
 import 'package:illegalparking_app/states/home.dart';
 import 'package:illegalparking_app/states/confirmation.state.dart';
 import 'package:illegalparking_app/states/car_number_camera_state.dart';
@@ -119,6 +119,7 @@ class _DeclarationState extends State<Declaration> {
       // showSnackBar(context, "서버 에러 or 타임아웃");
     }
 
+    // alertDialogByGetxonebutton("GPS", "longitude : ${controller.imageGPS.value.longitude}     latitude: ${controller.imageGPS.value.latitude}");
     setState(() {});
   }
 
@@ -377,7 +378,7 @@ class _DeclarationState extends State<Declaration> {
   }
 
   void _reportcamerabtn() {
-    Get.to(const Reportcamerareshoot());
+    Get.to(const Reportcamera());
     Env.CAR_CAMERA_RESHOOT_CHECK = true;
   }
 
@@ -460,7 +461,6 @@ class _DeclarationState extends State<Declaration> {
     try {
       String text = _numberplateContoroller.text;
       text = text.replaceAll(' ', '');
-      // 신고하기 테스트용으로 막아뒀음...  나중에 주석해제
       sendFileByReport(Env.SERVER_ADMIN_FILE_UPLOAD_URL, controller.reportImage.value).then((result) {
         if (result == false) {
           // Env.REPORT_RESPONSE_MSG = Env.MSG_REPORT_FILE_ERROR;
@@ -470,12 +470,14 @@ class _DeclarationState extends State<Declaration> {
           sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value, controller.imageGPS.value.latitude,
                   controller.imageGPS.value.longitude)
               .then((reportInfo) {
-            //보내는 위도 경도 확인용
-            Log.debug("longitude :${controller.imageGPS.value.longitude}");
-            Log.debug("latitude : ${controller.imageGPS.value.latitude}");
-            //중복 횟수 확인용
-            testCount++;
-            Log.debug("upload {$testCount}");
+            if (isDebug) {
+              //보내는 위도 경도 확인용
+              Log.debug("longitude :${controller.imageGPS.value.longitude}");
+              Log.debug("latitude : ${controller.imageGPS.value.latitude}");
+              //중복 횟수 확인용
+              testCount++;
+              Log.debug("upload {$testCount}");
+            }
             if (!reportInfo.success) {
               Env.REPORT_RESPONSE_MSG = reportInfo.message!;
               if (Env.REPORT_RESPONSE_MSG!.contains("초과했습니다.")) {
