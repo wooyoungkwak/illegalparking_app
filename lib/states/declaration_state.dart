@@ -470,7 +470,7 @@ class _DeclarationState extends State<Declaration> {
           sendReport(Env.USER_SEQ!, controller.imageGPS.value.address, _numberplateContoroller.text, controller.imageTime.value, controller.reportfileName.value, controller.imageGPS.value.latitude,
                   controller.imageGPS.value.longitude)
               .then((reportInfo) {
-            if (isDebug) {
+            if (Env.isDebug) {
               //보내는 위도 경도 확인용
               Log.debug("longitude :${controller.imageGPS.value.longitude}");
               Log.debug("latitude : ${controller.imageGPS.value.latitude}");
