@@ -237,6 +237,13 @@ class _DeclarationState extends State<Declaration> {
                       width: Env.MEDIA_SIZE_WIDTH! - 50,
                       File(path),
                       fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          height: Env.MEDIA_SIZE_WIDTH! - 50,
+                          fit: BoxFit.contain,
+                          "assets/noimage.jpg",
+                        );
+                      },
                     ),
                   ),
                 ));

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
 
@@ -237,4 +238,51 @@ Row createContainerByTopWidget({String? text, dynamic function, Color color = co
       child: IconButton(onPressed: function, icon: const Icon(Icons.close_outlined), color: color),
     ),
   ]);
+}
+
+InkWell createBytapImage(BuildContext context, String path, double height, double width) {
+  bool successimage = true;
+  return InkWell(
+    child: Image.network(
+      height: height,
+      width: width,
+      fit: BoxFit.cover,
+      path,
+      errorBuilder: (context, error, stackTrace) {
+        successimage = false;
+        return Image.asset(
+          height: height + 10,
+          width: width + 10,
+          fit: BoxFit.cover,
+          "assets/noimage.jpg",
+        );
+      },
+    ),
+    onTap: () {
+      if (successimage) {
+        showDialog(
+            barrierColor: AppColors.black,
+            context: context,
+            builder: (BuildContext context) => Dialog(
+                  child: GestureDetector(
+                    onTap: () {
+                      navigator?.pop();
+                    },
+                    child: Image.network(
+                      height: Env.MEDIA_SIZE_HEIGHT! / 2,
+                      width: Env.MEDIA_SIZE_WIDTH! / 2,
+                      fit: BoxFit.cover,
+                      path,
+                      errorBuilder: (context, error, stackTrace) => Image.asset(
+                        height: Env.MEDIA_SIZE_HEIGHT! / 2,
+                        width: Env.MEDIA_SIZE_WIDTH! / 2,
+                        fit: BoxFit.cover,
+                        "assets/noimage.jpg",
+                      ),
+                    ),
+                  ),
+                ));
+      }
+    },
+  );
 }

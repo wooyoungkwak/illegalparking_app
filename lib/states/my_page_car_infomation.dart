@@ -8,6 +8,7 @@ import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/my_page_controller.dart';
 import 'package:illegalparking_app/models/result_model.dart';
+import 'package:illegalparking_app/services/save_image_service.dart';
 import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/states/widgets/styleWidget.dart';
@@ -318,18 +319,20 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                           // child: Container(decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Image.asset("assets/noimage.jpg")),
                           child: Container(
                             decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-                            child: Image.network(
-                              height: 70,
-                              width: 70,
-                              fit: BoxFit.cover,
-                              "${Env.FILE_SERVER_URL}${alarmInfoList[index].fileName}",
-                              errorBuilder: (context, error, stackTrace) => Image.asset(
-                                height: 80,
-                                width: 80,
-                                fit: BoxFit.cover,
-                                "assets/noimage.jpg",
-                              ),
-                            ),
+                            child: createBytapImage(context, "${Env.FILE_SERVER_URL}${alarmInfoList[index].fileName}", 70, 80),
+                            // child: createBytapImage(index),
+                            // Image.network(
+                            //   height: 70,
+                            //   width: 70,
+                            //   fit: BoxFit.cover,
+                            //   "${Env.FILE_SERVER_URL}${alarmInfoList[index].fileName}",
+                            //   errorBuilder: (context, error, stackTrace) => Image.asset(
+                            //     height: 80,
+                            //     width: 80,
+                            //     fit: BoxFit.cover,
+                            //     "assets/noimage.jpg",
+                            //   ),
+                            // ),
                           ),
                         ),
                         Column(

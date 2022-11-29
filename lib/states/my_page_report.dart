@@ -290,27 +290,28 @@ class _MyPageReportState extends State<MyPageReport> {
       // Network Error가 계속 발생해서 잠시 막아둠
       children: [
         Container(
-          // color: AppColors.grey,
-          width: 66,
-          height: 66,
-          padding: const EdgeInsets.all(8.0),
-          // child: Container(decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Image.asset("assets/noimage.jpg")),
-          child: Container(
-            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-            child: Image.network(
-              height: 70,
-              width: 70,
-              fit: BoxFit.cover,
-              "${Env.FILE_SERVER_URL}$fileName",
-              errorBuilder: (context, error, stackTrace) => Image.asset(
-                height: 80,
-                width: 80,
-                fit: BoxFit.cover,
-                "assets/noimage.jpg",
-              ),
+            // color: AppColors.grey,
+            width: 66,
+            height: 66,
+            padding: const EdgeInsets.all(8.0),
+            // child: Container(decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Image.asset("assets/noimage.jpg")),
+            child: createBytapImage(context, "${Env.FILE_SERVER_URL}$fileName", 70, 80)
+            // child: Container(
+            //   decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+            //   child: Image.network(
+            //     height: 70,
+            //     width: 70,
+            //     fit: BoxFit.cover,
+            //     "${Env.FILE_SERVER_URL}$fileName",
+            //     errorBuilder: (context, error, stackTrace) => Image.asset(
+            //       height: 80,
+            //       width: 80,
+            //       fit: BoxFit.cover,
+            //       "assets/noimage.jpg",
+            //     ),
+            //   ),
+            // ),
             ),
-          ),
-        ),
         //주소 및 시간
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

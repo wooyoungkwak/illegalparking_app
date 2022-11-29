@@ -58,8 +58,13 @@ class _HomeState extends State<Home> {
             loginController.offBottomNav();
             Get.back();
           }
-          loginController.changeRealPage(loginController.currentIndex.value);
-          alertDialogByGetxtobutton("앱을 종료하시겠습니까?", appExit);
+
+          if (loginController.currentPageIdex > 3) {
+            loginController.changeRealPage(loginController.currentIndex.value);
+          } else {
+            alertDialogByGetxtobutton("앱을 종료하시겠습니까?", appExit);
+          }
+
           return Future(() => false);
         },
         child: Scaffold(

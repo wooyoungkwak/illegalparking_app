@@ -13,6 +13,7 @@ import 'package:illegalparking_app/services/server_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/states/widgets/styleWidget.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -34,6 +35,7 @@ class _MyPageState extends State<MyPage> {
   late String reportCount = "0";
   late String currentPoint = "0";
   late Future<MyPageInfo> requestInfo;
+  bool noticeMore = true;
 
   void _initInfo() {
     requestInfo = requestMyPage(Env.USER_SEQ!);
@@ -56,6 +58,11 @@ class _MyPageState extends State<MyPage> {
         myPagecontroller.setCurrentPotin(myPageInfo.currentPoint);
         // 공지 사항
         noticeList = myPageInfo.notices;
+        if (noticeList.length < 5) {
+          noticeMore = false;
+        } else {
+          noticeMore = true;
+        }
       });
     });
   }
@@ -408,11 +415,13 @@ class _MyPageState extends State<MyPage> {
                       ],
                     ),
                   ),
-                  Container(
-                    color: Colors.grey,
-                    height: 1,
-                    width: MediaQuery.of(context).size.width,
-                  ),
+                  noticeList.isNotEmpty
+                      ? Container(
+                          color: Colors.grey,
+                          height: 1,
+                          width: MediaQuery.of(context).size.width,
+                        )
+                      : Container(),
                   // 공지사항 content
                   Wrap(
                     children: List.generate(
@@ -500,22 +509,31 @@ class _MyPageState extends State<MyPage> {
               ),
             ),
           ),
-          createElevatedButton(
-            color: AppColors.white,
-            textColors: AppColors.black,
-            text: "더보기",
-            function: () {
-              requestNotice(Env.USER_SEQ!, noticeList.length, 5).then(
-                (noticeListInfo) {
-                  setState(
-                    () {
-                      noticeList.addAll(noticeListInfo.noticeInfos);
-                    },
-                  );
-                },
-              );
-            },
-          ),
+          noticeMore
+              ? createElevatedButton(
+                  color: AppColors.white,
+                  textColors: AppColors.black,
+                  text: "더보기",
+                  function: () {
+                    requestNotice(Env.USER_SEQ!, noticeList.length, 5).then(
+                      (noticeListInfo) {
+                        if (noticeListInfo.noticeInfos.isNotEmpty) {
+                          setState(
+                            () {
+                              noticeList.addAll(noticeListInfo.noticeInfos);
+                            },
+                          );
+                          if (noticeListInfo.noticeInfos.length < 5) {
+                            noticeMore = false;
+                          }
+                        } else {
+                          noticeMore = false;
+                        }
+                      },
+                    );
+                  },
+                )
+              : Container(),
         ],
       ),
     );
