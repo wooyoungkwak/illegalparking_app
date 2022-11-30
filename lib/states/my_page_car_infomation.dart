@@ -247,7 +247,8 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                       return alarmInfoList.isNotEmpty
                           ? _createAlarmHistorytList(context, alarmInfoList)
                           : Container(
-                              height: MediaQuery.of(context).size.height - 474,
+                              // height: MediaQuery.of(context).size.height - 474,
+                              height: MediaQuery.of(context).size.height / 3.1,
                               padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                               decoration: BoxDecoration(
                                 color: AppColors.white,
@@ -259,6 +260,7 @@ class _MyPageCarInfomatinoState extends State<MyPageCarInfomatino> {
                                   createCustomText(
                                     color: AppColors.textGrey,
                                     size: 16.0,
+                                    //  height: MediaQuery.of(context).size.height - 474,
                                     text: "신고 이력이 없습니다.",
                                   ),
                                 ],

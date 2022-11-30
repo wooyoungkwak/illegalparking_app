@@ -2,20 +2,20 @@
 import 'package:camera/camera.dart';
 
 class Env {
-  static bool isDebug = true; // 배포시 false
+  static bool isDebug = false; // 배포시 false
 
   static const String AI_SERVER = "http://teraenergy.iptime.org"; // AI 서버
   static const String SERVER_AI_URL = "$AI_SERVER:18091";
   static const String SERVER_AI_FILE_UPLOAD_URL = '$SERVER_AI_URL/';
 
-  static const String ADMIN_SERVER_TEST = "http://teraenergy.iptime.org"; // 관리자 서버
-  static const String ADMIN_SERVER_REAL = "http://sop.teravision.kr"; // 관리자 서버
-  static const String ADMIN_SERVER = ADMIN_SERVER_TEST; // 관리자 서버
+  static const String ADMIN_SERVER_TEST = "http://teraenergy.iptime.org:18090"; // 관리자 서버
+  static const String ADMIN_SERVER_REAL = "http://teraenergy.iptime.org:18093"; // 관리자 서버
+  static const String ADMIN_SERVER = ADMIN_SERVER_REAL; // 관리자 서버
 
-  static const String FILE_SERVER_URL = "http://49.50.166.205:8090/";
+  static const String FILE_SERVER_URL = "http://teraenergy.iptime.org:18095/";
 
-  static const String SERVER_ADMIN_URL = "$ADMIN_SERVER:18090";
-  // static const String SERVER_ADMIN_URL = ADMIN_SERVER; // REAL서버 포트
+  // static const String SERVER_ADMIN_URL = "$ADMIN_SERVER:18090";
+  static const String SERVER_ADMIN_URL = ADMIN_SERVER; // REAL서버 포트
   // static const String SERVER_ADMIN_URL = "http://192.168.0.175:8090";
   static const String SERVER_LOGIN_URL = '$SERVER_ADMIN_URL/api/login';
   static const String SERVER_ADMIN_REGISTER_URL = '$SERVER_ADMIN_URL/api/user/register';

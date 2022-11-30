@@ -152,7 +152,8 @@ class _MyPagePointState extends State<MyPagePoint> {
                       return pointInfoList.isNotEmpty
                           ? _initPointListByContainer()
                           : Container(
-                              height: MediaQuery.of(context).size.height - 404,
+                              // height: MediaQuery.of(context).size.height - 404,
+                              height: MediaQuery.of(context).size.height / 2.40,
                               margin: const EdgeInsets.only(top: 4.0),
                               decoration: const BoxDecoration(
                                 color: AppColors.white,

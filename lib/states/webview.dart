@@ -63,6 +63,7 @@ class _WebviewPageState extends State<WebviewPage> {
     timer = Timer.periodic(const Duration(seconds: 7), (timer) {
       _sendGPS();
     });
+    Log.debug("URL: ${Env.SERVER_ADMIN_URL}/api/area/map");
   }
 
   @override
