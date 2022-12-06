@@ -127,6 +127,7 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
                         ],
                       ),
                       createTextFormField(
+                        obscureText: false,
                         controller: carNumController,
                         fillColor: AppColors.textField,
                         hintText: "예) 123가4567, 65호4321",
@@ -222,6 +223,7 @@ class _MyPageRegistrationState extends State<MyPageRegistration> {
                         ],
                       ),
                       createTextFormField(
+                        obscureText: false,
                         fillColor: AppColors.textField,
                         controller: carNameController,
                         hintText: "쏘나타",

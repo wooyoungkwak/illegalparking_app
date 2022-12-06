@@ -2,9 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/config/style.dart';
+import 'package:illegalparking_app/controllers/setting_controller.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 
 Padding createCustomText({
   String? text,
@@ -46,12 +49,15 @@ Padding createTextFormField({
   String? hintText,
   String? helperText,
   String? errorText,
-  bool? obscureText,
+  required bool obscureText,
   bool? readOnly,
   Function? validation,
   Function? onChanged,
   Function? onSaved,
+  bool? passwordswich,
+  dynamic function,
 }) {
+  final settingController = Get.put(SettingController());
   return Padding(
     padding: EdgeInsets.all(padding ?? 8.0),
     child: TextFormField(
@@ -59,23 +65,41 @@ Padding createTextFormField({
       focusNode: focusNode,
       controller: controller,
       readOnly: readOnly ?? false,
-      obscureText: obscureText ?? false,
+      obscureText: obscureText,
       textInputAction: TextInputAction.next,
       style: const TextStyle(fontFamily: "NotoSansKR", fontWeight: FontWeight.w500, fontSize: 12.0),
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.black)),
-        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: AppColors.blue)),
-        filled: true,
-        fillColor: fillColor ?? Colors.white,
-        labelText: labelText,
-        labelStyle: const TextStyle(color: AppColors.black),
-        floatingLabelStyle: const TextStyle(color: AppColors.black),
-        hintText: hintText,
-        helperText: (controller?.text != "") && (helperText != null) ? helperText : null,
-        helperStyle: const TextStyle(color: AppColors.blue),
-        errorText: errorText,
-      ),
+      decoration: passwordswich == true
+          ? InputDecoration(
+              suffixIcon: obscureText
+                  ? IconButton(icon: const Icon(Icons.visibility_off_outlined), color: Colors.black, onPressed: function)
+                  : IconButton(icon: const Icon(Icons.visibility_outlined), color: Colors.black, onPressed: function),
+              contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+              enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.black)),
+              focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: AppColors.blue)),
+              filled: true,
+              fillColor: fillColor ?? Colors.white,
+              labelText: labelText,
+              labelStyle: const TextStyle(color: AppColors.black),
+              floatingLabelStyle: const TextStyle(color: AppColors.black),
+              hintText: hintText,
+              helperText: (controller?.text != "") && (helperText != null) ? helperText : null,
+              helperStyle: const TextStyle(color: AppColors.blue),
+              errorText: errorText,
+            )
+          : InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+              enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.black)),
+              focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: AppColors.blue)),
+              filled: true,
+              fillColor: fillColor ?? Colors.white,
+              labelText: labelText,
+              labelStyle: const TextStyle(color: AppColors.black),
+              floatingLabelStyle: const TextStyle(color: AppColors.black),
+              hintText: hintText,
+              helperText: (controller?.text != "") && (helperText != null) ? helperText : null,
+              helperStyle: const TextStyle(color: AppColors.blue),
+              errorText: errorText,
+            ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: validation != null ? (text) => validation(text) : null,
       onChanged: onChanged != null ? (text) => onChanged(text) : null,

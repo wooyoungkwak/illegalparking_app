@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/config/env.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
+import 'package:illegalparking_app/controllers/setting_controller.dart';
 import 'package:illegalparking_app/models/storage_model.dart';
 import 'package:illegalparking_app/services/network_service.dart';
 import 'package:illegalparking_app/services/server_service.dart';
@@ -50,6 +51,7 @@ class _SignUpState extends State<SignUp> {
   bool duplicatedId = false;
   Timer? timer;
   int? authNum;
+  final settingController = Get.put(SettingController());
 
   List profileCharicterList = [
     {
@@ -186,6 +188,7 @@ class _SignUpState extends State<SignUp> {
                     text: "아이디(이메일)",
                   ),
                   createTextFormField(
+                    obscureText: false,
                     focusNode: _idfocusNode,
                     fillColor: AppColors.textField,
                     hintText: "아이디 또는 이메일을 입력해주세요.",
@@ -204,19 +207,31 @@ class _SignUpState extends State<SignUp> {
                     text: "비밀번호",
                   ),
                   createTextFormField(
-                    controller: passController,
-                    obscureText: true,
-                    fillColor: AppColors.textField,
-                    hintText: "비밀번호를 입력해주세요.",
-                    helperText: "보안에 안전한 암호 입니다.",
-                    validation: passwordValidator,
-                  ),
+                      controller: passController,
+                      obscureText: settingController.hidepasswordSign.value,
+                      fillColor: AppColors.textField,
+                      hintText: "비밀번호를 입력해주세요.",
+                      helperText: "보안에 안전한 암호 입니다.",
+                      validation: passwordValidator,
+                      passwordswich: true,
+                      function: () {
+                        settingController.hidepasswordSignwrite(!settingController.hidepasswordSign.value);
+                        setState(
+                          () {},
+                        );
+                      }),
                   createTextFormField(
-                    fillColor: AppColors.textField,
-                    obscureText: true,
-                    hintText: "비밀번호를 한번 더 입력해주세요.",
-                    validation: passwordConfirmValidator,
-                  ),
+                      fillColor: AppColors.textField,
+                      obscureText: settingController.hidepasswordSign2.value,
+                      hintText: "비밀번호를 한번 더 입력해주세요.",
+                      validation: passwordConfirmValidator,
+                      passwordswich: true,
+                      function: () {
+                        settingController.hidepasswordSign2write(!settingController.hidepasswordSign2.value);
+                        setState(
+                          () {},
+                        );
+                      }),
                   // 이름
                   createCustomText(
                     top: 0.0,
@@ -226,12 +241,12 @@ class _SignUpState extends State<SignUp> {
                     text: "이름",
                   ),
                   createTextFormField(
+                    obscureText: false,
                     fillColor: AppColors.textField,
                     controller: nameCotroller,
                     hintText: "이름을 입력해주세요.",
                     validation: nameValidator,
                   ),
-
                   //전화번호
                   createCustomText(
                     top: 0.0,
@@ -241,6 +256,7 @@ class _SignUpState extends State<SignUp> {
                     text: "전화번호",
                   ),
                   createTextFormField(
+                    obscureText: false,
                     fillColor: AppColors.textField,
                     hintText: "전화번호를 입력해주세요.",
                     // helperText: "'-' 없이 입력해주세요",
@@ -271,6 +287,7 @@ class _SignUpState extends State<SignUp> {
                               }),
                   if (sendAuthentication)
                     createTextFormField(
+                      obscureText: false,
                       fillColor: AppColors.textField,
                       controller: authKeyController,
                       hintText: "인증번호를 입력해주세요.",

@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:illegalparking_app/states/widgets/custom_text.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
+import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:illegalparking_app/utils/time_util.dart';
 // import 'package:lottie/lottie.dart';
 import 'package:mask_for_camera_view/mask_for_camera_view_result.dart';
@@ -95,7 +96,7 @@ class _ReportcameraState extends State<Reportcamera> {
                 }),
             initContainerByOutlineButton(0, 0.7, "주정차관련법규보기", context),
             c.carnumberImage.value.isNotEmpty ? createContainerByAlignment(-0.75, Platform.isIOS ? -0.9 : -0.925, createContainerByTopWidget(color: AppColors.white, function: backbtn)) : Container(),
-            Positioned(top: c.carnumberImage.value.isNotEmpty ? Env.MEDIA_SIZE_PADDINGTOP! + 25 : Env.MEDIA_SIZE_PADDINGTOP! + 10, child: initColumnByText(11, AppFontWeight.regular, AppColors.white))
+            Positioned(top: c.carnumberImage.value.isNotEmpty ? Env.MEDIA_SIZE_PADDINGTOP! + 25 : Env.MEDIA_SIZE_PADDINGTOP! + 10, child: initColumnByText(11, AppFontWeight.regular, AppColors.white)),
           ],
         ),
       ),

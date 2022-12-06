@@ -2,7 +2,7 @@
 import 'package:camera/camera.dart';
 
 class Env {
-  static bool isDebug = false; // 배포시 false
+  static bool isDebug = true; // 배포시 false
 
   static const String AI_SERVER = "http://teraenergy.iptime.org"; // AI 서버
   static const String SERVER_AI_URL = "$AI_SERVER:18091";
@@ -10,7 +10,7 @@ class Env {
 
   static const String ADMIN_SERVER_TEST = "http://teraenergy.iptime.org:18090"; // 관리자 서버
   static const String ADMIN_SERVER_REAL = "http://teraenergy.iptime.org:18093"; // 관리자 서버
-  static const String ADMIN_SERVER = ADMIN_SERVER_REAL; // 관리자 서버
+  static const String ADMIN_SERVER = ADMIN_SERVER_TEST; // 관리자 서버
 
   static const String FILE_SERVER_URL = "http://teraenergy.iptime.org:18095/";
 

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:illegalparking_app/config/style.dart';
 import 'package:illegalparking_app/controllers/login_controller.dart';
+import 'package:illegalparking_app/controllers/setting_controller.dart';
 import 'package:illegalparking_app/models/storage_model.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -23,6 +24,7 @@ class MyPageInfomation extends StatefulWidget {
 
 class _MyPageInfomationState extends State<MyPageInfomation> {
   final loginController = Get.put(LoginController());
+  final settingController = Get.put(SettingController());
 
   final TextEditingController _oldPasswordController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
@@ -200,12 +202,18 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                                       text: "기존 비밀번호",
                                     ),
                                     createTextFormField(
-                                      obscureText: true,
-                                      fillColor: AppColors.textField,
-                                      hintText: "기존 비밀번호를 입력해주세요.",
-                                      controller: _oldPasswordController,
-                                      validation: passwordValidator,
-                                    ),
+                                        obscureText: settingController.hidepasswordMypage.value,
+                                        fillColor: AppColors.textField,
+                                        hintText: "기존 비밀번호를 입력해주세요.",
+                                        controller: _oldPasswordController,
+                                        validation: passwordValidator,
+                                        passwordswich: true,
+                                        function: () {
+                                          settingController.hidepasswordMypagewrite(!settingController.hidepasswordMypage.value);
+                                          setState(
+                                            () {},
+                                          );
+                                        }),
                                     createElevatedButton(
                                         padding: 24.0,
                                         color: oldPasswordValidation ? AppColors.blue : AppColors.black,
@@ -232,21 +240,32 @@ class _MyPageInfomationState extends State<MyPageInfomation> {
                                       ),
                                     if (oldPasswordValidation)
                                       createTextFormField(
-                                        obscureText: true,
-                                        fillColor: AppColors.textField,
-                                        hintText: "변경할 비밀번호를 입력해주세요.",
-                                        controller: _newPasswordController,
-                                        validation: passwordValidator,
-                                      ),
+                                          obscureText: settingController.hidepasswordMypage2.value,
+                                          fillColor: AppColors.textField,
+                                          hintText: "변경할 비밀번호를 입력해주세요.",
+                                          controller: _newPasswordController,
+                                          validation: passwordValidator,
+                                          passwordswich: true,
+                                          function: () {
+                                            settingController.hidepasswordMypage2write(!settingController.hidepasswordMypage2.value);
+                                            setState(
+                                              () {},
+                                            );
+                                          }),
                                     if (oldPasswordValidation)
                                       createTextFormField(
-                                        obscureText: true,
-                                        fillColor: AppColors.textField,
-                                        hintText: "비밀번호 확인해주세요.",
-                                        helperText: "보안이 안전된 암호입니다.",
-                                        controller: _newPasswordValidationController,
-                                        validation: passwordConfirmValidator,
-                                      ),
+                                          obscureText: settingController.hidepasswordMypage3.value,
+                                          fillColor: AppColors.textField,
+                                          hintText: "변경할 비밀번호를 입력해주세요.",
+                                          controller: _newPasswordController,
+                                          validation: passwordValidator,
+                                          passwordswich: true,
+                                          function: () {
+                                            settingController.hidepasswordMypage3write(!settingController.hidepasswordMypage3.value);
+                                            setState(
+                                              () {},
+                                            );
+                                          }),
                                     if (oldPasswordValidation)
                                       createElevatedButton(
                                         padding: 24.0,
