@@ -38,7 +38,7 @@ class _LoginState extends State<Login> {
     _setSaveId();
     secureStorage.write(Env.KEY_AUTO_LOGIN, "false");
 
-    if (!Env.isDebug) {
+    if (Env.isDebug) {
       _idController = TextEditingController(text: "hong@gmail.com");
       _passController = TextEditingController(text: "qwer1234");
     } else {
