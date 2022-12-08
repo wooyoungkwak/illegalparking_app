@@ -22,11 +22,13 @@ Padding createCustomText({
   double? bottom,
   double? left,
   double? right,
+  TextOverflow? overflow,
 }) {
   return Padding(
     padding: EdgeInsets.only(top: padding ?? top ?? 8.0, bottom: padding ?? bottom ?? 8.0, left: padding ?? left ?? 8.0, right: padding ?? right ?? 8.0),
     child: Text(
       text ?? "",
+      overflow: overflow,
       style: TextStyle(
         color: color ?? Colors.black,
         height: height,

@@ -452,6 +452,7 @@ class _MyPageState extends State<MyPage> {
                                       bottom: 4.0,
                                       weight: AppFontWeight.semiBold,
                                       size: 16.0,
+                                      overflow: TextOverflow.ellipsis,
                                       text: noticeList[index].subject,
                                     ),
                                   ),
@@ -663,11 +664,12 @@ class _MyPageState extends State<MyPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     createCustomText(
                                       top: 16.0,
                                       left: 8.0,
-                                      right: noticeList[noticeIndex].noticeType == "공지" ? 4.0 : 0.0,
+                                      right: noticeList[noticeIndex].noticeType == "공지" ? 8.0 : 0.0,
                                       bottom: 4.0,
                                       weight: AppFontWeight.semiBold,
                                       color: AppColors.blue,
