@@ -10,6 +10,7 @@ import 'package:illegalparking_app/controllers/login_controller.dart';
 import 'package:illegalparking_app/controllers/setting_controller.dart';
 import 'package:illegalparking_app/models/storage_model.dart';
 import 'package:illegalparking_app/services/server_service.dart';
+import 'package:illegalparking_app/services/setting_service.dart';
 import 'package:illegalparking_app/states/widgets/form.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
@@ -54,6 +55,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    mediasizeSetting(context);
     if (Platform.isIOS) {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarBrightness: loginController.isGuestMode ? Brightness.light : Brightness.dark));
       // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark)); // IOS = Brightness.light의 경우 글자 검정, 배경 흰색
@@ -268,7 +270,7 @@ class _LoginState extends State<Login> {
                     text: "회원가입",
                     function: () {
                       controller.getAutoLogin(false);
-                      Navigator.pushNamed(context, "/sign_up");
+                      Navigator.pushNamed(context, "/sign_up_consent");
                     },
                   ),
                 ),

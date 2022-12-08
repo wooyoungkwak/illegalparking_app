@@ -20,6 +20,7 @@ import 'package:illegalparking_app/states/my_page_registration.dart';
 import 'package:illegalparking_app/states/my_page_report.dart';
 import 'package:illegalparking_app/states/sign_up.dart';
 import 'package:illegalparking_app/states/first_use_state.dart';
+import 'package:illegalparking_app/states/sign_up_consent.dart';
 import 'package:illegalparking_app/utils/alarm_util.dart';
 import 'package:illegalparking_app/utils/log_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,6 +69,7 @@ class MyApp extends StatelessWidget {
           "/registration": (BuildContext context) => const MyPageRegistration(),
           "/report": (BuildContext context) => const MyPageReport(),
           "/point": (BuildContext context) => const MyPagePoint(),
+          "/sign_up_consent": (BuildContext context) => const SignUpConsent(),
         },
         home: const MyHomePage());
   }

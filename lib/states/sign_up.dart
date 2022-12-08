@@ -330,63 +330,6 @@ class _SignUpState extends State<SignUp> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // 약관
-                        SizedBox(
-                          height: 200,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Scrollbar(
-                              thumbVisibility: true,
-                              controller: _termsSummaryController,
-                              child: ListView.builder(
-                                itemCount: 1,
-                                controller: _termsSummaryController,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return const Text(Env.USER_TERMS);
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                        // 약관동의
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Checkbox(
-                                fillColor: MaterialStateProperty.resolveWith((states) => AppColors.blue),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                value: serviceTerms,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    serviceTerms = value!;
-                                    _formKey.currentState!.save();
-                                  });
-                                },
-                              ),
-                              createCustomText(
-                                padding: 0.0,
-                                text: "약관 동의",
-                              ),
-                              const Spacer(),
-                              TextButton(
-                                onPressed: () {
-                                  showServiceTermsDialog();
-                                },
-                                child: Row(children: [
-                                  createCustomText(
-                                    padding: 0.0,
-                                    text: "더보기",
-                                  ),
-                                  const Icon(
-                                    Icons.chevron_right,
-                                    color: Colors.black,
-                                  ),
-                                ]),
-                              ),
-                            ],
-                          ),
-                        ),
                         // 프로필 캐릭터 선택
                         createCustomText(
                           text: "프로필 캐릭터 선택",
@@ -406,21 +349,19 @@ class _SignUpState extends State<SignUp> {
                         createElevatedButton(
                           color: Colors.black,
                           text: "회원생성",
-                          function: serviceTerms
-                              ? () {
-                                  if (_formKey.currentState!.validate()) {
-                                    register(idController.text, passController.text, nameCotroller.text, phoneNumController.text, photoName).then((registerInfo) {
-                                      if (registerInfo.success) {
-                                        showSignUpSuccessDialog();
-                                      } else {
-                                        showErrorSnackBar(context, registerInfo.message!);
-                                      }
-                                    });
-                                  } else {
-                                    showErrorToast(text: "입력 사항을 확인해주세요");
-                                  }
+                          function: () {
+                            if (_formKey.currentState!.validate()) {
+                              register(idController.text, passController.text, nameCotroller.text, phoneNumController.text, photoName).then((registerInfo) {
+                                if (registerInfo.success) {
+                                  showSignUpSuccessDialog();
+                                } else {
+                                  showErrorSnackBar(context, registerInfo.message!);
                                 }
-                              : null,
+                              });
+                            } else {
+                              showErrorToast(text: "입력 사항을 확인해주세요");
+                            }
+                          },
                         ),
                       ],
                     ),

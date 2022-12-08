@@ -443,14 +443,18 @@ class _MyPageState extends State<MyPage> {
                                   size: 16.0,
                                   text: noticeList[index].noticeType == "공지" ? noticeList[index].noticeType : null,
                                 ),
-                                createCustomText(
-                                  top: 16.0,
-                                  left: 0.0,
-                                  right: 24.0,
-                                  bottom: 4.0,
-                                  weight: AppFontWeight.semiBold,
-                                  size: 16.0,
-                                  text: noticeList[index].subject,
+                                Flexible(
+                                  child: Container(
+                                    child: createCustomText(
+                                      top: 16.0,
+                                      left: 0.0,
+                                      right: 24.0,
+                                      bottom: 4.0,
+                                      weight: AppFontWeight.semiBold,
+                                      size: 16.0,
+                                      text: noticeList[index].subject,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -654,7 +658,7 @@ class _MyPageState extends State<MyPage> {
                             }
                           },
                           child: SizedBox(
-                            height: MediaQuery.of(context).size.height - 170,
+                            height: MediaQuery.of(context).size.height - 150,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -670,14 +674,18 @@ class _MyPageState extends State<MyPage> {
                                       size: 16.0,
                                       text: noticeList[noticeIndex].noticeType == "공지" ? noticeList[index].noticeType : null,
                                     ),
-                                    createCustomText(
-                                      top: 16.0,
-                                      left: 0.0,
-                                      right: 24.0,
-                                      bottom: 4.0,
-                                      weight: AppFontWeight.semiBold,
-                                      size: 16.0,
-                                      text: noticeList[noticeIndex].subject,
+                                    Flexible(
+                                      child: Container(
+                                        child: createCustomText(
+                                          top: 16.0,
+                                          left: 0.0,
+                                          right: 24.0,
+                                          bottom: 4.0,
+                                          weight: AppFontWeight.semiBold,
+                                          size: 16.0,
+                                          text: noticeList[noticeIndex].subject,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
