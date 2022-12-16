@@ -532,7 +532,7 @@ class Poptext extends StatelessWidget {
                 showPopover(
                   context: context,
                   bodyBuilder: (context) => ListItems(),
-                  onPop: () => Log.debug('Popover was popped!'),
+                  // onPop: () => Log.debug('Popover was popped!'),
                   direction: PopoverDirection.bottom,
                   width: Env.MEDIA_SIZE_WIDTH! - 30,
                   height: 75,
@@ -558,13 +558,13 @@ class ListItems extends StatelessWidget {
           children: [
             InkWell(
                 onTap: () {
-                  Navigator.of(context)
-                    ..pop()
-                    ..push(
-                      MaterialPageRoute<SecondRoute>(
-                        builder: (context) => const SecondRoute(),
-                      ),
-                    );
+                  // Navigator.of(context)
+                  //   ..pop()
+                  //   ..push(
+                  //     MaterialPageRoute<SecondRoute>(
+                  //       builder: (context) => const SecondRoute(),
+                  //     ),
+                  //   );
                 },
                 child: Container(
                   height: 50,
